@@ -1,8 +1,19 @@
 {
+  "name": "learn_ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:shreshthmohan/learn_ts.git",
+  "author": "Shreshth Mohan <sremog@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "tsc": "tsc"
+  },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
     "d3": "^7.1.1",
     "lodash-es": "^4.17.21",
+    "rollup": "^2.59.0",
     "tensor-diagrams": "^0.3.0"
   }
 }

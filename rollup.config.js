@@ -1,11 +1,11 @@
 import resolve from '@rollup/plugin-node-resolve'
 
 export default {
-  input: 'src/index.js',
+  input: './src/index.js',
   output: {
-    file: 'bundle.js',
+    file: 'dist/bundle.js',
     format: 'umd',
-    // name: 'maceChart',
+    name: 'viz',
     globals: {
       lodash: '_',
       d3: 'd3',

@@ -79,4 +79,4 @@ const options = {
   inactiveOpacity: 0.2,
 }
 
-mace.validateAndRenderMace({ dataPath, options, dimensions })
+viz.validateAndRenderMace({ dataPath, options, dimensions })
