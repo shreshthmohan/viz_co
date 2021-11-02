@@ -1,6 +1,4 @@
 /* global window */
-// SVG parent element CSS selector, preferably HTML id
-// e.g. #svg-container
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
@@ -15,10 +13,10 @@ export function renderChart({
   options: {
     aspectRatio = 2,
 
-    marginTop = 60,
-    marginRight = 90,
-    marginBottom = 20,
-    marginLeft = 50,
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
 
     bgColor = 'transparent',
 
@@ -42,9 +40,6 @@ export function renderChart({
     heading = 'This is a heading for the chart',
     subheading = 'This is a subheading for the chart describing it in more detail',
 
-    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-
     xAxisTickValues,
 
     xScaleType = 'linear', // linear or log
@@ -58,19 +53,22 @@ export function renderChart({
     circleSizeRange = [5, 30],
     lineWidthRange = [2, 4],
   },
-  dimensions,
-  svgParentNodeSelector,
-}) {
-  const {
+  dimensions: {
     xFieldStart,
     xFieldEnd,
     yFieldStart,
     yFieldEnd,
     sizeField,
     nameField,
-  } = dimensions
+  },
+  svgParentNodeSelector = '#svg-container',
+}) {
+  const {
+    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
 
-  // const  = options
+    // eslint-disable-next-line no-undef
+  } = options // works in chrome, but unable to find a way to disable eslint error
 
   d3.select('#main-container').classed(`${containerWidth}`, true)
 

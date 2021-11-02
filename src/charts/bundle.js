@@ -18464,10 +18464,10 @@
     options: {
       aspectRatio = 2,
 
-      marginTop = 60,
-      marginRight = 90,
-      marginBottom = 20,
-      marginLeft = 50,
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
 
       bgColor = 'transparent',
 
@@ -18491,9 +18491,6 @@
       heading = 'This is a heading for the chart',
       subheading = 'This is a subheading for the chart describing it in more detail',
 
-      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-
       xAxisTickValues,
 
       xScaleType = 'linear', // linear or log
@@ -18507,19 +18504,21 @@
       circleSizeRange = [5, 30],
       lineWidthRange = [2, 4],
     },
-    dimensions,
-    svgParentNodeSelector,
-  }) {
-    const {
+    dimensions: {
       xFieldStart,
       xFieldEnd,
       yFieldStart,
       yFieldEnd,
       sizeField,
       nameField,
-    } = dimensions;
-
-    // const  = options
+    },
+    svgParentNodeSelector = '#svg-container',
+  }) {
+    const {
+      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+    } = options; // works in chrome, but unable to find a way to disable eslint error
+    console.log({ options });
 
     d3__namespace.select('#main-container').classed(`${containerWidth}`, true);
 
