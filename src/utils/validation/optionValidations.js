@@ -1,4 +1,5 @@
 import _ from 'lodash-es'
+import * as d3 from 'd3'
 
 export const optionValidation = ({ optionTypes, options }) => {
   const optionValidations = []
@@ -51,7 +52,7 @@ export const checkBoolean = val => {
   return { valid: false, message: 'Should be true or false' }
 }
 
-const checkNumberBetween = refArr => val => {
+export const checkNumberBetween = refArr => val => {
   const min = Math.min(...refArr)
   const max = Math.max(...refArr)
   const message = `Should be a number between ${min} and ${max}`
@@ -66,7 +67,7 @@ const checkNumberBetween = refArr => val => {
   return { valid: false, message }
 }
 
-const checkColor = val => {
+export const checkColor = val => {
   const result = { valid: true, message: '' }
 
   if (val === 'transparent') return result

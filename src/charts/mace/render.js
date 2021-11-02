@@ -4,26 +4,15 @@
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
-import { formatNumber } from '../../utils/formatters'
+import { formatNumber } from '../../utils/helpers/formatters'
 
 import { renderDirectionLegend } from '../../utils/helpers/directionLegend'
-import { preventOverflow } from '../../utils/general'
+import { preventOverflow } from '../../utils/helpers/general'
 import { pointsToRotationAngle, maceShape } from './helpers'
 
-// TODO: expose to options/renderchart arg
-const svgParentNodeSelector = '#svg-container'
-
-export function renderChart({ data, options, dimensions }) {
-  const {
-    xFieldStart,
-    xFieldEnd,
-    yFieldStart,
-    yFieldEnd,
-    sizeField,
-    nameField,
-  } = dimensions
-
-  const {
+export function renderChart({
+  data,
+  options: {
     aspectRatio = 2,
 
     marginTop = 60,
@@ -68,7 +57,20 @@ export function renderChart({ data, options, dimensions }) {
 
     circleSizeRange = [5, 30],
     lineWidthRange = [2, 4],
-  } = options
+  },
+  dimensions,
+  svgParentNodeSelector,
+}) {
+  const {
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+    nameField,
+  } = dimensions
+
+  // const  = options
 
   d3.select('#main-container').classed(`${containerWidth}`, true)
 
