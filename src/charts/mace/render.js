@@ -70,8 +70,10 @@ export function renderChart({
     // eslint-disable-next-line no-undef
   } = options // works in chrome, but unable to find a way to disable eslint error
 
+  // setMainContainerWidth() - this should be outside renderChart
   d3.select('#main-container').classed(`${containerWidth}`, true)
 
+  // applyInteractionStyles
   d3.select('body').append('style').html(`
 
 g.maces .mace {
@@ -102,10 +104,15 @@ g.color-legend g:not(.mace-active) {
 `)
 
   // Headers
+  // setChartHeaders() - should be outside renderChart()
   d3.select('#chart-heading').node().textContent = heading
   d3.select('#chart-subheading').node().textContent = subheading
 
   // Chart Area
+
+  // setupChartArea()
+  // accepts - chart dimensions, margins, aspect ratio
+  // returns - svg, allComponents, chartCore
   const coreChartWidth = 1000
   const coreChartHeight = coreChartWidth / aspectRatio
 
@@ -125,7 +132,10 @@ g.color-legend g:not(.mace-active) {
     .append('g')
     .attr('transform', `translate(${marginLeft}, ${marginTop})`)
 
+  // remove (import from helpers)
   const toClassText = str => str.replace(/\s/g, '-').toLowerCase()
+
+  // initializeTooltip()
   const tooltipDiv = d3
     .select('body')
     .append('div')
@@ -135,6 +145,7 @@ g.color-legend g:not(.mace-active) {
     )
     .style('opacity', 0)
 
+  // parseData()
   const dataParsed = data
     .map(el => {
       const elParsed = { ...el }
@@ -153,6 +164,7 @@ g.color-legend g:not(.mace-active) {
   const nameValues = _(data).map(nameField).uniq().value()
   const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
 
+  // setupScales()
   const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]))
   const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]))
   const yDomain = d3.extent([...yDomainStart, ...yDomainEnd])
@@ -190,6 +202,7 @@ g.color-legend g:not(.mace-active) {
 
   const sizeValues = sizeLegendValues.map(a => circleSizeScale(a))
 
+  // renderSizeLegend()
   // TODO: move to options?
   const gapInCircles = 30
 
@@ -246,9 +259,11 @@ g.color-legend g:not(.mace-active) {
     .attr('height', sizeLegendBoundingBox.height)
     .attr('width', sizeLegendBoundingBox.width)
 
+  // move to scales: setupScales()
   const colorScale = slope =>
     slope > 0 ? sameDirectionColor : oppositeDirectionColor
 
+  // renderColorLegend()
   const stickHeight = 3
   const stickLength = 30
   const stickWidthLegend = 1
@@ -337,6 +352,7 @@ g.color-legend g:not(.mace-active) {
   })
 
   // x-axis
+  // renderXAxis()
   const xAxis = chartCore
     .append('g')
     .attr('class', 'x-axis-bottom')
@@ -357,6 +373,7 @@ g.color-legend g:not(.mace-active) {
     .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
 
   // y-axis
+  // renderYAxis()
   const yAxis = chartCore
     .append('g')
     .attr('class', 'text-xs y-axis-right')
@@ -375,6 +392,7 @@ g.color-legend g:not(.mace-active) {
     .attr('text-anchor', 'end')
     .attr('transform', 'translate(8, -20)')
 
+  // renderMaces()
   const cGroup = chartCore
     .append('g')
     .attr('class', 'maces')
@@ -484,6 +502,7 @@ g.color-legend g:not(.mace-active) {
     }
   }
 
+  // setupSearch()
   const search = d3.select('#search')
   search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false)
   search.on('keyup', e => {
