@@ -13,7 +13,7 @@ export default {
       },
     },
     // not sure if cjs will work if d3 doesn't support cjs
-    { file: 'dist/bundle.cjs.js', format: 'cjs' },
+    // { file: 'dist/bundle.cjs.js', format: 'cjs' },
   ],
   plugins: [resolve()],
   external: ['lodash-es', 'd3'],

@@ -253,8 +253,10 @@
       // eslint-disable-next-line no-undef
     } = options; // works in chrome, but unable to find a way to disable eslint error
 
+    // setMainContainerWidth() - this should be outside renderChart
     d3__namespace.select('#main-container').classed(`${containerWidth}`, true);
 
+    // applyInteractionStyles
     d3__namespace.select('body').append('style').html(`
 
 g.maces .mace {
@@ -285,10 +287,15 @@ g.color-legend g:not(.mace-active) {
 `);
 
     // Headers
+    // setChartHeaders() - should be outside renderChart()
     d3__namespace.select('#chart-heading').node().textContent = heading;
     d3__namespace.select('#chart-subheading').node().textContent = subheading;
 
     // Chart Area
+
+    // setupChartArea()
+    // accepts - chart dimensions, margins, aspect ratio
+    // returns - svg, allComponents, chartCore
     const coreChartWidth = 1000;
     const coreChartHeight = coreChartWidth / aspectRatio;
 
@@ -308,16 +315,20 @@ g.color-legend g:not(.mace-active) {
       .append('g')
       .attr('transform', `translate(${marginLeft}, ${marginTop})`);
 
+    // remove (import from helpers)
     const toClassText = str => str.replace(/\s/g, '-').toLowerCase();
+
+    // initializeTooltip()
     const tooltipDiv = d3__namespace
       .select('body')
       .append('div')
+      .attr('class', 'dom-tooltip')
       .attr(
-        'class',
-        'dom-tooltip absolute text-center bg-white rounded px-2 py-1 text-xs border',
-      )
-      .style('opacity', 0);
+        'style',
+        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      );
 
+    // parseData()
     const dataParsed = data
       .map(el => {
         const elParsed = { ...el };
@@ -336,6 +347,7 @@ g.color-legend g:not(.mace-active) {
     const nameValues = ___default["default"](data).map(nameField).uniq().value();
     const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
 
+    // setupScales()
     const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]));
     const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]));
     const yDomain = d3__namespace.extent([...yDomainStart, ...yDomainEnd]);
@@ -373,6 +385,7 @@ g.color-legend g:not(.mace-active) {
 
     const sizeValues = sizeLegendValues.map(a => circleSizeScale(a));
 
+    // renderSizeLegend()
     // TODO: move to options?
     const gapInCircles = 30;
 
@@ -429,9 +442,11 @@ g.color-legend g:not(.mace-active) {
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
 
+    // move to scales: setupScales()
     const colorScale = slope =>
       slope > 0 ? sameDirectionColor : oppositeDirectionColor;
 
+    // renderColorLegend()
     const stickHeight = 3;
     const stickLength = 30;
     const stickWidthLegend = 1;
@@ -520,6 +535,7 @@ g.color-legend g:not(.mace-active) {
     });
 
     // x-axis
+    // renderXAxis()
     const xAxis = chartCore
       .append('g')
       .attr('class', 'x-axis-bottom')
@@ -540,6 +556,7 @@ g.color-legend g:not(.mace-active) {
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
 
     // y-axis
+    // renderYAxis()
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -558,6 +575,7 @@ g.color-legend g:not(.mace-active) {
       .attr('text-anchor', 'end')
       .attr('transform', 'translate(8, -20)');
 
+    // renderMaces()
     const cGroup = chartCore
       .append('g')
       .attr('class', 'maces')
@@ -667,6 +685,7 @@ g.color-legend g:not(.mace-active) {
       }
     };
 
+    // setupSearch()
     const search = d3__namespace.select('#search');
     search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false);
     search.on('keyup', e => {

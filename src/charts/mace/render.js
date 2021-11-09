@@ -139,11 +139,11 @@ g.color-legend g:not(.mace-active) {
   const tooltipDiv = d3
     .select('body')
     .append('div')
+    .attr('class', 'dom-tooltip')
     .attr(
-      'class',
-      'dom-tooltip absolute text-center bg-white rounded px-2 py-1 text-xs border',
+      'style',
+      'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
     )
-    .style('opacity', 0)
 
   // parseData()
   const dataParsed = data
@@ -504,6 +504,7 @@ g.color-legend g:not(.mace-active) {
 
   // setupSearch()
   const search = d3.select('#search')
+  // TODO: refactor hidden, won't be needed if we add this node
   search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false)
   search.on('keyup', e => {
     const qstr = e.target.value
