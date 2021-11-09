@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es'), require('uid')) :
   typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es', 'uid'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._, global.uid));
-})(this, (function (exports, d3, _, uid) { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._));
+})(this, (function (exports, d3, _) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -37,88 +37,6 @@
       ? formattedValue
       : ___default["default"].replace(formattedValue, 'G', 'B')
   };
-
-  function renderDirectionLegend({
-    selector = '#direction-legend',
-    circleRadius = 5,
-    stickLength = 30,
-    stickWidth = 2,
-    directionStartLabel = 'start',
-    directionEndLabel = 'end',
-    gapForText = 5,
-  }) {
-    const directionLegend = d3.select(selector).append('svg');
-    const directionLegendMain = directionLegend.append('g');
-    const directionLegendChild = directionLegendMain
-      .append('g')
-      .attr('fill', 'gray');
-    directionLegendChild
-      .append('circle')
-      .attr('cx', circleRadius + stickLength)
-      .attr('r', circleRadius);
-    directionLegendChild
-      .append('rect')
-      .attr('width', stickLength)
-      .attr('height', stickWidth)
-      .attr('y', -stickWidth / 2);
-    const startPointText = directionLegendChild
-      .append('text')
-      .text(directionStartLabel)
-      .attr('alignment-baseline', 'middle')
-      .attr('text-anchor', 'end')
-      .style('font-size', 10)
-      .attr('transform', `translate(${-gapForText}, 0)`);
-
-    directionLegendChild.attr(
-      'transform',
-      `translate(${startPointText.node().getBBox().width + gapForText}, ${
-      circleRadius > startPointText.node().getBBox().height / 2
-        ? circleRadius
-        : startPointText.node().getBBox().height / 2
-    })`,
-    );
-
-    directionLegendChild
-      .append('text')
-      .text(directionEndLabel)
-      .attr('alignment-baseline', 'middle')
-      .attr('text-anchor', 'start')
-      .attr(
-        'transform',
-        `translate(${stickLength + circleRadius * 2 + gapForText}, 0)`,
-      )
-      .style('font-size', 10);
-
-    const directionLegendBoundingBox = directionLegendMain.node().getBBox();
-    directionLegend
-      .attr('height', directionLegendBoundingBox.height)
-      .attr('width', directionLegendBoundingBox.width);
-  }
-
-  function preventOverflow({
-    allComponents,
-    svg,
-    safetyMargin = 20,
-    margins,
-  }) {
-    const { marginLeft, marginRight, marginTop, marginBottom } = margins;
-    let allComponentsBox = allComponents.node().getBBox();
-
-    const updatedViewBoxWidth =
-      allComponentsBox.width + safetyMargin + marginLeft + marginRight;
-    const updatedViewBoxHeight =
-      allComponentsBox.height + safetyMargin + marginTop + marginBottom;
-    svg.attr('viewBox', `0 0 ${updatedViewBoxWidth} ${updatedViewBoxHeight}`);
-
-    allComponentsBox = allComponents.node().getBBox();
-
-    allComponents.attr(
-      'transform',
-      `translate(${-allComponentsBox.x + safetyMargin / 2 + marginLeft}, ${
-      -allComponentsBox.y + safetyMargin / 2 + marginTop
-    })`,
-    );
-  }
 
   function distanceInPoints({ x1, y1, x2, y2 }) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
@@ -244,9 +162,9 @@
       sizeField,
       nameField,
     },
-    svgParentNodeSelector = '#svg-container',
+    // svgParentNodeSelector = '#svg-container',
   }) {
-    console.log(uid.uid());
+    // console.log(uid())
     const {
       xFieldType = `${xFieldStart} → ${xFieldEnd}`,
       yFieldType = `${yFieldStart} → ${yFieldEnd}`,
@@ -255,7 +173,7 @@
     } = options; // works in chrome, but unable to find a way to disable eslint error
 
     // setMainContainerWidth() - this should be outside renderChart
-    d3__namespace.select('#main-container').classed(`${containerWidth}`, true);
+    // d3.select('#main-container').classed(`${containerWidth}`, true)
 
     // applyInteractionStyles
     d3__namespace.select('body').append('style').html(`
@@ -303,10 +221,10 @@ g.color-legend g:not(.mace-active) {
     const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
     const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
 
-    const svgParent = d3__namespace.select(svgParentNodeSelector);
+    // const svgParent = d3.select(svgParentNodeSelector)
 
-    const svg = svgParent
-      .append('svg')
+    const svg = d3__namespace
+      .create('svg')
       .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
       .style('background', bgColor);
 
@@ -402,7 +320,7 @@ g.color-legend g:not(.mace-active) {
       cumulativeSizes.push(cumulativeSize);
     });
 
-    const sizeLegend = d3__namespace.select('#size-legend').append('svg');
+    const sizeLegend = d3__namespace.create('svg');
     const sizeLegendContainerGroup = sizeLegend.append('g');
 
     sizeLegendContainerGroup
@@ -450,11 +368,10 @@ g.color-legend g:not(.mace-active) {
     // renderColorLegend()
     const stickHeight = 3;
     const stickLength = 30;
-    const stickWidthLegend = 1;
     const ballRadius = 6;
     const gapForText = 5;
     const singleMaceSectionHeight = 20;
-    const colorLegend = d3__namespace.select('#color-legend').append('svg');
+    const colorLegend = d3__namespace.create('svg');
     const colorLegendMain = colorLegend
       .append('g')
       .attr('class', 'color-legend cursor-pointer')
@@ -525,15 +442,15 @@ g.color-legend g:not(.mace-active) {
       .attr('height', legendBoundingBox.height)
       .attr('width', legendBoundingBox.width);
 
-    renderDirectionLegend({
-      selector: '#direction-legend',
-      ballRadius,
-      stickLength,
-      stickWidthLegend,
-      gapForText,
-      directionStartLabel,
-      directionEndLabel,
-    });
+    // renderDirectionLegend({
+    //   selector: '#direction-legend',
+    //   ballRadius,
+    //   stickLength,
+    //   stickWidthLegend,
+    //   gapForText,
+    //   directionStartLabel,
+    //   directionEndLabel,
+    // })
 
     // x-axis
     // renderXAxis()
@@ -687,7 +604,7 @@ g.color-legend g:not(.mace-active) {
     };
 
     // setupSearch()
-    const search = d3__namespace.select('#search');
+    const search = d3__namespace.create('input').attr('type', 'text');
     // TODO: refactor hidden, won't be needed if we add this node
     search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false);
     search.on('keyup', e => {
@@ -716,11 +633,17 @@ g.color-legend g:not(.mace-active) {
 
     // For responsiveness
     // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
+    // preventOverflow({
+    //   allComponents,
+    //   svg,
+    //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+    // })
+
+    return {
+      mainChart: svg.node(),
+      sizeLegend: sizeLegend.node(),
+      search: search.node(),
+    }
   }
 
   const validateData = ({ data, dimensionTypes, dimensions }) => {
@@ -932,21 +855,6 @@ g.color-legend g:not(.mace-active) {
     return result
   }
 
-  // TODO: adapt for removal of tailwind classes
-  function showErrors(svgParentNodeSelector, errorMessages) {
-    d3__namespace.select('.config-error-display').remove();
-    if (___default["default"].isEmpty(errorMessages)) {
-      return
-    }
-    d3__namespace.select(svgParentNodeSelector)
-      .append('div')
-      .attr('class', 'text-red-500 config-error-display')
-      .html(
-        `<p>Errors:</p>
-      <ul class="list-disc"><li>${errorMessages.join('</li><li>')}</li></ul>`,
-      );
-  }
-
   // export function that
 
   const dimensionTypes = {
@@ -1005,7 +913,7 @@ g.color-legend g:not(.mace-active) {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender = ({
+  const validateAndRender = async ({
     dataPath,
     options,
     dimensions,
@@ -1013,41 +921,44 @@ g.color-legend g:not(.mace-active) {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
-    d3__namespace.csv(dataPath).then(data => {
-      // Run validations
-      const { columns } = data;
-      const dimensionValidation = validateColumnsWithDimensions({
-        columns,
-        dimensions,
-      });
-
-      const dataValidations = validateData({ data, dimensionTypes, dimensions });
-
-      // When new validations are added simply add the result to this array
-      // When building a new validator the output should be of format:
-      // {valid: boolean, message: string}
-      const allValidations = [
-        dimensionValidation,
-        dataValidations,
-        optionsValidationResult,
-      ];
-
-      const combinedValidation = { valid: true, messages: [] };
-
-      allValidations.forEach(v => {
-        combinedValidation.valid = combinedValidation.valid && v.valid;
-        if (!v.valid) {
-          combinedValidation.messages.push(v.message);
-        }
-      });
-
-      combinedValidation.valid
-        ? renderChart({ data, dimensions, options, svgParentNodeSelector })
-        : showErrors(svgParentNodeSelector, combinedValidation.messages);
-
-      // eslint-disable-next-line no-console
-      // console.log({ combinedValidation })
+    const data = await d3__namespace.csv(dataPath);
+    //  .then(data => {
+    // Run validations
+    const { columns } = data;
+    const dimensionValidation = validateColumnsWithDimensions({
+      columns,
+      dimensions,
     });
+
+    const dataValidations = validateData({ data, dimensionTypes, dimensions });
+
+    // When new validations are added simply add the result to this array
+    // When building a new validator the output should be of format:
+    // {valid: boolean, message: string}
+    const allValidations = [
+      dimensionValidation,
+      dataValidations,
+      optionsValidationResult,
+    ];
+
+    const combinedValidation = { valid: true, messages: [] };
+
+    allValidations.forEach(v => {
+      combinedValidation.valid = combinedValidation.valid && v.valid;
+      if (!v.valid) {
+        combinedValidation.messages.push(v.message);
+      }
+    });
+
+    if (combinedValidation.valid) {
+      return renderChart({ data, dimensions, options, svgParentNodeSelector })
+    }
+    // ? renderChart({ data, dimensions, options, svgParentNodeSelector })
+    // : showErrors(svgParentNodeSelector, combinedValidation.messages)
+
+    // eslint-disable-next-line no-console
+    // console.log({ combinedValidation })
+    // })
   };
 
   exports.renderMace = renderChart;

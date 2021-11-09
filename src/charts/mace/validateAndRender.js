@@ -85,7 +85,7 @@ const optionTypes = {
   inactiveOpacity: checkNumberBetween([0, 1]),
 }
 
-export const validateAndRender = ({
+export const validateAndRender = async ({
   dataPath,
   options,
   dimensions,
@@ -93,39 +93,42 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
-    // Run validations
-    const { columns } = data
-    const dimensionValidation = validateColumnsWithDimensions({
-      columns,
-      dimensions,
-    })
-
-    const dataValidations = validateData({ data, dimensionTypes, dimensions })
-
-    // When new validations are added simply add the result to this array
-    // When building a new validator the output should be of format:
-    // {valid: boolean, message: string}
-    const allValidations = [
-      dimensionValidation,
-      dataValidations,
-      optionsValidationResult,
-    ]
-
-    const combinedValidation = { valid: true, messages: [] }
-
-    allValidations.forEach(v => {
-      combinedValidation.valid = combinedValidation.valid && v.valid
-      if (!v.valid) {
-        combinedValidation.messages.push(v.message)
-      }
-    })
-
-    combinedValidation.valid
-      ? renderChart({ data, dimensions, options, svgParentNodeSelector })
-      : showErrors(svgParentNodeSelector, combinedValidation.messages)
-
-    // eslint-disable-next-line no-console
-    // console.log({ combinedValidation })
+  const data = await d3.csv(dataPath)
+  //  .then(data => {
+  // Run validations
+  const { columns } = data
+  const dimensionValidation = validateColumnsWithDimensions({
+    columns,
+    dimensions,
   })
+
+  const dataValidations = validateData({ data, dimensionTypes, dimensions })
+
+  // When new validations are added simply add the result to this array
+  // When building a new validator the output should be of format:
+  // {valid: boolean, message: string}
+  const allValidations = [
+    dimensionValidation,
+    dataValidations,
+    optionsValidationResult,
+  ]
+
+  const combinedValidation = { valid: true, messages: [] }
+
+  allValidations.forEach(v => {
+    combinedValidation.valid = combinedValidation.valid && v.valid
+    if (!v.valid) {
+      combinedValidation.messages.push(v.message)
+    }
+  })
+
+  if (combinedValidation.valid) {
+    return renderChart({ data, dimensions, options, svgParentNodeSelector })
+  }
+  // ? renderChart({ data, dimensions, options, svgParentNodeSelector })
+  // : showErrors(svgParentNodeSelector, combinedValidation.messages)
+
+  // eslint-disable-next-line no-console
+  // console.log({ combinedValidation })
+  // })
 }

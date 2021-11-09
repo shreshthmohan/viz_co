@@ -79,4 +79,14 @@ const options = {
   inactiveOpacity: 0.2,
 }
 
-viz.validateAndRenderMace({ dataPath, options, dimensions })
+viz
+  .validateAndRenderMace({
+    dataPath,
+    options,
+    dimensions,
+  })
+  .then(renderObject => {
+    window.renderObject = renderObject
+  })
+
+// document.getElementById('svg-container')

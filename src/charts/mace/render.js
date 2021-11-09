@@ -62,9 +62,9 @@ export function renderChart({
     sizeField,
     nameField,
   },
-  svgParentNodeSelector = '#svg-container',
+  // svgParentNodeSelector = '#svg-container',
 }) {
-  console.log(uid())
+  // console.log(uid())
   const {
     xFieldType = `${xFieldStart} → ${xFieldEnd}`,
     yFieldType = `${yFieldStart} → ${yFieldEnd}`,
@@ -73,7 +73,7 @@ export function renderChart({
   } = options // works in chrome, but unable to find a way to disable eslint error
 
   // setMainContainerWidth() - this should be outside renderChart
-  d3.select('#main-container').classed(`${containerWidth}`, true)
+  // d3.select('#main-container').classed(`${containerWidth}`, true)
 
   // applyInteractionStyles
   d3.select('body').append('style').html(`
@@ -121,10 +121,10 @@ g.color-legend g:not(.mace-active) {
   const viewBoxHeight = coreChartHeight + marginTop + marginBottom
   const viewBoxWidth = coreChartWidth + marginLeft + marginRight
 
-  const svgParent = d3.select(svgParentNodeSelector)
+  // const svgParent = d3.select(svgParentNodeSelector)
 
-  const svg = svgParent
-    .append('svg')
+  const svg = d3
+    .create('svg')
     .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
     .style('background', bgColor)
 
@@ -220,7 +220,7 @@ g.color-legend g:not(.mace-active) {
     cumulativeSizes.push(cumulativeSize)
   })
 
-  const sizeLegend = d3.select('#size-legend').append('svg')
+  const sizeLegend = d3.create('svg')
   const sizeLegendContainerGroup = sizeLegend.append('g')
 
   sizeLegendContainerGroup
@@ -272,7 +272,7 @@ g.color-legend g:not(.mace-active) {
   const ballRadius = 6
   const gapForText = 5
   const singleMaceSectionHeight = 20
-  const colorLegend = d3.select('#color-legend').append('svg')
+  const colorLegend = d3.create('svg')
   const colorLegendMain = colorLegend
     .append('g')
     .attr('class', 'color-legend cursor-pointer')
@@ -343,15 +343,15 @@ g.color-legend g:not(.mace-active) {
     .attr('height', legendBoundingBox.height)
     .attr('width', legendBoundingBox.width)
 
-  renderDirectionLegend({
-    selector: '#direction-legend',
-    ballRadius,
-    stickLength,
-    stickWidthLegend,
-    gapForText,
-    directionStartLabel,
-    directionEndLabel,
-  })
+  // renderDirectionLegend({
+  //   selector: '#direction-legend',
+  //   ballRadius,
+  //   stickLength,
+  //   stickWidthLegend,
+  //   gapForText,
+  //   directionStartLabel,
+  //   directionEndLabel,
+  // })
 
   // x-axis
   // renderXAxis()
@@ -505,7 +505,7 @@ g.color-legend g:not(.mace-active) {
   }
 
   // setupSearch()
-  const search = d3.select('#search')
+  const search = d3.create('input').attr('type', 'text')
   // TODO: refactor hidden, won't be needed if we add this node
   search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false)
   search.on('keyup', e => {
@@ -534,9 +534,15 @@ g.color-legend g:not(.mace-active) {
 
   // For responsiveness
   // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
-  })
+  // preventOverflow({
+  //   allComponents,
+  //   svg,
+  //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+  // })
+
+  return {
+    mainChart: svg.node(),
+    sizeLegend: sizeLegend.node(),
+    search: search.node(),
+  }
 }
