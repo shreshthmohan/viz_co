@@ -2,6 +2,7 @@
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
+import { uid } from 'uid'
 import { formatNumber } from '../../utils/helpers/formatters'
 
 import { renderDirectionLegend } from '../../utils/helpers/directionLegend'
@@ -63,6 +64,7 @@ export function renderChart({
   },
   svgParentNodeSelector = '#svg-container',
 }) {
+  console.log(uid())
   const {
     xFieldType = `${xFieldStart} → ${xFieldEnd}`,
     yFieldType = `${yFieldStart} → ${yFieldEnd}`,

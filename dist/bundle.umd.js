@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._));
-})(this, (function (exports, d3, _) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es'), require('uid')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es', 'uid'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._, global.uid));
+})(this, (function (exports, d3, _, uid) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -246,6 +246,7 @@
     },
     svgParentNodeSelector = '#svg-container',
   }) {
+    console.log(uid.uid());
     const {
       xFieldType = `${xFieldStart} → ${xFieldEnd}`,
       yFieldType = `${yFieldStart} → ${yFieldEnd}`,
@@ -687,6 +688,7 @@ g.color-legend g:not(.mace-active) {
 
     // setupSearch()
     const search = d3__namespace.select('#search');
+    // TODO: refactor hidden, won't be needed if we add this node
     search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false);
     search.on('keyup', e => {
       const qstr = e.target.value;
