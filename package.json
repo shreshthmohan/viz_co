@@ -1,9 +1,7 @@
 {
-  "name": "learn_ts",
+  "name": "viz_co",
   "version": "1.0.0",
-  "repository": "git@github.com:shreshthmohan/learn_ts.git",
   "private": true,
-  "author": "Shreshth Mohan <sremog@gmail.com>",
   "license": "MIT",
   "type": "module",
   "main": "./dist/bundle.cjs.js",
