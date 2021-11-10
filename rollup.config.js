@@ -10,12 +10,11 @@ export default {
       globals: {
         'lodash-es': '_',
         'd3': 'd3',
-        'uid': 'uid',
       },
     },
     // not sure if cjs will work if d3 doesn't support cjs
     // { file: 'dist/bundle.cjs.js', format: 'cjs' },
   ],
   plugins: [resolve()],
-  external: ['lodash-es', 'd3', 'uid'],
+  external: ['lodash-es', 'd3'],
 }

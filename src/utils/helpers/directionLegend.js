@@ -1,6 +1,5 @@
-import { select } from 'd3'
 export function renderDirectionLegend({
-  selector = '#direction-legend',
+  selection,
   circleRadius = 5,
   stickLength = 30,
   stickWidth = 2,
@@ -8,7 +7,7 @@ export function renderDirectionLegend({
   directionEndLabel = 'end',
   gapForText = 5,
 }) {
-  const directionLegend = select(selector).append('svg')
+  const directionLegend = selection
   const directionLegendMain = directionLegend.append('g')
   const directionLegendChild = directionLegendMain
     .append('g')

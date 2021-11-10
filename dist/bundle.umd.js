@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es'), require('uid')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es', 'uid'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._, global.uid));
-})(this, (function (exports, d3, _, uid) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._));
+})(this, (function (exports, d3, _) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -39,7 +39,7 @@
   };
 
   function renderDirectionLegend({
-    selector = '#direction-legend',
+    selection,
     circleRadius = 5,
     stickLength = 30,
     stickWidth = 2,
@@ -47,7 +47,7 @@
     directionEndLabel = 'end',
     gapForText = 5,
   }) {
-    const directionLegend = d3.select(selector).append('svg');
+    const directionLegend = selection;
     const directionLegendMain = directionLegend.append('g');
     const directionLegendChild = directionLegendMain
       .append('g')
@@ -93,31 +93,6 @@
     directionLegend
       .attr('height', directionLegendBoundingBox.height)
       .attr('width', directionLegendBoundingBox.width);
-  }
-
-  function preventOverflow({
-    allComponents,
-    svg,
-    safetyMargin = 20,
-    margins,
-  }) {
-    const { marginLeft, marginRight, marginTop, marginBottom } = margins;
-    let allComponentsBox = allComponents.node().getBBox();
-
-    const updatedViewBoxWidth =
-      allComponentsBox.width + safetyMargin + marginLeft + marginRight;
-    const updatedViewBoxHeight =
-      allComponentsBox.height + safetyMargin + marginTop + marginBottom;
-    svg.attr('viewBox', `0 0 ${updatedViewBoxWidth} ${updatedViewBoxHeight}`);
-
-    allComponentsBox = allComponents.node().getBBox();
-
-    allComponents.attr(
-      'transform',
-      `translate(${-allComponentsBox.x + safetyMargin / 2 + marginLeft}, ${
-      -allComponentsBox.y + safetyMargin / 2 + marginTop
-    })`,
-    );
   }
 
   function distanceInPoints({ x1, y1, x2, y2 }) {
@@ -244,9 +219,8 @@
       sizeField,
       nameField,
     },
-    svgParentNodeSelector = '#svg-container',
+    chartContainerSelector = '#chart-container',
   }) {
-    console.log(uid.uid());
     const {
       xFieldType = `${xFieldStart} → ${xFieldEnd}`,
       yFieldType = `${yFieldStart} → ${yFieldEnd}`,
@@ -255,7 +229,7 @@
     } = options; // works in chrome, but unable to find a way to disable eslint error
 
     // setMainContainerWidth() - this should be outside renderChart
-    d3__namespace.select('#main-container').classed(`${containerWidth}`, true);
+    // d3.select('#main-container').classed(`${containerWidth}`, true)
 
     // applyInteractionStyles
     d3__namespace.select('body').append('style').html(`
@@ -289,8 +263,8 @@ g.color-legend g:not(.mace-active) {
 
     // Headers
     // setChartHeaders() - should be outside renderChart()
-    d3__namespace.select('#chart-heading').node().textContent = heading;
-    d3__namespace.select('#chart-subheading').node().textContent = subheading;
+    // d3.select('#chart-heading').node().textContent = heading
+    // d3.select('#chart-subheading').node().textContent = subheading
 
     // Chart Area
 
@@ -303,9 +277,22 @@ g.color-legend g:not(.mace-active) {
     const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
     const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
 
-    const svgParent = d3__namespace.select(svgParentNodeSelector);
+    const chartParent = d3__namespace.select(chartContainerSelector);
 
-    const svg = svgParent
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
       .append('svg')
       .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
       .style('background', bgColor);
@@ -402,7 +389,7 @@ g.color-legend g:not(.mace-active) {
       cumulativeSizes.push(cumulativeSize);
     });
 
-    const sizeLegend = d3__namespace.select('#size-legend').append('svg');
+    const sizeLegend = widgetsRight.append('svg');
     const sizeLegendContainerGroup = sizeLegend.append('g');
 
     sizeLegendContainerGroup
@@ -454,7 +441,7 @@ g.color-legend g:not(.mace-active) {
     const ballRadius = 6;
     const gapForText = 5;
     const singleMaceSectionHeight = 20;
-    const colorLegend = d3__namespace.select('#color-legend').append('svg');
+    const colorLegend = widgetsRight.append('svg');
     const colorLegendMain = colorLegend
       .append('g')
       .attr('class', 'color-legend cursor-pointer')
@@ -526,7 +513,7 @@ g.color-legend g:not(.mace-active) {
       .attr('width', legendBoundingBox.width);
 
     renderDirectionLegend({
-      selector: '#direction-legend',
+      selection: widgetsRight.append('svg'),
       ballRadius,
       stickLength,
       stickWidthLegend,
@@ -687,15 +674,17 @@ g.color-legend g:not(.mace-active) {
     };
 
     // setupSearch()
-    const search = d3__namespace.select('#search');
+    const search = widgetsLeft.append('input').attr('type', 'text');
     // TODO: refactor hidden, won't be needed if we add this node
-    search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false);
+    search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
       searchEventHandler(qstr);
     });
 
-    const goToInitialState = d3__namespace.select('#initial-state');
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State');
     goToInitialState.classed('hidden', false);
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.mace').classed('mace-active', false);
@@ -706,7 +695,7 @@ g.color-legend g:not(.mace-active) {
       searchEventHandler('');
     });
 
-    const clearAll = d3__namespace.select('#clear-all');
+    const clearAll = widgetsLeft.append('button').text('Clear All');
     clearAll.classed('hidden', false);
     clearAll.on('click', () => {
       d3__namespace.selectAll('.mace').classed('mace-active', false);
@@ -716,11 +705,11 @@ g.color-legend g:not(.mace-active) {
 
     // For responsiveness
     // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
+    // preventOverflow({
+    //   allComponents,
+    //   svg,
+    //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+    // })
   }
 
   const validateData = ({ data, dimensionTypes, dimensions }) => {

@@ -21,7 +21,7 @@ const options = {
 
   /* Chart Area */
   containerWidth: 'max-w-screen-lg', // ['max-w-screen-sm', 'max-w-screen-md', 'max-w-screen-lg', 'max-w-screen-xl', 'max-w-screen-2xl', 'max-w-full']
-  aspectRatio: 3,
+  aspectRatio: 2,
 
   marginTop: 0,
   marginRight: 0,
