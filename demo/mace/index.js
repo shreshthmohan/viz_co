@@ -1,10 +1,7 @@
-// import { validateAndRenderMace } from '../../charts/mace'
-
-// mace.validateAndRender
-// mace.renderMace
+/* global viz */
 
 // eslint-disable-next-line no-unused-vars
-const dataPath = 'maceData.csv'
+const dataPath = 'data.csv'
 
 // eslint-disable-next-line no-unused-vars
 const dimensions = {

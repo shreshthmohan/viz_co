@@ -6,7 +6,7 @@ export default {
     {
       file: 'dist/bundle.umd.js',
       format: 'umd',
-      name: 'viz',
+      name: 'viz', // use this global var when using in the browser
       globals: {
         'lodash-es': '_',
         'd3': 'd3',
