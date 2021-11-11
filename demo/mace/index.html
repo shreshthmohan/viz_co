@@ -2,36 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <!-- <link rel="stylesheet" href="../../assets/css/styles.css" /> -->
+    <link rel="stylesheet" href="../css/styles.css" />
     <title>Happiness Economics - Mace Chart</title>
   </head>
-  <body style="font-family: Arial, Helvetica, sans-serif">
+  <body>
     <style></style>
-    <div
-      id="main-container"
-      style="max-width: 1000px; margin: auto; padding-top: 1rem"
-    >
+    <div id="main-container" class="max-w-screen-lg mx-auto pt-4 pb-16">
       <div class="max-w-7xl py-4">
         <h1
           id="chart-heading"
           class="font-nunito text-2xl leading-tight text-gray-900"
-        ></h1>
+        >
+          Mace
+        </h1>
         <h3
           id="chart-subheading"
           class="font-nunito mt-2 text-xl leading-tight text-gray-600"
-        ></h3>
+        >
+          Happiness Economics
+        </h3>
       </div>
       <div
         id="chart-container"
-        style="border: 4px solid #eee; padding: 1em; border-radius: 0.5em"
+        class="border-4 border-gray-100 p-3 rounded-md"
       ></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.1.1/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
-    <script src="https://unpkg.com/uid@2.0.0/dist/index.min.js"></script>
     <script src="../../dist/bundle.umd.js"></script>
     <script src="./index.js"></script>
   </body>

@@ -52,6 +52,10 @@ export function renderChart({
 
     circleSizeRange = [5, 30],
     lineWidthRange = [2, 4],
+
+    searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
   },
   dimensions: {
     xFieldStart,
@@ -75,33 +79,32 @@ export function renderChart({
 
   // applyInteractionStyles
   d3.select('body').append('style').html(`
-
-g.maces .mace {
-  fill-opacity: ${inactiveOpacity};
-}
-/* clicked and legend clicked states are common: controlled by .mace-active */
-g.maces .mace.mace-active {
-  fill-opacity: ${activeOpacity};
-}
-g.maces.searching .mace.mace-matched {
-  stroke: #333;
-  stroke-width: 3;
-}
-/* So that legend text is visible irrespective of state */
-g.mace text {
-  fill-opacity: 0.8;
-}
-g.maces g.mace.mace-hovered {
-  stroke: #333;
-  stroke-width: 3;
-}
-g.color-legend g.mace-active {
-  fill-opacity: ${activeOpacity};
-}
-g.color-legend g:not(.mace-active) {
-  fill-opacity: ${inactiveOpacity};
-}
-`)
+    g.maces .mace {
+      fill-opacity: ${inactiveOpacity};
+    }
+    /* clicked and legend clicked states are common: controlled by .mace-active */
+    g.maces .mace.mace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.maces.searching .mace.mace-matched {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    /* So that legend text is visible irrespective of state */
+    g.mace text {
+      fill-opacity: 0.8;
+    }
+    g.maces g.mace.mace-hovered {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    g.color-legend g.mace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.color-legend g:not(.mace-active) {
+      fill-opacity: ${inactiveOpacity};
+    }
+  `)
 
   // Headers
   // setChartHeaders() - should be outside renderChart()
@@ -187,7 +190,6 @@ g.color-legend g:not(.mace-active) {
     .domain(yDomain)
     .nice()
 
-  // TODO: issue with slope, should be calculated after x and  y scales are defined
   const xDomainStart = dataParsed.map(el => Number.parseFloat(el[xFieldStart]))
   const xDomainEnd = dataParsed.map(el => Number.parseFloat(el[xFieldEnd]))
   const xDomain = d3.extent([...xDomainStart, ...xDomainEnd])
@@ -516,7 +518,10 @@ g.color-legend g:not(.mace-active) {
   }
 
   // setupSearch()
-  const search = widgetsLeft.append('input').attr('type', 'text')
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
   // TODO: refactor hidden, won't be needed if we add this node
   search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
@@ -527,6 +532,7 @@ g.color-legend g:not(.mace-active) {
   const goToInitialState = widgetsLeft
     .append('button')
     .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.classed('hidden', false)
   goToInitialState.on('click', () => {
     d3.selectAll('.mace').classed('mace-active', false)
@@ -537,7 +543,10 @@ g.color-legend g:not(.mace-active) {
     searchEventHandler('')
   })
 
-  const clearAll = widgetsLeft.append('button').text('Clear All')
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
     d3.selectAll('.mace').classed('mace-active', false)
@@ -547,9 +556,9 @@ g.color-legend g:not(.mace-active) {
 
   // For responsiveness
   // adjust svg to prevent overflows
-  // preventOverflow({
-  //   allComponents,
-  //   svg,
-  //   margins: { marginLeft, marginRight, marginTop, marginBottom },
-  // })
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
 }

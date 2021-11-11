@@ -74,6 +74,14 @@ const options = {
   /* Interactions */
   activeOpacity: 0.8,
   inactiveOpacity: 0.2,
+
+  searchInputClassNames:
+    'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
+  // 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md overscroll-y-auto',
+  goToInitialStateButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+  clearAllButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 
 viz.validateAndRenderMace({ dataPath, options, dimensions })

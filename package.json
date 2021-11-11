@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "type": "module",
   "main": "./dist/bundle.cjs.js",
   "module": "./src/index.js",
   "browser": "./dist/bundle.umd.js",
@@ -12,7 +11,10 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "tsc": "tsc -v"
+    "tsc": "tsc -v",
+    "notes": "css:build, watch scripts are for demo, deps: cross-env, cssnano, postcss-cli, tailwindcss, autoprefixer are for demo, todo move them to demo sub-folder",
+    "css:build": "cross-env NODE_ENV=production postcss demo/scss/styles.css -o demo/css/styles.css",
+    "css:watch": "cross-env NODE_ENV=development postcss  demo/scss/styles.css -o demo/css/styles.css --watch"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
@@ -20,6 +22,11 @@
     "lodash-es": "^4.17.21",
     "rollup": "^2.59.0",
     "typescript": "^4.4.4",
-    "uid": "^2.0.0"
+    "uid": "^2.0.0",
+    "cross-env": "^7.0.3",
+    "cssnano": "^5.0.5",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.1.3",
+    "autoprefixer": "^10.2.6"
   }
 }
