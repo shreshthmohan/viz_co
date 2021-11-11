@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./demo/**/*.html', './demo/**/*.js'],
+  purge: ['./src/**/*.html', './src/**/*.js'],
   // corePlugins: {
   //   preflight: false,
   // },
@@ -11,10 +11,10 @@ module.exports = {
     //   },
     // },
   },
-  variants: {
-    extend: {
-      backgroundColor: ['disabled'],
-      cursor: ['disabled'],
-    },
-  },
+  // variants: {
+  //   extend: {
+  //     backgroundColor: ['disabled'],
+  //     cursor: ['disabled'],
+  //   },
+  // },
 }
