@@ -2,7 +2,6 @@
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
-import { uid } from 'uid'
 import { formatNumber } from '../../utils/helpers/formatters'
 
 import { renderDirectionLegend } from '../../utils/helpers/directionLegend'
@@ -53,6 +52,10 @@ export function renderChart({
 
     circleSizeRange = [5, 30],
     lineWidthRange = [2, 4],
+
+    searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
   },
   dimensions: {
     xFieldStart,
@@ -62,9 +65,8 @@ export function renderChart({
     sizeField,
     nameField,
   },
-  svgParentNodeSelector = '#svg-container',
+  chartContainerSelector = '#chart-container',
 }) {
-  console.log(uid())
   const {
     xFieldType = `${xFieldStart} → ${xFieldEnd}`,
     yFieldType = `${yFieldStart} → ${yFieldEnd}`,
@@ -73,42 +75,41 @@ export function renderChart({
   } = options // works in chrome, but unable to find a way to disable eslint error
 
   // setMainContainerWidth() - this should be outside renderChart
-  d3.select('#main-container').classed(`${containerWidth}`, true)
+  // d3.select('#main-container').classed(`${containerWidth}`, true)
 
   // applyInteractionStyles
   d3.select('body').append('style').html(`
-
-g.maces .mace {
-  fill-opacity: ${inactiveOpacity};
-}
-/* clicked and legend clicked states are common: controlled by .mace-active */
-g.maces .mace.mace-active {
-  fill-opacity: ${activeOpacity};
-}
-g.maces.searching .mace.mace-matched {
-  stroke: #333;
-  stroke-width: 3;
-}
-/* So that legend text is visible irrespective of state */
-g.mace text {
-  fill-opacity: 0.8;
-}
-g.maces g.mace.mace-hovered {
-  stroke: #333;
-  stroke-width: 3;
-}
-g.color-legend g.mace-active {
-  fill-opacity: ${activeOpacity};
-}
-g.color-legend g:not(.mace-active) {
-  fill-opacity: ${inactiveOpacity};
-}
-`)
+    g.maces .mace {
+      fill-opacity: ${inactiveOpacity};
+    }
+    /* clicked and legend clicked states are common: controlled by .mace-active */
+    g.maces .mace.mace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.maces.searching .mace.mace-matched {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    /* So that legend text is visible irrespective of state */
+    g.mace text {
+      fill-opacity: 0.8;
+    }
+    g.maces g.mace.mace-hovered {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    g.color-legend g.mace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.color-legend g:not(.mace-active) {
+      fill-opacity: ${inactiveOpacity};
+    }
+  `)
 
   // Headers
   // setChartHeaders() - should be outside renderChart()
-  d3.select('#chart-heading').node().textContent = heading
-  d3.select('#chart-subheading').node().textContent = subheading
+  // d3.select('#chart-heading').node().textContent = heading
+  // d3.select('#chart-subheading').node().textContent = subheading
 
   // Chart Area
 
@@ -121,9 +122,22 @@ g.color-legend g:not(.mace-active) {
   const viewBoxHeight = coreChartHeight + marginTop + marginBottom
   const viewBoxWidth = coreChartWidth + marginLeft + marginRight
 
-  const svgParent = d3.select(svgParentNodeSelector)
+  const chartParent = d3.select(chartContainerSelector)
 
-  const svg = svgParent
+  const widgets = chartParent
+    .append('div')
+    .attr(
+      'style',
+      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+    )
+  const widgetsLeft = widgets
+    .append('div')
+    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
+  const widgetsRight = widgets
+    .append('div')
+    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
+
+  const svg = chartParent
     .append('svg')
     .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
     .style('background', bgColor)
@@ -176,7 +190,6 @@ g.color-legend g:not(.mace-active) {
     .domain(yDomain)
     .nice()
 
-  // TODO: issue with slope, should be calculated after x and  y scales are defined
   const xDomainStart = dataParsed.map(el => Number.parseFloat(el[xFieldStart]))
   const xDomainEnd = dataParsed.map(el => Number.parseFloat(el[xFieldEnd]))
   const xDomain = d3.extent([...xDomainStart, ...xDomainEnd])
@@ -220,7 +233,7 @@ g.color-legend g:not(.mace-active) {
     cumulativeSizes.push(cumulativeSize)
   })
 
-  const sizeLegend = d3.select('#size-legend').append('svg')
+  const sizeLegend = widgetsRight.append('svg')
   const sizeLegendContainerGroup = sizeLegend.append('g')
 
   sizeLegendContainerGroup
@@ -272,7 +285,7 @@ g.color-legend g:not(.mace-active) {
   const ballRadius = 6
   const gapForText = 5
   const singleMaceSectionHeight = 20
-  const colorLegend = d3.select('#color-legend').append('svg')
+  const colorLegend = widgetsRight.append('svg')
   const colorLegendMain = colorLegend
     .append('g')
     .attr('class', 'color-legend cursor-pointer')
@@ -344,7 +357,7 @@ g.color-legend g:not(.mace-active) {
     .attr('width', legendBoundingBox.width)
 
   renderDirectionLegend({
-    selector: '#direction-legend',
+    selection: widgetsRight.append('svg'),
     ballRadius,
     stickLength,
     stickWidthLegend,
@@ -505,15 +518,21 @@ g.color-legend g:not(.mace-active) {
   }
 
   // setupSearch()
-  const search = d3.select('#search')
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
   // TODO: refactor hidden, won't be needed if we add this node
-  search.attr('placeholder', `Find by ${nameField}`).classed('hidden', false)
+  search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
     searchEventHandler(qstr)
   })
 
-  const goToInitialState = d3.select('#initial-state')
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.classed('hidden', false)
   goToInitialState.on('click', () => {
     d3.selectAll('.mace').classed('mace-active', false)
@@ -524,7 +543,10 @@ g.color-legend g:not(.mace-active) {
     searchEventHandler('')
   })
 
-  const clearAll = d3.select('#clear-all')
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
     d3.selectAll('.mace').classed('mace-active', false)
