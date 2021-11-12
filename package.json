@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "tsc": "tsc -v"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
