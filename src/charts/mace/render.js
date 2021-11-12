@@ -181,8 +181,8 @@ function setupScales({
 }
 
 function renderSizeLegend({
+  gapInCircles,
   circleSizeScale,
-  sizeValues,
   widgetsRight,
   sizeLegendMoveSizeObjectDownBy,
   sizeLegendValues,
@@ -190,7 +190,6 @@ function renderSizeLegend({
   sizeLegendTitle,
 }) {
   const sizeValues = sizeLegendValues.map(a => circleSizeScale(a))
-  const gapInCircles = 30
 
   let cumulativeSize = 0
   const cumulativeSizes = []
@@ -245,6 +244,325 @@ function renderSizeLegend({
     .attr('height', sizeLegendBoundingBox.height)
     .attr('width', sizeLegendBoundingBox.width)
 }
+function renderXAxis({
+  chartCore,
+  coreChartHeight,
+  coreChartWidth,
+  xScale,
+  xAxisTickValues,
+  xAxisTitle,
+}) {
+  const xAxis = chartCore
+    .append('g')
+    .attr('class', 'x-axis-bottom')
+    .attr('transform', `translate(0, ${coreChartHeight + 30})`)
+  xAxis.call(
+    xAxisTickValues
+      ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
+      : d3.axisBottom(xScale),
+  )
+
+  xAxis
+    .append('g')
+    .append('text')
+    .attr('class', 'text-xs font-semibold tracking-wider')
+    .text(xAxisTitle)
+    .attr('fill', '#333')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
+}
+
+function renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  const yAxis = chartCore
+    .append('g')
+    .attr('class', 'text-xs y-axis-right')
+    .attr('transform', `translate(${coreChartWidth}, 0)`)
+  yAxis
+    .call(d3.axisRight(yScale).ticks(5).tickSize(-coreChartWidth))
+    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
+    .call(g => g.select('.domain').remove())
+
+  yAxis
+    .append('g')
+    .append('text')
+    .attr('class', 'font-semibold tracking-wider')
+    .text(yAxisTitle)
+    .attr('fill', '#333')
+    .attr('text-anchor', 'end')
+    .attr('transform', 'translate(8, -20)')
+}
+
+function renderColorLegend({
+  stickHeight,
+  stickLength,
+  ballRadius,
+  gapForText,
+  singleMaceSectionHeight,
+  widgetsRight,
+  sameDirectionColor,
+  oppositeDirectionColor,
+}) {
+  const colorLegend = widgetsRight.append('svg')
+  const colorLegendMain = colorLegend
+    .append('g')
+    .attr('class', 'color-legend cursor-pointer')
+    .attr(
+      'transform',
+      `translate(0, ${-(singleMaceSectionHeight - ballRadius)})`,
+    ) // 20-6
+  const colorLegendSame = colorLegendMain
+    .append('g')
+    .attr('transform', `translate(0, ${singleMaceSectionHeight})`)
+    .attr('fill', sameDirectionColor)
+    .attr('class', 'mace mace-same')
+    .on('click', e => {
+      const parentLegend = d3.select(e.target.parentNode)
+      const legendState = parentLegend.classed('mace-active')
+      d3.selectAll('.mace-same').classed('mace-active', !legendState)
+    })
+  colorLegendSame
+    .append('circle')
+    .attr('cx', ballRadius + stickLength)
+    .attr('r', ballRadius)
+  colorLegendSame
+    .append('rect')
+    .attr('width', stickLength)
+    .attr('height', stickHeight)
+    .attr('y', -stickHeight / 2)
+  colorLegendSame
+    .append('text')
+    .text('Moving in the same direction')
+    .style('font-size', 10)
+    .style('font-weight', 600)
+    .attr(
+      'transform',
+      `translate(${stickLength + ballRadius * 2 + gapForText}, 0)`,
+    )
+    .attr('alignment-baseline', 'middle')
+  const colorLegendOpposite = colorLegendMain
+    .append('g')
+    .attr('transform', `translate(0, ${singleMaceSectionHeight * 2})`)
+    .attr('fill', oppositeDirectionColor)
+    .attr('class', 'mace mace-opposite')
+    .on('click', e => {
+      const parentLegend = d3.select(e.target.parentNode)
+      const legendState = parentLegend.classed('mace-active')
+      d3.selectAll('.mace-opposite').classed('mace-active', !legendState)
+    })
+  colorLegendOpposite
+    .append('circle')
+    .attr('cx', ballRadius + stickLength)
+    .attr('r', ballRadius)
+  colorLegendOpposite
+    .append('rect')
+    .attr('width', stickLength)
+    .attr('height', stickHeight)
+    .attr('y', -stickHeight / 2)
+  colorLegendOpposite
+    .append('text')
+    .text('Moving in the opposite direction')
+    .style('font-size', 10)
+    .style('font-weight', 600)
+    .attr(
+      'transform',
+      `translate(${stickLength + ballRadius * 2 + gapForText}, 0)`,
+    )
+    .attr('alignment-baseline', 'middle')
+  const legendBoundingBox = colorLegendMain.node().getBBox()
+  colorLegend
+    .attr('height', legendBoundingBox.height)
+    .attr('width', legendBoundingBox.width)
+}
+
+function renderMaces({
+  chartCore,
+  dataParsed,
+  sizeField,
+  nameField,
+  defaultStateAll,
+  xFieldStart,
+  xFieldEnd,
+  xScale,
+  yScale,
+  yFieldStart,
+  yFieldEnd,
+  circleSizeScale,
+  lineWidthScale,
+  colorScale,
+  tooltipDiv,
+  sizeValueFormatter,
+  xValueFormatter,
+  yValueFormatter,
+  xFieldType,
+  yFieldType,
+}) {
+  const cGroup = chartCore
+    .append('g')
+    .attr('class', 'maces')
+    //  ${_.isEmpty(defaultStateAll) ? '' : 'default'}`)
+    .selectAll('g')
+    .data(dataParsed)
+    .join('g')
+    .sort((a, b) => d3.descending(a[sizeField], b[sizeField]))
+    .attr(
+      'class',
+      d =>
+        `mace
+        ${d.slope >= 0 ? 'mace-same' : 'mace-opposite'}
+        mace-${toClassText(d[nameField])}
+        ${defaultStateAll.includes(d[nameField]) ? 'mace-active' : ''}`,
+    )
+    .on('click', e => {
+      const parentMace = d3.select(e.target.parentNode)
+      const clickedState = parentMace.classed('mace-active')
+      parentMace.classed('mace-active', !clickedState)
+    })
+
+  cGroup
+    .append('path')
+    .attr('d', d => {
+      const x1 = xScale(d[xFieldStart])
+      const y1 = yScale(d[yFieldStart])
+      const x2 = xScale(d[xFieldEnd])
+      const y2 = yScale(d[yFieldEnd])
+      const circleRadius = circleSizeScale(d[sizeField])
+      const stickWidth = lineWidthScale(d[sizeField])
+      const macePoints = maceShape({
+        x1,
+        y1,
+        x2,
+        y2,
+        circleRadius,
+        stickWidth,
+      })
+      return d3.lineRadial()(macePoints)
+    })
+    .attr('transform', d => {
+      const x1 = xScale(d[xFieldStart])
+      const y1 = yScale(d[yFieldStart])
+      const x2 = xScale(d[xFieldEnd])
+      const y2 = yScale(d[yFieldEnd])
+      const rotationAngle = pointsToRotationAngle({ x1, y1, x2, y2 })
+      return `translate(${x2}, ${y2}) rotate(${rotationAngle})`
+    })
+    .attr('fill', d => colorScale(d.slope))
+    .attr('stroke-linecap', 'square')
+
+  cGroup
+    .on('mouseover', (e, d) => {
+      d3.select(e.target.parentNode).classed('mace-hovered', true)
+
+      tooltipDiv.transition().duration(200).style('opacity', 1)
+
+      const sizeFieldValue = formatNumber(d[sizeField], sizeValueFormatter)
+      const xFieldStartValue = formatNumber(d[xFieldStart], xValueFormatter)
+      const xFieldEndValue = formatNumber(d[xFieldEnd], xValueFormatter)
+      const yFieldStartValue = formatNumber(d[yFieldStart], yValueFormatter)
+      const yFieldEndValue = formatNumber(d[yFieldEnd], yValueFormatter)
+
+      tooltipDiv.html(
+        `${d[nameField]}
+        <br/>
+        ${xFieldType}: ${xFieldStartValue} → ${xFieldEndValue}
+        <br />
+        ${yFieldType}: ${yFieldStartValue} → ${yFieldEndValue}
+        <br />
+        ${_.capitalize(sizeField)}: ${sizeFieldValue}
+        `,
+      )
+      tooltipDiv
+        .style('left', `${e.clientX}px`)
+        .style('top', `${e.clientY + 20 + window.scrollY}px`)
+    })
+    .on('mouseout', e => {
+      d3.select(e.target.parentNode).classed('mace-hovered', false)
+      tooltipDiv
+        .style('left', '-300px')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+}
+const searchEventHandler = referenceList => qstr => {
+  if (qstr) {
+    const lqstr = qstr.toLowerCase()
+    referenceList.forEach(val => {
+      // d3.selectAll('.mace').classed('mace-active', false)
+      const maceName = toClassText(val)
+      if (val.toLowerCase().includes(lqstr)) {
+        d3.select(`.mace-${maceName}`).classed('mace-matched', true)
+      } else {
+        d3.select(`.mace-${maceName}`).classed('mace-matched', false)
+      }
+      d3.select('.maces').classed('searching', true)
+    })
+  } else {
+    referenceList.forEach(val => {
+      const maceName = toClassText(val)
+      d3.select(`.mace-${maceName}`).classed('mace-matched', false)
+    })
+    d3.select('.maces').classed('searching', false)
+  }
+}
+
+function setupSearch({
+  handleSearch,
+  widgetsLeft,
+  searchInputClassNames,
+  nameField,
+}) {
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+  // TODO: refactor hidden, won't be needed if we add this node
+  search.attr('placeholder', `Find by ${nameField}`)
+  search.on('keyup', e => {
+    const qstr = e.target.value
+    handleSearch(qstr)
+  })
+  return search
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    d3.selectAll('.mace').classed('mace-active', false)
+    _.forEach(defaultStateAll, val => {
+      d3.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
+    })
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    d3.selectAll('.mace').classed('mace-active', false)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
 
 export function renderChart({
   data,
@@ -261,8 +579,6 @@ export function renderChart({
     oppositeDirectionColor = '#ee4e34',
     sameDirectionColor = '#44a8c1',
 
-    containerWidth = 'max-w-screen-lg',
-
     yAxisTitle = 'y axis title',
     xAxisTitle = 'x axis title',
 
@@ -275,8 +591,6 @@ export function renderChart({
     sizeLegendMoveSizeObjectDownBy = 5,
     sizeLegendTitle = 'size legend title',
     sizeValueFormatter = '',
-    heading = 'This is a heading for the chart',
-    subheading = 'This is a subheading for the chart describing it in more detail',
 
     xAxisTickValues,
 
@@ -361,7 +675,9 @@ export function renderChart({
   const nameValues = _(data).map(nameField).uniq().value()
   const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
 
+  const gapInCircles = 30
   renderSizeLegend({
+    gapInCircles,
     circleSizeScale,
     widgetsRight,
     sizeLegendMoveSizeObjectDownBy,
@@ -369,85 +685,24 @@ export function renderChart({
     sizeValueFormatter,
     sizeLegendTitle,
   })
-  // TODO: move to options?
 
-  // renderColorLegend()
   const stickHeight = 3
   const stickLength = 30
   const stickWidthLegend = 1
   const ballRadius = 6
   const gapForText = 5
   const singleMaceSectionHeight = 20
-  const colorLegend = widgetsRight.append('svg')
-  const colorLegendMain = colorLegend
-    .append('g')
-    .attr('class', 'color-legend cursor-pointer')
-    .attr(
-      'transform',
-      `translate(0, ${-(singleMaceSectionHeight - ballRadius)})`,
-    ) // 20-6
-  const colorLegendSame = colorLegendMain
-    .append('g')
-    .attr('transform', `translate(0, ${singleMaceSectionHeight})`)
-    .attr('fill', sameDirectionColor)
-    .attr('class', 'mace mace-same')
-    .on('click', e => {
-      const parentLegend = d3.select(e.target.parentNode)
-      const legendState = parentLegend.classed('mace-active')
-      d3.selectAll('.mace-same').classed('mace-active', !legendState)
-    })
-  colorLegendSame
-    .append('circle')
-    .attr('cx', ballRadius + stickLength)
-    .attr('r', ballRadius)
-  colorLegendSame
-    .append('rect')
-    .attr('width', stickLength)
-    .attr('height', stickHeight)
-    .attr('y', -stickHeight / 2)
-  colorLegendSame
-    .append('text')
-    .text('Moving in the same direction')
-    .style('font-size', 10)
-    .style('font-weight', 600)
-    .attr(
-      'transform',
-      `translate(${stickLength + ballRadius * 2 + gapForText}, 0)`,
-    )
-    .attr('alignment-baseline', 'middle')
-  const colorLegendOpposite = colorLegendMain
-    .append('g')
-    .attr('transform', `translate(0, ${singleMaceSectionHeight * 2})`)
-    .attr('fill', oppositeDirectionColor)
-    .attr('class', 'mace mace-opposite')
-    .on('click', e => {
-      const parentLegend = d3.select(e.target.parentNode)
-      const legendState = parentLegend.classed('mace-active')
-      d3.selectAll('.mace-opposite').classed('mace-active', !legendState)
-    })
-  colorLegendOpposite
-    .append('circle')
-    .attr('cx', ballRadius + stickLength)
-    .attr('r', ballRadius)
-  colorLegendOpposite
-    .append('rect')
-    .attr('width', stickLength)
-    .attr('height', stickHeight)
-    .attr('y', -stickHeight / 2)
-  colorLegendOpposite
-    .append('text')
-    .text('Moving in the opposite direction')
-    .style('font-size', 10)
-    .style('font-weight', 600)
-    .attr(
-      'transform',
-      `translate(${stickLength + ballRadius * 2 + gapForText}, 0)`,
-    )
-    .attr('alignment-baseline', 'middle')
-  const legendBoundingBox = colorLegendMain.node().getBBox()
-  colorLegend
-    .attr('height', legendBoundingBox.height)
-    .attr('width', legendBoundingBox.width)
+
+  renderColorLegend({
+    stickHeight,
+    stickLength,
+    ballRadius,
+    gapForText,
+    singleMaceSectionHeight,
+    widgetsRight,
+    sameDirectionColor,
+    oppositeDirectionColor,
+  })
 
   renderDirectionLegend({
     selection: widgetsRight.append('svg'),
@@ -459,192 +714,63 @@ export function renderChart({
     directionEndLabel,
   })
 
-  // x-axis
-  // renderXAxis()
-  const xAxis = chartCore
-    .append('g')
-    .attr('class', 'x-axis-bottom')
-    .attr('transform', `translate(0, ${coreChartHeight + 30})`)
-  xAxis.call(
-    xAxisTickValues
-      ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
-      : d3.axisBottom(xScale),
-  )
-
-  xAxis
-    .append('g')
-    .append('text')
-    .attr('class', 'text-xs font-semibold tracking-wider')
-    .text(xAxisTitle)
-    .attr('fill', '#333')
-    .attr('text-anchor', 'middle')
-    .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
+  renderXAxis({
+    chartCore,
+    coreChartHeight,
+    coreChartWidth,
+    xScale,
+    xAxisTickValues,
+    xAxisTitle,
+  })
 
   // y-axis
-  // renderYAxis()
-  const yAxis = chartCore
-    .append('g')
-    .attr('class', 'text-xs y-axis-right')
-    .attr('transform', `translate(${coreChartWidth}, 0)`)
-  yAxis
-    .call(d3.axisRight(yScale).ticks(5).tickSize(-coreChartWidth))
-    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
-    .call(g => g.select('.domain').remove())
+  renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle })
 
-  yAxis
-    .append('g')
-    .append('text')
-    .attr('class', 'font-semibold tracking-wider')
-    .text(yAxisTitle)
-    .attr('fill', '#333')
-    .attr('text-anchor', 'end')
-    .attr('transform', 'translate(8, -20)')
-
-  // renderMaces()
-  const cGroup = chartCore
-    .append('g')
-    .attr('class', 'maces')
-    //  ${_.isEmpty(defaultStateAll) ? '' : 'default'}`)
-    .selectAll('g')
-    .data(dataParsed)
-    .join('g')
-    .sort((a, b) => d3.descending(a[sizeField], b[sizeField]))
-    .attr(
-      'class',
-      d =>
-        `mace
-        ${d.slope >= 0 ? 'mace-same' : 'mace-opposite'}
-        mace-${toClassText(d[nameField])}
-        ${defaultStateAll.includes(d[nameField]) ? 'mace-active' : ''}`,
-    )
-    .on('click', e => {
-      const parentMace = d3.select(e.target.parentNode)
-      const clickedState = parentMace.classed('mace-active')
-      parentMace.classed('mace-active', !clickedState)
-    })
-
-  cGroup
-    .append('path')
-    .attr('d', d => {
-      const x1 = xScale(d[xFieldStart])
-      const y1 = yScale(d[yFieldStart])
-      const x2 = xScale(d[xFieldEnd])
-      const y2 = yScale(d[yFieldEnd])
-      const circleRadius = circleSizeScale(d.population)
-      const stickWidth = lineWidthScale(d[sizeField])
-      const macePoints = maceShape({
-        x1,
-        y1,
-        x2,
-        y2,
-        circleRadius,
-        stickWidth,
-      })
-      return d3.lineRadial()(macePoints)
-    })
-    .attr('transform', d => {
-      const x1 = xScale(d[xFieldStart])
-      const y1 = yScale(d[yFieldStart])
-      const x2 = xScale(d[xFieldEnd])
-      const y2 = yScale(d[yFieldEnd])
-      const rotationAngle = pointsToRotationAngle({ x1, y1, x2, y2 })
-      return `translate(${x2}, ${y2}) rotate(${rotationAngle})`
-    })
-    .attr('fill', d => colorScale(d.slope))
-    .attr('stroke-linecap', 'square')
-
-  cGroup
-    .on('mouseover', (e, d) => {
-      d3.select(e.target.parentNode).classed('mace-hovered', true)
-
-      tooltipDiv.transition().duration(200).style('opacity', 1)
-
-      const sizeFieldValue = formatNumber(d[sizeField], sizeValueFormatter)
-      const xFieldStartValue = formatNumber(d[xFieldStart], xValueFormatter)
-      const xFieldEndValue = formatNumber(d[xFieldEnd], xValueFormatter)
-      const yFieldStartValue = formatNumber(d[yFieldStart], yValueFormatter)
-      const yFieldEndValue = formatNumber(d[yFieldEnd], yValueFormatter)
-
-      tooltipDiv.html(
-        `${d[nameField]}
-        <br/>
-        ${xFieldType}: ${xFieldStartValue} → ${xFieldEndValue}
-        <br />
-        ${yFieldType}: ${yFieldStartValue} → ${yFieldEndValue}
-        <br />
-        ${_.capitalize(sizeField)}: ${sizeFieldValue}
-        `,
-      )
-      tooltipDiv
-        .style('left', `${e.clientX}px`)
-        .style('top', `${e.clientY + 20 + window.scrollY}px`)
-    })
-    .on('mouseout', e => {
-      d3.select(e.target.parentNode).classed('mace-hovered', false)
-      tooltipDiv
-        .style('left', '-300px')
-        .transition()
-        .duration(500)
-        .style('opacity', 0)
-    })
-
-  const searchEventHandler = qstr => {
-    if (qstr) {
-      const lqstr = qstr.toLowerCase()
-      nameValues.forEach(val => {
-        // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText(val)
-        if (val.toLowerCase().includes(lqstr)) {
-          d3.select(`.mace-${maceName}`).classed('mace-matched', true)
-        } else {
-          d3.select(`.mace-${maceName}`).classed('mace-matched', false)
-        }
-        d3.select('.maces').classed('searching', true)
-      })
-    } else {
-      nameValues.forEach(val => {
-        const maceName = toClassText(val)
-        d3.select(`.mace-${maceName}`).classed('mace-matched', false)
-      })
-      d3.select('.maces').classed('searching', false)
-    }
-  }
-
-  // setupSearch()
-  const search = widgetsLeft
-    .append('input')
-    .attr('type', 'text')
-    .attr('class', searchInputClassNames)
-  // TODO: refactor hidden, won't be needed if we add this node
-  search.attr('placeholder', `Find by ${nameField}`)
-  search.on('keyup', e => {
-    const qstr = e.target.value
-    searchEventHandler(qstr)
+  renderMaces({
+    chartCore,
+    dataParsed,
+    sizeField,
+    nameField,
+    defaultStateAll,
+    xFieldStart,
+    xFieldEnd,
+    xScale,
+    yScale,
+    yFieldStart,
+    yFieldEnd,
+    circleSizeScale,
+    lineWidthScale,
+    colorScale,
+    tooltipDiv,
+    sizeValueFormatter,
+    xValueFormatter,
+    yValueFormatter,
+    xFieldType,
+    yFieldType,
   })
 
-  const goToInitialState = widgetsLeft
-    .append('button')
-    .text('Go to Initial State')
-    .attr('class', goToInitialStateButtonClassNames)
-  goToInitialState.classed('hidden', false)
-  goToInitialState.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
-    _.forEach(defaultStateAll, val => {
-      d3.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
-    })
-    search.node().value = ''
-    searchEventHandler('')
+  // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+  // handleSearch accepts search query string and applied appropriate
+  const handleSearch = searchEventHandler(nameValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    nameField,
   })
 
-  const clearAll = widgetsLeft
-    .append('button')
-    .text('Clear All')
-    .attr('class', clearAllButtonClassNames)
-  clearAll.classed('hidden', false)
-  clearAll.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
-    search.node().value = ''
-    searchEventHandler('')
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  })
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
   })
 
   // For responsiveness
