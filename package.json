@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "main": "./dist/bundle.cjs.js",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "module": "./src/index.js",
   "browser": "./dist/bundle.umd.js",
   "exports": {

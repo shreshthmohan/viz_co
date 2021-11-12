@@ -1,5 +1,4 @@
-/* global viz */
-import { validateAndRenderMace } from './index'
+import { validateAndRenderMace } from 'viz_co'
 
 // eslint-disable-next-line no-unused-vars
 const dataPath = 'data.csv'
