@@ -13,9 +13,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "tsc": "tsc",
-    "remove the line below once you create a proper ts demo": "",
-    "compile": "tsc src/config.js"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
