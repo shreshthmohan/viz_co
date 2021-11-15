@@ -84,4 +84,9 @@ const options = {
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 
-viz.validateAndRenderMace({ dataPath, options, dimensions })
+viz.validateAndRenderMace({
+  chartContainerSelector: '#chart-container',
+  dataPath,
+  options,
+  dimensions,
+})

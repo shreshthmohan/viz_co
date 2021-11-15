@@ -620,7 +620,7 @@ export function renderChart({
     sizeField,
     nameField,
   },
-  chartContainerSelector = '#chart-container',
+  chartContainerSelector,
 }) {
   applyInteractionStyles({ activeOpacity, inactiveOpacity })
 

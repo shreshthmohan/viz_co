@@ -807,7 +807,7 @@
       sizeField,
       nameField,
     },
-    chartContainerSelector = '#chart-container',
+    chartContainerSelector,
   }) {
     applyInteractionStyles({ activeOpacity, inactiveOpacity });
 
@@ -1255,7 +1255,7 @@
     dataPath,
     options,
     dimensions,
-    svgParentNodeSelector = '#svg-container',
+    chartContainerSelector,
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
@@ -1288,8 +1288,8 @@
       });
 
       combinedValidation.valid
-        ? renderChart({ data, dimensions, options, svgParentNodeSelector })
-        : showErrors(svgParentNodeSelector, combinedValidation.messages);
+        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
       // console.log({ combinedValidation })
