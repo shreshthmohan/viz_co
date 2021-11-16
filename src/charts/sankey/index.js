@@ -1,2 +1,2 @@
-export { renderChart as renderSankey } from './render'
-export { validateAndRender as validateAndRenderSankey } from './validateAndRender'
+export * from './render'
+export * from './validateAndRender'
