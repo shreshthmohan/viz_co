@@ -16,10 +16,10 @@ const options = {
   nodeWidth: 20,
 
   units: 'TWh',
+  format: ',.0f',
 
-  // headers
-  heading: 'This is a heading for the chart',
-  subheading: 'This is a subheading for the chart describing it in more detail',
+  searchInputClassNames:
+    'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
 }
 
 const dimensions = {

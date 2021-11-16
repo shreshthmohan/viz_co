@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._));
-})(this, (function (exports, d3, _) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('d3'), require('lodash-es'), require('d3-sankey')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'd3', 'lodash-es', 'd3-sankey'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.viz = {}, global.d3, global._, global.d3));
+})(this, (function (exports, d3$1, _, d3Sankey) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -24,7 +24,7 @@
     return Object.freeze(n);
   }
 
-  var d3__namespace = /*#__PURE__*/_interopNamespace(d3);
+  var d3__namespace = /*#__PURE__*/_interopNamespace(d3$1);
   var ___default = /*#__PURE__*/_interopDefaultLegacy(_);
 
   const formatNumber = function (
@@ -1195,7 +1195,7 @@
 
   // export function that
 
-  const dimensionTypes = {
+  const dimensionTypes$1 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1204,7 +1204,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1257,7 +1257,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1267,7 +1267,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1296,7 +1296,20 @@
     });
   };
 
-  /* global window */
+  /* eslint-disable no-import-assign */
+
+  // Done this so as to keep the ESM and UMD global interoperable
+  // Mimics behaviour of d3 UMD (sankey can be used as d3.sankey, so it should be usable here as d3.sankey too)
+  // TODO: test this when doing an ESM with bundler demo
+  // d3_ to prevent rollup error: "Illegal reassignment to import 'd3'"
+
+  const d3 = d3__namespace;
+
+  d3.sankey = d3Sankey.sankey;
+  d3.sankeyCenter = d3Sankey.sankeyCenter;
+  d3.sankeyLeft = d3Sankey.sankeyLeft;
+  d3.sankeyJustify = d3Sankey.sankeyJustify;
+  d3.sankeyRight = d3Sankey.sankeyRight;
 
   const alignOptions = {
     justify: 'sankeyJustify',
@@ -1323,6 +1336,9 @@
       nodeWidth = 20,
 
       units = '',
+      format = '',
+
+      searchInputClassNames = '',
     },
     dimensions: { sourceField, targetField, valueField },
 
@@ -1330,27 +1346,27 @@
   }) {
 
     const formatLinkThicknessValue = (val, unit) => {
-      const format = d3__namespace.format(',.0f');
-      return unit ? `${format(val)} ${unit}` : format(val)
+      const formatter = d3.format(format);
+      return unit ? `${formatter(val)} ${unit}` : formatter(val)
     };
 
     const chosenAlign = alignOptions[align];
 
     // apply interaction styles
-    d3__namespace.select('body').append('style')
-      .html(`    .sankey-nodes.hovering g:not(.active) * {
-  opacity: 0.1;
-}
-.sankey-links.hovering g:not(.active) {
-  opacity: 0.1;
-}
-
-.sankey-nodes.searching:not(.hovering) g:not(.node-matched) {
-  opacity: 0.1;
-}
-.sankey-links.searching:not(.hovering) g:not(.node-matched) > path {
-  opacity: 0.1;
-}`);
+    d3.select('body').append('style').html(`
+    .sankey-nodes.hovering g:not(.active) * {
+      opacity: 0.1;
+    }
+    .sankey-links.hovering g:not(.active) {
+      opacity: 0.1;
+    }
+    
+    .sankey-nodes.searching:not(.hovering) g:not(.node-matched) {
+      opacity: 0.1;
+    }
+    .sankey-links.searching:not(.hovering) g:not(.node-matched) > path {
+      opacity: 0.1;
+    }`);
 
     const coreChartWidth = 1000;
 
@@ -1359,7 +1375,17 @@
     const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
     const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
 
-    const chartParent = d3__namespace.select(chartContainerSelector);
+    const chartParent = d3.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
 
     const svg = chartParent
       .append('svg')
@@ -1372,7 +1398,7 @@
       .append('g')
       .attr('transform', `translate(${marginLeft}, ${marginTop})`);
 
-    const tooltipDiv = d3__namespace
+    const tooltipDiv = d3
       .select('body')
       .append('div')
       .attr('class', 'dom-tooltip')
@@ -1381,7 +1407,7 @@
         'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       );
 
-    const colorScheme = d3__namespace.scaleOrdinal(d3__namespace.schemeCategory10);
+    const colorScheme = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Sankey data is a list of links (source, target and thickness value of each link)
     const links = data.map(d => ({
@@ -1398,10 +1424,10 @@
       }),
     );
 
-    const sankeyGenerator = d3__namespace
+    const sankeyGenerator = d3
       .sankey()
       .nodeId(d => d.name)
-      .nodeAlign(d3__namespace[chosenAlign])
+      .nodeAlign(d3[chosenAlign])
       .nodeWidth(nodeWidth)
       .nodePadding(verticalGapInNodes)
       // space taken up by sankey diagram
@@ -1474,16 +1500,16 @@
           });
         });
 
-        d3__namespace.select('.sankey-nodes').classed('hovering', true);
-        d3__namespace.select('.sankey-links').classed('hovering', true);
+        d3.select('.sankey-nodes').classed('hovering', true);
+        d3.select('.sankey-links').classed('hovering', true);
 
         sel.forEach(item => {
           // if sel item is a link
           if (item.source && item.target) {
-            d3__namespace.select(`#iv-link-${item.index}`).classed('active', true);
+            d3.select(`#iv-link-${item.index}`).classed('active', true);
           } else {
             // else item is a node
-            d3__namespace.select(`#iv-node-${item.index}`).classed('active', true);
+            d3.select(`#iv-node-${item.index}`).classed('active', true);
           }
         });
 
@@ -1505,16 +1531,16 @@
           });
         });
 
-        d3__namespace.select('.sankey-nodes').classed('hovering', false);
-        d3__namespace.select('.sankey-links').classed('hovering', false);
+        d3.select('.sankey-nodes').classed('hovering', false);
+        d3.select('.sankey-links').classed('hovering', false);
 
         sel.forEach(item => {
           // if sel item is a link
           if (item.source && item.target) {
-            d3__namespace.select(`#iv-link-${item.index}`).classed('active', false);
+            d3.select(`#iv-link-${item.index}`).classed('active', false);
           } else {
             // else item is a node
-            d3__namespace.select(`#iv-node-${item.index}`).classed('active', false);
+            d3.select(`#iv-node-${item.index}`).classed('active', false);
           }
         });
         tooltipDiv
@@ -1542,7 +1568,7 @@
 
     link
       .append('path')
-      .attr('d', d3__namespace.sankeyLinkHorizontal())
+      .attr('d', d3.sankeyLinkHorizontal())
       .attr('stroke', d => {
         return `url(#iv-link-gradient-${d.index})`
       })
@@ -1574,16 +1600,16 @@
           });
         });
 
-        d3__namespace.select('.sankey-nodes').classed('hovering', true);
-        d3__namespace.select('.sankey-links').classed('hovering', true);
+        d3.select('.sankey-nodes').classed('hovering', true);
+        d3.select('.sankey-links').classed('hovering', true);
 
         sel.forEach(item => {
           // if sel item is a link
           if (item.source && item.target) {
-            d3__namespace.select(`#iv-link-${item.index}`).classed('active', true);
+            d3.select(`#iv-link-${item.index}`).classed('active', true);
           } else {
             // else item is a node
-            d3__namespace.select(`#iv-node-${item.index}`).classed('active', true);
+            d3.select(`#iv-node-${item.index}`).classed('active', true);
           }
         });
 
@@ -1606,16 +1632,16 @@
           });
         });
 
-        d3__namespace.select('.sankey-nodes').classed('hovering', false);
-        d3__namespace.select('.sankey-links').classed('hovering', false);
+        d3.select('.sankey-nodes').classed('hovering', false);
+        d3.select('.sankey-links').classed('hovering', false);
 
         sel.forEach(item => {
           // if sel item is a link
           if (item.source && item.target) {
-            d3__namespace.select(`#iv-link-${item.index}`).classed('active', false);
+            d3.select(`#iv-link-${item.index}`).classed('active', false);
           } else {
             // else item is a node
-            d3__namespace.select(`#iv-node-${item.index}`).classed('active', false);
+            d3.select(`#iv-node-${item.index}`).classed('active', false);
           }
         });
 
@@ -1636,7 +1662,12 @@
       .attr('dy', '0.35em')
       .attr('text-anchor', d => (d.x0 < coreChartWidth / 2 ? 'start' : 'end'));
 
-    const search = d3__namespace.select('#search');
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    search.attr('placeholder', `Find by node`);
+
     search.on('keyup', e => {
       const qstr = e.target.value;
 
@@ -1644,8 +1675,8 @@
         // reset matched state for all links and nodes because
         // it we don't want matched states to accumulate as we type
         // the matched elements should only correspond to the current qstr
-        d3__namespace.selectAll('.sankey-link').classed('node-matched', false);
-        d3__namespace.selectAll('.sankey-node').classed('node-matched', false);
+        d3.selectAll('.sankey-link').classed('node-matched', false);
+        d3.selectAll('.sankey-node').classed('node-matched', false);
 
         const lqstr = qstr.toLowerCase();
         const sel = [];
@@ -1685,24 +1716,51 @@
         sel.forEach(item => {
           // if sel item is a link
           if (item.source && item.target) {
-            d3__namespace.select(`#iv-link-${item.index}`).classed('node-matched', true);
+            d3.select(`#iv-link-${item.index}`).classed('node-matched', true);
           } else {
             // else item is a node
-            d3__namespace.select(`#iv-node-${item.index}`).classed('node-matched', true);
+            d3.select(`#iv-node-${item.index}`).classed('node-matched', true);
           }
         });
-        d3__namespace.select('.sankey-nodes').classed('searching', true);
-        d3__namespace.select('.sankey-links').classed('searching', true);
+        d3.select('.sankey-nodes').classed('searching', true);
+        d3.select('.sankey-links').classed('searching', true);
       } else {
         sankeyfied.nodes.forEach(thisNode => {
           const { index } = thisNode;
-          d3__namespace.select(`#iv-node-${index}`).classed('node-matched', false);
+          d3.select(`#iv-node-${index}`).classed('node-matched', false);
         });
-        d3__namespace.select('.sankey-nodes').classed('searching', false);
-        d3__namespace.select('.sankey-links').classed('searching', false);
+        d3.select('.sankey-nodes').classed('searching', false);
+        d3.select('.sankey-links').classed('searching', false);
       }
     });
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
   }
+
+  const dimensionTypes = {
+    sourceField: [shouldNotBeBlank],
+    targetField: [shouldNotBeBlank],
+    valueField: [shouldBeNumber],
+  };
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    align: checkOneOf(['justify', 'left', 'right', 'center']),
+
+    verticalGapInNodes: checkNumber,
+    nodeWidth: checkNumber,
+  };
 
   const validateAndRender = ({
     dataPath,
@@ -1710,10 +1768,39 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    // const optionsValidationResult = optionValidation({ optionTypes, options })
+    const optionsValidationResult = optionValidation({ optionTypes, options });
 
     d3__namespace.csv(dataPath).then(data => {
-      renderChart({ data, dimensions, options, chartContainerSelector });
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 

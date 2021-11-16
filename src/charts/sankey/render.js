@@ -1,5 +1,27 @@
+/* eslint-disable no-import-assign */
 /* global window */
-import * as d3 from 'd3'
+import * as d3_ from 'd3'
+import {
+  sankey,
+  sankeyCenter,
+  sankeyLeft,
+  sankeyJustify,
+  sankeyRight,
+} from 'd3-sankey'
+import { preventOverflow } from '../../utils/helpers/general'
+
+// Done this so as to keep the ESM and UMD global interoperable
+// Mimics behaviour of d3 UMD (sankey can be used as d3.sankey, so it should be usable here as d3.sankey too)
+// TODO: test this when doing an ESM with bundler demo
+// d3_ to prevent rollup error: "Illegal reassignment to import 'd3'"
+
+const d3 = d3_
+
+d3.sankey = sankey
+d3.sankeyCenter = sankeyCenter
+d3.sankeyLeft = sankeyLeft
+d3.sankeyJustify = sankeyJustify
+d3.sankeyRight = sankeyRight
 
 const alignOptions = {
   justify: 'sankeyJustify',
@@ -26,6 +48,9 @@ export function renderChart({
     nodeWidth = 20,
 
     units = '',
+    format = '',
+
+    searchInputClassNames = '',
   },
   dimensions: { sourceField, targetField, valueField },
 
@@ -39,8 +64,8 @@ export function renderChart({
   }
 
   const formatLinkThicknessValue = (val, unit) => {
-    const format = d3.format(',.0f')
-    return unit ? `${format(val)} ${unit}` : format(val)
+    const formatter = d3.format(format)
+    return unit ? `${formatter(val)} ${unit}` : formatter(val)
   }
 
   const chosenAlign = alignOptions[align]
@@ -50,20 +75,20 @@ export function renderChart({
   const chosenLinkColor = linkColorBy.inputOutput
 
   // apply interaction styles
-  d3.select('body').append('style')
-    .html(`    .sankey-nodes.hovering g:not(.active) * {
-  opacity: 0.1;
-}
-.sankey-links.hovering g:not(.active) {
-  opacity: 0.1;
-}
-
-.sankey-nodes.searching:not(.hovering) g:not(.node-matched) {
-  opacity: 0.1;
-}
-.sankey-links.searching:not(.hovering) g:not(.node-matched) > path {
-  opacity: 0.1;
-}`)
+  d3.select('body').append('style').html(`
+    .sankey-nodes.hovering g:not(.active) * {
+      opacity: 0.1;
+    }
+    .sankey-links.hovering g:not(.active) {
+      opacity: 0.1;
+    }
+    
+    .sankey-nodes.searching:not(.hovering) g:not(.node-matched) {
+      opacity: 0.1;
+    }
+    .sankey-links.searching:not(.hovering) g:not(.node-matched) > path {
+      opacity: 0.1;
+    }`)
 
   const coreChartWidth = 1000
 
@@ -73,6 +98,16 @@ export function renderChart({
   const viewBoxWidth = coreChartWidth + marginLeft + marginRight
 
   const chartParent = d3.select(chartContainerSelector)
+
+  const widgets = chartParent
+    .append('div')
+    .attr(
+      'style',
+      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+    )
+  const widgetsLeft = widgets
+    .append('div')
+    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
 
   const svg = chartParent
     .append('svg')
@@ -349,7 +384,12 @@ export function renderChart({
     .attr('dy', '0.35em')
     .attr('text-anchor', d => (d.x0 < coreChartWidth / 2 ? 'start' : 'end'))
 
-  const search = d3.select('#search')
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+  search.attr('placeholder', `Find by node`)
+
   search.on('keyup', e => {
     const qstr = e.target.value
 
@@ -414,5 +454,10 @@ export function renderChart({
       d3.select('.sankey-nodes').classed('searching', false)
       d3.select('.sankey-links').classed('searching', false)
     }
+  })
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
 }
