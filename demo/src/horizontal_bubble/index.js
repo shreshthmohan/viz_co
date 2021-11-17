@@ -30,6 +30,9 @@
 //   'schemeOranges',
 // ]
 const options = {
+  aspectRatioSplit: 2,
+  aspectRatioCombined: 8,
+
   marginTop: 30,
   marginRight: 50,
   marginBottom: 30,
