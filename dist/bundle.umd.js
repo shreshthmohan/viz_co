@@ -124,6 +124,9 @@
     );
   }
 
+  // Throttled this function for use in force simulations
+  const preventOverflowThrottled = _.throttle(preventOverflow, 500);
+
   function distanceInPoints({ x1, y1, x2, y2 }) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
   }
@@ -1804,6 +1807,195 @@
     });
   };
 
+  /* global document */
+
+  function legend({
+    color,
+    title,
+    tickSize = 6,
+    width = 320,
+    height = 44 + tickSize,
+    marginTop = 18,
+    marginRight = 0,
+    marginBottom = 16 + tickSize,
+    marginLeft = 0,
+    ticks = width / 64,
+    removeTicks = false,
+    tickFormat,
+    tickValues,
+    // opacity,
+  } = {}) {
+    const svg = d3__namespace
+      .create('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, 0, width, height])
+      .style('overflow', 'visible')
+      // .style("opacity", 0.7)
+      .style('display', 'block');
+
+    let tickAdjust = g =>
+      g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
+    let x;
+
+    // Continuous
+    if (color.interpolate) {
+      const n = Math.min(color.domain().length, color.range().length);
+
+      x = color
+        .copy()
+        .rangeRound(
+          d3__namespace.quantize(d3__namespace.interpolate(marginLeft, width - marginRight), n),
+        );
+
+      svg
+        .append('image')
+        .attr('x', marginLeft)
+        .attr('y', marginTop)
+        .attr('width', width - marginLeft - marginRight)
+        .attr('height', height - marginTop - marginBottom)
+        .attr('preserveAspectRatio', 'none')
+        .attr(
+          'xlink:href',
+          ramp(
+            color.copy().domain(d3__namespace.quantize(d3__namespace.interpolate(0, 1), n)),
+          ).toDataURL(),
+        );
+    }
+
+    // Sequential
+    else if (color.interpolator) {
+      x = Object.assign(
+        color
+          .copy()
+          .interpolator(d3__namespace.interpolateRound(marginLeft, width - marginRight)),
+        {
+          range() {
+            return [marginLeft, width - marginRight]
+          },
+        },
+      );
+
+      svg
+        .append('image')
+        .attr('x', marginLeft)
+        .attr('y', marginTop)
+        .attr('width', width - marginLeft - marginRight)
+        .attr('height', height - marginTop - marginBottom)
+        .attr('preserveAspectRatio', 'none')
+        .attr('xlink:href', ramp(color.interpolator()).toDataURL());
+
+      // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
+      if (!x.ticks) {
+        if (tickValues === undefined) {
+          const n = Math.round(ticks + 1);
+          tickValues = d3__namespace
+            .range(n)
+            .map(i => d3__namespace.quantile(color.domain(), i / (n - 1)));
+        }
+        if (typeof tickFormat !== 'function') {
+          tickFormat = d3__namespace.format(tickFormat === undefined ? ',f' : tickFormat);
+        }
+      }
+    }
+
+    // Threshold
+    else if (color.invertExtent) {
+      const thresholds = color.thresholds
+        ? color.thresholds() // scaleQuantize
+        : color.quantiles
+        ? color.quantiles() // scaleQuantile
+        : color.domain(); // scaleThreshold
+
+      const thresholdFormat =
+        tickFormat === undefined
+          ? d => d
+          : typeof tickFormat === 'string'
+          ? d3__namespace.format(tickFormat)
+          : tickFormat;
+
+      x = d3__namespace
+        .scaleLinear()
+        .domain([-1, color.range().length - 1])
+        .rangeRound([marginLeft, width - marginRight]);
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(color.range())
+        .join('rect')
+        .attr('x', (d, i) => x(i - 1))
+        .attr('y', marginTop)
+        .attr('width', (d, i) => x(i) - x(i - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', d => d);
+
+      tickValues = d3__namespace.range(thresholds.length);
+      tickFormat = i => thresholdFormat(thresholds[i], i);
+    }
+
+    // Ordinal
+    else {
+      x = d3__namespace
+        .scaleBand()
+        .domain(color.domain())
+        .rangeRound([marginLeft, width - marginRight]);
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(color.domain())
+        .join('rect')
+        .attr('x', x)
+        .attr('y', marginTop)
+        .attr('width', Math.max(0, x.bandwidth() - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color);
+
+      tickAdjust = () => {};
+    }
+
+    svg
+      .append('g')
+      .attr('transform', `translate(0,${height - marginBottom})`)
+      .call(
+        d3__namespace
+          .axisBottom(x)
+          .ticks(ticks, typeof tickFormat === 'string' ? tickFormat : undefined)
+          .tickFormat(typeof tickFormat === 'function' ? tickFormat : undefined)
+          .tickSize(tickSize)
+          .tickValues(tickValues),
+      )
+      .call(tickAdjust)
+      .call(g => g.select('.domain').remove())
+      .call(g => (removeTicks ? g.selectAll('.tick').remove() : null))
+      .call(g =>
+        g
+          .append('text')
+          .attr('x', marginLeft)
+          .attr('y', marginTop + marginBottom - height - 6)
+          .attr('fill', 'currentColor')
+          .attr('text-anchor', 'start')
+          .attr('class', 'font-sans')
+          .attr('style', 'font-weight: 600;')
+          .text(title),
+      );
+
+    return svg.node()
+  }
+
+  function ramp(color, n = 256) {
+    var canvas = document.createElement('canvas');
+    canvas.width = n;
+    canvas.height = 1;
+    const context = canvas.getContext('2d');
+    for (let i = 0; i < n; ++i) {
+      context.fillStyle = color(i / (n - 1));
+      context.fillRect(i, 0, 1, 1);
+    }
+    return canvas
+  }
+
   /* global window, console */
 
   function renderChart({
@@ -1854,7 +2046,12 @@
     },
     chartContainerSelector,
   }) {
-    console.log('in render ');
+    d3__namespace.select('body').append('style').html(`
+    .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+  `);
     const coreChartWidth = 1000;
 
     const coreChartHeightCombined = coreChartWidth / aspectRatioCombined;
@@ -1865,7 +2062,6 @@
     const viewBoxHeightSplit = coreChartHeightSplit + marginTop + marginBottom;
     const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
 
-    console.log(chartContainerSelector);
     const chartParent = d3__namespace.select(chartContainerSelector);
 
     const widgets = chartParent
@@ -1889,7 +2085,7 @@
 
     const allComponents = svg.append('g').attr('class', 'all-components');
 
-    allComponents
+    const chartCore = allComponents
       .append('g')
       .attr('transform', `translate(${marginLeft}, ${marginTop})`);
 
@@ -1959,9 +2155,10 @@
     const sizeScale = d3__namespace.scaleSqrt().range(sizeRange).domain([0, maxSizeValue]);
 
     const yScale = d3__namespace
-      .scaleBand()
+      .scalePoint()
       .domain(segments)
-      .range([0, coreChartHeightSplit]);
+      .range([0, coreChartHeightSplit])
+      .padding(0.5);
 
     const xValues = parsedData.map(d => d[xField]).sort();
     const xDomainDefault = d3__namespace.extent(xValues);
@@ -1970,35 +2167,19 @@
 
     // TODO: separate field for color scale and xscale?
     // Right now both x scale and color scale are based on the same
-    // const xColorScale = d3.scaleQuantile().domain([0, 40]).range(d3.schemeOrRd[5]);
     const xColorScale = d3__namespace
       .scaleQuantize()
-      // .domain(xValues)
       .domain(xDomain)
-      // TODO: provide a way to customize color scheme
-      // .range(colorScheme[5])
       .range(customColorScheme || d3__namespace[inbuiltScheme][numberOfColors])
-
       .nice();
 
-    // console.log(xColorScale)
-
-    // Replace marginTop * 0.3 with yScale.bandwith (/2?)
-
-    // const div = d3
-    //   .select('body')
-    //   .append('div')
-    //   .attr('class', 'tooltip absolute bg-white rounded px-1 text-xs border')
-    //   .style('opacity', 0)
-
-    // https://observablehq.com/@d3/color-legend
-    // d3.select('#color-legend')
-    //   .append('svg')
-    //   .attr('width', 260)
-    //   .attr('height', 66)
-    //   .append(() =>
-    //     legend({ color: xColorScale, title: colorLegendTitle, width: 260 }),
-    //   )
+    widgetsRight
+      .append('svg')
+      .attr('width', 260)
+      .attr('height', 45)
+      .append(() =>
+        legend({ color: xColorScale, title: colorLegendTitle, width: 260 }),
+      );
 
     // Size Legend
 
@@ -2019,12 +2200,8 @@
       cumulativeSizes.push(cumulativeSize);
     });
 
-    // const sizeLegend = d3.select('#size-legend').append('svg')
     const sizeLegend = widgetsRight.append('svg');
     const sizeLegendContainerGroup = sizeLegend.append('g');
-    // console.log(sizeLegendContainerGroup.node())
-    // .attr('width', 260)
-    // .attr('height', 66)
 
     // TODO: move this to options?
     const moveSizeObjectDownBy = 5;
@@ -2067,21 +2244,15 @@
       .attr('height', legendBoundingBox.height)
       .attr('width', legendBoundingBox.width);
 
-    svg
+    chartCore
       .append('g')
-      .attr(
-        'transform',
-        `translate(${marginLeft + coreChartWidth / 2}, ${marginTop - 20})`,
-      )
+      .attr('transform', `translate(${coreChartWidth / 2}, ${-20})`)
       .append('text')
       .attr('class', 'text-xs font-semibold tracking-wider')
       .text(xAxisLabel)
       .attr('text-anchor', 'middle');
 
-    const xAxis = svg
-      .append('g')
-      .attr('id', 'x-axis')
-      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+    const xAxis = chartCore.append('g').attr('id', 'x-axis');
 
     xAxis
       .call(d3__namespace.axisTop(xScale).tickSize(-coreChartHeightCombined))
@@ -2101,54 +2272,58 @@
         .call(g => g.select('.domain').remove());
     }
 
-    const yAxisLabel = svg
+    const yAxisLabel = chartCore
       .append('g')
-      .attr('transform', `translate(${marginLeft - 23}, ${marginTop - 20})`)
+      .attr('transform', `translate(${-23}, ${-20})`)
       .append('text')
       .attr('class', 'text-xs font-semibold ')
       .text(segmentType)
       .attr('text-anchor', 'end');
 
-    const yAxisSplit = svg
-      .append('g')
-      .attr('id', 'y-axis-split')
-      .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-      .call(d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth))
-      .call(g => g.select('.domain').remove())
-      .call(g => {
-        g.selectAll('.tick line').attr('stroke-opacity', 0.1);
-        g.selectAll('.tick text')
-          .attr('transform', 'translate(-20,0)')
-          .classed('text-xs', true);
-      })
-      .attr('opacity', 0);
+    function yAxisSplit() {
+      d3__namespace.select('#y-axis-combined').remove();
+      chartCore
+        .append('g')
+        .attr('id', 'y-axis-split')
+        .call(d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth))
+        .call(g => g.select('.domain').remove())
+        .call(g => {
+          g.selectAll('.tick line').attr('stroke-opacity', 0.1);
+          g.selectAll('.tick text')
+            .attr('transform', 'translate(-20,0)')
+            .classed('text-xs', true);
+        })
+        .attr('opacity', 0)
+        .transition()
+        .duration(1000)
+        .attr('opacity', 1);
+    }
 
     const yScaleCombined = d3__namespace
       .scaleBand()
       .domain([combinedSegmentLabel])
       .range([0, coreChartHeightCombined]);
 
-    const yAxisCombined = svg
-      .append('g')
-      .attr('id', 'y-axis-split')
-      .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-      .call(d3__namespace.axisLeft(yScaleCombined).tickSize(-coreChartWidth))
-      .call(g => g.select('.domain').remove())
-      .call(g => {
-        g.selectAll('.tick line').attr('stroke-opacity', 0.1);
-        g.selectAll('.tick text')
-          .attr('transform', 'translate(-20,0)')
-          .classed('text-xs', true);
-      })
-      .attr('opacity', 0);
+    function yAxisCombined() {
+      d3__namespace.select('#y-axis-split').remove();
+      chartCore
+        .append('g')
+        .attr('id', 'y-axis-combined')
+        .call(d3__namespace.axisLeft(yScaleCombined).tickSize(-coreChartWidth))
+        .call(g => g.select('.domain').remove())
+        .call(g => {
+          g.selectAll('.tick line').attr('stroke-opacity', 0.1);
+          g.selectAll('.tick text')
+            .attr('transform', 'translate(-20,0)')
+            .classed('text-xs', true);
+        })
+        .attr('opacity', 0)
+        .transition()
+        .duration(1000)
+        .attr('opacity', 1);
+    }
 
-    const bubbles = svg
-      .append('g')
-      .attr(
-        'transform',
-        `translate(${marginLeft}, ${marginTop + coreChartHeightCombined / 2})`,
-      )
-      .attr('class', 'bubbles');
+    const bubbles = chartCore.append('g').attr('class', 'bubbles');
 
     let allBubbles;
     function ticked() {
@@ -2163,10 +2338,8 @@
         .attr('stroke', function (d) {
           return d3__namespace.rgb(xColorScale(d[xField])).darker(0.5)
         })
-        // .style('stroke-width', 1)
         .merge(u)
         .attr('cx', function (d) {
-          // console.log(d.x)
           return d.x
         })
         .attr('cy', function (d) {
@@ -2199,11 +2372,16 @@
             .style('stroke-width', 1);
         });
       u.exit().remove();
+      preventOverflowThrottled({
+        allComponents,
+        svg,
+        margins: { marginLeft, marginRight, marginTop, marginBottom },
+      });
     }
 
     const search = widgetsLeft
       .append('input')
-      .attr('tyoe', 'text')
+      .attr('type', 'text')
       .attr('class', searchInputClassNames);
 
     search.attr('placeholder', `Find by ${nameField}`);
@@ -2228,13 +2406,14 @@
       manageSplitCombine();
       renderXAxisSplit();
 
-      yAxisSplit.transition().duration(1000).attr('opacity', 1);
-      yAxisCombined.transition().duration(1000).attr('opacity', 0);
+      yAxisSplit();
+
       yAxisLabel.text(segmentTypeSplit);
 
       svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightSplit}`);
 
-      bubbles.attr('transform', `translate(${marginLeft}, ${marginTop})`);
+      bubbles.attr('transform', `translate(0, 0)`);
+      bubbles.raise();
 
       d3__namespace.forceSimulation(parsedData)
         .force('charge', d3__namespace.forceManyBody().strength(1))
@@ -2253,7 +2432,7 @@
           d3__namespace
             .forceY()
             .y(function (d) {
-              return yScale(d[segmentField]) + yScale.bandwidth() / 2
+              return yScale(d[segmentField])
             })
             // split Y strength
             .strength(1.2),
@@ -2276,16 +2455,13 @@
       manageSplitCombine();
       renderXAxisCombined();
 
-      yAxisSplit.transition().duration(1000).attr('opacity', 0);
-      yAxisCombined.transition().duration(1000).attr('opacity', 1);
+      yAxisCombined();
 
       yAxisLabel.text(segmentTypeCombined);
       svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightCombined}`);
 
-      bubbles.attr(
-        'transform',
-        `translate(${marginLeft}, ${marginTop + coreChartHeightCombined / 2})`,
-      );
+      bubbles.attr('transform', `translate(0, ${coreChartHeightCombined / 2})`);
+      bubbles.raise();
 
       d3__namespace.forceSimulation(parsedData)
         .force('charge', d3__namespace.forceManyBody().strength(1))
@@ -2299,10 +2475,7 @@
         )
         .force(
           'y',
-          d3__namespace.forceY().y(
-            0,
-            // function (d) { return 0 }
-          ),
+          d3__namespace.forceY().y(0),
           // combine Y strength
           // .strength(1)
         )
@@ -2319,8 +2492,6 @@
           manageSplitCombine();
         });
     }
-    // window.combinedSim = combinedSim
-    // window.splitSim = splitSim
 
     splitButton.on('click', splitSim);
     combinedButton.on('click', combinedSim);
@@ -2339,10 +2510,10 @@
     });
   };
 
-  exports.renderHorizontalBubble = renderChart;
+  exports.renderBubbleHorizontal = renderChart;
   exports.renderMace = renderChart$2;
   exports.renderSankey = renderChart$1;
-  exports.validateAndRenderHorizontalBubble = validateAndRender;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender;
   exports.validateAndRenderMace = validateAndRender$2;
   exports.validateAndRenderSankey = validateAndRender$1;
 

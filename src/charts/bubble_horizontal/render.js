@@ -1,6 +1,8 @@
 /* global window, console */
 
 import * as d3 from 'd3'
+import { legend } from '../../utils/helpers/colorLegend'
+import { preventOverflowThrottled } from '../../utils/helpers/general'
 
 export function renderChart({
   data,
@@ -50,7 +52,12 @@ export function renderChart({
   },
   chartContainerSelector,
 }) {
-  console.log('in render ')
+  d3.select('body').append('style').html(`
+    .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+  `)
   const coreChartWidth = 1000
 
   const coreChartHeightCombined = coreChartWidth / aspectRatioCombined
@@ -61,7 +68,6 @@ export function renderChart({
   const viewBoxHeightSplit = coreChartHeightSplit + marginTop + marginBottom
   const viewBoxWidth = coreChartWidth + marginLeft + marginRight
 
-  console.log(chartContainerSelector)
   const chartParent = d3.select(chartContainerSelector)
 
   const widgets = chartParent
@@ -155,9 +161,10 @@ export function renderChart({
   const sizeScale = d3.scaleSqrt().range(sizeRange).domain([0, maxSizeValue])
 
   const yScale = d3
-    .scaleBand()
+    .scalePoint()
     .domain(segments)
     .range([0, coreChartHeightSplit])
+    .padding(0.5)
 
   const xValues = parsedData.map(d => d[xField]).sort()
   const xDomainDefault = d3.extent(xValues)
@@ -166,35 +173,19 @@ export function renderChart({
 
   // TODO: separate field for color scale and xscale?
   // Right now both x scale and color scale are based on the same
-  // const xColorScale = d3.scaleQuantile().domain([0, 40]).range(d3.schemeOrRd[5]);
   const xColorScale = d3
     .scaleQuantize()
-    // .domain(xValues)
     .domain(xDomain)
-    // TODO: provide a way to customize color scheme
-    // .range(colorScheme[5])
     .range(customColorScheme || d3[inbuiltScheme][numberOfColors])
-
     .nice()
 
-  // console.log(xColorScale)
-
-  // Replace marginTop * 0.3 with yScale.bandwith (/2?)
-
-  // const div = d3
-  //   .select('body')
-  //   .append('div')
-  //   .attr('class', 'tooltip absolute bg-white rounded px-1 text-xs border')
-  //   .style('opacity', 0)
-
-  // https://observablehq.com/@d3/color-legend
-  // d3.select('#color-legend')
-  //   .append('svg')
-  //   .attr('width', 260)
-  //   .attr('height', 66)
-  //   .append(() =>
-  //     legend({ color: xColorScale, title: colorLegendTitle, width: 260 }),
-  //   )
+  widgetsRight
+    .append('svg')
+    .attr('width', 260)
+    .attr('height', 45)
+    .append(() =>
+      legend({ color: xColorScale, title: colorLegendTitle, width: 260 }),
+    )
 
   // Size Legend
 
@@ -215,12 +206,8 @@ export function renderChart({
     cumulativeSizes.push(cumulativeSize)
   })
 
-  // const sizeLegend = d3.select('#size-legend').append('svg')
   const sizeLegend = widgetsRight.append('svg')
   const sizeLegendContainerGroup = sizeLegend.append('g')
-  // console.log(sizeLegendContainerGroup.node())
-  // .attr('width', 260)
-  // .attr('height', 66)
 
   // TODO: move this to options?
   const moveSizeObjectDownBy = 5
@@ -263,21 +250,15 @@ export function renderChart({
     .attr('height', legendBoundingBox.height)
     .attr('width', legendBoundingBox.width)
 
-  svg
+  chartCore
     .append('g')
-    .attr(
-      'transform',
-      `translate(${marginLeft + coreChartWidth / 2}, ${marginTop - 20})`,
-    )
+    .attr('transform', `translate(${coreChartWidth / 2}, ${-20})`)
     .append('text')
     .attr('class', 'text-xs font-semibold tracking-wider')
     .text(xAxisLabel)
     .attr('text-anchor', 'middle')
 
-  const xAxis = svg
-    .append('g')
-    .attr('id', 'x-axis')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
+  const xAxis = chartCore.append('g').attr('id', 'x-axis')
 
   xAxis
     .call(d3.axisTop(xScale).tickSize(-coreChartHeightCombined))
@@ -297,54 +278,58 @@ export function renderChart({
       .call(g => g.select('.domain').remove())
   }
 
-  const yAxisLabel = svg
+  const yAxisLabel = chartCore
     .append('g')
-    .attr('transform', `translate(${marginLeft - 23}, ${marginTop - 20})`)
+    .attr('transform', `translate(${-23}, ${-20})`)
     .append('text')
     .attr('class', 'text-xs font-semibold ')
     .text(segmentType)
     .attr('text-anchor', 'end')
 
-  const yAxisSplit = svg
-    .append('g')
-    .attr('id', 'y-axis-split')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-    .call(d3.axisLeft(yScale).tickSize(-coreChartWidth))
-    .call(g => g.select('.domain').remove())
-    .call(g => {
-      g.selectAll('.tick line').attr('stroke-opacity', 0.1)
-      g.selectAll('.tick text')
-        .attr('transform', 'translate(-20,0)')
-        .classed('text-xs', true)
-    })
-    .attr('opacity', 0)
+  function yAxisSplit() {
+    d3.select('#y-axis-combined').remove()
+    chartCore
+      .append('g')
+      .attr('id', 'y-axis-split')
+      .call(d3.axisLeft(yScale).tickSize(-coreChartWidth))
+      .call(g => g.select('.domain').remove())
+      .call(g => {
+        g.selectAll('.tick line').attr('stroke-opacity', 0.1)
+        g.selectAll('.tick text')
+          .attr('transform', 'translate(-20,0)')
+          .classed('text-xs', true)
+      })
+      .attr('opacity', 0)
+      .transition()
+      .duration(1000)
+      .attr('opacity', 1)
+  }
 
   const yScaleCombined = d3
     .scaleBand()
     .domain([combinedSegmentLabel])
     .range([0, coreChartHeightCombined])
 
-  const yAxisCombined = svg
-    .append('g')
-    .attr('id', 'y-axis-split')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-    .call(d3.axisLeft(yScaleCombined).tickSize(-coreChartWidth))
-    .call(g => g.select('.domain').remove())
-    .call(g => {
-      g.selectAll('.tick line').attr('stroke-opacity', 0.1)
-      g.selectAll('.tick text')
-        .attr('transform', 'translate(-20,0)')
-        .classed('text-xs', true)
-    })
-    .attr('opacity', 0)
+  function yAxisCombined() {
+    d3.select('#y-axis-split').remove()
+    chartCore
+      .append('g')
+      .attr('id', 'y-axis-combined')
+      .call(d3.axisLeft(yScaleCombined).tickSize(-coreChartWidth))
+      .call(g => g.select('.domain').remove())
+      .call(g => {
+        g.selectAll('.tick line').attr('stroke-opacity', 0.1)
+        g.selectAll('.tick text')
+          .attr('transform', 'translate(-20,0)')
+          .classed('text-xs', true)
+      })
+      .attr('opacity', 0)
+      .transition()
+      .duration(1000)
+      .attr('opacity', 1)
+  }
 
-  const bubbles = svg
-    .append('g')
-    .attr(
-      'transform',
-      `translate(${marginLeft}, ${marginTop + coreChartHeightCombined / 2})`,
-    )
-    .attr('class', 'bubbles')
+  const bubbles = chartCore.append('g').attr('class', 'bubbles')
 
   let allBubbles
   function ticked() {
@@ -359,10 +344,8 @@ export function renderChart({
       .attr('stroke', function (d) {
         return d3.rgb(xColorScale(d[xField])).darker(0.5)
       })
-      // .style('stroke-width', 1)
       .merge(u)
       .attr('cx', function (d) {
-        // console.log(d.x)
         return d.x
       })
       .attr('cy', function (d) {
@@ -395,11 +378,16 @@ export function renderChart({
           .style('stroke-width', 1)
       })
     u.exit().remove()
+    preventOverflowThrottled({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    })
   }
 
   const search = widgetsLeft
     .append('input')
-    .attr('tyoe', 'text')
+    .attr('type', 'text')
     .attr('class', searchInputClassNames)
 
   search.attr('placeholder', `Find by ${nameField}`)
@@ -424,13 +412,14 @@ export function renderChart({
     manageSplitCombine()
     renderXAxisSplit()
 
-    yAxisSplit.transition().duration(1000).attr('opacity', 1)
-    yAxisCombined.transition().duration(1000).attr('opacity', 0)
+    yAxisSplit()
+
     yAxisLabel.text(segmentTypeSplit)
 
     svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightSplit}`)
 
-    bubbles.attr('transform', `translate(${marginLeft}, ${marginTop})`)
+    bubbles.attr('transform', `translate(0, 0)`)
+    bubbles.raise()
 
     d3.forceSimulation(parsedData)
       .force('charge', d3.forceManyBody().strength(1))
@@ -449,7 +438,7 @@ export function renderChart({
         d3
           .forceY()
           .y(function (d) {
-            return yScale(d[segmentField]) + yScale.bandwidth() / 2
+            return yScale(d[segmentField])
           })
           // split Y strength
           .strength(1.2),
@@ -472,16 +461,13 @@ export function renderChart({
     manageSplitCombine()
     renderXAxisCombined()
 
-    yAxisSplit.transition().duration(1000).attr('opacity', 0)
-    yAxisCombined.transition().duration(1000).attr('opacity', 1)
+    yAxisCombined()
 
     yAxisLabel.text(segmentTypeCombined)
     svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightCombined}`)
 
-    bubbles.attr(
-      'transform',
-      `translate(${marginLeft}, ${marginTop + coreChartHeightCombined / 2})`,
-    )
+    bubbles.attr('transform', `translate(0, ${coreChartHeightCombined / 2})`)
+    bubbles.raise()
 
     d3.forceSimulation(parsedData)
       .force('charge', d3.forceManyBody().strength(1))
@@ -495,10 +481,7 @@ export function renderChart({
       )
       .force(
         'y',
-        d3.forceY().y(
-          0,
-          // function (d) { return 0 }
-        ),
+        d3.forceY().y(0),
         // combine Y strength
         // .strength(1)
       )
@@ -515,8 +498,6 @@ export function renderChart({
         manageSplitCombine()
       })
   }
-  // window.combinedSim = combinedSim
-  // window.splitSim = splitSim
 
   splitButton.on('click', splitSim)
   combinedButton.on('click', combinedSim)

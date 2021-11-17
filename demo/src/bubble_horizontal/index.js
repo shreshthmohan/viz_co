@@ -33,10 +33,10 @@ const options = {
   aspectRatioSplit: 2,
   aspectRatioCombined: 8,
 
-  marginTop: 30,
-  marginRight: 50,
-  marginBottom: 30,
-  marginLeft: 170,
+  marginTop: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  marginLeft: 0,
 
   bgColor: 'transparent',
 
@@ -83,7 +83,7 @@ const dimensions = {
 }
 const dataPath = 'data.csv'
 
-viz.validateAndRenderHorizontalBubble({
+viz.validateAndRenderBubbleHorizontal({
   chartContainerSelector: '#chart-container',
   dataPath,
   options,

@@ -9,6 +9,6 @@ export {
 } from './charts/sankey/index'
 
 export {
-  renderChart as renderHorizontalBubble,
-  validateAndRender as validateAndRenderHorizontalBubble,
+  renderChart as renderBubbleHorizontal,
+  validateAndRender as validateAndRenderBubbleHorizontal,
 } from './charts/bubble_horizontal/index'

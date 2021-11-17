@@ -1,3 +1,5 @@
+import { throttle } from 'lodash-es'
+
 export function toClassText(str) {
   return str.replace(/[\s&',.]/g, '').toLowerCase()
 }
@@ -26,6 +28,9 @@ export function preventOverflow({
     })`,
   )
 }
+
+// Throttled this function for use in force simulations
+export const preventOverflowThrottled = throttle(preventOverflow, 500)
 
 export const fileExtension = filename => {
   const [ext] = filename.split('.').slice(-1)
