@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
-  "main": "./dist/bundle.cjs.js",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "module": "./src/index.js",
   "browser": "./dist/bundle.umd.js",
   "exports": {
@@ -11,11 +13,12 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "tsc": "tsc -v"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
     "d3": "^7.1.1",
+    "d3-sankey": "^0.12.3",
     "lodash-es": "^4.17.21",
     "rollup": "^2.59.0",
     "typescript": "^4.4.4"

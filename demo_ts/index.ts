@@ -1,4 +1,4 @@
-/* global viz */
+import { validateAndRenderMace } from 'viz_co'
 
 // eslint-disable-next-line no-unused-vars
 const dataPath = 'data.csv'
@@ -72,7 +72,7 @@ const options = {
   // defaultState: 'All',
 
   /* Interactions */
-  activeOpacity: 0.8,
+  activeOpacity: '',
   inactiveOpacity: 0.2,
 
   searchInputClassNames:
@@ -84,9 +84,4 @@ const options = {
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 
-viz.validateAndRenderMace({
-  chartContainerSelector: '#chart-container',
-  dataPath,
-  options,
-  dimensions,
-})
+validateAndRenderMace({ dataPath, options, dimensions })

@@ -5,79 +5,10 @@ import _ from 'lodash-es'
 import { formatNumber } from '../../utils/helpers/formatters'
 
 import { renderDirectionLegend } from '../../utils/helpers/directionLegend'
-import { preventOverflow } from '../../utils/helpers/general'
+import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { pointsToRotationAngle, maceShape } from './helpers'
 
-export function renderChart({
-  data,
-  options: {
-    aspectRatio = 2,
-
-    marginTop = 0,
-    marginRight = 0,
-    marginBottom = 0,
-    marginLeft = 0,
-
-    bgColor = 'transparent',
-
-    oppositeDirectionColor = '#ee4e34',
-    sameDirectionColor = '#44a8c1',
-
-    containerWidth = 'max-w-screen-lg',
-
-    yAxisTitle = 'y axis title',
-    xAxisTitle = 'x axis title',
-
-    xValueFormatter = '',
-    yValueFormatter = '',
-
-    directionStartLabel = 'start point',
-    directionEndLabel = 'end point',
-    sizeLegendValues = [1e6, 1e8, 1e9],
-    sizeLegendMoveSizeObjectDownBy = 5,
-    sizeLegendTitle = 'size legend title',
-    sizeValueFormatter = '',
-    heading = 'This is a heading for the chart',
-    subheading = 'This is a subheading for the chart describing it in more detail',
-
-    xAxisTickValues,
-
-    xScaleType = 'linear', // linear or log
-    xScaleLogBase = 10, // applicable only if log scale
-
-    defaultState = [],
-
-    activeOpacity = 0.8, // click, hover, search
-    inactiveOpacity = 0.2,
-
-    circleSizeRange = [5, 30],
-    lineWidthRange = [2, 4],
-
-    searchInputClassNames = '',
-    goToInitialStateButtonClassNames = '',
-    clearAllButtonClassNames = '',
-  },
-  dimensions: {
-    xFieldStart,
-    xFieldEnd,
-    yFieldStart,
-    yFieldEnd,
-    sizeField,
-    nameField,
-  },
-  chartContainerSelector = '#chart-container',
-}) {
-  const {
-    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-
-    // eslint-disable-next-line no-undef
-  } = options // works in chrome, but unable to find a way to disable eslint error
-
-  // setMainContainerWidth() - this should be outside renderChart
-  // d3.select('#main-container').classed(`${containerWidth}`, true)
-
-  // applyInteractionStyles
+function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   d3.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -105,18 +36,18 @@ export function renderChart({
       fill-opacity: ${inactiveOpacity};
     }
   `)
+}
 
-  // Headers
-  // setChartHeaders() - should be outside renderChart()
-  // d3.select('#chart-heading').node().textContent = heading
-  // d3.select('#chart-subheading').node().textContent = subheading
-
-  // Chart Area
-
-  // setupChartArea()
-  // accepts - chart dimensions, margins, aspect ratio
-  // returns - svg, allComponents, chartCore
-  const coreChartWidth = 1000
+function setupChartArea({
+  chartContainerSelector,
+  coreChartWidth,
+  aspectRatio,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  bgColor,
+}) {
   const coreChartHeight = coreChartWidth / aspectRatio
 
   const viewBoxHeight = coreChartHeight + marginTop + marginBottom
@@ -148,11 +79,18 @@ export function renderChart({
     .append('g')
     .attr('transform', `translate(${marginLeft}, ${marginTop})`)
 
-  // remove (import from helpers)
-  const toClassText = str => str.replace(/\s/g, '-').toLowerCase()
+  return {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  }
+}
 
-  // initializeTooltip()
-  const tooltipDiv = d3
+function initializeTooltip() {
+  return d3
     .select('body')
     .append('div')
     .attr('class', 'dom-tooltip')
@@ -160,9 +98,17 @@ export function renderChart({
       'style',
       'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
     )
+}
 
-  // parseData()
-  const dataParsed = data
+function parseData({
+  data,
+  xFieldStart,
+  xFieldEnd,
+  yFieldStart,
+  yFieldEnd,
+  sizeField,
+}) {
+  return data
     .map(el => {
       const elParsed = { ...el }
       elParsed[xFieldStart] = Number.parseFloat(el[xFieldStart])
@@ -176,11 +122,24 @@ export function renderChart({
       return elParsed
     })
     .filter(d => !Number.isNaN(d.slope))
+}
 
-  const nameValues = _(data).map(nameField).uniq().value()
-  const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
-
-  // setupScales()
+function setupScales({
+  dataParsed,
+  coreChartHeight,
+  coreChartWidth,
+  yFieldStart,
+  yFieldEnd,
+  xFieldStart,
+  xFieldEnd,
+  xScaleType,
+  xScaleLogBase,
+  sizeField,
+  circleSizeRange,
+  lineWidthRange,
+  sameDirectionColor,
+  oppositeDirectionColor,
+}) {
   const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]))
   const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]))
   const yDomain = d3.extent([...yDomainStart, ...yDomainEnd])
@@ -203,23 +162,34 @@ export function renderChart({
           .nice()
       : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain).nice()
 
-  // Area of circle should be proportional to the population
   const sizeMax = d3.max(dataParsed.map(el => el[sizeField]))
 
   const circleSizeScale = d3
     .scaleSqrt()
     .range(circleSizeRange)
     .domain([0, sizeMax])
+
   const lineWidthScale = d3
     .scaleSqrt()
     .range(lineWidthRange)
     .domain([0, sizeMax])
 
-  const sizeValues = sizeLegendValues.map(a => circleSizeScale(a))
+  const colorScale = slope =>
+    slope > 0 ? sameDirectionColor : oppositeDirectionColor
 
-  // renderSizeLegend()
-  // TODO: move to options?
-  const gapInCircles = 30
+  return { yScale, xScale, circleSizeScale, lineWidthScale, colorScale }
+}
+
+function renderSizeLegend({
+  gapInCircles,
+  circleSizeScale,
+  widgetsRight,
+  sizeLegendMoveSizeObjectDownBy,
+  sizeLegendValues,
+  sizeValueFormatter,
+  sizeLegendTitle,
+}) {
+  const sizeValues = sizeLegendValues.map(a => circleSizeScale(a))
 
   let cumulativeSize = 0
   const cumulativeSizes = []
@@ -273,18 +243,65 @@ export function renderChart({
   sizeLegend
     .attr('height', sizeLegendBoundingBox.height)
     .attr('width', sizeLegendBoundingBox.width)
+}
+function renderXAxis({
+  chartCore,
+  coreChartHeight,
+  coreChartWidth,
+  xScale,
+  xAxisTickValues,
+  xAxisTitle,
+}) {
+  const xAxis = chartCore
+    .append('g')
+    .attr('class', 'x-axis-bottom')
+    .attr('transform', `translate(0, ${coreChartHeight + 30})`)
+  xAxis.call(
+    xAxisTickValues
+      ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
+      : d3.axisBottom(xScale),
+  )
 
-  // move to scales: setupScales()
-  const colorScale = slope =>
-    slope > 0 ? sameDirectionColor : oppositeDirectionColor
+  xAxis
+    .append('g')
+    .append('text')
+    .attr('class', 'text-xs font-semibold tracking-wider')
+    .text(xAxisTitle)
+    .attr('fill', '#333')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
+}
 
-  // renderColorLegend()
-  const stickHeight = 3
-  const stickLength = 30
-  const stickWidthLegend = 1
-  const ballRadius = 6
-  const gapForText = 5
-  const singleMaceSectionHeight = 20
+function renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  const yAxis = chartCore
+    .append('g')
+    .attr('class', 'text-xs y-axis-right')
+    .attr('transform', `translate(${coreChartWidth}, 0)`)
+  yAxis
+    .call(d3.axisRight(yScale).ticks(5).tickSize(-coreChartWidth))
+    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
+    .call(g => g.select('.domain').remove())
+
+  yAxis
+    .append('g')
+    .append('text')
+    .attr('class', 'font-semibold tracking-wider')
+    .text(yAxisTitle)
+    .attr('fill', '#333')
+    .attr('text-anchor', 'end')
+    .attr('transform', 'translate(8, -20)')
+}
+
+function renderColorLegend({
+  stickHeight,
+  stickLength,
+  ballRadius,
+  gapForText,
+  singleMaceSectionHeight,
+  widgetsRight,
+  sameDirectionColor,
+  oppositeDirectionColor,
+}) {
   const colorLegend = widgetsRight.append('svg')
   const colorLegendMain = colorLegend
     .append('g')
@@ -355,59 +372,30 @@ export function renderChart({
   colorLegend
     .attr('height', legendBoundingBox.height)
     .attr('width', legendBoundingBox.width)
+}
 
-  renderDirectionLegend({
-    selection: widgetsRight.append('svg'),
-    ballRadius,
-    stickLength,
-    stickWidthLegend,
-    gapForText,
-    directionStartLabel,
-    directionEndLabel,
-  })
-
-  // x-axis
-  // renderXAxis()
-  const xAxis = chartCore
-    .append('g')
-    .attr('class', 'x-axis-bottom')
-    .attr('transform', `translate(0, ${coreChartHeight + 30})`)
-  xAxis.call(
-    xAxisTickValues
-      ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
-      : d3.axisBottom(xScale),
-  )
-
-  xAxis
-    .append('g')
-    .append('text')
-    .attr('class', 'text-xs font-semibold tracking-wider')
-    .text(xAxisTitle)
-    .attr('fill', '#333')
-    .attr('text-anchor', 'middle')
-    .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
-
-  // y-axis
-  // renderYAxis()
-  const yAxis = chartCore
-    .append('g')
-    .attr('class', 'text-xs y-axis-right')
-    .attr('transform', `translate(${coreChartWidth}, 0)`)
-  yAxis
-    .call(d3.axisRight(yScale).ticks(5).tickSize(-coreChartWidth))
-    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
-    .call(g => g.select('.domain').remove())
-
-  yAxis
-    .append('g')
-    .append('text')
-    .attr('class', 'font-semibold tracking-wider')
-    .text(yAxisTitle)
-    .attr('fill', '#333')
-    .attr('text-anchor', 'end')
-    .attr('transform', 'translate(8, -20)')
-
-  // renderMaces()
+function renderMaces({
+  chartCore,
+  dataParsed,
+  sizeField,
+  nameField,
+  defaultStateAll,
+  xFieldStart,
+  xFieldEnd,
+  xScale,
+  yScale,
+  yFieldStart,
+  yFieldEnd,
+  circleSizeScale,
+  lineWidthScale,
+  colorScale,
+  tooltipDiv,
+  sizeValueFormatter,
+  xValueFormatter,
+  yValueFormatter,
+  xFieldType,
+  yFieldType,
+}) {
   const cGroup = chartCore
     .append('g')
     .attr('class', 'maces')
@@ -437,7 +425,7 @@ export function renderChart({
       const y1 = yScale(d[yFieldStart])
       const x2 = xScale(d[xFieldEnd])
       const y2 = yScale(d[yFieldEnd])
-      const circleRadius = circleSizeScale(d.population)
+      const circleRadius = circleSizeScale(d[sizeField])
       const stickWidth = lineWidthScale(d[sizeField])
       const macePoints = maceShape({
         x1,
@@ -494,30 +482,35 @@ export function renderChart({
         .duration(500)
         .style('opacity', 0)
     })
-
-  const searchEventHandler = qstr => {
-    if (qstr) {
-      const lqstr = qstr.toLowerCase()
-      nameValues.forEach(val => {
-        // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText(val)
-        if (val.toLowerCase().includes(lqstr)) {
-          d3.select(`.mace-${maceName}`).classed('mace-matched', true)
-        } else {
-          d3.select(`.mace-${maceName}`).classed('mace-matched', false)
-        }
-        d3.select('.maces').classed('searching', true)
-      })
-    } else {
-      nameValues.forEach(val => {
-        const maceName = toClassText(val)
+}
+const searchEventHandler = referenceList => qstr => {
+  if (qstr) {
+    const lqstr = qstr.toLowerCase()
+    referenceList.forEach(val => {
+      // d3.selectAll('.mace').classed('mace-active', false)
+      const maceName = toClassText(val)
+      if (val.toLowerCase().includes(lqstr)) {
+        d3.select(`.mace-${maceName}`).classed('mace-matched', true)
+      } else {
         d3.select(`.mace-${maceName}`).classed('mace-matched', false)
-      })
-      d3.select('.maces').classed('searching', false)
-    }
+      }
+      d3.select('.maces').classed('searching', true)
+    })
+  } else {
+    referenceList.forEach(val => {
+      const maceName = toClassText(val)
+      d3.select(`.mace-${maceName}`).classed('mace-matched', false)
+    })
+    d3.select('.maces').classed('searching', false)
   }
+}
 
-  // setupSearch()
+function setupSearch({
+  handleSearch,
+  widgetsLeft,
+  searchInputClassNames,
+  nameField,
+}) {
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
@@ -526,9 +519,18 @@ export function renderChart({
   search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    searchEventHandler(qstr)
+    handleSearch(qstr)
   })
+  return search
+}
 
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+}) {
   const goToInitialState = widgetsLeft
     .append('button')
     .text('Go to Initial State')
@@ -540,9 +542,16 @@ export function renderChart({
       d3.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
     })
     search.node().value = ''
-    searchEventHandler('')
+    handleSearch('')
   })
+}
 
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
   const clearAll = widgetsLeft
     .append('button')
     .text('Clear All')
@@ -551,7 +560,217 @@ export function renderChart({
   clearAll.on('click', () => {
     d3.selectAll('.mace').classed('mace-active', false)
     search.node().value = ''
-    searchEventHandler('')
+    handleSearch('')
+  })
+}
+
+export function renderChart({
+  data,
+  options: {
+    aspectRatio = 2,
+
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
+
+    bgColor = 'transparent',
+
+    oppositeDirectionColor = '#ee4e34',
+    sameDirectionColor = '#44a8c1',
+
+    yAxisTitle = 'y axis title',
+    xAxisTitle = 'x axis title',
+
+    xValueFormatter = '',
+    yValueFormatter = '',
+
+    directionStartLabel = 'start point',
+    directionEndLabel = 'end point',
+    sizeLegendValues = [1e6, 1e8, 1e9],
+    sizeLegendMoveSizeObjectDownBy = 5,
+    sizeLegendTitle = 'size legend title',
+    sizeValueFormatter = '',
+
+    xAxisTickValues,
+
+    xScaleType = 'linear', // linear or log
+    xScaleLogBase = 10, // applicable only if log scale
+
+    defaultState = [],
+
+    activeOpacity = 0.8, // click, hover, search
+    inactiveOpacity = 0.2,
+
+    circleSizeRange = [5, 30],
+    lineWidthRange = [2, 4],
+
+    searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
+
+    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+  },
+  dimensions: {
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+    nameField,
+  },
+  chartContainerSelector,
+}) {
+  applyInteractionStyles({ activeOpacity, inactiveOpacity })
+
+  const coreChartWidth = 1000
+  const {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
+
+  const tooltipDiv = initializeTooltip()
+
+  const dataParsed = parseData({
+    data,
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+  })
+
+  const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
+    setupScales({
+      dataParsed,
+      coreChartHeight,
+      coreChartWidth,
+      yFieldStart,
+      yFieldEnd,
+      xFieldStart,
+      xFieldEnd,
+      xScaleType,
+      xScaleLogBase,
+      sizeField,
+      circleSizeRange,
+      lineWidthRange,
+      sameDirectionColor,
+      oppositeDirectionColor,
+    })
+
+  const nameValues = _(data).map(nameField).uniq().value()
+  const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
+
+  const gapInCircles = 30
+  renderSizeLegend({
+    gapInCircles,
+    circleSizeScale,
+    widgetsRight,
+    sizeLegendMoveSizeObjectDownBy,
+    sizeLegendValues,
+    sizeValueFormatter,
+    sizeLegendTitle,
+  })
+
+  const stickHeight = 3
+  const stickLength = 30
+  const stickWidthLegend = 1
+  const ballRadius = 6
+  const gapForText = 5
+  const singleMaceSectionHeight = 20
+
+  renderColorLegend({
+    stickHeight,
+    stickLength,
+    ballRadius,
+    gapForText,
+    singleMaceSectionHeight,
+    widgetsRight,
+    sameDirectionColor,
+    oppositeDirectionColor,
+  })
+
+  renderDirectionLegend({
+    selection: widgetsRight.append('svg'),
+    ballRadius,
+    stickLength,
+    stickWidthLegend,
+    gapForText,
+    directionStartLabel,
+    directionEndLabel,
+  })
+
+  renderXAxis({
+    chartCore,
+    coreChartHeight,
+    coreChartWidth,
+    xScale,
+    xAxisTickValues,
+    xAxisTitle,
+  })
+
+  // y-axis
+  renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle })
+
+  renderMaces({
+    chartCore,
+    dataParsed,
+    sizeField,
+    nameField,
+    defaultStateAll,
+    xFieldStart,
+    xFieldEnd,
+    xScale,
+    yScale,
+    yFieldStart,
+    yFieldEnd,
+    circleSizeScale,
+    lineWidthScale,
+    colorScale,
+    tooltipDiv,
+    sizeValueFormatter,
+    xValueFormatter,
+    yValueFormatter,
+    xFieldType,
+    yFieldType,
+  })
+
+  // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+  // handleSearch accepts search query string and applied appropriate
+  const handleSearch = searchEventHandler(nameValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    nameField,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  })
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
   })
 
   // For responsiveness
