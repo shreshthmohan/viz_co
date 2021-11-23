@@ -2021,10 +2021,19 @@
       xDomainCustom,
 
       sizeRange = [2, 20],
-
       sizeLegendValues = [10e3, 50e3, 10e4, 25e4],
       sizeLegendTitle = sizeField,
+
+      legendGapInCircles = 30,
       xAxisLabel = xField,
+
+      xValuePrefix = '',
+      xValueFormatter = '',
+      xValueSuffix = '',
+
+      sizeValuePrefix = '',
+      sizeValueFormatter = '',
+      sizeValueSuffix = '',
 
       colorLegendTitle = xField,
 
@@ -2048,6 +2057,10 @@
   }) {
     d3__namespace.select('body').append('style').html(`
     .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+    circle.hovered {
       stroke-width: 2;
       stroke: #333;
     }
@@ -2095,7 +2108,7 @@
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        'opacity: 0; position: absolute;  background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       );
 
     const parsedData = data.map(d => ({
@@ -2145,10 +2158,6 @@
     }
     manageSplitCombine();
 
-    // const width = svgWidth - marginLeft - marginRight
-    // const heightInnerCombined = combinedHeight - marginTop - marginBottom
-    // const heightInnerSplit = splitHeight - marginTop - marginBottom
-
     const segments = [...new Set(parsedData.map(c => c[segmentField]))];
     const maxSizeValue = Math.max(...parsedData.map(c => c[sizeField]));
 
@@ -2185,9 +2194,6 @@
 
     const sizeValues = sizeLegendValues.map(a => sizeScale(a));
 
-    // TODO: move to options
-    const gapInCircles = 30;
-
     let cumulativeSize = 0;
     const cumulativeSizes = [];
     sizeValues.forEach((sz, i) => {
@@ -2220,7 +2226,7 @@
       .style('fill', '#bebebe')
       .style('stroke-width', 1)
       .style('stroke', 'gray')
-      .attr('cx', (d, i) => cumulativeSizes[i] + i * gapInCircles + 1)
+      .attr('cx', (d, i) => cumulativeSizes[i] + i * legendGapInCircles + 1)
       .attr('cy', sizeValues[sizeValues.length - 1] + 1);
 
     sizeLegendContainerGroup
@@ -2228,9 +2234,17 @@
       .append('text')
       .attr('alignment-baseline', 'middle')
       .attr('dy', sizeValues[sizeValues.length - 1] + 2)
-      .attr('dx', (d, i) => d + cumulativeSizes[i] + (i + 0.1) * gapInCircles)
+      .attr(
+        'dx',
+        (d, i) => d + cumulativeSizes[i] + (i + 0.1) * legendGapInCircles,
+      )
       .style('font-size', 8)
-      .text((d, i) => d3__namespace.format('.3s')(sizeLegendValues[i]));
+      .text(
+        (d, i) =>
+          sizeValuePrefix +
+          d3__namespace.format(sizeValueFormatter)(sizeLegendValues[i]) +
+          sizeValueSuffix,
+      );
 
     sizeLegendContainerGroup
       .append('text')
@@ -2254,20 +2268,31 @@
 
     const xAxis = chartCore.append('g').attr('id', 'x-axis');
 
-    xAxis
-      .call(d3__namespace.axisTop(xScale).tickSize(-coreChartHeightCombined))
-      .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
-      .call(g => g.select('.domain').remove());
-
     function renderXAxisSplit() {
       xAxis
-        .call(d3__namespace.axisTop(xScale).tickSize(-coreChartHeightSplit))
+        .call(
+          d3__namespace
+            .axisTop(xScale)
+            .tickSize(-coreChartHeightSplit)
+            .tickFormat(
+              val =>
+                xValuePrefix + d3__namespace.format(xValueFormatter)(val) + xValueSuffix,
+            ),
+        )
         .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
         .call(g => g.select('.domain').remove());
     }
     function renderXAxisCombined() {
       xAxis
-        .call(d3__namespace.axisTop(xScale).tickSize(-coreChartHeightCombined))
+        .call(
+          d3__namespace
+            .axisTop(xScale)
+            .tickSize(-coreChartHeightCombined)
+            .tickFormat(
+              val =>
+                xValuePrefix + d3__namespace.format(xValueFormatter)(val) + xValueSuffix,
+            ),
+        )
         .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
         .call(g => g.select('.domain').remove());
     }
@@ -2345,31 +2370,33 @@
         .attr('cy', function (d) {
           return d.y
         })
-        .on('mouseover', (e, d) => {
+        .on('mouseover', function (e, d) {
           tooltipDiv.transition().duration(200).style('opacity', 1);
           tooltipDiv.html(
-            `<div><span class="font-bold">${d[nameField]}</span>(${
-            d[segmentField]
-          })</div>
-         <div class="flex space-between">
-           <div class="capitalize">${xField}:</div>
-           <div class="pl-2 font-bold">${d[xField].toFixed(0)}</div>
+            `<div><span>${d[nameField]}</span>(${d[segmentField]})</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${xField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             xValuePrefix + d3__namespace.format(xValueFormatter)(d[xField]) + xValueSuffix
+           }</div>
          </div>
-         <div class="flex space-between">
-           <div class="capitalize">${sizeField}:</div>
-           <div class="pl-2 font-bold">${d[sizeField].toFixed(0)}</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${sizeField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             sizeValuePrefix +
+             d3__namespace.format(sizeValueFormatter)(d[sizeField]) +
+             sizeValueSuffix
+           }</div>
          </div>`,
           );
           tooltipDiv
             .style('left', `${e.clientX}px`)
             .style('top', `${e.clientY + window.scrollY + 30}px`);
-          d3__namespace.select(e.target).attr('stroke', 'black').style('stroke-width', 2);
+          d3__namespace.select(this).classed('hovered', true);
         })
-        .on('mouseout', (e, d) => {
+        .on('mouseout', function () {
           tooltipDiv.transition().duration(500).style('opacity', 0);
-          d3__namespace.select(e.target)
-            .attr('stroke', d3__namespace.rgb(xColorScale(d[xField])).darker(0.5))
-            .style('stroke-width', 1);
+          d3__namespace.select(this).classed('hovered', false);
         });
       u.exit().remove();
       preventOverflowThrottled({

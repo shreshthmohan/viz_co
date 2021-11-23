@@ -38,7 +38,7 @@ const options = {
   marginBottom: 0,
   marginLeft: 0,
 
-  bgColor: 'transparent',
+  bgColor: '#fafafa',
 
   collisionDistance: 0.5,
 
@@ -48,6 +48,16 @@ const options = {
 
   sizeLegendValues: [10e3, 50e3, 10e4, 25e4],
   sizeLegendTitle: 'size legend title',
+
+  legendGapInCircles: 45,
+
+  xValuePrefix: '',
+  xValueFormatter: '.1f',
+  xValueSuffix: '%',
+
+  sizeValuePrefix: '$',
+  sizeValueFormatter: ',',
+  sizeValueSuffix: '',
 
   xAxisLabel: 'x-axis label',
 
@@ -59,7 +69,7 @@ const options = {
   segmentTypeSplit: 'segment type (split)',
 
   // customColorScheme: ['red', 'blue', 'green', 'black', 'gray'],
-  inbuiltScheme: 'schemePuRd',
+  inbuiltScheme: 'schemeOrRd',
   // inbuiltSchemeOptions[0], // 0, 27
   numberOfColors: 5, // minumum: 3, maximum: 9
 
@@ -78,7 +88,6 @@ const dimensions = {
   sizeField: 'capitalization',
   xField: 'taxRate',
   nameField: 'name',
-
   segmentField: 'sector',
 }
 const dataPath = 'data.csv'
