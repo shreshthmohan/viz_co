@@ -2242,7 +2242,7 @@
       .text(
         (d, i) =>
           sizeValuePrefix +
-          d3__namespace.format(sizeValueFormatter)(sizeLegendValues[i]) +
+          formatNumber(sizeLegendValues[i], sizeValueFormatter) +
           sizeValueSuffix,
       );
 
@@ -2276,7 +2276,7 @@
             .tickSize(-coreChartHeightSplit)
             .tickFormat(
               val =>
-                xValuePrefix + d3__namespace.format(xValueFormatter)(val) + xValueSuffix,
+                xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
             ),
         )
         .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
@@ -2290,7 +2290,7 @@
             .tickSize(-coreChartHeightCombined)
             .tickFormat(
               val =>
-                xValuePrefix + d3__namespace.format(xValueFormatter)(val) + xValueSuffix,
+                xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
             ),
         )
         .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
@@ -2377,14 +2377,16 @@
          <div style="display: flex">
            <div style="text-transform: capitalize">${xField}:</div>
            <div style="padding-left: 0.25rem; font-weight: bold">${
-             xValuePrefix + d3__namespace.format(xValueFormatter)(d[xField]) + xValueSuffix
+             xValuePrefix +
+             formatNumber(d[xField], xValueFormatter) +
+             xValueSuffix
            }</div>
          </div>
          <div style="display: flex">
            <div style="text-transform: capitalize">${sizeField}:</div>
            <div style="padding-left: 0.25rem; font-weight: bold">${
              sizeValuePrefix +
-             d3__namespace.format(sizeValueFormatter)(d[sizeField]) +
+             formatNumber(d[sizeField], sizeValueFormatter) +
              sizeValueSuffix
            }</div>
          </div>`,

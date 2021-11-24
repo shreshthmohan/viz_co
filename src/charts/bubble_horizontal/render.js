@@ -3,6 +3,7 @@
 import * as d3 from 'd3'
 import { legend } from '../../utils/helpers/colorLegend'
 import { preventOverflowThrottled } from '../../utils/helpers/general'
+import { formatNumber } from '../../utils/helpers/formatters'
 
 export function renderChart({
   data,
@@ -248,7 +249,7 @@ export function renderChart({
     .text(
       (d, i) =>
         sizeValuePrefix +
-        d3.format(sizeValueFormatter)(sizeLegendValues[i]) +
+        formatNumber(sizeLegendValues[i], sizeValueFormatter) +
         sizeValueSuffix,
     )
 
@@ -282,7 +283,7 @@ export function renderChart({
           .tickSize(-coreChartHeightSplit)
           .tickFormat(
             val =>
-              xValuePrefix + d3.format(xValueFormatter)(val) + xValueSuffix,
+              xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
           ),
       )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
@@ -296,7 +297,7 @@ export function renderChart({
           .tickSize(-coreChartHeightCombined)
           .tickFormat(
             val =>
-              xValuePrefix + d3.format(xValueFormatter)(val) + xValueSuffix,
+              xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
           ),
       )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
@@ -383,14 +384,16 @@ export function renderChart({
          <div style="display: flex">
            <div style="text-transform: capitalize">${xField}:</div>
            <div style="padding-left: 0.25rem; font-weight: bold">${
-             xValuePrefix + d3.format(xValueFormatter)(d[xField]) + xValueSuffix
+             xValuePrefix +
+             formatNumber(d[xField], xValueFormatter) +
+             xValueSuffix
            }</div>
          </div>
          <div style="display: flex">
            <div style="text-transform: capitalize">${sizeField}:</div>
            <div style="padding-left: 0.25rem; font-weight: bold">${
              sizeValuePrefix +
-             d3.format(sizeValueFormatter)(d[sizeField]) +
+             formatNumber(d[sizeField], sizeValueFormatter) +
              sizeValueSuffix
            }</div>
          </div>`,
