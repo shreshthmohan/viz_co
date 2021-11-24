@@ -195,7 +195,7 @@
 
   /* global window */
 
-  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$1({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -225,7 +225,7 @@
   `);
   }
 
-  function setupChartArea({
+  function setupChartArea$1({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -276,7 +276,7 @@
     }
   }
 
-  function initializeTooltip() {
+  function initializeTooltip$1() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -287,7 +287,7 @@
       )
   }
 
-  function parseData({
+  function parseData$1({
     data,
     xFieldStart,
     xFieldEnd,
@@ -311,7 +311,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales({
+  function setupScales$1({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -431,7 +431,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis({
+  function renderXAxis$1({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -670,7 +670,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler = referenceList => qstr => {
+  const searchEventHandler$1 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -692,7 +692,7 @@
     }
   };
 
-  function setupSearch({
+  function setupSearch$1({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -711,7 +711,7 @@
     return search
   }
 
-  function setupInitialStateButton({
+  function setupInitialStateButton$1({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -733,7 +733,7 @@
     });
   }
 
-  function setupClearAllButton({
+  function setupClearAllButton$1({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -751,7 +751,7 @@
     });
   }
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 2,
@@ -809,7 +809,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$1({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -819,7 +819,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea({
+    } = setupChartArea$1({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -830,9 +830,9 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$1();
 
-    const dataParsed = parseData({
+    const dataParsed = parseData$1({
       data,
       xFieldStart,
       xFieldEnd,
@@ -842,7 +842,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales({
+      setupScales$1({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -901,7 +901,7 @@
       directionEndLabel,
     });
 
-    renderXAxis({
+    renderXAxis$1({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -938,22 +938,22 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler(nameValues);
-    const search = setupSearch({
+    const handleSearch = searchEventHandler$1(nameValues);
+    const search = setupSearch$1({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       nameField,
     });
 
-    setupInitialStateButton({
+    setupInitialStateButton$1({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton({
+    setupClearAllButton$1({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -1122,6 +1122,28 @@
     return result
   };
 
+  const checkColorArray = length => arr => {
+    const checkColorsResult = arr.map(clr => checkColor(clr));
+    const lengthValidationResult = { valid: true, message: '' };
+    if (length && arr.length < length) {
+      lengthValidationResult.valid = false;
+      lengthValidationResult.message = `Need atleast ${length} colors`;
+    }
+
+    const checkAllResults = [...checkColorsResult, lengthValidationResult];
+
+    const combinedResult = { valid: true, message: '' };
+
+    checkAllResults.forEach(result => {
+      if (!result.valid) {
+        combinedResult.message += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${result.message}`;
+        combinedResult.valid = false;
+      }
+    });
+
+    return combinedResult
+  };
+
   // TODO: add length feature as in checkColorArray
   const checkNumericArray = val => {
     const valid =
@@ -1195,7 +1217,7 @@
 
   // export function that
 
-  const dimensionTypes$1 = {
+  const dimensionTypes$2 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1204,7 +1226,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1251,13 +1273,13 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1267,7 +1289,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1288,7 +1310,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1318,7 +1340,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 2,
@@ -1740,13 +1762,13 @@
     });
   }
 
-  const dimensionTypes = {
+  const dimensionTypes$1 = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1760,6 +1782,664 @@
 
     verticalGapInNodes: checkNumber,
     nodeWidth: checkNumber,
+  };
+
+  const validateAndRender$1 = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  };
+
+  /* eslint-disable no-import-assign */
+
+  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+    d3__namespace.select('body').append('style').html(`
+g.serieses .series {
+  fill-opacity: ${inactiveOpacity};
+}
+/* clicked and legend clicked states are common: controlled by .mace-active */
+g.serieses .series.series-active {
+  fill-opacity: ${activeOpacity};
+}
+g.serieses.searching .series.series-matched .top-line {
+  fill-opacity: ${activeOpacity};
+  stroke: #000;
+  stroke-width: 3;
+}
+/* So that legend text is visible irrespective of state */
+g.series text {
+  fill-opacity: ${activeOpacity};
+}
+g.serieses g.series.series-matched text {
+  font-weight: bolder;
+}
+g.serieses g.series.series-hovered .top-line {
+  stroke-width: 3;
+}
+g.circles circle.circle {
+  r: 2;
+  fill-opacity: 0.1;
+}
+g.circles circle.circle.circle-hovered {
+  r: 5;
+  fill-opacity: ${activeOpacity};
+}
+`);
+  }
+
+  function setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  }) {
+    const coreChartHeight = coreChartWidth / aspectRatio;
+
+    const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
+    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
+
+    const chartParent = d3__namespace.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
+      .append('svg')
+      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+      .style('background', bgColor);
+
+    const allComponents = svg.append('g').attr('class', 'all-components');
+
+    const chartCore = allComponents
+      .append('g')
+      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+
+    return {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+      viewBoxWidth,
+    }
+  }
+
+  function initializeTooltip() {
+    return d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      )
+  }
+
+  function parseData({ data, yField, xField, seriesField, colorField }) {
+    const parsedData = data.map(d => ({
+      ...d,
+      [yField]: Number.parseFloat(d[yField]),
+    }));
+
+    parsedData.sort((a, b) => a[xField] - b[xField]);
+
+    const nestedData = d3__namespace
+      .groups(parsedData, d => d[seriesField])
+      .map(([key, values]) => ({
+        [seriesField]: key,
+        values,
+        [colorField]: values[0][colorField],
+      }));
+
+    return { parsedData, nestedData }
+  }
+
+  const parseDate = (dt, xAxisDateParser) => {
+    const date = d3__namespace.timeParse(xAxisDateParser)(dt);
+
+    return date
+  };
+
+  function setupScales({
+    parsedData,
+    nestedData,
+    xField,
+    yField,
+    seriesField,
+    coreChartWidth,
+    coreChartHeight,
+    overlap,
+    xAxisDateParser,
+    colorField,
+    colorRange,
+  }) {
+    const xDomain = d3__namespace.extent(
+      ___default["default"].chain(parsedData)
+        .map(xField)
+        .uniq()
+        .value()
+        .map(d => parseDate(d, xAxisDateParser)),
+    );
+
+    const xScale = d3__namespace.scaleTime([0, coreChartWidth]).domain(xDomain);
+
+    const categoryDomain = nestedData.map(d => d[seriesField]);
+    const categoryScale = d3__namespace
+      .scaleBand()
+      .range([0, coreChartHeight])
+      .domain(categoryDomain)
+      .paddingInner(0)
+      .paddingOuter(0);
+
+    const yDomain = d3__namespace.extent(parsedData, d => d[yField]);
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([0, -(1 + overlap) * categoryScale.step()])
+      .domain(yDomain);
+
+    const colorDomain = ___default["default"].chain(parsedData).map(colorField).uniq().value();
+    const fillColorScale = d3__namespace.scaleOrdinal().range(colorRange).domain(colorDomain);
+
+    return { yScale, xScale, categoryScale, categoryDomain, fillColorScale }
+  }
+
+  function renderXAxis({
+    chartCore,
+    coreChartHeight,
+    xScale,
+    xAxisDateFormatter,
+    xAxisTitle,
+    coreChartWidth,
+  }) {
+    const xAxis = chartCore
+      .append('g')
+      .attr('class', 'x-axis-bottom')
+      .attr('transform', `translate(0, ${coreChartHeight + 10})`);
+
+    xAxis.call(
+      d3__namespace
+        .axisBottom(xScale)
+        .tickFormat(val => d3__namespace.timeFormat(xAxisDateFormatter)(val)),
+      // xAxisTickValues
+      //   ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
+      //   : d3.axisBottom(xScale),
+    );
+
+    xAxis
+      .append('g')
+      .append('text')
+      .attr('class', 'text-xs font-semibold tracking-wider')
+      .text(xAxisTitle)
+      .attr('fill', '#333')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
+  }
+
+  function renderRidges({
+    chartCore,
+    nestedData,
+    seriesField,
+    defaultStateAll,
+    categoryScale,
+    xField,
+    yField,
+    xAxisDateParser,
+    xScale,
+    yScale,
+    fillColorScale,
+    colorField,
+    tooltipDiv,
+    xTooltipFormatter,
+    yValuePrefix,
+    yValuePostfix,
+    yValueFormatter,
+    seriesLabelPosition,
+    viewBoxWidth,
+  }) {
+    const seriesGroup = chartCore
+      .append('g')
+      .attr('class', 'serieses')
+      .selectAll('.series')
+      .data(nestedData)
+      .join('g')
+      .attr('class', d => {
+        return `series 
+    series-${toClassText(d[seriesField])} 
+    ${defaultStateAll.includes(d[seriesField]) ? 'series-active' : ''}`
+      })
+      .attr(
+        'transform',
+        d =>
+          `translate(0, ${
+          categoryScale(d[seriesField]) + categoryScale.bandwidth()
+        })`,
+      )
+      .on('click', e => {
+        const parentMace = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentMace.classed('series-active');
+        parentMace.classed('series-active', !clickedState);
+      })
+      .on('mouseover', e => {
+        d3__namespace.select(e.target.parentNode).classed('series-hovered', true);
+      })
+      .on('mouseout', e => {
+        d3__namespace.select(e.target.parentNode).classed('series-hovered', false);
+      });
+
+    const area = d3__namespace
+      .area()
+      // .curve(d3.curveBasis)
+      .x(d => xScale(parseDate(d[xField], xAxisDateParser)))
+      .y1(d => yScale(d[yField]))
+      .y0(yScale(0));
+
+    seriesGroup
+      .append('path')
+      .attr('fill', d => {
+        return d3__namespace.rgb(fillColorScale(d[colorField])).brighter(0.2)
+      })
+      .datum(d => d.values)
+      .attr('d', area)
+      .attr('stroke', d => {
+        return d3__namespace.rgb(fillColorScale(d[0][colorField])).darker(0.5)
+      });
+
+    seriesGroup
+      .append('path')
+      .attr('class', 'top-line')
+      .attr('fill', 'none')
+      .datum(d => d.values)
+      .attr('d', area.lineY1());
+    // .attr('stroke', d => {
+    //   return d3.rgb(fillColorScale(d[0][colorField])).darker(0.5)
+    // })
+
+    seriesGroup
+      .append('g')
+      .attr('class', 'circles')
+      .selectAll('.circle')
+      .data(d => d.values)
+      .join('circle')
+      .attr('class', 'circle')
+      .attr('cx', d => xScale(parseDate(d[xField], xAxisDateParser)))
+      .attr('cy', d => yScale(d[yField]))
+      .attr('fill', d => {
+        return d3__namespace.rgb(fillColorScale(d[colorField])).darker(1)
+      })
+      .on('mouseover', (e, d) => {
+        d3__namespace.select(e.target).classed('circle-hovered', true);
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        tooltipDiv.html(
+          `${seriesField}: ${d[seriesField]} (${d3__namespace.timeFormat(xTooltipFormatter)(
+          d3__namespace.timeParse(xAxisDateParser)(d[xField]),
+        )})
+      <br/>
+      ${yField}: ${
+          yValuePrefix +
+          formatNumber(d[yField], yValueFormatter) +
+          yValuePostfix
+        }
+      `,
+        );
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', e => {
+        d3__namespace.select(e.target).classed('circle-hovered', false);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+
+    seriesGroup
+      .append('text')
+      .text(d => d[seriesField])
+      .attr('text-anchor', seriesLabelPosition === 'right' ? 'start' : 'end')
+      .attr(
+        'transform',
+        `translate(${
+        seriesLabelPosition === 'right' ? viewBoxWidth + 5 : -5
+      }, 0)`,
+      )
+      .style('font-size', 10);
+  }
+
+  const searchEventHandler = referenceList => qstr => {
+    if (qstr) {
+      const lqstr = toClassText(qstr).toLowerCase();
+      referenceList.forEach(val => {
+        const seriesName = toClassText(val);
+        if (seriesName.toLowerCase().includes(lqstr)) {
+          d3__namespace.select(`.series-${seriesName}`).classed('series-matched', true);
+        } else {
+          d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
+        }
+        d3__namespace.select('.serieses').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const seriesName = toClassText(val);
+        d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
+      });
+      d3__namespace.select('.serieses').classed('searching', false);
+    }
+  };
+
+  function setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    seriesField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${seriesField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
+  }
+
+  function setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      d3__namespace.selectAll('.series').classed('series-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        d3__namespace.select(`.series-${toClassText(val)}`).classed('series-active', true);
+      });
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      d3__namespace.selectAll('.series').classed('series-active', false);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      d3__namespace.selectAll('.series').classed('series-active', true);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 0.8,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = '#eee',
+
+      xAxisTitle = '',
+      xAxisDateParser = '',
+      xAxisDateFormatter = '',
+      xTooltipFormatter = '%B %d, %Y',
+
+      overlap = 1,
+      yValueFormatter = '',
+      yValuePrefix = '',
+      yValuePostfix = '',
+
+      seriesLabelPosition = 'left',
+
+      colorRange = d3__namespace.schemeTableau10,
+
+      defaultState = [],
+
+      activeOpacity = 0.8,
+      inactiveOpacity = 0.2,
+
+      searchInputClassNames = '',
+      goToInitialStateButtonClassNames = '',
+      clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
+    },
+    dimensions: { seriesField, xField, yField, colorField },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles({ activeOpacity, inactiveOpacity });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+      viewBoxWidth,
+    } = setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip();
+
+    const { parsedData, nestedData } = parseData({
+      data,
+      yField,
+      xField,
+      seriesField,
+      colorField,
+    });
+
+    const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
+      setupScales({
+        parsedData,
+        nestedData,
+        xField,
+        yField,
+        seriesField,
+        coreChartWidth,
+        coreChartHeight,
+        overlap,
+        xAxisDateParser,
+        colorField,
+        colorRange,
+      });
+
+    const defaultStateAll = defaultState === 'All' ? categoryDomain : defaultState;
+
+    renderXAxis({
+      chartCore,
+      coreChartHeight,
+      xScale,
+      xAxisDateFormatter,
+      xAxisTitle,
+      coreChartWidth,
+    });
+
+    renderRidges({
+      chartCore,
+      nestedData,
+      seriesField,
+      defaultStateAll,
+      categoryScale,
+      xField,
+      yField,
+      xAxisDateParser,
+      xScale,
+      yScale,
+      fillColorScale,
+      colorField,
+      tooltipDiv,
+      xTooltipFormatter,
+      yValuePrefix,
+      yValuePostfix,
+      yValueFormatter,
+      seriesLabelPosition,
+      viewBoxWidth,
+    });
+
+    const handleSearch = searchEventHandler(categoryDomain);
+    const search = setupSearch({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      seriesField,
+    });
+
+    setupInitialStateButton({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+    });
+
+    setupClearAllButton({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  const dimensionTypes = {
+    xField: [],
+    yField: [shouldBeNumber],
+    seriesField: [shouldNotBeBlank],
+    colorField: [shouldNotBeBlank],
+  };
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    seriesLabelPosition: checkOneOf(['left', 'right']),
+
+    overlap: checkNumber,
+
+    colorRange: checkColorArray(),
+
+    defaultState: checkDefaultState,
+
+    activeOpacity: checkNumberBetween([0, 1]),
+    inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
   const validateAndRender = ({
@@ -1804,10 +2484,12 @@
     });
   };
 
-  exports.renderMace = renderChart$1;
-  exports.renderSankey = renderChart;
-  exports.validateAndRenderMace = validateAndRender$1;
-  exports.validateAndRenderSankey = validateAndRender;
+  exports.renderMace = renderChart$2;
+  exports.renderRidgeline = renderChart;
+  exports.renderSankey = renderChart$1;
+  exports.validateAndRenderMace = validateAndRender$2;
+  exports.validateAndRenderRidgeline = validateAndRender;
+  exports.validateAndRenderSankey = validateAndRender$1;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
