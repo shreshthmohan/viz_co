@@ -195,7 +195,7 @@
 
   /* global window */
 
-  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$1({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -225,7 +225,7 @@
   `);
   }
 
-  function setupChartArea({
+  function setupChartArea$1({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -276,7 +276,7 @@
     }
   }
 
-  function initializeTooltip() {
+  function initializeTooltip$1() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -287,7 +287,7 @@
       )
   }
 
-  function parseData({
+  function parseData$1({
     data,
     xFieldStart,
     xFieldEnd,
@@ -311,7 +311,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales({
+  function setupScales$1({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -431,7 +431,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis({
+  function renderXAxis$1({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -459,7 +459,7 @@
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
   }
 
-  function renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  function renderYAxis$1({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -479,7 +479,7 @@
       .attr('transform', 'translate(8, -20)');
   }
 
-  function renderColorLegend({
+  function renderColorLegend$1({
     stickHeight,
     stickLength,
     ballRadius,
@@ -670,7 +670,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler = referenceList => qstr => {
+  const searchEventHandler$1 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -692,7 +692,7 @@
     }
   };
 
-  function setupSearch({
+  function setupSearch$1({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -809,7 +809,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$1({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -819,7 +819,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea({
+    } = setupChartArea$1({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -830,9 +830,9 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$1();
 
-    const dataParsed = parseData({
+    const dataParsed = parseData$1({
       data,
       xFieldStart,
       xFieldEnd,
@@ -842,7 +842,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales({
+      setupScales$1({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -880,7 +880,7 @@
     const gapForText = 5;
     const singleMaceSectionHeight = 20;
 
-    renderColorLegend({
+    renderColorLegend$1({
       stickHeight,
       stickLength,
       ballRadius,
@@ -901,7 +901,7 @@
       directionEndLabel,
     });
 
-    renderXAxis({
+    renderXAxis$1({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -911,7 +911,7 @@
     });
 
     // y-axis
-    renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle });
+    renderYAxis$1({ chartCore, coreChartWidth, yScale, yAxisTitle });
 
     renderMaces({
       chartCore,
@@ -938,8 +938,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler(nameValues);
-    const search = setupSearch({
+    const handleSearch = searchEventHandler$1(nameValues);
+    const search = setupSearch$1({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -1806,42 +1806,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function renderChart({
-    data,
-    options: {
-      aspectRatio = 2,
-
-      marginTop = 60,
-      marginRight = 90,
-      marginBottom = 20,
-      marginLeft = 50,
-
-      bgColor = 'transparent',
-
-      xPaddingOuter = 0.2,
-      xAxisLabel = xField,
-
-      dominoSize = 0.2,
-
-      yPaddingInner = 0.2,
-      yPaddingOuter = 0.2,
-      ySortOrder = 'desc',
-
-      colorStrategy = 'value',
-      colorThreshold = 10,
-      colorDominoHighlighted = '#c20a66',
-      colorDominoNormal = '#d9e2e4',
-
-      normalLegendLabel = 'Normal Player',
-      highlightedLegendLabel = 'Best Player',
-
-      searchInputClassNames = '',
-    },
-    dimensions: { xField, yField, dominoField, colorField },
-
-    chartContainerSelector,
-  }) {
-    // Interaction Styling
+  function applyInteractionStyles() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -1850,27 +1815,39 @@
     stroke: #333;
   }
   `);
+  }
 
-    // Tooltip
-    const tooltipDiv = d3__namespace
-      .select('body')
-      .append('div')
-      .attr(
-        'class',
-        'dom-tooltip absolute text-center bg-white rounded px-2 py-1 text-xs border',
-      )
-      .style('opacity', 0);
-
-    // Chart Area
-    const coreChartWidth = 1000;
+  function setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  }) {
     const coreChartHeight = coreChartWidth / aspectRatio;
 
     const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
     const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
 
-    const svgParent = d3__namespace.select(chartContainerSelector);
+    const chartParent = d3__namespace.select(chartContainerSelector);
 
-    const svg = svgParent
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
       .append('svg')
       .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
       .style('background', bgColor);
@@ -1881,7 +1858,28 @@
       .append('g')
       .attr('transform', `translate(${marginLeft}, ${marginTop})`);
 
-    // Data Parsed
+    return {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    }
+  }
+
+  function initializeTooltip() {
+    return d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      )
+  }
+
+  function parseData({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -1905,8 +1903,24 @@
       })
       .value()
       .flat();
+    return dataParsed
+  }
 
-    // x-scale
+  function setupScales({
+    dataParsed,
+    xField,
+    yField,
+    dominoSize,
+    coreChartWidth,
+    coreChartHeight,
+    xPaddingOuter,
+    ySortOrder,
+    yPaddingOuter,
+    yPaddingInner,
+    colorThreshold,
+    colorDominoNormal,
+    colorDominoHighlighted,
+  }) {
     // Data should be sorted on xField and provided.
     const xDomain = ___default["default"](dataParsed).map(xField).uniq().value();
     const xPaddingInner = 1 - dominoSize;
@@ -1935,12 +1949,39 @@
     const colorScale = threshold =>
       threshold >= colorThreshold ? colorDominoNormal : colorDominoHighlighted;
 
+    return { xScale, yScale, colorScale }
+  }
+
+  function renderYAxis({ chartCore, yScale }) {
     chartCore
       .append('g')
       .attr('class', 'y-axis-left')
       .call(d3__namespace.axisLeft(yScale).tickSize(0))
       .call(g => g.select('.domain').remove());
+  }
 
+  function renderXAxis({ chartCore, xAxisLabel, coreChartWidth }) {
+    chartCore
+      .append('text')
+      .text(xAxisLabel)
+      .attr('transform', `translate(${coreChartWidth / 2}, 0)`)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 12);
+  }
+
+  function renderDominos({
+    dataParsed,
+    yField,
+    chartCore,
+    yScale,
+    dominoField,
+    xScale,
+    xField,
+    colorScale,
+    colorField,
+    colorStrategy,
+    tooltipDiv,
+  }) {
     const nestedData = d3__namespace
       .groups(dataParsed, d => d[yField])
       .map(([key, values]) => ({
@@ -1990,46 +2031,38 @@
           .duration(500)
           .style('opacity', 0);
       });
+  }
 
-    const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const searchEventHandler = qstr => {
-      if (qstr) {
-        const lqstr = qstr.toLowerCase();
-        dominoValues.forEach(val => {
-          const dominoName = toClassText(val);
-          if (val.toLowerCase().includes(lqstr)) {
-            d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
-          } else {
-            d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
-          }
-          d3__namespace.select('.dominos').classed('searching', true);
-        });
-      } else {
-        dominoValues.forEach(val => {
-          const dominoName = toClassText(val);
+  const searchEventHandler = referenceList => qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      referenceList.forEach(val => {
+        const dominoName = toClassText(val);
+        if (val.toLowerCase().includes(lqstr)) {
+          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
+        } else {
           d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
-        });
-        d3__namespace.select('.dominos').classed('searching', false);
-      }
-    };
-
-    const search = d3__namespace.select('#search');
-    search.attr('placeholder', `Find by ${dominoField}`).classed('hidden', false);
-    search.on('keyup', e => {
-      const qstr = e.target.value;
-      searchEventHandler(qstr);
-    });
-
-    // x axis labels
-    chartCore
-      .append('text')
-      .text(xAxisLabel)
-      .attr('transform', `translate(${coreChartWidth / 2}, 0)`)
-      .attr('text-anchor', 'middle')
-      .attr('font-size', 12);
-
-    // Legends
-    const colorLegend = d3__namespace.select('#color-legend').append('svg');
+        }
+        d3__namespace.select('.dominos').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const dominoName = toClassText(val);
+        d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
+      });
+      d3__namespace.select('.dominos').classed('searching', false);
+    }
+  };
+  function renderColorLegend({
+    xScale,
+    yScale,
+    widgetsRight,
+    colorDominoHighlighted,
+    highlightedLegendLabel,
+    colorDominoNormal,
+    normalLegendLabel,
+  }) {
+    const colorLegend = widgetsRight.append('svg');
     const colorLegendContainerGroup = colorLegend.append('g');
     const dominoWidth = xScale.bandwidth();
     const dominoHeight = yScale.bandwidth();
@@ -2048,9 +2081,10 @@
       .attr('font-size', 12)
       .attr('dominant-baseline', 'middle')
       .text(highlightedLegendLabel);
-    // const xShift = highlightedLegend.node().getBBox().width
-    const normalLegend = colorLegendContainerGroup.append('g');
-    // .attr('transform', `translate(${xShift + 20}, 0)`)
+    const xShift = highlightedLegend.node().getBBox().width;
+    const normalLegend = colorLegendContainerGroup
+      .append('g')
+      .attr('transform', `translate(${xShift + 20}, 0)`);
     normalLegend
       .append('rect')
       .attr('x', 0)
@@ -2065,10 +2099,148 @@
       .attr('font-size', 12)
       .attr('dominant-baseline', 'middle')
       .text(normalLegendLabel);
-    // const colorLegendDimensions = colorLegendContainerGroup.node().getBBox()
-    // colorLegend
-    //   .attr('width', colorLegendDimensions.width)
-    //   .attr('height', colorLegendDimensions.height)
+    const colorLegendDimensions = colorLegendContainerGroup.node().getBBox();
+    colorLegend
+      .attr('width', colorLegendDimensions.width)
+      .attr('height', colorLegendDimensions.height);
+  }
+
+  function setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    dominoField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${dominoField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
+  }
+
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 60,
+      marginRight = 90,
+      marginBottom = 20,
+      marginLeft = 50,
+
+      bgColor = 'transparent',
+
+      xPaddingOuter = 0.2,
+      xAxisLabel = xField,
+
+      dominoSize = 0.2,
+
+      yPaddingInner = 0.2,
+      yPaddingOuter = 0.2,
+      ySortOrder = 'desc',
+
+      colorStrategy = 'value',
+      colorThreshold = 10,
+      colorDominoHighlighted = '#c20a66',
+      colorDominoNormal = '#d9e2e4',
+
+      normalLegendLabel = 'Normal Player',
+      highlightedLegendLabel = 'Best Player',
+
+      searchInputClassNames = '',
+    },
+    dimensions: { xField, yField, dominoField, colorField },
+
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles();
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip();
+
+    const dataParsed = parseData({
+      data,
+      colorField,
+      yField,
+    });
+
+    const { xScale, yScale, colorScale } = setupScales({
+      dataParsed,
+      xField,
+      yField,
+      dominoSize,
+      coreChartWidth,
+      coreChartHeight,
+      xPaddingOuter,
+      ySortOrder,
+      yPaddingOuter,
+      yPaddingInner,
+      colorThreshold,
+      colorDominoNormal,
+      colorDominoHighlighted,
+    });
+
+    renderYAxis({ chartCore, yScale });
+
+    renderDominos({
+      dataParsed,
+      yField,
+      chartCore,
+      yScale,
+      dominoField,
+      xScale,
+      xField,
+      colorScale,
+      colorField,
+      colorStrategy,
+      tooltipDiv,
+    });
+
+    renderXAxis({ chartCore, xAxisLabel, coreChartWidth });
+
+    const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
+    const handleSearch = searchEventHandler(dominoValues);
+    setupSearch({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      dominoField,
+    });
+
+    // Legends
+    renderColorLegend({
+      xScale,
+      yScale,
+      widgetsRight,
+      colorDominoHighlighted,
+      highlightedLegendLabel,
+      colorDominoNormal,
+      normalLegendLabel,
+    });
 
     // For responsiveness
     // adjust svg to prevent overflows

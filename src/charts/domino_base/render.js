@@ -2,7 +2,6 @@
 /* global window */
 import * as d3 from 'd3'
 import _ from 'lodash-es'
-import { renderDominoBase } from '../..'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 
 function applyInteractionStyles() {
@@ -252,8 +251,16 @@ const searchEventHandler = referenceList => qstr => {
     d3.select('.dominos').classed('searching', false)
   }
 }
-function renderColorLegend({}) {
-  const colorLegend = d3.select('#color-legend').append('svg')
+function renderColorLegend({
+  xScale,
+  yScale,
+  widgetsRight,
+  colorDominoHighlighted,
+  highlightedLegendLabel,
+  colorDominoNormal,
+  normalLegendLabel,
+}) {
+  const colorLegend = widgetsRight.append('svg')
   const colorLegendContainerGroup = colorLegend.append('g')
   const dominoWidth = xScale.bandwidth()
   const dominoHeight = yScale.bandwidth()
@@ -423,6 +430,15 @@ export function renderChart({
   })
 
   // Legends
+  renderColorLegend({
+    xScale,
+    yScale,
+    widgetsRight,
+    colorDominoHighlighted,
+    highlightedLegendLabel,
+    colorDominoNormal,
+    normalLegendLabel,
+  })
 
   // For responsiveness
   // adjust svg to prevent overflows
