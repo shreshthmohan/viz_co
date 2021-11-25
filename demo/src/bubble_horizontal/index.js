@@ -40,26 +40,25 @@ const options = {
 
   bgColor: '#fafafa',
 
+  // customColorScheme: ['red', 'blue', 'green', 'black', 'gray'],
+  inbuiltScheme: 'schemeOrRd',
+  numberOfColors: 5, // minumum: 3, maximum: 9
+
   collisionDistance: 0.5,
 
   xDomainCustom: [0, 45],
-
-  sizeRange: [2, 15],
-
-  sizeLegendValues: [10e3, 50e3, 10e4, 25e4],
-  sizeLegendTitle: 'size legend title',
-
-  sizeLegendGapInCircles: 45,
-
+  xAxisLabel: 'x-axis label',
   xValuePrefix: '',
   xValueFormatter: '.1f',
   xValueSuffix: '%',
 
+  sizeRange: [2, 15],
   sizeValuePrefix: '$',
   sizeValueFormatter: ',',
   sizeValueSuffix: '',
-
-  xAxisLabel: 'x-axis label',
+  sizeLegendValues: [10e3, 50e3, 10e4, 25e4],
+  sizeLegendTitle: 'size legend title',
+  sizeLegendGapInCircles: 45,
 
   colorLegendTitle: 'color legend label',
 
@@ -68,14 +67,6 @@ const options = {
   segmentTypeCombined: 'segment type (combined)',
   segmentTypeSplit: 'segment type (split)',
 
-  // customColorScheme: ['red', 'blue', 'green', 'black', 'gray'],
-  inbuiltScheme: 'schemeOrRd',
-  // inbuiltSchemeOptions[0], // 0, 27
-  numberOfColors: 5, // minumum: 3, maximum: 9
-
-  // headers
-  heading: 'This is a heading for the chart',
-  subheading: 'This is a subheading for the chart describing it in more detail',
   splitButtonClassNames:
     'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   combinedButtonClassNames:
