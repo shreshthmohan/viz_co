@@ -49,7 +49,7 @@ const options = {
   sizeLegendValues: [10e3, 50e3, 10e4, 25e4],
   sizeLegendTitle: 'size legend title',
 
-  legendGapInCircles: 45,
+  sizeLegendGapInCircles: 45,
 
   xValuePrefix: '',
   xValueFormatter: '.1f',

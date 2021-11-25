@@ -2000,6 +2000,12 @@
 
   function renderChart({
     data,
+    dimensions: {
+      sizeField,
+      xField,
+      nameField, // also search field
+      segmentField,
+    },
     options: {
       aspectRatioCombined = 5,
       aspectRatioSplit = 0.8,
@@ -2011,29 +2017,27 @@
 
       bgColor = 'transparent',
 
-      collisionDistance,
-      // colorScheme,
-
       customColorScheme,
       inbuiltScheme = 'schemeOrRd',
       numberOfColors = 5,
 
+      collisionDistance = 0.5,
+
+      /* xField */
       xDomainCustom,
-
-      sizeRange = [2, 20],
-      sizeLegendValues = [10e3, 50e3, 10e4, 25e4],
-      sizeLegendTitle = sizeField,
-
-      legendGapInCircles = 30,
       xAxisLabel = xField,
-
       xValuePrefix = '',
       xValueFormatter = '',
       xValueSuffix = '',
 
+      /* sizeField */
+      sizeRange = [2, 20],
       sizeValuePrefix = '',
       sizeValueFormatter = '',
       sizeValueSuffix = '',
+      sizeLegendValues,
+      sizeLegendTitle = sizeField,
+      sizeLegendGapInCircles = 30,
 
       colorLegendTitle = xField,
 
@@ -2046,13 +2050,7 @@
       combinedButtonClassNames = '',
       searchInputClassNames = '',
     },
-    dimensions: {
-      sizeField,
-      xField,
-      nameField, // also search field
-      // colorField,
-      segmentField,
-    },
+
     chartContainerSelector,
   }) {
     d3__namespace.select('body').append('style').html(`
@@ -2226,7 +2224,7 @@
       .style('fill', '#bebebe')
       .style('stroke-width', 1)
       .style('stroke', 'gray')
-      .attr('cx', (d, i) => cumulativeSizes[i] + i * legendGapInCircles + 1)
+      .attr('cx', (d, i) => cumulativeSizes[i] + i * sizeLegendGapInCircles + 1)
       .attr('cy', sizeValues[sizeValues.length - 1] + 1);
 
     sizeLegendContainerGroup
@@ -2236,7 +2234,7 @@
       .attr('dy', sizeValues[sizeValues.length - 1] + 2)
       .attr(
         'dx',
-        (d, i) => d + cumulativeSizes[i] + (i + 0.1) * legendGapInCircles,
+        (d, i) => d + cumulativeSizes[i] + (i + 0.1) * sizeLegendGapInCircles,
       )
       .style('font-size', 8)
       .text(
