@@ -1,0 +1,278 @@
+/* eslint-disable no-import-assign */
+/* global window */
+import * as d3 from 'd3'
+import _ from 'lodash-es'
+import { preventOverflow, toClassText } from '../../utils/helpers/general'
+
+export function renderChart({
+  data,
+  options: {
+    aspectRatio = 2,
+
+    marginTop = 60,
+    marginRight = 90,
+    marginBottom = 20,
+    marginLeft = 50,
+
+    bgColor = 'transparent',
+
+    xPaddingOuter = 0.2,
+    xAxisLabel = xField,
+
+    dominoSize = 0.2,
+
+    yPaddingInner = 0.2,
+    yPaddingOuter = 0.2,
+    ySortOrder = 'desc',
+
+    colorStrategy = 'value',
+    colorThreshold = 10,
+    colorDominoHighlighted = '#c20a66',
+    colorDominoNormal = '#d9e2e4',
+
+    normalLegendLabel = 'Normal Player',
+    highlightedLegendLabel = 'Best Player',
+
+    searchInputClassNames = '',
+  },
+  dimensions: { xField, yField, dominoField, colorField },
+
+  chartContainerSelector,
+}) {
+  // Interaction Styling
+  d3.select('body').append('style').html(`
+  rect.domino.domino-hovered {
+    stroke: #333;
+  }
+  g.dominos.searching g rect.domino-matched {
+    stroke: #333;
+  }
+  `)
+
+  // Tooltip
+  const tooltipDiv = d3
+    .select('body')
+    .append('div')
+    .attr(
+      'class',
+      'dom-tooltip absolute text-center bg-white rounded px-2 py-1 text-xs border',
+    )
+    .style('opacity', 0)
+
+  // Chart Area
+  const coreChartWidth = 1000
+  const coreChartHeight = coreChartWidth / aspectRatio
+
+  const viewBoxHeight = coreChartHeight + marginTop + marginBottom
+  const viewBoxWidth = coreChartWidth + marginLeft + marginRight
+
+  const svgParent = d3.select(chartContainerSelector)
+
+  const svg = svgParent
+    .append('svg')
+    .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+    .style('background', bgColor)
+
+  const allComponents = svg.append('g').attr('class', 'all-components')
+
+  const chartCore = allComponents
+    .append('g')
+    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
+
+  // Data Parsed
+  let dataParsed = data.map(el => {
+    const elParsed = { ...el }
+    elParsed[colorField] = Number.parseFloat(el[colorField])
+    return elParsed
+  })
+
+  dataParsed = _(dataParsed)
+    .groupBy(yField)
+    .map(val => {
+      val.forEach((val_, i) => {
+        // eslint-disable-next-line no-param-reassign
+        val_.__idx__ = i
+      })
+      const sortedArray = _.orderBy(val, colorField, 'desc')
+      sortedArray.forEach((val_, i) => {
+        // eslint-disable-next-line no-param-reassign
+        val_.__rank__ = i
+      })
+      const unsortedArray = _.orderBy(sortedArray, '__idx__', 'asc')
+      return unsortedArray
+    })
+    .value()
+    .flat()
+
+  // x-scale
+  // Data should be sorted on xField and provided.
+  const xDomain = _(dataParsed).map(xField).uniq().value()
+  const xPaddingInner = 1 - dominoSize
+  const xScale = d3
+    .scaleBand()
+    .domain(xDomain)
+    .range([0, coreChartWidth])
+    .paddingInner(xPaddingInner)
+    .paddingOuter(xPaddingOuter)
+
+  // y-scale
+  const yDomain = _(dataParsed)
+    .orderBy([yField], [ySortOrder])
+    .map(yField)
+    .uniq()
+    .value()
+
+  const yScale = d3
+    .scaleBand()
+    .domain(yDomain)
+    .range([0, coreChartHeight])
+    .paddingInner(yPaddingInner)
+    .paddingOuter(yPaddingOuter)
+
+  // colorStrategy
+  const colorScale = threshold =>
+    threshold >= colorThreshold ? colorDominoNormal : colorDominoHighlighted
+
+  chartCore
+    .append('g')
+    .attr('class', 'y-axis-left')
+    .call(d3.axisLeft(yScale).tickSize(0))
+    .call(g => g.select('.domain').remove())
+
+  const nestedData = d3
+    .groups(dataParsed, d => d[yField])
+    .map(([key, values]) => ({
+      [yField]: key,
+      values,
+    }))
+
+  const cGroup = chartCore
+    .append('g')
+    .attr('class', 'dominos')
+    .selectAll('g')
+    .data(nestedData)
+    .join('g')
+    .attr('id', d => `${yField}-${d[yField]}`)
+    .attr('transform', d => `translate(0, ${yScale(d[yField])})`)
+
+  cGroup
+    .selectAll('rect')
+    .data(d => d.values)
+    .join('rect')
+    .attr('class', d => {
+      const dominoName = toClassText(d[dominoField])
+      return `domino domino-${dominoName}`
+    })
+    .attr('width', xScale.bandwidth())
+    .attr('height', yScale.bandwidth())
+    .attr('x', d => xScale(d[xField]))
+    .attr('y', 0)
+    .attr('fill', d =>
+      colorScale(colorStrategy === 'value' ? d[colorField] : d.__rank__),
+    )
+    .on('mouseover', (e, d) => {
+      d3.select(e.target).classed('domino-hovered', true)
+
+      tooltipDiv.transition().duration(200).style('opacity', 1)
+
+      tooltipDiv.html(`${d[dominoField]}, Pick # ${d[xField]}`)
+      tooltipDiv
+        .style('left', `${e.clientX}px`)
+        .style('top', `${e.clientY + 20 + window.scrollY}px`)
+    })
+    .on('mouseout', e => {
+      d3.select(e.target).classed('domino-hovered', false)
+      tooltipDiv
+        .style('left', '-300px')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+
+  const dominoValues = _(dataParsed).map(dominoField).uniq().value()
+  const searchEventHandler = qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase()
+      dominoValues.forEach(val => {
+        const dominoName = toClassText(val)
+        if (val.toLowerCase().includes(lqstr)) {
+          d3.select(`.domino-${dominoName}`).classed('domino-matched', true)
+        } else {
+          d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
+        }
+        d3.select('.dominos').classed('searching', true)
+      })
+    } else {
+      dominoValues.forEach(val => {
+        const dominoName = toClassText(val)
+        d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
+      })
+      d3.select('.dominos').classed('searching', false)
+    }
+  }
+
+  const search = d3.select('#search')
+  search.attr('placeholder', `Find by ${dominoField}`).classed('hidden', false)
+  search.on('keyup', e => {
+    const qstr = e.target.value
+    searchEventHandler(qstr)
+  })
+
+  // x axis labels
+  chartCore
+    .append('text')
+    .text(xAxisLabel)
+    .attr('transform', `translate(${coreChartWidth / 2}, 0)`)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', 12)
+
+  // Legends
+  const colorLegend = d3.select('#color-legend').append('svg')
+  const colorLegendContainerGroup = colorLegend.append('g')
+  const dominoWidth = xScale.bandwidth()
+  const dominoHeight = yScale.bandwidth()
+  const highlightedLegend = colorLegendContainerGroup.append('g')
+  highlightedLegend
+    .append('rect')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', dominoWidth)
+    .attr('height', dominoHeight)
+    .attr('fill', colorDominoHighlighted)
+  highlightedLegend
+    .append('text')
+    .attr('x', dominoWidth + 5)
+    .attr('y', dominoHeight / 2)
+    .attr('font-size', 12)
+    .attr('dominant-baseline', 'middle')
+    .text(highlightedLegendLabel)
+  // const xShift = highlightedLegend.node().getBBox().width
+  const normalLegend = colorLegendContainerGroup.append('g')
+  // .attr('transform', `translate(${xShift + 20}, 0)`)
+  normalLegend
+    .append('rect')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', dominoWidth)
+    .attr('height', dominoHeight)
+    .attr('fill', colorDominoNormal)
+  normalLegend
+    .append('text')
+    .attr('x', dominoWidth + 5)
+    .attr('y', dominoHeight / 2)
+    .attr('font-size', 12)
+    .attr('dominant-baseline', 'middle')
+    .text(normalLegendLabel)
+  // const colorLegendDimensions = colorLegendContainerGroup.node().getBBox()
+  // colorLegend
+  //   .attr('width', colorLegendDimensions.width)
+  //   .attr('height', colorLegendDimensions.height)
+
+  // For responsiveness
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
