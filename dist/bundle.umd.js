@@ -195,7 +195,7 @@
 
   /* global window */
 
-  function applyInteractionStyles$1({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$2({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -225,7 +225,7 @@
   `);
   }
 
-  function setupChartArea$1({
+  function setupChartArea$2({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -276,7 +276,7 @@
     }
   }
 
-  function initializeTooltip$1() {
+  function initializeTooltip$2() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -287,7 +287,7 @@
       )
   }
 
-  function parseData$1({
+  function parseData$2({
     data,
     xFieldStart,
     xFieldEnd,
@@ -311,7 +311,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$1({
+  function setupScales$2({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -431,7 +431,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis$1({
+  function renderXAxis$2({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -459,7 +459,7 @@
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
   }
 
-  function renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  function renderYAxis$1({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -479,7 +479,7 @@
       .attr('transform', 'translate(8, -20)');
   }
 
-  function renderColorLegend({
+  function renderColorLegend$1({
     stickHeight,
     stickLength,
     ballRadius,
@@ -670,7 +670,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$1 = referenceList => qstr => {
+  const searchEventHandler$2 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -692,7 +692,7 @@
     }
   };
 
-  function setupSearch$1({
+  function setupSearch$2({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -751,7 +751,7 @@
     });
   }
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 2,
@@ -809,7 +809,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$1({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$2({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -819,7 +819,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$1({
+    } = setupChartArea$2({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -830,9 +830,9 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$1();
+    const tooltipDiv = initializeTooltip$2();
 
-    const dataParsed = parseData$1({
+    const dataParsed = parseData$2({
       data,
       xFieldStart,
       xFieldEnd,
@@ -842,7 +842,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$1({
+      setupScales$2({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -880,7 +880,7 @@
     const gapForText = 5;
     const singleMaceSectionHeight = 20;
 
-    renderColorLegend({
+    renderColorLegend$1({
       stickHeight,
       stickLength,
       ballRadius,
@@ -901,7 +901,7 @@
       directionEndLabel,
     });
 
-    renderXAxis$1({
+    renderXAxis$2({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -911,7 +911,7 @@
     });
 
     // y-axis
-    renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle });
+    renderYAxis$1({ chartCore, coreChartWidth, yScale, yAxisTitle });
 
     renderMaces({
       chartCore,
@@ -938,8 +938,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$1(nameValues);
-    const search = setupSearch$1({
+    const handleSearch = searchEventHandler$2(nameValues);
+    const search = setupSearch$2({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -1217,7 +1217,7 @@
 
   // export function that
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1226,7 +1226,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1273,13 +1273,13 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1289,7 +1289,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1310,7 +1310,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1340,7 +1340,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 2,
@@ -1762,13 +1762,13 @@
     });
   }
 
-  const dimensionTypes$1 = {
+  const dimensionTypes$2 = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1782,6 +1782,545 @@
 
     verticalGapInNodes: checkNumber,
     nodeWidth: checkNumber,
+  };
+
+  const validateAndRender$2 = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  };
+
+  /* eslint-disable no-import-assign */
+
+  function applyInteractionStyles$1() {
+    d3__namespace.select('body').append('style').html(`
+  rect.domino.domino-hovered {
+    stroke: #333;
+  }
+  g.dominos.searching g rect.domino-matched {
+    stroke: #333;
+  }
+  `);
+  }
+
+  function setupChartArea$1({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  }) {
+    const coreChartHeight = coreChartWidth / aspectRatio;
+
+    const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
+    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
+
+    const chartParent = d3__namespace.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
+      .append('svg')
+      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+      .style('background', bgColor);
+
+    const allComponents = svg.append('g').attr('class', 'all-components');
+
+    const chartCore = allComponents
+      .append('g')
+      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+
+    return {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    }
+  }
+
+  function initializeTooltip$1() {
+    return d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      )
+  }
+
+  function parseData$1({ data, colorField, yField }) {
+    let dataParsed = data.map(el => {
+      const elParsed = { ...el };
+      elParsed[colorField] = Number.parseFloat(el[colorField]);
+      return elParsed
+    });
+
+    dataParsed = ___default["default"](dataParsed)
+      .groupBy(yField)
+      .map(val => {
+        val.forEach((val_, i) => {
+          // eslint-disable-next-line no-param-reassign
+          val_.__idx__ = i;
+        });
+        const sortedArray = ___default["default"].orderBy(val, colorField, 'desc');
+        sortedArray.forEach((val_, i) => {
+          // eslint-disable-next-line no-param-reassign
+          val_.__rank__ = i;
+        });
+        const unsortedArray = ___default["default"].orderBy(sortedArray, '__idx__', 'asc');
+        return unsortedArray
+      })
+      .value()
+      .flat();
+    return dataParsed
+  }
+
+  function setupScales$1({
+    dataParsed,
+    xField,
+    yField,
+    dominoSize,
+    coreChartWidth,
+    coreChartHeight,
+    xPaddingOuter,
+    ySortOrder,
+    yPaddingOuter,
+    yPaddingInner,
+    colorStrategy,
+    colorThreshold,
+    colorDominoNormal,
+    colorDominoHighlighted,
+  }) {
+    // Data should be sorted on xField and provided.
+    const xDomain = ___default["default"](dataParsed).map(xField).uniq().value();
+    const xPaddingInner = 1 - dominoSize;
+    const xScale = d3__namespace
+      .scaleBand()
+      .domain(xDomain)
+      .range([0, coreChartWidth])
+      .paddingInner(xPaddingInner)
+      .paddingOuter(xPaddingOuter);
+
+    // y-scale
+    const yDomain = ___default["default"](dataParsed)
+      .orderBy([yField], [ySortOrder])
+      .map(yField)
+      .uniq()
+      .value();
+
+    const yScale = d3__namespace
+      .scaleBand()
+      .domain(yDomain)
+      .range([0, coreChartHeight])
+      .paddingInner(yPaddingInner)
+      .paddingOuter(yPaddingOuter);
+
+    const colorScaleRankStrat = val =>
+      val >= colorThreshold ? colorDominoNormal : colorDominoHighlighted;
+
+    const colorScaleValueStrat = val =>
+      val >= colorThreshold ? colorDominoHighlighted : colorDominoNormal;
+
+    return {
+      xScale,
+      yScale,
+      colorScale:
+        colorStrategy === 'value' ? colorScaleValueStrat : colorScaleRankStrat,
+    }
+  }
+
+  function renderYAxis({ chartCore, yScale }) {
+    chartCore
+      .append('g')
+      .attr('class', 'y-axis-left')
+      .call(d3__namespace.axisLeft(yScale).tickSize(0))
+      .call(g => g.select('.domain').remove());
+  }
+
+  function renderXAxis$1({ chartCore, xAxisLabel, coreChartWidth }) {
+    chartCore
+      .append('text')
+      .text(xAxisLabel)
+      .attr('transform', `translate(${coreChartWidth / 2}, 0)`)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 12);
+  }
+
+  function renderDominos({
+    dataParsed,
+    yField,
+    chartCore,
+    yScale,
+    dominoField,
+    xScale,
+    xField,
+    colorScale,
+    colorField,
+    colorStrategy,
+    tooltipDiv,
+  }) {
+    const nestedData = d3__namespace
+      .groups(dataParsed, d => d[yField])
+      .map(([key, values]) => ({
+        [yField]: key,
+        values,
+      }));
+
+    const cGroup = chartCore
+      .append('g')
+      .attr('class', 'dominos')
+      .selectAll('g')
+      .data(nestedData)
+      .join('g')
+      .attr('id', d => `${yField}-${d[yField]}`)
+      .attr('transform', d => `translate(0, ${yScale(d[yField])})`);
+
+    cGroup
+      .selectAll('rect')
+      .data(d => d.values)
+      .join('rect')
+      .attr('class', d => {
+        const dominoName = toClassText(d[dominoField]);
+        return `domino domino-${dominoName}`
+      })
+      .attr('width', xScale.bandwidth())
+      .attr('height', yScale.bandwidth())
+      .attr('x', d => xScale(d[xField]))
+      .attr('y', 0)
+      .attr('fill', d =>
+        colorScale(colorStrategy === 'value' ? d[colorField] : d.__rank__),
+      )
+      .on('mouseover', (e, d) => {
+        d3__namespace.select(e.target).classed('domino-hovered', true);
+
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+
+        tooltipDiv.html(`${d[dominoField]}, Pick # ${d[xField]}`);
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', e => {
+        d3__namespace.select(e.target).classed('domino-hovered', false);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+  }
+
+  const searchEventHandler$1 = referenceList => qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      referenceList.forEach(val => {
+        const dominoName = toClassText(val);
+        if (val.toLowerCase().includes(lqstr)) {
+          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
+        } else {
+          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
+        }
+        d3__namespace.select('.dominos').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const dominoName = toClassText(val);
+        d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
+      });
+      d3__namespace.select('.dominos').classed('searching', false);
+    }
+  };
+  function renderColorLegend({
+    xScale,
+    yScale,
+    widgetsRight,
+    colorDominoHighlighted,
+    highlightedLegendLabel,
+    colorDominoNormal,
+    normalLegendLabel,
+  }) {
+    const colorLegend = widgetsRight.append('svg');
+    const colorLegendContainerGroup = colorLegend.append('g');
+    const dominoWidth = xScale.bandwidth();
+    const dominoHeight = yScale.bandwidth();
+    const highlightedLegend = colorLegendContainerGroup.append('g');
+    highlightedLegend
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', dominoWidth)
+      .attr('height', dominoHeight)
+      .attr('fill', colorDominoHighlighted);
+    highlightedLegend
+      .append('text')
+      .attr('x', dominoWidth + 5)
+      .attr('y', dominoHeight / 2)
+      .attr('font-size', 12)
+      .attr('dominant-baseline', 'middle')
+      .text(highlightedLegendLabel);
+    const xShift = highlightedLegend.node().getBBox().width;
+    const normalLegend = colorLegendContainerGroup
+      .append('g')
+      .attr('transform', `translate(${xShift + 20}, 0)`);
+    normalLegend
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', dominoWidth)
+      .attr('height', dominoHeight)
+      .attr('fill', colorDominoNormal);
+    normalLegend
+      .append('text')
+      .attr('x', dominoWidth + 5)
+      .attr('y', dominoHeight / 2)
+      .attr('font-size', 12)
+      .attr('dominant-baseline', 'middle')
+      .text(normalLegendLabel);
+    const colorLegendDimensions = colorLegendContainerGroup.node().getBBox();
+    colorLegend
+      .attr('width', colorLegendDimensions.width)
+      .attr('height', colorLegendDimensions.height);
+  }
+
+  function setupSearch$1({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    dominoField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${dominoField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
+  }
+
+  function renderChart$1({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 60,
+      marginRight = 90,
+      marginBottom = 20,
+      marginLeft = 50,
+
+      bgColor = 'transparent',
+
+      xPaddingOuter = 0.2,
+      xAxisLabel = xField,
+
+      dominoSize = 0.2,
+
+      yPaddingInner = 0.2,
+      yPaddingOuter = 0.2,
+      ySortOrder = 'desc',
+
+      colorStrategy = 'value',
+      colorThreshold = 10,
+      colorDominoHighlighted = '#c20a66',
+      colorDominoNormal = '#d9e2e4',
+
+      normalLegendLabel = 'Normal',
+      highlightedLegendLabel = 'Highlighted',
+
+      searchInputClassNames = '',
+    },
+    dimensions: { xField, yField, dominoField, colorField },
+
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles$1();
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$1({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$1();
+
+    const dataParsed = parseData$1({
+      data,
+      colorField,
+      yField,
+    });
+
+    const { xScale, yScale, colorScale } = setupScales$1({
+      dataParsed,
+      xField,
+      yField,
+      dominoSize,
+      coreChartWidth,
+      coreChartHeight,
+      xPaddingOuter,
+      ySortOrder,
+      yPaddingOuter,
+      yPaddingInner,
+      colorThreshold,
+      colorDominoNormal,
+      colorDominoHighlighted,
+      colorStrategy,
+    });
+
+    renderYAxis({ chartCore, yScale });
+
+    renderDominos({
+      dataParsed,
+      yField,
+      chartCore,
+      yScale,
+      dominoField,
+      xScale,
+      xField,
+      colorScale,
+      colorField,
+      colorStrategy,
+      tooltipDiv,
+    });
+
+    renderXAxis$1({ chartCore, xAxisLabel, coreChartWidth });
+
+    const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
+    const handleSearch = searchEventHandler$1(dominoValues);
+    setupSearch$1({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      dominoField,
+    });
+
+    // Legends
+    renderColorLegend({
+      xScale,
+      yScale,
+      widgetsRight,
+      colorDominoHighlighted,
+      highlightedLegendLabel,
+      colorDominoNormal,
+      normalLegendLabel,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  const dimensionTypes$1 = {
+    xField: [shouldNotBeBlank],
+    yField: [shouldNotBeBlank],
+    colorField: [shouldBeNumber],
+    dominoField: [shouldNotBeBlank],
+  };
+
+  const optionTypes$1 = {
+    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    /* Dimensions */
+    /* xField */
+    xPaddingOuter: checkNumberBetween([0, 1]),
+    // xAxisLabel: checkString,
+
+    /* yField */
+    yPaddingInner: checkNumberBetween([0, 1]),
+    yPaddingOuter: checkNumberBetween([0, 1]),
+    ySortOrder: checkOneOf(['asc', 'desc']),
+
+    /* colorField */
+    colorStrategy: checkOneOf(['rank', 'value']),
+    colorThreshold: checkNumber,
+    colorDominoHighlighted: checkColor,
+    colorDominoNormal: checkColor,
+
+    /* dominoField */
+    dominoSize: checkNumberBetween([0, 1]),
+
+    /* Legends */
+    // normalLegendLabel: checkString,
+    // highlightedLegendLabel: checkString,
   };
 
   const validateAndRender$1 = ({
@@ -2483,12 +3022,14 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  exports.renderMace = renderChart$2;
+  exports.renderDominoBase = renderChart$1;
+  exports.renderMace = renderChart$3;
   exports.renderRidgeline = renderChart;
-  exports.renderSankey = renderChart$1;
-  exports.validateAndRenderMace = validateAndRender$2;
+  exports.renderSankey = renderChart$2;
+  exports.validateAndRenderDominoBase = validateAndRender$1;
+  exports.validateAndRenderMace = validateAndRender$3;
   exports.validateAndRenderRidgeline = validateAndRender;
-  exports.validateAndRenderSankey = validateAndRender$1;
+  exports.validateAndRenderSankey = validateAndRender$2;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

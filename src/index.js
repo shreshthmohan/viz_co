@@ -9,6 +9,11 @@ export {
 } from './charts/sankey/index'
 
 export {
+  renderChart as renderDominoBase,
+  validateAndRender as validateAndRenderDominoBase,
+} from './charts/domino_base/index'
+
+export {
   renderChart as renderRidgeline,
   validateAndRender as validateAndRenderRidgeline,
 } from './charts/ridgeline/index'
