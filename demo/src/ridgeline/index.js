@@ -1,4 +1,4 @@
-/* global viz */
+/* global viz, d3 */
 
 const options = {
   aspectRatio: 2,

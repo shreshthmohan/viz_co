@@ -481,7 +481,6 @@ export function renderChart({
     allComponents,
     chartCore,
     widgetsLeft,
-    widgetsRight,
     viewBoxWidth,
   } = setupChartArea({
     chartContainerSelector,

@@ -20,7 +20,7 @@ import {
 import { renderChart } from './render'
 
 const dimensionTypes = {
-  xField: [],
+  xField: [shouldNotBeBlank],
   yField: [shouldBeNumber],
   seriesField: [shouldNotBeBlank],
   colorField: [shouldNotBeBlank],
