@@ -33,8 +33,8 @@ const options = {
   ySortOrder: 'desc',
 
   /* colorField */
-  colorStrategy: 'rank', // ['rank', 'value']
-  colorThreshold: 10,
+  colorStrategy: 'value', // ['rank', 'value']
+  colorThreshold: 50,
   colorDominoHighlighted: '#c20a66',
   colorDominoNormal: '#d9e2e4',
 
