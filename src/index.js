@@ -12,3 +12,13 @@ export {
   renderChart as renderBubbleHorizontal,
   validateAndRender as validateAndRenderBubbleHorizontal,
 } from './charts/bubble_horizontal/index'
+
+export {
+  renderChart as renderDominoBase,
+  validateAndRender as validateAndRenderDominoBase,
+} from './charts/domino_base/index'
+
+export {
+  renderChart as renderRidgeline,
+  validateAndRender as validateAndRenderRidgeline,
+} from './charts/ridgeline/index'
