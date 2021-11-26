@@ -1939,6 +1939,7 @@
     ySortOrder,
     yPaddingOuter,
     yPaddingInner,
+    colorStrategy,
     colorThreshold,
     colorDominoNormal,
     colorDominoHighlighted,
@@ -1967,11 +1968,18 @@
       .paddingInner(yPaddingInner)
       .paddingOuter(yPaddingOuter);
 
-    // colorStrategy
-    const colorScale = threshold =>
-      threshold >= colorThreshold ? colorDominoNormal : colorDominoHighlighted;
+    const colorScaleRankStrat = val =>
+      val >= colorThreshold ? colorDominoNormal : colorDominoHighlighted;
 
-    return { xScale, yScale, colorScale }
+    const colorScaleValueStrat = val =>
+      val >= colorThreshold ? colorDominoHighlighted : colorDominoNormal;
+
+    return {
+      xScale,
+      yScale,
+      colorScale:
+        colorStrategy === 'value' ? colorScaleValueStrat : colorScaleRankStrat,
+    }
   }
 
   function renderYAxis({ chartCore, yScale }) {
@@ -2172,8 +2180,8 @@
       colorDominoHighlighted = '#c20a66',
       colorDominoNormal = '#d9e2e4',
 
-      normalLegendLabel = 'Normal Player',
-      highlightedLegendLabel = 'Best Player',
+      normalLegendLabel = 'Normal',
+      highlightedLegendLabel = 'Highlighted',
 
       searchInputClassNames = '',
     },
@@ -2224,6 +2232,7 @@
       colorThreshold,
       colorDominoNormal,
       colorDominoHighlighted,
+      colorStrategy,
     });
 
     renderYAxis({ chartCore, yScale });
