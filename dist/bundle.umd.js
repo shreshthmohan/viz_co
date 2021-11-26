@@ -1220,7 +1220,7 @@
 
   // export function that
 
-  const dimensionTypes$3 = {
+  const dimensionTypes$4 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1229,7 +1229,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1282,7 +1282,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1292,7 +1292,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1765,13 +1765,13 @@
     });
   }
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1793,7 +1793,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -1803,7 +1803,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -2548,14 +2548,126 @@
     combinedSim();
   }
 
+  const d3ColorSchemeOptions = [
+    'schemeBrBG',
+    'schemePRGn',
+    'schemePiYG',
+    'schemePuOr',
+    'schemeRdBu',
+    'schemeRdGy',
+    'schemeRdYlBu',
+    'schemeRdYlGn',
+    'schemeSpectral',
+    'schemeBuGn',
+    'schemeBuPu',
+    'schemeGnBu',
+    'schemeOrRd',
+    'schemePuBuGn',
+    'schemePuBu',
+    'schemePuRd',
+    'schemeRdPu',
+    'schemeYlGnBu',
+    'schemeYlGn',
+    'schemeYlOrBr',
+    'schemeYlOrRd',
+    'schemeBlues',
+    'schemeGreens',
+    'schemeGreys',
+    'schemePurples',
+    'schemeReds',
+    'schemeOranges',
+  ];
+
+  const dimensionTypes$2 = {
+    sizeField: [shouldBeNumber],
+    xField: [shouldBeNumber],
+    nameField: [shouldNotBeBlank], // also search field
+    segmentField: [shouldNotBeBlank],
+  };
+
+  const optionTypes$2 = {
+    aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+    aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    customColorScheme: checkColorArray,
+    inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
+    numberOfColors: checkNumberBetween([3, 9]),
+
+    collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
+
+    /* xField */
+    xDomainCustom: checkNumericArray,
+    // xAxisLabel = xField,
+    // xValuePrefix = '',
+    // xValueFormatter = '',
+    // xValueSuffix = '',
+
+    /* sizeField */
+    sizeRange: checkNumericArray,
+    // sizeValuePrefix = '',
+    // sizeValueFormatter = '',
+    // sizeValueSuffix = '',
+    sizeLegendValues: checkNumericArray,
+    // sizeLegendTitle = sizeField,
+    sizeLegendGapInCircles: checkNumber,
+
+    // colorLegendTitle = xField,
+
+    // combinedSegmentLabel = 'All',
+    // segmentType = segmentField,
+    // segmentTypeCombined = '',
+    // segmentTypeSplit = '',
+
+    // splitButtonClassNames = '',
+    // combinedButtonClassNames = '',
+    // searchInputClassNames = '',
+  };
+
   const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+
     d3__namespace.csv(dataPath).then(data => {
-      renderChart$2({ data, dimensions, options, chartContainerSelector });
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
