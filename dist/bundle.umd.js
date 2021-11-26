@@ -2304,7 +2304,6 @@ g.circles circle.circle.circle-hovered {
       allComponents,
       chartCore,
       widgetsLeft,
-      widgetsRight,
       viewBoxWidth,
     } = setupChartArea({
       chartContainerSelector,
@@ -2414,7 +2413,7 @@ g.circles circle.circle.circle-hovered {
   }
 
   const dimensionTypes = {
-    xField: [],
+    xField: [shouldNotBeBlank],
     yField: [shouldBeNumber],
     seriesField: [shouldNotBeBlank],
     colorField: [shouldNotBeBlank],
