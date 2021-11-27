@@ -64,7 +64,7 @@ function initializeTooltip() {
     .attr('class', 'dom-tooltip')
     .attr(
       'style',
-      'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
     )
 }
 
@@ -239,7 +239,7 @@ function renderCalendar({
           const values = yFields
             .map(
               (yf, i) =>
-                `<div style="height: 0.5rem; width: 0.5rem; background: ${colorScale(
+                `<div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
                   yf,
                 )}"></div> ${yFieldLabels[i]}: ${d3.format('.1%')(
                   dd.data[yf],

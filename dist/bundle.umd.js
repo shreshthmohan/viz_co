@@ -4046,7 +4046,7 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       )
   }
 
@@ -4221,7 +4221,7 @@ g.circles circle.circle.circle-hovered {
             const values = yFields
               .map(
                 (yf, i) =>
-                  `<div style="display: flex; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+                  `<div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
                   yf,
                 )}"></div> ${yFieldLabels[i]}: ${d3__namespace.format('.1%')(
                   dd.data[yf],
@@ -4386,8 +4386,6 @@ g.circles circle.circle.circle-hovered {
 
     xGridGap: checkNumberBetween([0, 1]),
 
-    // colorScheme: checkColorArray,
-
     // uniqueFieldTimeParser: checkString,
     // uniqueFieldTimeFormatter: checkString,
     // yFieldLabels: to be added dynamically
@@ -4416,6 +4414,7 @@ g.circles circle.circle.circle-hovered {
     const optionTypesWYFields = {
       ...optionTypes,
       yFieldLabels: checkStringArray(yFields.length),
+      colorScheme: checkColorArray(yFields.length),
     };
 
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }

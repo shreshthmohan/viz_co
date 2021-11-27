@@ -47,8 +47,6 @@ const optionTypes = {
 
   xGridGap: checkNumberBetween([0, 1]),
 
-  // colorScheme: checkColorArray,
-
   // uniqueFieldTimeParser: checkString,
   // uniqueFieldTimeFormatter: checkString,
   // yFieldLabels: to be added dynamically
@@ -77,6 +75,7 @@ function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {
   const optionTypesWYFields = {
     ...optionTypes,
     yFieldLabels: checkStringArray(yFields.length),
+    colorScheme: checkColorArray(yFields.length),
   }
 
   return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
