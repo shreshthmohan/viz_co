@@ -28,15 +28,15 @@ const options = {
   sizeValueFormatter: ',',
   sizeValueSuffix: '',
   sizeLegendValues: [10e3, 50e3, 10e4, 25e4],
-  sizeLegendTitle: 'size legend title',
+  sizeLegendTitle: 'Size Legend Title',
   sizeLegendGapInCircles: 45,
 
-  colorLegendTitle: 'color legend label',
+  colorLegendTitle: 'Color Legend Label',
 
-  combinedSegmentLabel: 'combined segment label',
-  segmentType: 'segment type', // use this if it's the same for both split and combined modes
-  segmentTypeCombined: 'segment type (combined)',
-  segmentTypeSplit: 'segment type (split)',
+  combinedSegmentLabel: 'Combined Segment Label',
+  segmentType: 'Segment Type', // use this if it's the same for both split and combined modes
+  segmentTypeCombined: 'Segment Type (combined)',
+  segmentTypeSplit: 'Segment Type (split)',
 
   splitButtonClassNames:
     'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
