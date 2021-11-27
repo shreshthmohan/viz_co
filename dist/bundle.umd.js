@@ -124,6 +124,9 @@
     );
   }
 
+  // Throttled this function for use in force simulations
+  const preventOverflowThrottled = _.throttle(preventOverflow, 500);
+
   function distanceInPoints({ x1, y1, x2, y2 }) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
   }
@@ -751,7 +754,7 @@
     });
   }
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     options: {
       aspectRatio = 2,
@@ -1217,7 +1220,7 @@
 
   // export function that
 
-  const dimensionTypes$3 = {
+  const dimensionTypes$4 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1226,7 +1229,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1273,13 +1276,13 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1289,7 +1292,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1310,7 +1313,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1340,7 +1343,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 2,
@@ -1762,13 +1765,13 @@
     });
   }
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1782,6 +1785,849 @@
 
     verticalGapInNodes: checkNumber,
     nodeWidth: checkNumber,
+  };
+
+  const validateAndRender$3 = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  };
+
+  /* global document */
+
+  function legend({
+    color,
+    title,
+    tickSize = 6,
+    width = 320,
+    height = 44 + tickSize,
+    marginTop = 18,
+    marginRight = 0,
+    marginBottom = 16 + tickSize,
+    marginLeft = 0,
+    ticks = width / 64,
+    removeTicks = false,
+    tickFormat,
+    tickValues,
+    // opacity,
+  } = {}) {
+    const svg = d3__namespace
+      .create('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, 0, width, height])
+      .style('overflow', 'visible')
+      // .style("opacity", 0.7)
+      .style('display', 'block');
+
+    let tickAdjust = g =>
+      g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
+    let x;
+
+    // Continuous
+    if (color.interpolate) {
+      const n = Math.min(color.domain().length, color.range().length);
+
+      x = color
+        .copy()
+        .rangeRound(
+          d3__namespace.quantize(d3__namespace.interpolate(marginLeft, width - marginRight), n),
+        );
+
+      svg
+        .append('image')
+        .attr('x', marginLeft)
+        .attr('y', marginTop)
+        .attr('width', width - marginLeft - marginRight)
+        .attr('height', height - marginTop - marginBottom)
+        .attr('preserveAspectRatio', 'none')
+        .attr(
+          'xlink:href',
+          ramp(
+            color.copy().domain(d3__namespace.quantize(d3__namespace.interpolate(0, 1), n)),
+          ).toDataURL(),
+        );
+    }
+
+    // Sequential
+    else if (color.interpolator) {
+      x = Object.assign(
+        color
+          .copy()
+          .interpolator(d3__namespace.interpolateRound(marginLeft, width - marginRight)),
+        {
+          range() {
+            return [marginLeft, width - marginRight]
+          },
+        },
+      );
+
+      svg
+        .append('image')
+        .attr('x', marginLeft)
+        .attr('y', marginTop)
+        .attr('width', width - marginLeft - marginRight)
+        .attr('height', height - marginTop - marginBottom)
+        .attr('preserveAspectRatio', 'none')
+        .attr('xlink:href', ramp(color.interpolator()).toDataURL());
+
+      // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
+      if (!x.ticks) {
+        if (tickValues === undefined) {
+          const n = Math.round(ticks + 1);
+          tickValues = d3__namespace
+            .range(n)
+            .map(i => d3__namespace.quantile(color.domain(), i / (n - 1)));
+        }
+        if (typeof tickFormat !== 'function') {
+          tickFormat = d3__namespace.format(tickFormat === undefined ? ',f' : tickFormat);
+        }
+      }
+    }
+
+    // Threshold
+    else if (color.invertExtent) {
+      const thresholds = color.thresholds
+        ? color.thresholds() // scaleQuantize
+        : color.quantiles
+        ? color.quantiles() // scaleQuantile
+        : color.domain(); // scaleThreshold
+
+      const thresholdFormat =
+        tickFormat === undefined
+          ? d => d
+          : typeof tickFormat === 'string'
+          ? d3__namespace.format(tickFormat)
+          : tickFormat;
+
+      x = d3__namespace
+        .scaleLinear()
+        .domain([-1, color.range().length - 1])
+        .rangeRound([marginLeft, width - marginRight]);
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(color.range())
+        .join('rect')
+        .attr('x', (d, i) => x(i - 1))
+        .attr('y', marginTop)
+        .attr('width', (d, i) => x(i) - x(i - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', d => d);
+
+      tickValues = d3__namespace.range(thresholds.length);
+      tickFormat = i => thresholdFormat(thresholds[i], i);
+    }
+
+    // Ordinal
+    else {
+      x = d3__namespace
+        .scaleBand()
+        .domain(color.domain())
+        .rangeRound([marginLeft, width - marginRight]);
+
+      svg
+        .append('g')
+        .selectAll('rect')
+        .data(color.domain())
+        .join('rect')
+        .attr('x', x)
+        .attr('y', marginTop)
+        .attr('width', Math.max(0, x.bandwidth() - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color);
+
+      tickAdjust = () => {};
+    }
+
+    svg
+      .append('g')
+      .attr('transform', `translate(0,${height - marginBottom})`)
+      .call(
+        d3__namespace
+          .axisBottom(x)
+          .ticks(ticks, typeof tickFormat === 'string' ? tickFormat : undefined)
+          .tickFormat(typeof tickFormat === 'function' ? tickFormat : undefined)
+          .tickSize(tickSize)
+          .tickValues(tickValues),
+      )
+      .call(tickAdjust)
+      .call(g => g.select('.domain').remove())
+      .call(g => (removeTicks ? g.selectAll('.tick').remove() : null))
+      .call(g =>
+        g
+          .append('text')
+          .attr('x', marginLeft)
+          .attr('y', marginTop + marginBottom - height - 6)
+          .attr('fill', 'currentColor')
+          .attr('text-anchor', 'start')
+          .attr('class', 'font-sans')
+          .attr('style', 'font-weight: 600;')
+          .text(title),
+      );
+
+    return svg.node()
+  }
+
+  function ramp(color, n = 256) {
+    var canvas = document.createElement('canvas');
+    canvas.width = n;
+    canvas.height = 1;
+    const context = canvas.getContext('2d');
+    for (let i = 0; i < n; ++i) {
+      context.fillStyle = color(i / (n - 1));
+      context.fillRect(i, 0, 1, 1);
+    }
+    return canvas
+  }
+
+  /* global window, console */
+
+  function renderChart$2({
+    data,
+    dimensions: {
+      sizeField,
+      xField,
+      nameField, // also search field
+      segmentField,
+    },
+    options: {
+      aspectRatioCombined = 5,
+      aspectRatioSplit = 0.8,
+
+      marginTop = 60,
+      marginRight = 90,
+      marginBottom = 20,
+      marginLeft = 50,
+
+      bgColor = 'transparent',
+
+      customColorScheme,
+      inbuiltScheme = 'schemeOrRd',
+      numberOfColors = 5,
+
+      collisionDistance = 0.5,
+
+      /* xField */
+      xDomainCustom,
+      xAxisLabel = xField,
+      xValuePrefix = '',
+      xValueFormatter = '',
+      xValueSuffix = '',
+
+      /* sizeField */
+      sizeRange = [2, 20],
+      sizeValuePrefix = '',
+      sizeValueFormatter = '',
+      sizeValueSuffix = '',
+      sizeLegendValues,
+      sizeLegendTitle = sizeField,
+      sizeLegendGapInCircles = 30,
+
+      colorLegendTitle = xField,
+
+      combinedSegmentLabel = 'All',
+      segmentType = segmentField,
+      segmentTypeCombined = '',
+      segmentTypeSplit = '',
+
+      splitButtonClassNames = '',
+      combinedButtonClassNames = '',
+      searchInputClassNames = '',
+    },
+
+    chartContainerSelector,
+  }) {
+    d3__namespace.select('body').append('style').html(`
+    .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+    circle.hovered {
+      stroke-width: 2;
+      stroke: #333;
+    }
+  `);
+    const coreChartWidth = 1000;
+
+    const coreChartHeightCombined = coreChartWidth / aspectRatioCombined;
+    const coreChartHeightSplit = coreChartWidth / aspectRatioSplit;
+
+    const viewBoxHeightCombined =
+      coreChartHeightCombined + marginTop + marginBottom;
+    const viewBoxHeightSplit = coreChartHeightSplit + marginTop + marginBottom;
+    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
+
+    const chartParent = d3__namespace.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
+      .append('svg')
+      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightCombined}`)
+      .style('background', bgColor);
+
+    const allComponents = svg.append('g').attr('class', 'all-components');
+
+    const chartCore = allComponents
+      .append('g')
+      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+
+    const tooltipDiv = d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute;  background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      );
+
+    const parsedData = data.map(d => ({
+      ...d,
+      [sizeField]: Number.parseFloat(d[sizeField]),
+      [xField]: Number.parseFloat(d[xField]),
+    }));
+
+    // const splitButton = d3.select('#split-bubbles')
+    const splitButton = widgetsLeft
+      .append('button')
+      .text('Split')
+      .attr('class', splitButtonClassNames);
+
+    // const combinedButton = d3.select('#combine-bubbles')
+    const combinedButton = widgetsLeft
+      .append('button')
+      .text('Combine')
+      .attr('class', combinedButtonClassNames);
+
+    let allowSplit = false;
+    let allowCombine = false;
+
+    function manageSplitCombine() {
+      if (!allowSplit) {
+        splitButton.node().disabled = true;
+        splitButton.attr(
+          'title',
+          'Combined force simulation is either in progress or current configuration is already split',
+        );
+      } else {
+        splitButton.node().disabled = false;
+
+        splitButton.attr('title', null);
+      }
+
+      if (!allowCombine) {
+        combinedButton.node().disabled = true;
+        combinedButton.attr(
+          'title',
+          'Split force simulation is either in progress or current configuration is already combined',
+        );
+      } else {
+        combinedButton.node().disabled = false;
+        combinedButton.attr('title', null);
+      }
+    }
+    manageSplitCombine();
+
+    const segments = [...new Set(parsedData.map(c => c[segmentField]))];
+    const maxSizeValue = Math.max(...parsedData.map(c => c[sizeField]));
+
+    const sizeScale = d3__namespace.scaleSqrt().range(sizeRange).domain([0, maxSizeValue]);
+
+    const yScale = d3__namespace
+      .scalePoint()
+      .domain(segments)
+      .range([0, coreChartHeightSplit])
+      .padding(0.5);
+
+    const xValues = parsedData.map(d => d[xField]).sort();
+    const xDomainDefault = d3__namespace.extent(xValues);
+    const xDomain = xDomainCustom || xDomainDefault;
+    const xScale = d3__namespace.scaleLinear().domain(xDomain).range([0, coreChartWidth]);
+
+    // TODO: separate field for color scale and xscale?
+    // Right now both x scale and color scale are based on the same
+    const xColorScale = d3__namespace
+      .scaleQuantize()
+      .domain(xDomain)
+      .range(customColorScheme || d3__namespace[inbuiltScheme][numberOfColors])
+      .nice();
+
+    widgetsRight
+      .append('svg')
+      .attr('width', 260)
+      .attr('height', 45)
+      .append(() =>
+        legend({ color: xColorScale, title: colorLegendTitle, width: 260 }),
+      );
+
+    // Size Legend
+
+    const sizeValues = sizeLegendValues.map(a => sizeScale(a));
+
+    let cumulativeSize = 0;
+    const cumulativeSizes = [];
+    sizeValues.forEach((sz, i) => {
+      if (i === 0) {
+        cumulativeSize += sz;
+      } else {
+        cumulativeSize += sizeValues[i - 1] + sizeValues[i];
+      }
+
+      cumulativeSizes.push(cumulativeSize);
+    });
+
+    const sizeLegend = widgetsRight.append('svg');
+    const sizeLegendContainerGroup = sizeLegend.append('g');
+
+    // TODO: move this to options?
+    const moveSizeObjectDownBy = 5;
+
+    sizeLegendContainerGroup
+      .append('g')
+      .attr('class', 'g-size-container')
+      .attr('transform', `translate(0, ${moveSizeObjectDownBy})`)
+      .selectAll('.g-size-circle')
+      .data(sizeValues)
+      .enter()
+      .append('g')
+      .attr('class', 'g-size-circle')
+      .append('circle')
+      .attr('r', d => d)
+      .style('fill', '#bebebe')
+      .style('stroke-width', 1)
+      .style('stroke', 'gray')
+      .attr('cx', (d, i) => cumulativeSizes[i] + i * sizeLegendGapInCircles + 1)
+      .attr('cy', sizeValues[sizeValues.length - 1] + 1);
+
+    sizeLegendContainerGroup
+      .selectAll('.g-size-circle')
+      .append('text')
+      .attr('alignment-baseline', 'middle')
+      .attr('dy', sizeValues[sizeValues.length - 1] + 2)
+      .attr(
+        'dx',
+        (d, i) => d + cumulativeSizes[i] + (i + 0.1) * sizeLegendGapInCircles,
+      )
+      .style('font-size', 8)
+      .text(
+        (d, i) =>
+          sizeValuePrefix +
+          formatNumber(sizeLegendValues[i], sizeValueFormatter) +
+          sizeValueSuffix,
+      );
+
+    sizeLegendContainerGroup
+      .append('text')
+      .attr('alignment-baseline', 'hanging')
+      .style('font-size', 10)
+      .style('font-weight', 600)
+      .text(sizeLegendTitle);
+
+    const legendBoundingBox = sizeLegendContainerGroup.node().getBBox();
+    sizeLegend
+      .attr('height', legendBoundingBox.height)
+      .attr('width', legendBoundingBox.width);
+
+    chartCore
+      .append('g')
+      .attr('transform', `translate(${coreChartWidth / 2}, ${-20})`)
+      .append('text')
+      .attr('class', 'text-xs font-semibold tracking-wider')
+      .text(xAxisLabel)
+      .attr('text-anchor', 'middle');
+
+    const xAxis = chartCore.append('g').attr('id', 'x-axis');
+
+    function renderXAxisSplit() {
+      xAxis
+        .call(
+          d3__namespace
+            .axisTop(xScale)
+            .tickSize(-coreChartHeightSplit)
+            .tickFormat(
+              val =>
+                xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
+            ),
+        )
+        .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
+        .call(g => g.select('.domain').remove());
+    }
+    function renderXAxisCombined() {
+      xAxis
+        .call(
+          d3__namespace
+            .axisTop(xScale)
+            .tickSize(-coreChartHeightCombined)
+            .tickFormat(
+              val =>
+                xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
+            ),
+        )
+        .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
+        .call(g => g.select('.domain').remove());
+    }
+
+    const yAxisLabel = chartCore
+      .append('g')
+      .attr('transform', `translate(${-23}, ${-20})`)
+      .append('text')
+      .attr('class', 'text-xs font-semibold ')
+      .text(segmentType)
+      .attr('text-anchor', 'end');
+
+    function yAxisSplit() {
+      d3__namespace.select('#y-axis-combined').remove();
+      chartCore
+        .append('g')
+        .attr('id', 'y-axis-split')
+        .call(d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth))
+        .call(g => g.select('.domain').remove())
+        .call(g => {
+          g.selectAll('.tick line').attr('stroke-opacity', 0.1);
+          g.selectAll('.tick text')
+            .attr('transform', 'translate(-20,0)')
+            .classed('text-xs', true);
+        })
+        .attr('opacity', 0)
+        .transition()
+        .duration(1000)
+        .attr('opacity', 1);
+    }
+
+    const yScaleCombined = d3__namespace
+      .scaleBand()
+      .domain([combinedSegmentLabel])
+      .range([0, coreChartHeightCombined]);
+
+    function yAxisCombined() {
+      d3__namespace.select('#y-axis-split').remove();
+      chartCore
+        .append('g')
+        .attr('id', 'y-axis-combined')
+        .call(d3__namespace.axisLeft(yScaleCombined).tickSize(-coreChartWidth))
+        .call(g => g.select('.domain').remove())
+        .call(g => {
+          g.selectAll('.tick line').attr('stroke-opacity', 0.1);
+          g.selectAll('.tick text')
+            .attr('transform', 'translate(-20,0)')
+            .classed('text-xs', true);
+        })
+        .attr('opacity', 0)
+        .transition()
+        .duration(1000)
+        .attr('opacity', 1);
+    }
+
+    const bubbles = chartCore.append('g').attr('class', 'bubbles');
+
+    let allBubbles;
+    function ticked() {
+      const u = bubbles.selectAll('circle').data(parsedData);
+      allBubbles = u
+        .enter()
+        .append('circle')
+        .attr('r', d => sizeScale(d[sizeField]))
+        .style('fill', function (d) {
+          return xColorScale(d[xField])
+        })
+        .attr('stroke', function (d) {
+          return d3__namespace.rgb(xColorScale(d[xField])).darker(0.5)
+        })
+        .merge(u)
+        .attr('cx', function (d) {
+          return d.x
+        })
+        .attr('cy', function (d) {
+          return d.y
+        })
+        .on('mouseover', function (e, d) {
+          tooltipDiv.transition().duration(200).style('opacity', 1);
+          tooltipDiv.html(
+            `<div><span>${d[nameField]}</span>(${d[segmentField]})</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${xField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             xValuePrefix +
+             formatNumber(d[xField], xValueFormatter) +
+             xValueSuffix
+           }</div>
+         </div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${sizeField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             sizeValuePrefix +
+             formatNumber(d[sizeField], sizeValueFormatter) +
+             sizeValueSuffix
+           }</div>
+         </div>`,
+          );
+          tooltipDiv
+            .style('left', `${e.clientX}px`)
+            .style('top', `${e.clientY + window.scrollY + 30}px`);
+          d3__namespace.select(this).classed('hovered', true);
+        })
+        .on('mouseout', function () {
+          tooltipDiv.transition().duration(500).style('opacity', 0);
+          d3__namespace.select(this).classed('hovered', false);
+        });
+      u.exit().remove();
+      preventOverflowThrottled({
+        allComponents,
+        svg,
+        margins: { marginLeft, marginRight, marginTop, marginBottom },
+      });
+    }
+
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+
+    search.attr('placeholder', `Find by ${nameField}`);
+
+    function searchBy(term) {
+      if (term) {
+        d3__namespace.select('.bubbles').classed('g-searching', true);
+        allBubbles.classed('c-match', d =>
+          d[nameField].toLowerCase().includes(term.toLowerCase()),
+        );
+      } else {
+        d3__namespace.select('.bubbles').classed('g-searching', false);
+      }
+    }
+
+    search.on('keyup', e => {
+      searchBy(e.target.value.trim());
+    });
+
+    function splitSim() {
+      allowSplit = false;
+      manageSplitCombine();
+      renderXAxisSplit();
+
+      yAxisSplit();
+
+      yAxisLabel.text(segmentTypeSplit);
+
+      svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightSplit}`);
+
+      bubbles.attr('transform', `translate(0, 0)`);
+      bubbles.raise();
+
+      d3__namespace.forceSimulation(parsedData)
+        .force('charge', d3__namespace.forceManyBody().strength(1))
+        .force(
+          'x',
+          d3__namespace
+            .forceX()
+            .x(function (d) {
+              return xScale(d[xField])
+            })
+            // split X strength
+            .strength(1),
+        )
+        .force(
+          'y',
+          d3__namespace
+            .forceY()
+            .y(function (d) {
+              return yScale(d[segmentField])
+            })
+            // split Y strength
+            .strength(1.2),
+        )
+        .force(
+          'collision',
+          d3__namespace.forceCollide().radius(function (d) {
+            return sizeScale(d[sizeField]) + collisionDistance
+          }),
+        )
+        .on('tick', ticked)
+        .on('end', () => {
+          console.log('split force simulation ended');
+          allowCombine = true;
+          manageSplitCombine();
+        });
+    }
+    function combinedSim() {
+      allowCombine = false;
+      manageSplitCombine();
+      renderXAxisCombined();
+
+      yAxisCombined();
+
+      yAxisLabel.text(segmentTypeCombined);
+      svg.attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeightCombined}`);
+
+      bubbles.attr('transform', `translate(0, ${coreChartHeightCombined / 2})`);
+      bubbles.raise();
+
+      d3__namespace.forceSimulation(parsedData)
+        .force('charge', d3__namespace.forceManyBody().strength(1))
+        .force(
+          'x',
+          d3__namespace
+            .forceX()
+            .x(d => xScale(d[xField]))
+            // combine X strength
+            .strength(1),
+        )
+        .force(
+          'y',
+          d3__namespace.forceY().y(0),
+          // combine Y strength
+          // .strength(1)
+        )
+        .force(
+          'collision',
+          d3__namespace.forceCollide().radius(function (d) {
+            return sizeScale(d[sizeField]) + collisionDistance
+          }),
+        )
+        .on('tick', ticked)
+        .on('end', () => {
+          console.log('combined force simulation ended');
+          allowSplit = true;
+          manageSplitCombine();
+        });
+    }
+
+    splitButton.on('click', splitSim);
+    combinedButton.on('click', combinedSim);
+
+    combinedSim();
+  }
+
+  const d3ColorSchemeOptions = [
+    'schemeBrBG',
+    'schemePRGn',
+    'schemePiYG',
+    'schemePuOr',
+    'schemeRdBu',
+    'schemeRdGy',
+    'schemeRdYlBu',
+    'schemeRdYlGn',
+    'schemeSpectral',
+    'schemeBuGn',
+    'schemeBuPu',
+    'schemeGnBu',
+    'schemeOrRd',
+    'schemePuBuGn',
+    'schemePuBu',
+    'schemePuRd',
+    'schemeRdPu',
+    'schemeYlGnBu',
+    'schemeYlGn',
+    'schemeYlOrBr',
+    'schemeYlOrRd',
+    'schemeBlues',
+    'schemeGreens',
+    'schemeGreys',
+    'schemePurples',
+    'schemeReds',
+    'schemeOranges',
+  ];
+
+  const dimensionTypes$2 = {
+    sizeField: [shouldBeNumber],
+    xField: [shouldBeNumber],
+    nameField: [shouldNotBeBlank], // also search field
+    segmentField: [shouldNotBeBlank],
+  };
+
+  const optionTypes$2 = {
+    aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+    aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    customColorScheme: checkColorArray,
+    inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
+    numberOfColors: checkNumberBetween([3, 9]),
+
+    collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
+
+    /* xField */
+    xDomainCustom: checkNumericArray,
+    // xAxisLabel = xField,
+    // xValuePrefix = '',
+    // xValueFormatter = '',
+    // xValueSuffix = '',
+
+    /* sizeField */
+    sizeRange: checkNumericArray,
+    // sizeValuePrefix = '',
+    // sizeValueFormatter = '',
+    // sizeValueSuffix = '',
+    sizeLegendValues: checkNumericArray,
+    // sizeLegendTitle = sizeField,
+    sizeLegendGapInCircles: checkNumber,
+
+    // colorLegendTitle = xField,
+
+    // combinedSegmentLabel = 'All',
+    // segmentType = segmentField,
+    // segmentTypeCombined = '',
+    // segmentTypeSplit = '',
+
+    // splitButtonClassNames = '',
+    // combinedButtonClassNames = '',
+    // searchInputClassNames = '',
   };
 
   const validateAndRender$2 = ({
@@ -1799,7 +2645,6 @@
         columns,
         dimensions,
       });
-
       const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
 
       // When new validations are added simply add the result to this array
@@ -3022,14 +3867,16 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
+  exports.renderBubbleHorizontal = renderChart$2;
   exports.renderDominoBase = renderChart$1;
-  exports.renderMace = renderChart$3;
+  exports.renderMace = renderChart$4;
   exports.renderRidgeline = renderChart;
-  exports.renderSankey = renderChart$2;
+  exports.renderSankey = renderChart$3;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$2;
   exports.validateAndRenderDominoBase = validateAndRender$1;
-  exports.validateAndRenderMace = validateAndRender$3;
+  exports.validateAndRenderMace = validateAndRender$4;
   exports.validateAndRenderRidgeline = validateAndRender;
-  exports.validateAndRenderSankey = validateAndRender$2;
+  exports.validateAndRenderSankey = validateAndRender$3;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
