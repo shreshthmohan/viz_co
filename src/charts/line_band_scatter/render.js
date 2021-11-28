@@ -5,7 +5,7 @@ import { preventOverflow } from '../../utils/helpers/general'
 
 export function renderChart({
   data,
-  dataScatter,
+  dataScatter = [],
   dimensions: { xField, yFields },
   options: {
     aspectRatio = 2,
@@ -30,9 +30,6 @@ export function renderChart({
 
   chartContainerSelector,
 }) {
-  console.log({ data })
-  console.log({ dataScatter })
-
   const coreChartWidth = 1000
   const {
     svg,
@@ -270,12 +267,13 @@ export function renderChart({
       }
       k.type += 'band'
     }
-    if (yf.circle) {
+    if (yf.circle && dataScatter.length) {
       k.circle = { label: yf.circle, color: yColors[i].circle }
       k.type = 'circle'
     }
-
-    lineBandsWithColors.push(k)
+    if (k.type) {
+      lineBandsWithColors.push(k)
+    }
   })
 
   widgetsRight

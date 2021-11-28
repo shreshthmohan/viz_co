@@ -3871,7 +3871,7 @@ g.circles circle.circle.circle-hovered {
 
   function renderChart({
     data,
-    dataScatter,
+    dataScatter = [],
     dimensions: { xField, yFields },
     options: {
       aspectRatio = 2,
@@ -3896,9 +3896,6 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    console.log({ data });
-    console.log({ dataScatter });
-
     const coreChartWidth = 1000;
     const {
       svg,
@@ -4136,12 +4133,13 @@ g.circles circle.circle.circle-hovered {
         };
         k.type += 'band';
       }
-      if (yf.circle) {
+      if (yf.circle && dataScatter.length) {
         k.circle = { label: yf.circle, color: yColors[i].circle };
         k.type = 'circle';
       }
-
-      lineBandsWithColors.push(k);
+      if (k.type) {
+        lineBandsWithColors.push(k);
+      }
     });
 
     widgetsRight
