@@ -228,7 +228,7 @@
   `);
   }
 
-  function setupChartArea$2({
+  function setupChartArea$3({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -279,7 +279,7 @@
     }
   }
 
-  function initializeTooltip$2() {
+  function initializeTooltip$3() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -754,7 +754,7 @@
     });
   }
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 2,
@@ -822,7 +822,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$2({
+    } = setupChartArea$3({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -833,7 +833,7 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$2();
+    const tooltipDiv = initializeTooltip$3();
 
     const dataParsed = parseData$2({
       data,
@@ -1276,7 +1276,7 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
@@ -1313,7 +1313,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1343,7 +1343,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     options: {
       aspectRatio = 2,
@@ -1787,7 +1787,7 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
@@ -1824,7 +1824,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2020,7 +2020,7 @@
 
   /* global window, console */
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     dimensions: {
       sizeField,
@@ -2630,7 +2630,7 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
@@ -2666,7 +2666,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2684,7 +2684,7 @@
   `);
   }
 
-  function setupChartArea$1({
+  function setupChartArea$2({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -2735,7 +2735,7 @@
     }
   }
 
-  function initializeTooltip$1() {
+  function initializeTooltip$2() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -2999,7 +2999,7 @@
     return search
   }
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 2,
@@ -3044,7 +3044,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$1({
+    } = setupChartArea$2({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -3055,7 +3055,7 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$1();
+    const tooltipDiv = initializeTooltip$2();
 
     const dataParsed = parseData$1({
       data,
@@ -3168,7 +3168,7 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
@@ -3205,7 +3205,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3247,7 +3247,7 @@ g.circles circle.circle.circle-hovered {
 `);
   }
 
-  function setupChartArea({
+  function setupChartArea$1({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -3299,7 +3299,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function initializeTooltip() {
+  function initializeTooltip$1() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -3640,7 +3640,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3689,7 +3689,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       viewBoxWidth,
-    } = setupChartArea({
+    } = setupChartArea$1({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -3700,7 +3700,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$1();
 
     const { parsedData, nestedData } = parseData({
       data,
@@ -3825,7 +3825,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender = ({
+  const validateAndRender$1 = ({
     dataPath,
     options,
     dimensions,
@@ -3862,21 +3862,491 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
-  exports.renderBubbleHorizontal = renderChart$2;
-  exports.renderDominoBase = renderChart$1;
-  exports.renderMace = renderChart$4;
-  exports.renderRidgeline = renderChart;
-  exports.renderSankey = renderChart$3;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$2;
-  exports.validateAndRenderDominoBase = validateAndRender$1;
-  exports.validateAndRenderMace = validateAndRender$4;
-  exports.validateAndRenderRidgeline = validateAndRender;
-  exports.validateAndRenderSankey = validateAndRender$3;
+  /* global window */
+
+  function renderChart({
+    data,
+    dataScatter,
+    dimensions: { xField, yFields },
+    options: {
+      aspectRatio = 2,
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+      bgColor = 'transparent',
+      xAxisLabel = xField,
+      yAxisLabel = '',
+      yLineColors,
+      yColors,
+
+      yBandColors,
+      yScatterColors,
+
+      scatterCircleRadius = 2,
+
+      highlightRanges = [],
+      highlightRangeColors,
+    },
+
+    chartContainerSelector,
+  }) {
+    console.log({ data });
+    console.log({ dataScatter });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip();
+
+    const allYValues = [];
+
+    const dataParsed = data.map(d => {
+      const parsedDataRow = { ...d };
+      yFields.forEach(yf => {
+        if (yf.line) {
+          const dyf = Number.parseFloat(d[yf.line]);
+          parsedDataRow[yf.line] = dyf;
+          allYValues.push(dyf);
+        }
+        if (yf.band) {
+          const yBandFieldDataMin = Number.parseFloat(d[yf.band[0]]);
+          parsedDataRow[yf.band[0]] = yBandFieldDataMin;
+          allYValues.push(yBandFieldDataMin);
+
+          const yBandFieldDataMax = Number.parseFloat(d[yf.band[1]]);
+          parsedDataRow[yf.band[1]] = yBandFieldDataMax;
+          allYValues.push(yBandFieldDataMax);
+        }
+      });
+      return parsedDataRow
+    });
+
+    const dataScatterParsed = dataScatter.map(d => {
+      const parsedDataRow = { ...d };
+      yFields.forEach(yf => {
+        if (yf.circle) {
+          const dyf = Number.parseFloat(d[yf.circle]);
+          parsedDataRow[yf.line] = dyf;
+          allYValues.push(dyf);
+        }
+      });
+      return parsedDataRow
+    });
+
+    const yDomain = d3__namespace.extent(allYValues);
+
+    const xDomainLineBand = d3__namespace.extent(dataParsed.map(d => d[xField]));
+    const xDomainScatter = d3__namespace.extent(dataScatterParsed.map(d => d[xField]));
+
+    const xDomain = d3__namespace.extent([...xDomainLineBand, ...xDomainScatter]);
+
+    const xScale = d3__namespace.scaleLinear().range([0, coreChartWidth]).domain(xDomain);
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([coreChartHeight, 0])
+      .domain(yDomain)
+      .nice();
+
+    const yAxisTickSizeOffset = 20;
+
+    const yAxis = chartCore
+      .append('g')
+      .attr('id', 'x-axis')
+      .attr('transform', `translate(${coreChartWidth + yAxisTickSizeOffset}, 0)`);
+
+    yAxis
+      .call(d3__namespace.axisRight(yScale).tickSize(-coreChartWidth - yAxisTickSizeOffset))
+      .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
+      .call(g => g.selectAll('.tick text').attr('fill', '#333'))
+      .call(g => g.select('.domain').remove());
+
+    yAxis
+      .append('text')
+      .text(yAxisLabel)
+      .attr('fill', '#333')
+      .attr('text-anchor', 'end')
+      .style('font-weight', 'bold')
+      .attr('transform', `translate(${30}, -10)`);
+
+    // highlightRange
+    highlightRanges.forEach((hr, i) => {
+      chartCore
+        .append('rect')
+        .attr('x', d3__namespace.min([xScale(hr[0], xScale(hr[1]))]))
+        .attr('y', 0)
+        .attr('height', coreChartHeight)
+        .attr('width', Math.abs(xScale(hr[1]) - xScale(hr[0])))
+        .attr('fill', highlightRangeColors[i]);
+      // .attr('opacity', 0.2)
+    });
+
+    const lineForField = field => {
+      return (
+        d3__namespace
+          .line()
+          // .curve(d3.curveBasis)
+          .defined(d => !Number.isNaN(d[field]))
+          .x(d => xScale(d[xField]))
+          .y(d => yScale(d[field]))
+      )
+    };
+
+    const areaForBand = ([bandMin, bandMax]) => {
+      return (
+        d3__namespace
+          .area()
+          // .curve(d3.curveBasis)
+          .defined(d => !Number.isNaN(d[bandMin]) && !Number.isNaN(d[bandMax]))
+          .x(d => xScale(d[xField]))
+          .y0(d => yScale(d[bandMin]))
+          .y1(d => yScale(d[bandMax]))
+      )
+    };
+
+    yFields.forEach((yf, i) => {
+      if (yf.band) {
+        chartCore
+          .append('path')
+          .datum(dataParsed)
+          .attr('fill', yColors[i].band)
+          .attr('d', areaForBand(yf.band));
+      }
+    });
+    yFields.forEach((yf, i) => {
+      if (yf.circle) {
+        chartCore
+          .append('g')
+          .attr('class', `scatter-container-${i}`)
+          .selectAll('circle')
+          .data(dataScatterParsed.filter(d => !Number.isNaN(d[yf.circle])))
+          .join('circle')
+          .attr('cx', d => xScale(d[xField]))
+          .attr('cy', d => yScale(d[yf.circle]))
+          .attr('r', scatterCircleRadius)
+          .attr('fill', yColors[i].circle);
+      }
+    });
+    yFields.forEach((yf, i) => {
+      if (yf.line) {
+        chartCore
+          .append('path')
+          .datum(dataParsed)
+          .attr('fill', 'none')
+          .attr('stroke', yColors[i].line)
+          .attr('stroke-width', 2.5)
+          .attr('stroke-linejoin', 'round')
+          .attr('stroke-linecap', 'round')
+          .attr('d', lineForField(yf.line));
+
+        const filteredData = dataParsed.filter(d => !Number.isNaN(d[yf.line]));
+        chartCore
+          .append('g')
+          .attr('class', 'tooltip-circles')
+          .selectAll('circle')
+          .data(filteredData)
+          .join('circle')
+          .attr('cx', d => xScale(d[xField]))
+          .attr('cy', d => yScale(d[yf.line]))
+          .attr('r', 5)
+          .attr('fill', 'transparent')
+          .on('mouseover', function (e, d) {
+            const lineValue = d[yf.line];
+
+            tooltipDiv.transition().duration(200).style('opacity', 1);
+
+            // If line is not linked to band, show only line values
+            if (yf.band) {
+              const [bandMinValue, bandMaxValue] = [d[yf.band[0]], d[yf.band[1]]];
+              tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
+            <br/> ${yf.line}: ${lineValue}
+            <br/> ${yf.band[0]}: ${bandMinValue}
+            <br/> ${yf.band[1]}: ${bandMaxValue}`);
+            } else {
+              tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
+            <br/> ${yf.line}: ${lineValue}`);
+            }
+
+            tooltipDiv
+              .style('left', `${e.clientX}px`)
+              .style('top', `${e.clientY + 20 + window.scrollY}px`);
+          })
+          .on('mouseout', function () {
+            tooltipDiv
+              .style('left', '-300px')
+              .transition()
+              .duration(500)
+              .style('opacity', 0);
+          });
+      }
+    });
+    // x axis
+    const xAxis = chartCore
+      .append('g')
+      .attr('id', 'x-axis')
+      .attr('transform', `translate(0, ${coreChartHeight})`);
+
+    xAxis.call(d3__namespace.axisBottom(xScale).tickFormat(d3__namespace.format('d'))).call(g => {
+      g.selectAll('.domain').attr('stroke', '#333');
+      g.selectAll('.tick line').attr('stroke', '#333');
+      g.selectAll('.tick text').attr('fill', '#333');
+    });
+
+    xAxis
+      .append('text')
+      .text(xAxisLabel)
+      .attr('fill', '#333')
+      .attr('font-weight', 'bold')
+      .attr('transform', `translate(${coreChartWidth / 2}, 30)`)
+      .attr('text-anchor', 'middle');
+
+    const lineBandsWithColors = [];
+    yFields.forEach((yf, i) => {
+      const k = {};
+      k.type = '';
+      if (yf.line) {
+        k.line = { label: yf.line, color: yColors[i].line };
+        k.type += 'line';
+      }
+      if (yf.band) {
+        k.band = {
+          label: `${yf.band[0]}-${yf.band[1]}`,
+          color: yColors[i].band,
+        };
+        k.type += 'band';
+      }
+      if (yf.circle) {
+        k.circle = { label: yf.circle, color: yColors[i].circle };
+        k.type = 'circle';
+      }
+
+      lineBandsWithColors.push(k);
+    });
+
+    widgetsRight
+      .append('div')
+      .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
+
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  function setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  }) {
+    const coreChartHeight = coreChartWidth / aspectRatio;
+
+    const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
+    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
+
+    const chartParent = d3__namespace.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
+      .append('svg')
+      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+      .style('background', bgColor);
+
+    const allComponents = svg.append('g').attr('class', 'all-components');
+
+    const chartCore = allComponents
+      .append('g')
+      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+
+    return {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    }
+  }
+  function initializeTooltip() {
+    return d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      )
+  }
+
+  function lineBandLegend({
+    uid,
+    swatchSize = 20,
+    swatchWidth = swatchSize,
+    swatchHeight = swatchSize,
+    lineHeight = 5,
+    lineBandColorScale,
+    format = x => x,
+    circleDiameter = 8,
+    marginLeft = 10,
+  }) {
+    const id = `${uid}-lbl`;
+
+    return `<div
+    style="display: flex; align-items: center; min-height: 33px; margin-left: ${+marginLeft}px; font: 10px sans-serif;"
+  >
+    <style>
+      .${id} {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 1em;
+      }
+      .${id}.band::before, .${id}.lineband::before {
+        content: '';
+        width: ${+swatchWidth}px;
+        height: ${+swatchHeight}px;
+        margin-right: 0.5em;
+      }
+      .${id}.band::before {
+        background: var(--band-color);
+      }
+      .${id}.lineband::before {
+        background: linear-gradient(180deg, var(--band-color) 0%, var(--band-color) 40%, var(--line-color) 40%, var(--line-color) 60%, var(--band-color) 60%, var(--band-color) 100%);
+      }
+      .${id}.line::before {
+        content: '';
+        width: ${+swatchWidth}px;
+        height: ${+lineHeight}px;
+        margin-right: 0.5em;
+        background: var(--line-color);
+      }
+      .${id}.circle::before {
+        content: '';
+        width: ${+circleDiameter}px;
+        height: ${+circleDiameter}px;
+        margin-right: 0.5em;
+        background: var(--circle-color);
+        border-radius: 100%;
+      }
+    </style>
+
+      
+        ${lineBandColorScale
+          .map(
+            lbc =>
+              `<span class="${id} ${lbc.type}"
+                style="--line-color: ${lbc.line?.color};
+                  --band-color: ${lbc.band?.color};
+                  --circle-color: ${lbc.circle?.color}">
+                  ${
+                    lbc.line
+                      ? format(lbc.line.label)
+                      : lbc.band
+                      ? format(lbc.band.label)
+                      : format(lbc.circle.label)
+                  }
+              </span>`,
+          )
+          .join('')}
+      
+    </div>
+  `
+  }
+
+  const validateAndRender = ({
+    dataPaths,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const dataFetchPromises = [];
+    dataPaths.forEach(dataPath => {
+      dataFetchPromises.push(d3__namespace.csv(dataPath));
+    });
+
+    Promise.all(dataFetchPromises).then(([data, dataScatter]) => {
+      renderChart({
+        data,
+        dataScatter,
+        options,
+        dimensions,
+        chartContainerSelector,
+      });
+    });
+  };
+
+  exports.renderBubbleHorizontal = renderChart$3;
+  exports.renderDominoBase = renderChart$2;
+  exports.renderLineBandScatter = renderChart;
+  exports.renderMace = renderChart$5;
+  exports.renderRidgeline = renderChart$1;
+  exports.renderSankey = renderChart$4;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$3;
+  exports.validateAndRenderDominoBase = validateAndRender$2;
+  exports.validateAndRenderLineBandScatter = validateAndRender;
+  exports.validateAndRenderMace = validateAndRender$5;
+  exports.validateAndRenderRidgeline = validateAndRender$1;
+  exports.validateAndRenderSankey = validateAndRender$4;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

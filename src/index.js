@@ -22,3 +22,8 @@ export {
   renderChart as renderRidgeline,
   validateAndRender as validateAndRenderRidgeline,
 } from './charts/ridgeline/index'
+
+export {
+  renderChart as renderLineBandScatter,
+  validateAndRender as validateAndRenderLineBandScatter,
+} from './charts/line_band_scatter/index'
