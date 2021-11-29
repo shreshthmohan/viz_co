@@ -15,7 +15,7 @@ const dimensions = {
   yFields: [
     //                        [min, max] order to be maintained
     { line: 'series2' },
-    { line: 'series1a', band: ['series1amin', 'series1amax'] },
+    { line: 'series1a', band: ['serie1amin', 'series1amax'] },
     { line: 'series1', band: ['series1min', 'series1max'] }, // legend will have only line name
 
     // { circle: 'series1min' },
@@ -27,10 +27,6 @@ const dimensions = {
 
 // eslint-disable-next-line no-unused-vars
 const options = {
-  heading: 'Global area burned',
-  subheading:
-    'The total area burned per year has fallen steadily. Rural development has made fires less pervasive in poor countries',
-
   aspectRatio: 2,
 
   marginTop: 0,
@@ -69,7 +65,6 @@ const options = {
 
 const dataPaths = ['data.csv', 'data_scatter.csv']
 
-// TODO handle case when there's no scatter fields or data
 // const dataPaths = ['data.csv']
 
 viz.validateAndRenderLineBandScatter({

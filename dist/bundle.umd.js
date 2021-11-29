@@ -1196,7 +1196,7 @@
       }
     });
     if (!result.valid) {
-      result.message = `These dimensions/columns are missing in the data: ${result.missingFields.join(
+      result.message = `These dimensions/columns are missing in the data file: ${result.missingFields.join(
       ', ',
     )}`;
     }
@@ -4311,11 +4311,28 @@ g.circles circle.circle.circle-hovered {
   `
   }
 
+  function validateBandFields({ bandDimensions }) {
+    const result = { valid: true, message: '', invalidBands: [] };
+
+    ___default["default"].each(bandDimensions, (val, key) => {
+      if (!(___default["default"].isArray(val) && val.length === 2)) {
+        result.valid = false;
+        result.invalidBands.push(`{${key}: ${val}}`);
+      }
+    });
+
+    if (!result.valid) {
+      result.message = `These band dimensions should have exactly two values (lower bound and upper bound): ${result.invalidBands.join(
+      ', ',
+    )}`;
+    }
+
+    return result
+  }
+
   // Note about missing validations:
-  // 1. yFields are not validated for types (only existense as a column in data is checked)
+  // 1. yFields are not validated for types(shoulBe*) (only existense as a column in data is checked)
   //    because our shouldNotBeBlank and shouldBeNumber validations don't support gaps in data
-  // 2. band fields inside yFields should be of length 2, not yet validated
-  //
 
   const validateAndRender = ({
     dataPaths,
@@ -4343,11 +4360,9 @@ g.circles circle.circle.circle-hovered {
       }
     });
 
-    // Band length 2 validation wip
-    // _.each(yFieldBandDimensions, (val, key) => {
-    //   if (!(_.isArray(val) && val.length === 2)) {
-    //   }
-    // })
+    const yFieldBandValidation = validateBandFields({
+      bandDimensions: yFieldBandDimensions,
+    });
 
     const dimensionTypes = {
       xField: [shouldNotBeBlank],
@@ -4379,7 +4394,11 @@ g.circles circle.circle.circle-hovered {
         dimensions: flatDimensions,
       });
 
-      const allValidations = [dimensionValidation, dataValidations];
+      const allValidations = [
+        dimensionValidation,
+        yFieldBandValidation,
+        dataValidations,
+      ];
 
       const combinedValidation = { valid: true, messages: [] };
 
@@ -4389,6 +4408,8 @@ g.circles circle.circle.circle-hovered {
           combinedValidation.messages.push(v.message);
         }
       });
+
+      console.log(combinedValidation);
 
       renderChart({
         data,

@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import _ from 'lodash-es'
 
 import { shouldNotBeBlank } from '../../utils/validation/dataValidations'
 import { renderChart } from './render'
@@ -7,11 +6,11 @@ import { renderChart } from './render'
 import { validateColumnsWithDimensions } from '../../utils/validation/validations'
 import { validateData } from '../../utils/validation/dataValidations'
 
+import { validateBandFields } from './bandValidation'
+
 // Note about missing validations:
-// 1. yFields are not validated for types (only existense as a column in data is checked)
+// 1. yFields are not validated for types(shoulBe*) (only existense as a column in data is checked)
 //    because our shouldNotBeBlank and shouldBeNumber validations don't support gaps in data
-// 2. band fields inside yFields should be of length 2, not yet validated
-//
 
 export const validateAndRender = ({
   dataPaths,
@@ -39,11 +38,9 @@ export const validateAndRender = ({
     }
   })
 
-  // Band length 2 validation wip
-  // _.each(yFieldBandDimensions, (val, key) => {
-  //   if (!(_.isArray(val) && val.length === 2)) {
-  //   }
-  // })
+  const yFieldBandValidation = validateBandFields({
+    bandDimensions: yFieldBandDimensions,
+  })
 
   const dimensionTypes = {
     xField: [shouldNotBeBlank],
@@ -75,7 +72,11 @@ export const validateAndRender = ({
       dimensions: flatDimensions,
     })
 
-    const allValidations = [dimensionValidation, dataValidations]
+    const allValidations = [
+      dimensionValidation,
+      yFieldBandValidation,
+      dataValidations,
+    ]
 
     const combinedValidation = { valid: true, messages: [] }
 
@@ -85,6 +86,8 @@ export const validateAndRender = ({
         combinedValidation.messages.push(v.message)
       }
     })
+
+    console.log(combinedValidation)
 
     renderChart({
       data,
