@@ -22,3 +22,8 @@ export {
   renderChart as renderRidgeline,
   validateAndRender as validateAndRenderRidgeline,
 } from './charts/ridgeline/index'
+
+export {
+  renderChart as renderCalendar,
+  validateAndRender as validateAndRenderCalendar,
+} from './charts/calendar/index'
