@@ -1,4 +1,3 @@
-/* eslint-disable no-import-assign */
 /* global window */
 import * as d3 from 'd3'
 import _ from 'lodash-es'

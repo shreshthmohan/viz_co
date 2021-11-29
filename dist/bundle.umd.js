@@ -3985,7 +3985,7 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  /* eslint-disable no-import-assign */
+  /* global window */
 
   function setupChartArea({
     chartContainerSelector,
