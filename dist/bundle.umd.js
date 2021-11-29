@@ -1229,7 +1229,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$4 = {
+  const optionTypes$5 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1282,7 +1282,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1771,7 +1771,7 @@
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1793,7 +1793,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -2585,7 +2585,7 @@
     segmentField: [shouldNotBeBlank],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
     aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
 
@@ -2636,7 +2636,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3134,7 +3134,7 @@
     dominoField: [shouldNotBeBlank],
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3174,7 +3174,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3803,7 +3803,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [shouldNotBeBlank],
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3831,7 +3831,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3867,6 +3867,80 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
+  function lineBandLegend({
+    uid,
+    swatchSize = 20,
+    swatchWidth = swatchSize,
+    swatchHeight = swatchSize,
+    lineHeight = 5,
+    lineBandColorScale,
+    format = x => x,
+    circleDiameter = 8,
+    marginLeft = 10,
+  }) {
+    const id = `${uid}-lbl`;
+
+    return `<div
+    style="display: flex; align-items: center; min-height: 33px; margin-left: ${+marginLeft}px; font: 10px sans-serif;"
+  >
+    <style>
+      .${id} {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 1em;
+      }
+      .${id}.band::before, .${id}.lineband::before {
+        content: '';
+        width: ${+swatchWidth}px;
+        height: ${+swatchHeight}px;
+        margin-right: 0.5em;
+      }
+      .${id}.band::before {
+        background: var(--band-color);
+      }
+      .${id}.lineband::before {
+        background: linear-gradient(180deg, var(--band-color) 0%, var(--band-color) 40%, var(--line-color) 40%, var(--line-color) 60%, var(--band-color) 60%, var(--band-color) 100%);
+      }
+      .${id}.line::before {
+        content: '';
+        width: ${+swatchWidth}px;
+        height: ${+lineHeight}px;
+        margin-right: 0.5em;
+        background: var(--line-color);
+      }
+      .${id}.circle::before {
+        content: '';
+        width: ${+circleDiameter}px;
+        height: ${+circleDiameter}px;
+        margin-right: 0.5em;
+        background: var(--circle-color);
+        border-radius: 100%;
+      }
+    </style>
+
+      
+        ${lineBandColorScale
+          .map(
+            lbc =>
+              `<span class="${id} ${lbc.type}"
+                style="--line-color: ${lbc.line?.color};
+                  --band-color: ${lbc.band?.color};
+                  --circle-color: ${lbc.circle?.color}">
+                  ${
+                    lbc.line
+                      ? format(lbc.line.label)
+                      : lbc.band
+                      ? format(lbc.band.label)
+                      : format(lbc.circle.label)
+                  }
+              </span>`,
+          )
+          .join('')}
+      
+    </div>
+  `
+  }
+
   /* global window */
 
   function renderChart({
@@ -3882,11 +3956,7 @@ g.circles circle.circle.circle-hovered {
       bgColor = 'transparent',
       xAxisLabel = xField,
       yAxisLabel = '',
-      yLineColors,
       yColors,
-
-      yBandColors,
-      yScatterColors,
 
       scatterCircleRadius = 2,
 
@@ -4237,80 +4307,6 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function lineBandLegend({
-    uid,
-    swatchSize = 20,
-    swatchWidth = swatchSize,
-    swatchHeight = swatchSize,
-    lineHeight = 5,
-    lineBandColorScale,
-    format = x => x,
-    circleDiameter = 8,
-    marginLeft = 10,
-  }) {
-    const id = `${uid}-lbl`;
-
-    return `<div
-    style="display: flex; align-items: center; min-height: 33px; margin-left: ${+marginLeft}px; font: 10px sans-serif;"
-  >
-    <style>
-      .${id} {
-        display: inline-flex;
-        align-items: center;
-        margin-right: 1em;
-      }
-      .${id}.band::before, .${id}.lineband::before {
-        content: '';
-        width: ${+swatchWidth}px;
-        height: ${+swatchHeight}px;
-        margin-right: 0.5em;
-      }
-      .${id}.band::before {
-        background: var(--band-color);
-      }
-      .${id}.lineband::before {
-        background: linear-gradient(180deg, var(--band-color) 0%, var(--band-color) 40%, var(--line-color) 40%, var(--line-color) 60%, var(--band-color) 60%, var(--band-color) 100%);
-      }
-      .${id}.line::before {
-        content: '';
-        width: ${+swatchWidth}px;
-        height: ${+lineHeight}px;
-        margin-right: 0.5em;
-        background: var(--line-color);
-      }
-      .${id}.circle::before {
-        content: '';
-        width: ${+circleDiameter}px;
-        height: ${+circleDiameter}px;
-        margin-right: 0.5em;
-        background: var(--circle-color);
-        border-radius: 100%;
-      }
-    </style>
-
-      
-        ${lineBandColorScale
-          .map(
-            lbc =>
-              `<span class="${id} ${lbc.type}"
-                style="--line-color: ${lbc.line?.color};
-                  --band-color: ${lbc.band?.color};
-                  --circle-color: ${lbc.circle?.color}">
-                  ${
-                    lbc.line
-                      ? format(lbc.line.label)
-                      : lbc.band
-                      ? format(lbc.band.label)
-                      : format(lbc.circle.label)
-                  }
-              </span>`,
-          )
-          .join('')}
-      
-    </div>
-  `
-  }
-
   function validateBandFields({ bandDimensions }) {
     const result = { valid: true, message: '', invalidBands: [] };
 
@@ -4333,6 +4329,31 @@ g.circles circle.circle.circle-hovered {
   // Note about missing validations:
   // 1. yFields are not validated for types(shoulBe*) (only existense as a column in data is checked)
   //    because our shouldNotBeBlank and shouldBeNumber validations don't support gaps in data
+  // 2. options.yColors doesn't have a validation, it has a structure similar to yFields
+  // 3. options.highlightRanges doesn't have a validation yet
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    // xAxisLabel: xField,
+    // yAxisLabel: '',
+
+    // Don't have a validation for this right now.
+    // yColors,
+
+    scatterCircleRadius: checkNumber,
+
+    // array of arrays with two numbers each
+    // highlightRanges: [],
+    highlightRangeColors: checkColorArray(),
+  };
 
   const validateAndRender = ({
     dataPaths,
@@ -4340,6 +4361,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
+    const optionsValidationResult = optionValidation({ optionTypes, options });
     const yFieldsDimensionTypes = {};
     const yFieldDimensions = {};
 
@@ -4396,6 +4418,7 @@ g.circles circle.circle.circle-hovered {
 
       const allValidations = [
         dimensionValidation,
+        optionsValidationResult,
         yFieldBandValidation,
         dataValidations,
       ];
@@ -4409,15 +4432,15 @@ g.circles circle.circle.circle-hovered {
         }
       });
 
-      console.log(combinedValidation);
-
-      renderChart({
-        data,
-        dataScatter,
-        options,
-        dimensions,
-        chartContainerSelector,
-      });
+      combinedValidation.valid
+        ? renderChart({
+            data,
+            dataScatter,
+            dimensions,
+            options,
+            chartContainerSelector,
+          })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 

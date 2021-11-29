@@ -3,14 +3,49 @@ import * as d3 from 'd3'
 import { shouldNotBeBlank } from '../../utils/validation/dataValidations'
 import { renderChart } from './render'
 
-import { validateColumnsWithDimensions } from '../../utils/validation/validations'
+import {
+  showErrors,
+  validateColumnsWithDimensions,
+} from '../../utils/validation/validations'
 import { validateData } from '../../utils/validation/dataValidations'
 
 import { validateBandFields } from './bandValidation'
+import {
+  checkColor,
+  checkNumber,
+  checkColorArray,
+  checkNumberBetween,
+  optionValidation,
+} from '../../utils/validation/optionValidations'
 
 // Note about missing validations:
 // 1. yFields are not validated for types(shoulBe*) (only existense as a column in data is checked)
 //    because our shouldNotBeBlank and shouldBeNumber validations don't support gaps in data
+// 2. options.yColors doesn't have a validation, it has a structure similar to yFields
+// 3. options.highlightRanges doesn't have a validation yet
+
+const optionTypes = {
+  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+
+  marginTop: checkNumber,
+  marginRight: checkNumber,
+  marginBottom: checkNumber,
+  marginLeft: checkNumber,
+
+  bgColor: checkColor,
+
+  // xAxisLabel: xField,
+  // yAxisLabel: '',
+
+  // Don't have a validation for this right now.
+  // yColors,
+
+  scatterCircleRadius: checkNumber,
+
+  // array of arrays with two numbers each
+  // highlightRanges: [],
+  highlightRangeColors: checkColorArray(),
+}
 
 export const validateAndRender = ({
   dataPaths,
@@ -18,6 +53,7 @@ export const validateAndRender = ({
   dimensions,
   chartContainerSelector,
 }) => {
+  const optionsValidationResult = optionValidation({ optionTypes, options })
   const yFieldsDimensionTypes = {}
   const yFieldDimensions = {}
 
@@ -74,6 +110,7 @@ export const validateAndRender = ({
 
     const allValidations = [
       dimensionValidation,
+      optionsValidationResult,
       yFieldBandValidation,
       dataValidations,
     ]
@@ -87,14 +124,14 @@ export const validateAndRender = ({
       }
     })
 
-    console.log(combinedValidation)
-
-    renderChart({
-      data,
-      dataScatter,
-      options,
-      dimensions,
-      chartContainerSelector,
-    })
+    combinedValidation.valid
+      ? renderChart({
+          data,
+          dataScatter,
+          dimensions,
+          options,
+          chartContainerSelector,
+        })
+      : showErrors(chartContainerSelector, combinedValidation.messages)
   })
 }

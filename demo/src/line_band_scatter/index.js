@@ -15,7 +15,7 @@ const dimensions = {
   yFields: [
     //                        [min, max] order to be maintained
     { line: 'series2' },
-    { line: 'series1a', band: ['serie1amin', 'series1amax'] },
+    { line: 'series1a', band: ['series1amin', 'series1amax'] },
     { line: 'series1', band: ['series1min', 'series1max'] }, // legend will have only line name
 
     // { circle: 'series1min' },
