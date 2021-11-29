@@ -49,6 +49,9 @@ const options = {
     // { circle: '#aaa' },
     { circle: 'orange' },
   ],
+
+  yValueFormat: '.0f',
+
   // yLabels: [{ line: 'series 1 label', band: 'band 1 label' }],
   // yLineColors: ['#878770', '#ed3833', '#f29474'],
   // yBandColors: ['#d0d1c3', '#f9d6c6'],

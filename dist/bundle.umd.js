@@ -4067,14 +4067,19 @@ g.circles circle.circle.circle-hovered {
     dimensions: { xField, yFields },
     options: {
       aspectRatio = 2,
+
       marginTop = 0,
       marginRight = 0,
       marginBottom = 0,
       marginLeft = 0,
+
       bgColor = 'transparent',
+
       xAxisLabel = xField,
       yAxisLabel = '',
+
       yColors,
+      yValueFormat = '',
 
       scatterCircleRadius = 2,
 
@@ -4085,23 +4090,19 @@ g.circles circle.circle.circle-hovered {
     chartContainerSelector,
   }) {
     const coreChartWidth = 1000;
-    const {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      widgetsRight,
-    } = setupChartArea$1({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+      setupChartArea$1({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const yValueFormatter = val => formatNumber(val, yValueFormat);
 
     const tooltipDiv = initializeTooltip$1();
 
@@ -4162,7 +4163,12 @@ g.circles circle.circle.circle-hovered {
       .attr('transform', `translate(${coreChartWidth + yAxisTickSizeOffset}, 0)`);
 
     yAxis
-      .call(d3__namespace.axisRight(yScale).tickSize(-coreChartWidth - yAxisTickSizeOffset))
+      .call(
+        d3__namespace
+          .axisRight(yScale)
+          .tickFormat(yValueFormatter)
+          .tickSize(-coreChartWidth - yAxisTickSizeOffset),
+      )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
       .call(g => g.selectAll('.tick text').attr('fill', '#333'))
       .call(g => g.select('.domain').remove());
@@ -4265,12 +4271,12 @@ g.circles circle.circle.circle-hovered {
             if (yf.band) {
               const [bandMinValue, bandMaxValue] = [d[yf.band[0]], d[yf.band[1]]];
               tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
-            <br/> ${yf.line}: ${lineValue}
-            <br/> ${yf.band[0]}: ${bandMinValue}
-            <br/> ${yf.band[1]}: ${bandMaxValue}`);
+            <br/> ${yf.line}: ${yValueFormatter(lineValue)}
+            <br/> ${yf.band[0]}: ${yValueFormatter(bandMinValue)}
+            <br/> ${yf.band[1]}: ${yValueFormatter(bandMaxValue)}`);
             } else {
               tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
-            <br/> ${yf.line}: ${lineValue}`);
+            <br/> ${yf.line}: ${yValueFormatter(lineValue)}`);
             }
 
             tooltipDiv
