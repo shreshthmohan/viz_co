@@ -27,3 +27,8 @@ export {
   renderChart as renderLineBandScatter,
   validateAndRender as validateAndRenderLineBandScatter,
 } from './charts/line_band_scatter/index'
+
+export {
+  renderChart as renderCalendar,
+  validateAndRender as validateAndRenderCalendar,
+} from './charts/calendar/index'
