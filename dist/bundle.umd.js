@@ -4076,8 +4076,10 @@ g.circles circle.circle.circle-hovered {
       bgColor = 'transparent',
 
       xAxisLabel = xField,
-      yAxisLabel = '',
+      xValueDateParse = '',
+      xValueDateFormat = '',
 
+      yAxisLabel = '',
       yColors,
       yValueFormat = '',
 
@@ -4104,6 +4106,11 @@ g.circles circle.circle.circle-hovered {
 
     const yValueFormatter = val => formatNumber(val, yValueFormat);
 
+    const parseDate = dt => {
+      const date = d3__namespace.timeParse(xValueDateParse)(dt);
+      return date
+    };
+
     const tooltipDiv = initializeTooltip$1();
 
     const allYValues = [];
@@ -4126,6 +4133,8 @@ g.circles circle.circle.circle-hovered {
           allYValues.push(yBandFieldDataMax);
         }
       });
+
+      parsedDataRow[xField] = parseDate(d[xField]);
       return parsedDataRow
     });
 
@@ -4138,17 +4147,20 @@ g.circles circle.circle.circle-hovered {
           allYValues.push(dyf);
         }
       });
+      parsedDataRow[xField] = parseDate(d[xField]);
       return parsedDataRow
     });
 
     const yDomain = d3__namespace.extent(allYValues);
 
-    const xDomainLineBand = d3__namespace.extent(dataParsed.map(d => d[xField]));
-    const xDomainScatter = d3__namespace.extent(dataScatterParsed.map(d => d[xField]));
+    const xDomainLineBand = dataParsed.map(d => d[xField]);
+    const xDomainScatter = dataScatterParsed.map(d => d[xField]);
 
     const xDomain = d3__namespace.extent([...xDomainLineBand, ...xDomainScatter]);
 
-    const xScale = d3__namespace.scaleLinear().range([0, coreChartWidth]).domain(xDomain);
+    console.log(xDomain);
+
+    const xScale = d3__namespace.scaleTime().range([0, coreChartWidth]).domain(xDomain);
     const yScale = d3__namespace
       .scaleLinear()
       .range([coreChartHeight, 0])
@@ -4185,10 +4197,13 @@ g.circles circle.circle.circle-hovered {
     highlightRanges.forEach((hr, i) => {
       chartCore
         .append('rect')
-        .attr('x', d3__namespace.min([xScale(hr[0], xScale(hr[1]))]))
+        .attr('x', d3__namespace.min([xScale(parseDate(hr[0]), xScale(parseDate(hr[1])))]))
         .attr('y', 0)
         .attr('height', coreChartHeight)
-        .attr('width', Math.abs(xScale(hr[1]) - xScale(hr[0])))
+        .attr(
+          'width',
+          Math.abs(xScale(parseDate(hr[1])) - xScale(parseDate(hr[0]))),
+        )
         .attr('fill', highlightRangeColors[i]);
       // .attr('opacity', 0.2)
     });
@@ -4270,7 +4285,9 @@ g.circles circle.circle.circle-hovered {
             // If line is not linked to band, show only line values
             if (yf.band) {
               const [bandMinValue, bandMaxValue] = [d[yf.band[0]], d[yf.band[1]]];
-              tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
+              tooltipDiv.html(`<span style="font-weight: bold">${d3__namespace.timeFormat(
+              xValueDateFormat,
+            )(d[xField])}</span>
             <br/> ${yf.line}: ${yValueFormatter(lineValue)}
             <br/> ${yf.band[0]}: ${yValueFormatter(bandMinValue)}
             <br/> ${yf.band[1]}: ${yValueFormatter(bandMaxValue)}`);
@@ -4298,11 +4315,13 @@ g.circles circle.circle.circle-hovered {
       .attr('id', 'x-axis')
       .attr('transform', `translate(0, ${coreChartHeight})`);
 
-    xAxis.call(d3__namespace.axisBottom(xScale).tickFormat(d3__namespace.format('d'))).call(g => {
-      g.selectAll('.domain').attr('stroke', '#333');
-      g.selectAll('.tick line').attr('stroke', '#333');
-      g.selectAll('.tick text').attr('fill', '#333');
-    });
+    xAxis
+      .call(d3__namespace.axisBottom(xScale).tickFormat(d3__namespace.timeFormat(xValueDateFormat)))
+      .call(g => {
+        g.selectAll('.domain').attr('stroke', '#333');
+        g.selectAll('.tick line').attr('stroke', '#333');
+        g.selectAll('.tick text').attr('fill', '#333');
+      });
 
     xAxis
       .append('text')
