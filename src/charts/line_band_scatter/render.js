@@ -20,8 +20,10 @@ export function renderChart({
     bgColor = 'transparent',
 
     xAxisLabel = xField,
-    yAxisLabel = '',
+    xValueDateParse = '',
+    xValueDateFormat = '',
 
+    yAxisLabel = '',
     yColors,
     yValueFormat = '',
 
@@ -48,6 +50,18 @@ export function renderChart({
 
   const yValueFormatter = val => formatNumber(val, yValueFormat)
 
+  const parseDate = xValueDateParse
+    ? dt => {
+        const date = d3.timeParse(xValueDateParse)(dt)
+        return date
+      }
+    : dt => dt
+
+  const formatDate =
+    xValueDateParse && xValueDateFormat
+      ? d3.timeFormat(xValueDateFormat)
+      : dt => dt
+
   const tooltipDiv = initializeTooltip()
 
   const allYValues = []
@@ -70,6 +84,8 @@ export function renderChart({
         allYValues.push(yBandFieldDataMax)
       }
     })
+
+    parsedDataRow[xField] = parseDate(d[xField])
     return parsedDataRow
   })
 
@@ -82,17 +98,20 @@ export function renderChart({
         allYValues.push(dyf)
       }
     })
+    parsedDataRow[xField] = parseDate(d[xField])
     return parsedDataRow
   })
 
   const yDomain = d3.extent(allYValues)
 
-  const xDomainLineBand = d3.extent(dataParsed.map(d => d[xField]))
-  const xDomainScatter = d3.extent(dataScatterParsed.map(d => d[xField]))
+  const xDomainLineBand = dataParsed.map(d => d[xField])
+  const xDomainScatter = dataScatterParsed.map(d => d[xField])
 
   const xDomain = d3.extent([...xDomainLineBand, ...xDomainScatter])
 
-  const xScale = d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain)
+  const xScale = xValueDateParse
+    ? d3.scaleTime().range([0, coreChartWidth]).domain(xDomain)
+    : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain)
   const yScale = d3
     .scaleLinear()
     .range([coreChartHeight, 0])
@@ -129,10 +148,13 @@ export function renderChart({
   highlightRanges.forEach((hr, i) => {
     chartCore
       .append('rect')
-      .attr('x', d3.min([xScale(hr[0], xScale(hr[1]))]))
+      .attr('x', d3.min([xScale(parseDate(hr[0]), xScale(parseDate(hr[1])))]))
       .attr('y', 0)
       .attr('height', coreChartHeight)
-      .attr('width', Math.abs(xScale(hr[1]) - xScale(hr[0])))
+      .attr(
+        'width',
+        Math.abs(xScale(parseDate(hr[1])) - xScale(parseDate(hr[0]))),
+      )
       .attr('fill', highlightRangeColors[i])
     // .attr('opacity', 0.2)
   })
@@ -214,7 +236,9 @@ export function renderChart({
           // If line is not linked to band, show only line values
           if (yf.band) {
             const [bandMinValue, bandMaxValue] = [d[yf.band[0]], d[yf.band[1]]]
-            tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
+            tooltipDiv.html(`<span style="font-weight: bold">${formatDate(
+              d[xField],
+            )}</span>
             <br/> ${yf.line}: ${yValueFormatter(lineValue)}
             <br/> ${yf.band[0]}: ${yValueFormatter(bandMinValue)}
             <br/> ${yf.band[1]}: ${yValueFormatter(bandMaxValue)}`)
@@ -242,7 +266,7 @@ export function renderChart({
     .attr('id', 'x-axis')
     .attr('transform', `translate(0, ${coreChartHeight})`)
 
-  xAxis.call(d3.axisBottom(xScale).tickFormat(d3.format('d'))).call(g => {
+  xAxis.call(d3.axisBottom(xScale).tickFormat(formatDate)).call(g => {
     g.selectAll('.domain').attr('stroke', '#333')
     g.selectAll('.tick line').attr('stroke', '#333')
     g.selectAll('.tick text').attr('fill', '#333')

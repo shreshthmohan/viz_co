@@ -37,6 +37,9 @@ const options = {
   bgColor: 'transparent',
 
   xAxisLabel: 'Year',
+  xValueDateParse: '%Y',
+  xValueDateFormat: '%Y',
+
   yAxisLabel: 'Area burned, thousand km²',
 
   // TODO: line and band color customization
