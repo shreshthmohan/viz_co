@@ -481,24 +481,13 @@ function renderColorLegend({
   colorField,
   colorLegendValueFormatter,
 }) {
-  const colorLegend = widgetsRight.append('svg')
-  const colorLegendContainerGroup = colorLegend.append('g')
-  colorLegendContainerGroup
-    .append('g')
-    .attr('class', 'g-color-container')
-    .append(() =>
-      legend({
-        color: colorScale,
-        title: colorLegendLabel || _.capitalize(colorField),
-        width: 260,
-        tickFormat: val => formatNumber(val, colorLegendValueFormatter),
-      }),
-    )
-
-  const colorLegendDimensions = colorLegendContainerGroup.node().getBBox()
-  colorLegend
-    .attr('width', colorLegendDimensions.width)
-    .attr('height', colorLegendDimensions.height)
+  const colorLegend = legend({
+    color: colorScale,
+    title: colorLegendLabel || _.capitalize(colorField),
+    width: 260,
+    tickFormat: val => formatNumber(val, colorLegendValueFormatter),
+  })
+  widgetsRight.node().appendChild(colorLegend)
 }
 
 function renderSizeLegend({
