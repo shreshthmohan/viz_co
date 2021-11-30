@@ -481,13 +481,14 @@ function renderColorLegend({
   colorField,
   colorLegendValueFormatter,
 }) {
-  const colorLegend = legend({
-    color: colorScale,
-    title: colorLegendLabel || _.capitalize(colorField),
-    width: 260,
-    tickFormat: val => formatNumber(val, colorLegendValueFormatter),
-  })
-  widgetsRight.node().appendChild(colorLegend)
+  widgetsRight.append(() =>
+    legend({
+      color: colorScale,
+      title: colorLegendLabel || _.capitalize(colorField),
+      width: 260,
+      tickFormat: val => formatNumber(val, colorLegendValueFormatter),
+    }),
+  )
 }
 
 function renderSizeLegend({

@@ -4965,13 +4965,14 @@ g.circles circle.circle.circle-hovered {
     colorField,
     colorLegendValueFormatter,
   }) {
-    const colorLegend = legend({
-      color: colorScale,
-      title: colorLegendLabel || ___default["default"].capitalize(colorField),
-      width: 260,
-      tickFormat: val => formatNumber(val, colorLegendValueFormatter),
-    });
-    widgetsRight.node().appendChild(colorLegend);
+    widgetsRight.append(() =>
+      legend({
+        color: colorScale,
+        title: colorLegendLabel || ___default["default"].capitalize(colorField),
+        width: 260,
+        tickFormat: val => formatNumber(val, colorLegendValueFormatter),
+      }),
+    );
   }
 
   function renderSizeLegend({
