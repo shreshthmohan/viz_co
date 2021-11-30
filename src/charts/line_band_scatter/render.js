@@ -50,10 +50,17 @@ export function renderChart({
 
   const yValueFormatter = val => formatNumber(val, yValueFormat)
 
-  const parseDate = dt => {
-    const date = d3.timeParse(xValueDateParse)(dt)
-    return date
-  }
+  const parseDate = xValueDateParse
+    ? dt => {
+        const date = d3.timeParse(xValueDateParse)(dt)
+        return date
+      }
+    : dt => dt
+
+  const formatDate =
+    xValueDateParse && xValueDateFormat
+      ? d3.timeFormat(xValueDateFormat)
+      : dt => dt
 
   const tooltipDiv = initializeTooltip()
 
@@ -102,9 +109,9 @@ export function renderChart({
 
   const xDomain = d3.extent([...xDomainLineBand, ...xDomainScatter])
 
-  console.log(xDomain)
-
-  const xScale = d3.scaleTime().range([0, coreChartWidth]).domain(xDomain)
+  const xScale = xValueDateParse
+    ? d3.scaleTime().range([0, coreChartWidth]).domain(xDomain)
+    : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain)
   const yScale = d3
     .scaleLinear()
     .range([coreChartHeight, 0])
@@ -229,9 +236,9 @@ export function renderChart({
           // If line is not linked to band, show only line values
           if (yf.band) {
             const [bandMinValue, bandMaxValue] = [d[yf.band[0]], d[yf.band[1]]]
-            tooltipDiv.html(`<span style="font-weight: bold">${d3.timeFormat(
-              xValueDateFormat,
-            )(d[xField])}</span>
+            tooltipDiv.html(`<span style="font-weight: bold">${formatDate(
+              d[xField],
+            )}</span>
             <br/> ${yf.line}: ${yValueFormatter(lineValue)}
             <br/> ${yf.band[0]}: ${yValueFormatter(bandMinValue)}
             <br/> ${yf.band[1]}: ${yValueFormatter(bandMaxValue)}`)
@@ -259,13 +266,11 @@ export function renderChart({
     .attr('id', 'x-axis')
     .attr('transform', `translate(0, ${coreChartHeight})`)
 
-  xAxis
-    .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat(xValueDateFormat)))
-    .call(g => {
-      g.selectAll('.domain').attr('stroke', '#333')
-      g.selectAll('.tick line').attr('stroke', '#333')
-      g.selectAll('.tick text').attr('fill', '#333')
-    })
+  xAxis.call(d3.axisBottom(xScale).tickFormat(formatDate)).call(g => {
+    g.selectAll('.domain').attr('stroke', '#333')
+    g.selectAll('.tick line').attr('stroke', '#333')
+    g.selectAll('.tick text').attr('fill', '#333')
+  })
 
   xAxis
     .append('text')
