@@ -4575,7 +4575,7 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       )
   }
 
@@ -4734,7 +4734,7 @@ g.circles circle.circle.circle-hovered {
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2));
   }
 
-  function renderDominosANdRibbons({
+  function renderDominosAndRibbons({
     data,
     yField,
     sizeField,
@@ -4805,15 +4805,10 @@ g.circles circle.circle.circle-hovered {
         tooltipDiv.transition().duration(200).style('opacity', 1);
 
         tooltipDiv.html(
-          `<div> <span class="font-bold">${d[dominoField]}</span> (${yFieldValue})</div>
-           <div class="flex space-between">
-             <div class="capitalize">${xField}:</div>
-             <div class="pl-2 font-bold">${xFieldValue}</div>
-           </div>
-           <div class="flex space-between">
-             <div class="capitalize">${sizeField}:</div>
-             <div class="pl-2 font-bold">${sizeFieldValue}</div>
-           </div>`,
+          `<div>${d[dominoField]} (${yFieldValue})</div>
+          <div style="text-transform: capitalize">${xField}: ${xFieldValue}</div>
+          <div style="text-transform: capitalize">${sizeField}: ${sizeFieldValue}</div>
+         </div>`,
         );
 
         d3__namespace.select(e.target).raise();
@@ -5037,7 +5032,6 @@ g.circles circle.circle.circle-hovered {
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
     search.attr('placeholder', `Find by ${dominoField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
@@ -5057,7 +5051,6 @@ g.circles circle.circle.circle-hovered {
       .append('button')
       .text('Go to Initial State')
       .attr('class', goToInitialStateButtonClassNames);
-    goToInitialState.classed('hidden', false);
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
@@ -5078,7 +5071,6 @@ g.circles circle.circle.circle-hovered {
       .append('button')
       .text('Clear All')
       .attr('class', clearAllButtonClassNames);
-    clearAll.classed('hidden', false);
     clearAll.on('click', () => {
       d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
       search.node().value = '';
@@ -5208,7 +5200,7 @@ g.circles circle.circle.circle-hovered {
       yAxisDateFormatter,
     });
 
-    renderDominosANdRibbons({
+    renderDominosAndRibbons({
       data,
       yField,
       sizeField,
@@ -5249,14 +5241,6 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
-    });
-
-    // For responsiveness
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
     });
 
     // Legends
