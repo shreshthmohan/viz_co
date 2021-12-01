@@ -42,12 +42,15 @@ const options = {
   motionDelay: 750,
 
   sizeRange: [2, 30],
+  sizeValueFormat: '.0f',
 
   xDomainCustom: [0, 30],
   xAxisLabel: 'Unemployment',
+  xValueFormat: '.1f',
 
   yDomainCustom: [0, 8],
   yAxisLabel: 'Frustration Index',
+  yValueFormat: '.1f',
 
   inbuiltScheme: 'schemeSpectral',
   numberOfColors: 9, // minumum: 3, maximum: 9,

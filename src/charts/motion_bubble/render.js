@@ -10,6 +10,7 @@ import {
   setupChartArea,
   initializeTooltip,
 } from '../../utils/helpers/commonChartHelpers'
+import { formatNumber } from '../../utils/helpers/formatters'
 
 export function renderChart({
   data,
@@ -24,13 +25,18 @@ export function renderChart({
     aspectRatio = 2,
 
     sizeRange = [2, 20],
+    sizeValueFormat = '',
+
     xDomainCustom = null,
+    xAxisLabel = xField,
+    xValueFormat = '',
+
     yDomainCustom = null,
+    yAxisLabel = yField,
+    yValueFormat = '',
 
     inbuiltScheme = 'schemePuRd',
     numberOfColors = 9, // minumum: 3, maximum: 9
-    xAxisLabel = xField,
-    yAxisLabel = yField,
 
     inactiveOpacity = 0.1,
     activeOpacity = 1,
@@ -51,6 +57,10 @@ export function renderChart({
     stroke: #333;
   }
   `)
+
+  const xValueFormatter = val => formatNumber(val, xValueFormat)
+  const yValueFormatter = val => formatNumber(val, yValueFormat)
+  const sizeValueFormatter = val => formatNumber(val, sizeValueFormat)
 
   const coreChartWidth = 1000
   const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
@@ -148,15 +158,20 @@ export function renderChart({
     .attr('opacity', activeOpacity)
     .attr('stroke', d => d3.rgb(colorScale(d[colorField])).darker(0.5))
     .on('mouseover', (e, d) => {
-      // TODO: what will you do if a field is missing
       tooltipDiv.transition().duration(200).style('opacity', 1)
       tooltipDiv.html(`${d[nameField]} (${d[timeField]})
       <br/>
-      <span class="capitalize"> ${xField}: ${d[xField]}</span>
+      <div style="text-transform: capitalize">
+      <span> ${xField}: ${xValueFormatter(d[xField])}</span>
       <br/>
-      <span class="capitalize">${yField}: ${d[yField]}</span>
+      <span>${yField}: ${yValueFormatter(d[yField])}</span>
       <br/>
-      <span class="capitalize">${sizeField}: ${d[sizeField]}</span>
+      ${
+        sizeField
+          ? `<span>${sizeField}: ${sizeValueFormatter(d[sizeField])}</span>`
+          : ''
+      }
+      </div>
       `)
       d3.select(e.target).attr('stroke-width', 2)
       tooltipDiv
