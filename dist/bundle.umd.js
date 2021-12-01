@@ -95,14 +95,14 @@
       .attr('width', directionLegendBoundingBox.width);
   }
 
-  function toClassText$1(str) {
+  function toClassText(str) {
     return str.replace(/[\s&',.]/g, '').toLowerCase()
   }
 
   function preventOverflow({
     allComponents,
     svg,
-    safetyMargin = 20,
+    safetyMargin = 5,
     margins,
   }) {
     const { marginLeft, marginRight, marginTop, marginBottom } = margins;
@@ -604,7 +604,7 @@
         d =>
           `mace
         ${d.slope >= 0 ? 'mace-same' : 'mace-opposite'}
-        mace-${toClassText$1(d[nameField])}
+        mace-${toClassText(d[nameField])}
         ${defaultStateAll.includes(d[nameField]) ? 'mace-active' : ''}`,
       )
       .on('click', e => {
@@ -683,7 +683,7 @@
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText$1(val);
+        const maceName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
         } else {
@@ -693,7 +693,7 @@
       });
     } else {
       referenceList.forEach(val => {
-        const maceName = toClassText$1(val);
+        const maceName = toClassText(val);
         d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
       });
       d3__namespace.select('.maces').classed('searching', false);
@@ -734,7 +734,7 @@
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.mace').classed('mace-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.mace-${toClassText$1(val)}`).classed('mace-active', true);
+        d3__namespace.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -2996,7 +2996,7 @@
       .data(d => d.values)
       .join('rect')
       .attr('class', d => {
-        const dominoName = toClassText$1(d[dominoField]);
+        const dominoName = toClassText(d[dominoField]);
         return `domino domino-${dominoName}`
       })
       .attr('width', xScale.bandwidth())
@@ -3030,7 +3030,7 @@
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
-        const dominoName = toClassText$1(val);
+        const dominoName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
         } else {
@@ -3040,7 +3040,7 @@
       });
     } else {
       referenceList.forEach(val => {
-        const dominoName = toClassText$1(val);
+        const dominoName = toClassText(val);
         d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
       });
       d3__namespace.select('.dominos').classed('searching', false);
@@ -3557,7 +3557,7 @@ g.circles circle.circle.circle-hovered {
       .join('g')
       .attr('class', d => {
         return `series 
-    series-${toClassText$1(d[seriesField])} 
+    series-${toClassText(d[seriesField])} 
     ${defaultStateAll.includes(d[seriesField]) ? 'series-active' : ''}`
       })
       .attr(
@@ -3662,9 +3662,9 @@ g.circles circle.circle.circle-hovered {
 
   const searchEventHandler = referenceList => qstr => {
     if (qstr) {
-      const lqstr = toClassText$1(qstr).toLowerCase();
+      const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
-        const seriesName = toClassText$1(val);
+        const seriesName = toClassText(val);
         if (seriesName.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.series-${seriesName}`).classed('series-matched', true);
         } else {
@@ -3674,7 +3674,7 @@ g.circles circle.circle.circle-hovered {
       });
     } else {
       referenceList.forEach(val => {
-        const seriesName = toClassText$1(val);
+        const seriesName = toClassText(val);
         d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
       });
       d3__namespace.select('.serieses').classed('searching', false);
@@ -3715,7 +3715,7 @@ g.circles circle.circle.circle-hovered {
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.series').classed('series-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.series-${toClassText$1(val)}`).classed('series-active', true);
+        d3__namespace.select(`.series-${toClassText(val)}`).classed('series-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -4501,7 +4501,7 @@ g.circles circle.circle.circle-hovered {
       );
     const widgetsLeft = widgets
       .append('div')
-      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+      .attr('style', 'display: flex; align-items: center; column-gap: 5px;');
     const widgetsRight = widgets
       .append('div')
       .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
@@ -4535,9 +4535,11 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       )
   }
+
+  /* global window */
 
   function renderChart({
     data,
@@ -4549,43 +4551,46 @@ g.circles circle.circle.circle-hovered {
       marginBottom = 50,
       marginLeft = 40,
       bgColor = 'transparent',
-      heading = '',
-      subheading = '',
       aspectRatio = 2,
 
-      /* eslint-disable unicorn/no-null */
       sizeRange = [2, 20],
       xDomainCustom = null,
       yDomainCustom = null,
-      /* eslint-enable unicorn/no-null */
 
       inbuiltScheme = 'schemePuRd',
       numberOfColors = 9, // minumum: 3, maximum: 9
       xAxisLabel = xField,
       yAxisLabel = yField,
+
+      startButtonClassNames = '',
+      stopButtonClassNames = '',
+      searchButtonClassNames = '',
     },
     chartContainerSelector,
   }) {
-    console.log(data);
+    let intervalId;
+
+    d3__namespace.select('body').append('style').html(`
+  .group-circles.searching > .iv-circle:not(.s-match) {
+    opacity: 0.05;
+  }
+  .group-circles.searching > .iv-circle.s-match {
+    stroke: #333;
+  }
+  `);
 
     const coreChartWidth = 1000;
-    const {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      viewBoxWidth,
-    } = setupChartArea({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
+      setupChartArea({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
 
     const tooltipDiv = initializeTooltip();
 
@@ -4617,12 +4622,43 @@ g.circles circle.circle.circle-hovered {
       return data.filter(d => d[timeField] === loc)
     };
     const timeDomain = ___default["default"].uniq(___default["default"].map(data, timeField)).sort();
-    timeDomain.length;
+    const timeDomainLength = timeDomain.length;
 
-    const rangeSliderValue = d3__namespace.select('#range-slider-value');
+    const startButton = widgetsLeft
+      .append('button')
+      .text('Start')
+      .attr('id', '#start')
+      .attr('class', startButtonClassNames);
+
+    const stopButton = widgetsLeft
+      .append('button')
+      .text('Stop')
+      .attr('id', '#stop')
+      .attr('class', stopButtonClassNames);
+
+    const rangeSliderContainer = widgetsLeft
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; flex-direction: column; align-items: center; font-size: 0.75rem',
+      );
+
+    // Range slider label
+    rangeSliderContainer
+      .append('label')
+      .text(timeField)
+      .attr('for', '#range-slider')
+      .attr('style', 'text-transform: capitalize');
+
+    const rangeSlider = rangeSliderContainer
+      .append('input')
+      .attr('type', 'range')
+      .attr('id', 'range-slider');
+
+    const rangeSliderValue = rangeSliderContainer.append('span');
 
     rangeSliderValue.text(timeDomain[0]);
-    chartCore
+    const circles = chartCore
       .append('g')
       .attr('class', 'group-circles')
       .selectAll('circle')
@@ -4659,6 +4695,152 @@ g.circles circle.circle.circle-hovered {
           .duration(500)
           .style('opacity', 0);
       });
+
+    const updateCircles = newData => {
+      circles
+        .data(newData, d => d[nameField])
+        .sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]))
+        .transition()
+        .duration(motionDelay)
+        .attr('cx', d => xScale(d[xField]))
+        .attr('cy', d => yScale(d[yField]))
+        .attr('r', d => sizeScale(d[sizeField]));
+    };
+
+    rangeSlider
+      .attr('min', 0)
+      .attr('max', timeDomainLength - 1)
+      .attr('value', 0)
+      .on('input', e => {
+        const posInArr = Number.parseInt(e.target.value, 10);
+        rangeSliderValue.text(timeDomain[posInArr]);
+        updateCircles(dataAt(timeDomain[posInArr]));
+      });
+
+    startButton.on('click', () => {
+      startButton.node().disabled = true;
+      stopButton.node().disabled = false;
+
+      // if (rangeSlider.node().value === timeDomainLength - 1) {
+      if (
+        Number.parseInt(rangeSlider.node().value, 10) ===
+        Number.parseInt(timeDomainLength - 1, 10)
+      ) {
+        rangeSlider.node().value = 0;
+      }
+      intervalId = window.setInterval(() => {
+        // console.log(typeof rangeSlider.node().value, typeof timeDomainLength - 1)
+        if (
+          Number.parseInt(rangeSlider.node().value, 10) ===
+          Number.parseInt(timeDomainLength - 1, 10)
+        ) {
+          window.clearInterval(intervalId);
+          startButton.node().disabled = false;
+          stopButton.node().disabled = true;
+          return
+        }
+        rangeSlider.node().value++;
+        const posInArr = Number.parseInt(rangeSlider.node().value, 10);
+        rangeSliderValue.text(timeDomain[posInArr]);
+        updateCircles(dataAt(timeDomain[posInArr]));
+      }, motionDelay);
+    });
+
+    stopButton.on('click', () => {
+      stopButton.node().disabled = true;
+      startButton.node().disabled = false;
+      window.clearInterval(intervalId);
+    });
+
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('placeholder', `Find by ${nameField}`)
+      .attr('class', searchButtonClassNames);
+
+    function searchBy(term) {
+      if (term) {
+        d3__namespace.select('.group-circles').classed('searching', true);
+        const matchedCircles = [];
+        circles.classed('s-match', d => {
+          const bool = d[nameField].toLowerCase().includes(term.toLowerCase());
+          if (bool) {
+            matchedCircles.push(`.iv-circle-${toClassText(d[nameField])}`);
+          }
+          return bool
+        });
+        // Raise all matched circles so that
+        // hovering over them doesn't cause other circle's tooltip
+        // to be highlighted
+        matchedCircles.forEach(m => {
+          d3__namespace.select(m).raise();
+        });
+      } else {
+        d3__namespace.select('.group-circles').classed('searching', false);
+
+        // Put circles back in order after raising matched circles
+        circles.sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]));
+      }
+    }
+
+    search.on('keyup', e => {
+      searchBy(e.target.value.trim());
+    });
+
+    const xAxis = chartCore.append('g').attr('class', 'x-axis').lower();
+
+    xAxis
+      .attr('transform', `translate(0, ${coreChartHeight})`)
+      .call(d3__namespace.axisBottom(xScale).tickSize(-coreChartHeight - 6))
+      .style('color', '#777')
+      .call(g => {
+        g.selectAll('.tick line')
+          .style('color', '#ddd')
+          .attr('transform', `translate(0, ${6})`);
+        g.selectAll('.tick text').attr('transform', `translate(0, ${6})`);
+        // g.select('.domain').remove()
+      });
+
+    xAxis
+      .append('text')
+      .attr('transform', `translate(${coreChartWidth / 2}, 35)`)
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'top')
+      .style('fill', '#333')
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .text(xAxisLabel);
+
+    const yAxis = chartCore.append('g').attr('class', 'y-axis').lower();
+
+    yAxis
+      .append('g')
+      .call(d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth - 6))
+      .style('color', '#777')
+      .call(g => {
+        g.selectAll('.tick line')
+          .style('color', '#ddd')
+          .attr('transform', 'translate(-6, 0)');
+        g.selectAll('.tick text').attr('transform', 'translate(-6, 0)');
+        g.select('.domain').remove();
+      })
+      .attr('class', 'y-axis');
+
+    yAxis
+      .append('text')
+      .attr('transform', `translate(-35, ${coreChartHeight / 2}), rotate(-90)`)
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'hanging')
+      .style('fill', '#333')
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .text(yAxisLabel);
+
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
   }
 
   const validateAndRender = ({

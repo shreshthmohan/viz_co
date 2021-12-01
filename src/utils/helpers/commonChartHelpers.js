@@ -25,7 +25,7 @@ export function setupChartArea({
     )
   const widgetsLeft = widgets
     .append('div')
-    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
+    .attr('style', 'display: flex; align-items: center; column-gap: 5px;')
   const widgetsRight = widgets
     .append('div')
     .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
@@ -59,6 +59,6 @@ export function initializeTooltip() {
     .attr('class', 'dom-tooltip')
     .attr(
       'style',
-      'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
     )
 }

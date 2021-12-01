@@ -7,7 +7,7 @@ export function toClassText(str) {
 export function preventOverflow({
   allComponents,
   svg,
-  safetyMargin = 20,
+  safetyMargin = 5,
   margins,
 }) {
   const { marginLeft, marginRight, marginTop, marginBottom } = margins
