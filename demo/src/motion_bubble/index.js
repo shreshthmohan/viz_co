@@ -32,12 +32,12 @@ const dimensions = {
 const options = {
   aspectRatio: 2,
 
-  marginTop: 0,
-  marginRight: 0,
-  marginBottom: 0,
-  marginLeft: 0,
+  marginTop: 20,
+  marginRight: 20,
+  marginBottom: 10,
+  marginLeft: 10,
 
-  bgColor: 'transparent',
+  bgColor: '#f7f7f7',
 
   motionDelay: 750,
 
