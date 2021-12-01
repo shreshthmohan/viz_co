@@ -95,7 +95,7 @@
       .attr('width', directionLegendBoundingBox.width);
   }
 
-  function toClassText(str) {
+  function toClassText$1(str) {
     return str.replace(/[\s&',.]/g, '').toLowerCase()
   }
 
@@ -233,7 +233,7 @@
   `);
   }
 
-  function setupChartArea$3({
+  function setupChartArea$4({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -284,7 +284,7 @@
     }
   }
 
-  function initializeTooltip$3() {
+  function initializeTooltip$4() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -604,7 +604,7 @@
         d =>
           `mace
         ${d.slope >= 0 ? 'mace-same' : 'mace-opposite'}
-        mace-${toClassText(d[nameField])}
+        mace-${toClassText$1(d[nameField])}
         ${defaultStateAll.includes(d[nameField]) ? 'mace-active' : ''}`,
       )
       .on('click', e => {
@@ -683,7 +683,7 @@
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText(val);
+        const maceName = toClassText$1(val);
         if (val.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
         } else {
@@ -693,7 +693,7 @@
       });
     } else {
       referenceList.forEach(val => {
-        const maceName = toClassText(val);
+        const maceName = toClassText$1(val);
         d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
       });
       d3__namespace.select('.maces').classed('searching', false);
@@ -734,7 +734,7 @@
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.mace').classed('mace-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
+        d3__namespace.select(`.mace-${toClassText$1(val)}`).classed('mace-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -759,7 +759,7 @@
     });
   }
 
-  function renderChart$5({
+  function renderChart$6({
     data,
     options: {
       aspectRatio = 2,
@@ -827,7 +827,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$3({
+    } = setupChartArea$4({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -838,7 +838,7 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$3();
+    const tooltipDiv = initializeTooltip$4();
 
     const dataParsed = parseData$3({
       data,
@@ -1302,7 +1302,7 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
@@ -1339,7 +1339,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1369,7 +1369,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 2,
@@ -1813,7 +1813,7 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
@@ -1850,7 +1850,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2138,7 +2138,7 @@
 
   /* global window, console */
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     dimensions: {
       sizeField,
@@ -2748,7 +2748,7 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
@@ -2784,7 +2784,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2802,7 +2802,7 @@
   `);
   }
 
-  function setupChartArea$2({
+  function setupChartArea$3({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -2853,7 +2853,7 @@
     }
   }
 
-  function initializeTooltip$2() {
+  function initializeTooltip$3() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -2996,7 +2996,7 @@
       .data(d => d.values)
       .join('rect')
       .attr('class', d => {
-        const dominoName = toClassText(d[dominoField]);
+        const dominoName = toClassText$1(d[dominoField]);
         return `domino domino-${dominoName}`
       })
       .attr('width', xScale.bandwidth())
@@ -3030,7 +3030,7 @@
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
-        const dominoName = toClassText(val);
+        const dominoName = toClassText$1(val);
         if (val.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
         } else {
@@ -3040,7 +3040,7 @@
       });
     } else {
       referenceList.forEach(val => {
-        const dominoName = toClassText(val);
+        const dominoName = toClassText$1(val);
         d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
       });
       d3__namespace.select('.dominos').classed('searching', false);
@@ -3117,7 +3117,7 @@
     return search
   }
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 2,
@@ -3162,7 +3162,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$2({
+    } = setupChartArea$3({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -3173,7 +3173,7 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$2();
+    const tooltipDiv = initializeTooltip$3();
 
     const dataParsed = parseData$2({
       data,
@@ -3286,7 +3286,7 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
@@ -3323,7 +3323,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3365,7 +3365,7 @@ g.circles circle.circle.circle-hovered {
 `);
   }
 
-  function setupChartArea$1({
+  function setupChartArea$2({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -3417,7 +3417,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function initializeTooltip$1() {
+  function initializeTooltip$2() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -3557,7 +3557,7 @@ g.circles circle.circle.circle-hovered {
       .join('g')
       .attr('class', d => {
         return `series 
-    series-${toClassText(d[seriesField])} 
+    series-${toClassText$1(d[seriesField])} 
     ${defaultStateAll.includes(d[seriesField]) ? 'series-active' : ''}`
       })
       .attr(
@@ -3662,9 +3662,9 @@ g.circles circle.circle.circle-hovered {
 
   const searchEventHandler = referenceList => qstr => {
     if (qstr) {
-      const lqstr = toClassText(qstr).toLowerCase();
+      const lqstr = toClassText$1(qstr).toLowerCase();
       referenceList.forEach(val => {
-        const seriesName = toClassText(val);
+        const seriesName = toClassText$1(val);
         if (seriesName.toLowerCase().includes(lqstr)) {
           d3__namespace.select(`.series-${seriesName}`).classed('series-matched', true);
         } else {
@@ -3674,7 +3674,7 @@ g.circles circle.circle.circle-hovered {
       });
     } else {
       referenceList.forEach(val => {
-        const seriesName = toClassText(val);
+        const seriesName = toClassText$1(val);
         d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
       });
       d3__namespace.select('.serieses').classed('searching', false);
@@ -3715,7 +3715,7 @@ g.circles circle.circle.circle-hovered {
     goToInitialState.on('click', () => {
       d3__namespace.selectAll('.series').classed('series-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.series-${toClassText(val)}`).classed('series-active', true);
+        d3__namespace.select(`.series-${toClassText$1(val)}`).classed('series-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -3758,7 +3758,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3807,7 +3807,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       viewBoxWidth,
-    } = setupChartArea$1({
+    } = setupChartArea$2({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -3818,7 +3818,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$1();
+    const tooltipDiv = initializeTooltip$2();
 
     const { parsedData, nestedData } = parseData$1({
       data,
@@ -3943,7 +3943,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
@@ -3980,14 +3980,14 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* global window */
 
-  function setupChartArea({
+  function setupChartArea$1({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -4039,7 +4039,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function initializeTooltip() {
+  function initializeTooltip$1() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -4249,7 +4249,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.8,
@@ -4285,7 +4285,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea({
+      setupChartArea$1({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -4296,7 +4296,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$1();
 
     const { maxY, stackedDataByYear, names } = parseData({
       data,
@@ -4420,7 +4420,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender = ({
+  const validateAndRender$1 = ({
     dataPath,
     options,
     dimensions,
@@ -4471,23 +4471,221 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
-  exports.renderBubbleHorizontal = renderChart$3;
-  exports.renderCalendar = renderChart;
-  exports.renderDominoBase = renderChart$2;
-  exports.renderMace = renderChart$5;
-  exports.renderRidgeline = renderChart$1;
-  exports.renderSankey = renderChart$4;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$3;
-  exports.validateAndRenderCalendar = validateAndRender;
-  exports.validateAndRenderDominoBase = validateAndRender$2;
-  exports.validateAndRenderMace = validateAndRender$5;
-  exports.validateAndRenderRidgeline = validateAndRender$1;
-  exports.validateAndRenderSankey = validateAndRender$4;
+  function setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  }) {
+    const coreChartHeight = coreChartWidth / aspectRatio;
+
+    const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
+    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
+
+    const chartParent = d3__namespace.select(chartContainerSelector);
+
+    const widgets = chartParent
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      );
+    const widgetsLeft = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+    const widgetsRight = widgets
+      .append('div')
+      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+
+    const svg = chartParent
+      .append('svg')
+      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+      .style('background', bgColor);
+
+    const allComponents = svg.append('g').attr('class', 'all-components');
+
+    const chartCore = allComponents
+      .append('g')
+      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
+
+    return {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+      viewBoxWidth,
+    }
+  }
+
+  function initializeTooltip() {
+    return d3__namespace
+      .select('body')
+      .append('div')
+      .attr('class', 'dom-tooltip')
+      .attr(
+        'style',
+        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      )
+  }
+
+  function renderChart({
+    data,
+    dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
+    options: {
+      motionDelay = 1000,
+      marginTop = 40,
+      marginRight = 50,
+      marginBottom = 50,
+      marginLeft = 40,
+      bgColor = 'transparent',
+      heading = '',
+      subheading = '',
+      aspectRatio = 2,
+
+      /* eslint-disable unicorn/no-null */
+      sizeRange = [2, 20],
+      xDomainCustom = null,
+      yDomainCustom = null,
+      /* eslint-enable unicorn/no-null */
+
+      inbuiltScheme = 'schemePuRd',
+      numberOfColors = 9, // minumum: 3, maximum: 9
+      xAxisLabel = xField,
+      yAxisLabel = yField,
+    },
+    chartContainerSelector,
+  }) {
+    console.log(data);
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      viewBoxWidth,
+    } = setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip();
+
+    const dataParsed = data.map(d => ({
+      ...d,
+      [sizeField]: Number.parseFloat(d[sizeField]),
+      [xField]: Number.parseFloat(d[xField]),
+      [yField]: Number.parseFloat(d[yField]),
+    }));
+
+    const sizes = dataParsed.map(d => d[sizeField]);
+    const sizeDomain = d3__namespace.extent(sizes);
+    const sizeScale = d3__namespace.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange);
+
+    const xDomain = xDomainCustom || d3__namespace.extent(dataParsed.map(d => d[xField]));
+    const yDomain = yDomainCustom || d3__namespace.extent(dataParsed.map(d => d[yField]));
+
+    const xScale = d3__namespace.scaleLinear().domain(xDomain).range([0, coreChartWidth]);
+    const yScale = d3__namespace.scaleLinear().range([coreChartHeight, 0]).domain(yDomain);
+    // .nice()
+
+    const colorDomain = ___default["default"].uniq(___default["default"].map(dataParsed, colorField));
+    const colorScale = d3__namespace.scaleOrdinal(
+      colorDomain,
+      d3__namespace[inbuiltScheme][numberOfColors],
+    );
+
+    const dataAt = loc => {
+      return data.filter(d => d[timeField] === loc)
+    };
+    const timeDomain = ___default["default"].uniq(___default["default"].map(data, timeField)).sort();
+    timeDomain.length;
+
+    const rangeSliderValue = d3__namespace.select('#range-slider-value');
+
+    rangeSliderValue.text(timeDomain[0]);
+    chartCore
+      .append('g')
+      .attr('class', 'group-circles')
+      .selectAll('circle')
+      .data(dataAt(timeDomain[0]), d => d[nameField])
+      .join('circle')
+      .sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]))
+      .attr('class', d => `iv-circle iv-circle-${toClassText(d[nameField])}`)
+      .attr('cx', d => xScale(d[xField]))
+      .attr('cy', d => yScale(d[yField]))
+      .attr('r', d => sizeScale(d[sizeField]))
+      .attr('fill', d => colorScale(d[colorField]))
+      .attr('stroke', d => d3__namespace.rgb(colorScale(d[colorField])).darker(0.5))
+      .on('mouseover', (e, d) => {
+        // TODO: what will you do if a field is missing
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        tooltipDiv.html(`${d[nameField]} (${d[timeField]})
+      <br/>
+      <span class="capitalize"> ${xField}: ${d[xField]}</span>
+      <br/>
+      <span class="capitalize">${yField}: ${d[yField]}</span>
+      <br/>
+      <span class="capitalize">${sizeField}: ${d[sizeField]}</span>
+      `);
+        d3__namespace.select(e.target).attr('stroke-width', 2);
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', e => {
+        d3__namespace.select(e.target).attr('stroke-width', 1);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+  }
+
+  const validateAndRender = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    d3__namespace.csv(dataPath).then(data => {
+      renderChart({ data, dimensions, options, chartContainerSelector });
+    });
+  };
+
+  exports.renderBubbleHorizontal = renderChart$4;
+  exports.renderCalendar = renderChart$1;
+  exports.renderDominoBase = renderChart$3;
+  exports.renderMace = renderChart$6;
+  exports.renderMotionBubble = renderChart;
+  exports.renderRidgeline = renderChart$2;
+  exports.renderSankey = renderChart$5;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$4;
+  exports.validateAndRenderCalendar = validateAndRender$1;
+  exports.validateAndRenderDominoBase = validateAndRender$3;
+  exports.validateAndRenderMace = validateAndRender$6;
+  exports.validateAndRenderMotionBubble = validateAndRender;
+  exports.validateAndRenderRidgeline = validateAndRender$2;
+  exports.validateAndRenderSankey = validateAndRender$5;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
