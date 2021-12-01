@@ -41,7 +41,7 @@ const options = {
 
   motionDelay: 750,
 
-  sizeRange: [5, 30],
+  sizeRange: [2, 30],
 
   xDomainCustom: [0, 30],
   xAxisLabel: 'Unemployment',
@@ -53,7 +53,7 @@ const options = {
   numberOfColors: 9, // minumum: 3, maximum: 9,
 
   inactiveOpacity: 0.2,
-  activeOpacity: 0.8,
+  activeOpacity: 1,
 
   startButtonClassNames: startStopButtonClassNames,
   stopButtonClassNames: startStopButtonClassNames,

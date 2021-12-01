@@ -22,12 +22,12 @@ import {
 } from '../../utils/validation/validations'
 
 const dimensionTypes = {
-  sizeField: [], // TODO default size if missing
+  sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
   xField: [shouldNotBeBlank, shouldBeNumber],
   yField: [shouldNotBeBlank, shouldBeNumber],
   timeField: [shouldNotBeBlank],
   nameField: [shouldNotBeBlank],
-  colorField: [], // TODO default color if missing, or color by name?
+  colorField: [], // can be empty (if not provided, first color from scheme will be picked)
 }
 
 const optionTypes = {

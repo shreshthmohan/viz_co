@@ -76,7 +76,9 @@ export function renderChart({
 
   const sizes = dataParsed.map(d => d[sizeField])
   const sizeDomain = d3.extent(sizes)
-  const sizeScale = d3.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
+  const sizeScale = sizeField
+    ? d3.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
+    : () => sizeRange[0]
 
   const xDomain = xDomainCustom || d3.extent(dataParsed.map(d => d[xField]))
   const yDomain = yDomainCustom || d3.extent(dataParsed.map(d => d[yField]))

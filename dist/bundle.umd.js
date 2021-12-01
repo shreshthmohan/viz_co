@@ -4606,7 +4606,9 @@ g.circles circle.circle.circle-hovered {
 
     const sizes = dataParsed.map(d => d[sizeField]);
     const sizeDomain = d3__namespace.extent(sizes);
-    const sizeScale = d3__namespace.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange);
+    const sizeScale = sizeField
+      ? d3__namespace.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
+      : () => sizeRange[0];
 
     const xDomain = xDomainCustom || d3__namespace.extent(dataParsed.map(d => d[xField]));
     const yDomain = yDomainCustom || d3__namespace.extent(dataParsed.map(d => d[yField]));
@@ -4848,12 +4850,12 @@ g.circles circle.circle.circle-hovered {
   }
 
   const dimensionTypes = {
-    sizeField: [], // TODO default size if missing
+    sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
     xField: [shouldNotBeBlank, shouldBeNumber],
     yField: [shouldNotBeBlank, shouldBeNumber],
     timeField: [shouldNotBeBlank],
     nameField: [shouldNotBeBlank],
-    colorField: [], // TODO default color if missing, or color by name?
+    colorField: [], // can be empty (if not provided, first color from scheme will be picked)
   };
 
   const optionTypes = {
