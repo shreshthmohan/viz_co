@@ -30,20 +30,31 @@ const dimensions = {
 }
 
 const options = {
-  motionDelay: 750,
+  aspectRatio: 2,
+
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
   marginLeft: 0,
+
   bgColor: 'transparent',
-  aspectRatio: 2,
-  sizeRange: [2, 20],
+
+  motionDelay: 750,
+
+  sizeRange: [5, 30],
+
   xDomainCustom: [0, 30],
+  xAxisLabel: 'Unemployment',
+
   yDomainCustom: [0, 8],
+  yAxisLabel: 'Frustration Index',
+
   inbuiltScheme: 'schemeSpectral',
   numberOfColors: 9, // minumum: 3, maximum: 9,
-  xAxisLabel: 'Unemployment',
-  yAxisLabel: 'Frustration Index',
+
+  inactiveOpacity: 0.2,
+  activeOpacity: 0.8,
+
   startButtonClassNames: startStopButtonClassNames,
   stopButtonClassNames: startStopButtonClassNames,
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500

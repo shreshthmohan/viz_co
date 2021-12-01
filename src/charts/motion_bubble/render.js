@@ -32,6 +32,9 @@ export function renderChart({
     xAxisLabel = xField,
     yAxisLabel = yField,
 
+    inactiveOpacity = 0.1,
+    activeOpacity = 1,
+
     startButtonClassNames = '',
     stopButtonClassNames = '',
     searchButtonClassNames = '',
@@ -42,7 +45,7 @@ export function renderChart({
 
   d3.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
-    opacity: 0.05;
+    opacity: ${inactiveOpacity};
   }
   .group-circles.searching > .iv-circle.s-match {
     stroke: #333;
@@ -140,6 +143,7 @@ export function renderChart({
     .attr('cy', d => yScale(d[yField]))
     .attr('r', d => sizeScale(d[sizeField]))
     .attr('fill', d => colorScale(d[colorField]))
+    .attr('opacity', activeOpacity)
     .attr('stroke', d => d3.rgb(colorScale(d[colorField])).darker(0.5))
     .on('mouseover', (e, d) => {
       // TODO: what will you do if a field is missing
@@ -191,15 +195,15 @@ export function renderChart({
     startButton.node().disabled = true
     stopButton.node().disabled = false
 
-    // if (rangeSlider.node().value === timeDomainLength - 1) {
     if (
       Number.parseInt(rangeSlider.node().value, 10) ===
       Number.parseInt(timeDomainLength - 1, 10)
     ) {
       rangeSlider.node().value = 0
+      rangeSliderValue.text(timeDomain[0])
+      updateCircles(dataAt(timeDomain[0]))
     }
     intervalId = window.setInterval(() => {
-      // console.log(typeof rangeSlider.node().value, typeof timeDomainLength - 1)
       if (
         Number.parseInt(rangeSlider.node().value, 10) ===
         Number.parseInt(timeDomainLength - 1, 10)
@@ -268,7 +272,7 @@ export function renderChart({
         .style('color', '#ddd')
         .attr('transform', `translate(0, ${6})`)
       g.selectAll('.tick text').attr('transform', `translate(0, ${6})`)
-      // g.select('.domain').remove()
+      g.select('.domain').remove()
     })
 
   xAxis

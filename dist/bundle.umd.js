@@ -4562,6 +4562,9 @@ g.circles circle.circle.circle-hovered {
       xAxisLabel = xField,
       yAxisLabel = yField,
 
+      inactiveOpacity = 0.1,
+      activeOpacity = 1,
+
       startButtonClassNames = '',
       stopButtonClassNames = '',
       searchButtonClassNames = '',
@@ -4572,7 +4575,7 @@ g.circles circle.circle.circle-hovered {
 
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
-    opacity: 0.05;
+    opacity: ${inactiveOpacity};
   }
   .group-circles.searching > .iv-circle.s-match {
     stroke: #333;
@@ -4670,6 +4673,7 @@ g.circles circle.circle.circle-hovered {
       .attr('cy', d => yScale(d[yField]))
       .attr('r', d => sizeScale(d[sizeField]))
       .attr('fill', d => colorScale(d[colorField]))
+      .attr('opacity', activeOpacity)
       .attr('stroke', d => d3__namespace.rgb(colorScale(d[colorField])).darker(0.5))
       .on('mouseover', (e, d) => {
         // TODO: what will you do if a field is missing
@@ -4721,15 +4725,15 @@ g.circles circle.circle.circle-hovered {
       startButton.node().disabled = true;
       stopButton.node().disabled = false;
 
-      // if (rangeSlider.node().value === timeDomainLength - 1) {
       if (
         Number.parseInt(rangeSlider.node().value, 10) ===
         Number.parseInt(timeDomainLength - 1, 10)
       ) {
         rangeSlider.node().value = 0;
+        rangeSliderValue.text(timeDomain[0]);
+        updateCircles(dataAt(timeDomain[0]));
       }
       intervalId = window.setInterval(() => {
-        // console.log(typeof rangeSlider.node().value, typeof timeDomainLength - 1)
         if (
           Number.parseInt(rangeSlider.node().value, 10) ===
           Number.parseInt(timeDomainLength - 1, 10)
@@ -4798,7 +4802,7 @@ g.circles circle.circle.circle-hovered {
           .style('color', '#ddd')
           .attr('transform', `translate(0, ${6})`);
         g.selectAll('.tick text').attr('transform', `translate(0, ${6})`);
-        // g.select('.domain').remove()
+        g.select('.domain').remove();
       });
 
     xAxis
