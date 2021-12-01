@@ -47,12 +47,12 @@ const options = {
   startButtonClassNames: startStopButtonClassNames,
   stopButtonClassNames: startStopButtonClassNames,
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
-text-xs
-border-gray-300
-rounded-sm
-px-2
-py-1
-shadow-inner border`,
+    text-xs
+    border-gray-300
+    rounded-sm
+    px-2
+    py-1
+    shadow-inner border`,
 }
 
 const dataPath = 'data.csv'
