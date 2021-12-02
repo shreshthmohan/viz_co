@@ -32,3 +32,13 @@ export {
   renderChart as renderCalendar,
   validateAndRender as validateAndRenderCalendar,
 } from './charts/calendar/index'
+
+export {
+  renderChart as renderMotionBubble,
+  validateAndRender as validateAndRenderMotionBubble,
+} from './charts/motion_bubble/index'
+
+export {
+  renderChart as renderDominoRibbon,
+  validateAndRender as validateAndRenderDominoRibbon,
+} from './charts/domino_ribbon/index'
