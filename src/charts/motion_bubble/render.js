@@ -12,6 +12,135 @@ import {
 } from '../../utils/helpers/commonChartHelpers'
 import { formatNumber } from '../../utils/helpers/formatters'
 
+function applyInteractionStyles({ inactiveOpacity }) {
+  d3.select('body').append('style').html(`
+  .group-circles.searching > .iv-circle:not(.s-match) {
+    opacity: ${inactiveOpacity};
+  }
+  .group-circles.searching > .iv-circle.s-match {
+    stroke: #333;
+  }
+  `)
+}
+
+function parseData({ data, xField, yField, sizeField, timeField }) {
+  const dataParsed = data.map(d => ({
+    ...d,
+    [sizeField]: Number.parseFloat(d[sizeField]),
+    [xField]: Number.parseFloat(d[xField]),
+    [yField]: Number.parseFloat(d[yField]),
+  }))
+
+  const dataAt = loc => {
+    return data.filter(d => d[timeField] === loc)
+  }
+  const timeDomain = _.uniq(_.map(data, timeField)).sort()
+  const timeDomainLength = timeDomain.length
+
+  return { dataParsed, dataAt, timeDomain, timeDomainLength }
+}
+
+function setupScales({
+  dataParsed,
+  sizeField,
+  sizeRange,
+  xDomainCustom,
+  yDomainCustom,
+  xField,
+  yField,
+  colorField,
+  coreChartWidth,
+  coreChartHeight,
+  inbuiltScheme,
+  numberOfColors,
+}) {
+  const sizes = dataParsed.map(d => d[sizeField])
+  const sizeDomain = d3.extent(sizes)
+  const sizeScale = sizeField
+    ? d3.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
+    : () => sizeRange[0]
+
+  const xDomain = xDomainCustom || d3.extent(dataParsed.map(d => d[xField]))
+  const yDomain = yDomainCustom || d3.extent(dataParsed.map(d => d[yField]))
+
+  const xScale = d3.scaleLinear().domain(xDomain).range([0, coreChartWidth])
+  const yScale = d3.scaleLinear().range([coreChartHeight, 0]).domain(yDomain)
+  // .nice()
+
+  const colorDomain = _.uniq(_.map(dataParsed, colorField))
+  const colorScale = d3.scaleOrdinal(
+    colorDomain,
+    d3[inbuiltScheme][numberOfColors],
+  )
+
+  return { sizeScale, xScale, yScale, colorScale }
+}
+
+function renderXAxis({
+  chartCore,
+  coreChartHeight,
+  coreChartWidth,
+  xScale,
+  xAxisLabel,
+}) {
+  const xAxis = chartCore.append('g').attr('class', 'x-axis').lower()
+
+  xAxis
+    .attr('transform', `translate(0, ${coreChartHeight})`)
+    .call(d3.axisBottom(xScale).tickSize(-coreChartHeight - 6))
+    .style('color', '#777')
+    .call(g => {
+      g.selectAll('.tick line')
+        .style('color', '#ddd')
+        .attr('transform', `translate(0, ${6})`)
+      g.selectAll('.tick text').attr('transform', `translate(0, ${6})`)
+      g.select('.domain').remove()
+    })
+
+  xAxis
+    .append('text')
+    .attr('transform', `translate(${coreChartWidth / 2}, 35)`)
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'top')
+    .style('fill', '#333')
+    .style('font-size', '12px')
+    .style('font-weight', 'bold')
+    .text(xAxisLabel)
+}
+
+function renderYAxis({
+  chartCore,
+  coreChartWidth,
+  coreChartHeight,
+  yScale,
+  yAxisLabel,
+}) {
+  const yAxis = chartCore.append('g').attr('class', 'y-axis').lower()
+
+  yAxis
+    .append('g')
+    .call(d3.axisLeft(yScale).tickSize(-coreChartWidth - 6))
+    .style('color', '#777')
+    .call(g => {
+      g.selectAll('.tick line')
+        .style('color', '#ddd')
+        .attr('transform', 'translate(-6, 0)')
+      g.selectAll('.tick text').attr('transform', 'translate(-6, 0)')
+      g.select('.domain').remove()
+    })
+    .attr('class', 'y-axis')
+
+  yAxis
+    .append('text')
+    .attr('transform', `translate(-35, ${coreChartHeight / 2}), rotate(-90)`)
+    .style('text-anchor', 'middle')
+    .style('dominant-baseline', 'hanging')
+    .style('fill', '#333')
+    .style('font-size', '12px')
+    .style('font-weight', 'bold')
+    .text(yAxisLabel)
+}
+
 export function renderChart({
   data,
   dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
@@ -49,14 +178,7 @@ export function renderChart({
 }) {
   let intervalId
 
-  d3.select('body').append('style').html(`
-  .group-circles.searching > .iv-circle:not(.s-match) {
-    opacity: ${inactiveOpacity};
-  }
-  .group-circles.searching > .iv-circle.s-match {
-    stroke: #333;
-  }
-  `)
+  applyInteractionStyles({ inactiveOpacity })
 
   const xValueFormatter = val => formatNumber(val, xValueFormat)
   const yValueFormatter = val => formatNumber(val, yValueFormat)
@@ -77,37 +199,28 @@ export function renderChart({
 
   const tooltipDiv = initializeTooltip()
 
-  const dataParsed = data.map(d => ({
-    ...d,
-    [sizeField]: Number.parseFloat(d[sizeField]),
-    [xField]: Number.parseFloat(d[xField]),
-    [yField]: Number.parseFloat(d[yField]),
-  }))
+  const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData({
+    data,
+    xField,
+    yField,
+    sizeField,
+    timeField,
+  })
 
-  const sizes = dataParsed.map(d => d[sizeField])
-  const sizeDomain = d3.extent(sizes)
-  const sizeScale = sizeField
-    ? d3.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
-    : () => sizeRange[0]
-
-  const xDomain = xDomainCustom || d3.extent(dataParsed.map(d => d[xField]))
-  const yDomain = yDomainCustom || d3.extent(dataParsed.map(d => d[yField]))
-
-  const xScale = d3.scaleLinear().domain(xDomain).range([0, coreChartWidth])
-  const yScale = d3.scaleLinear().range([coreChartHeight, 0]).domain(yDomain)
-  // .nice()
-
-  const colorDomain = _.uniq(_.map(dataParsed, colorField))
-  const colorScale = d3.scaleOrdinal(
-    colorDomain,
-    d3[inbuiltScheme][numberOfColors],
-  )
-
-  const dataAt = loc => {
-    return data.filter(d => d[timeField] === loc)
-  }
-  const timeDomain = _.uniq(_.map(data, timeField)).sort()
-  const timeDomainLength = timeDomain.length
+  const { sizeScale, xScale, yScale, colorScale } = setupScales({
+    dataParsed,
+    sizeField,
+    sizeRange,
+    xDomainCustom,
+    yDomainCustom,
+    xField,
+    yField,
+    colorField,
+    coreChartWidth,
+    coreChartHeight,
+    inbuiltScheme,
+    numberOfColors,
+  })
 
   const startButton = widgetsLeft
     .append('button')
@@ -278,54 +391,21 @@ export function renderChart({
     searchBy(e.target.value.trim())
   })
 
-  const xAxis = chartCore.append('g').attr('class', 'x-axis').lower()
+  renderXAxis({
+    chartCore,
+    coreChartHeight,
+    coreChartWidth,
+    xScale,
+    xAxisLabel,
+  })
 
-  xAxis
-    .attr('transform', `translate(0, ${coreChartHeight})`)
-    .call(d3.axisBottom(xScale).tickSize(-coreChartHeight - 6))
-    .style('color', '#777')
-    .call(g => {
-      g.selectAll('.tick line')
-        .style('color', '#ddd')
-        .attr('transform', `translate(0, ${6})`)
-      g.selectAll('.tick text').attr('transform', `translate(0, ${6})`)
-      g.select('.domain').remove()
-    })
-
-  xAxis
-    .append('text')
-    .attr('transform', `translate(${coreChartWidth / 2}, 35)`)
-    .style('text-anchor', 'middle')
-    .style('dominant-baseline', 'top')
-    .style('fill', '#333')
-    .style('font-size', '12px')
-    .style('font-weight', 'bold')
-    .text(xAxisLabel)
-
-  const yAxis = chartCore.append('g').attr('class', 'y-axis').lower()
-
-  yAxis
-    .append('g')
-    .call(d3.axisLeft(yScale).tickSize(-coreChartWidth - 6))
-    .style('color', '#777')
-    .call(g => {
-      g.selectAll('.tick line')
-        .style('color', '#ddd')
-        .attr('transform', 'translate(-6, 0)')
-      g.selectAll('.tick text').attr('transform', 'translate(-6, 0)')
-      g.select('.domain').remove()
-    })
-    .attr('class', 'y-axis')
-
-  yAxis
-    .append('text')
-    .attr('transform', `translate(-35, ${coreChartHeight / 2}), rotate(-90)`)
-    .style('text-anchor', 'middle')
-    .style('dominant-baseline', 'hanging')
-    .style('fill', '#333')
-    .style('font-size', '12px')
-    .style('font-weight', 'bold')
-    .text(yAxisLabel)
+  renderYAxis({
+    chartCore,
+    coreChartWidth,
+    coreChartHeight,
+    yScale,
+    yAxisLabel,
+  })
 
   preventOverflow({
     allComponents,
