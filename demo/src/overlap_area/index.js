@@ -10,7 +10,7 @@ const dimensions = {
 }
 
 const options = {
-  aspectRatio: 1,
+  aspectRatio: 1.6,
 
   marginTop: 0,
   marginRight: 0,
