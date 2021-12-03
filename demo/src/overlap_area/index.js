@@ -19,12 +19,11 @@ const options = {
 
   bgColor: 'transparent',
 
-  containerWidth: 'max-w-screen-lg',
-
   // colorScheme: d3.scheme[6].reverse(),
   colorScheme: d3.schemeCategory10,
   // colorScheme: ['red', 'blue', 'green'],
-  // areaOpacity: 0.6,
+
+  areaOpacity: 0.6,
 
   verticalLines: [
     { x: '6', group: 'United Income', series: 'Pan' },

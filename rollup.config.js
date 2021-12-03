@@ -1,4 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve'
+// terser will minify the bundle
+// import { terser } from 'rollup-plugin-terser'
 
 export default {
   input: './src/index.js',
@@ -17,6 +19,9 @@ export default {
     // not sure if cjs will work if d3 doesn't support cjs
     // { file: 'dist/bundle.cjs.js', format: 'cjs' },
   ],
-  plugins: [resolve()],
+  plugins: [
+    resolve(),
+    //, terser()
+  ],
   external: ['lodash-es', 'd3', 'd3-sankey'],
 }

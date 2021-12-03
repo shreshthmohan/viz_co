@@ -6402,6 +6402,16 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
+    // verticalLines = [{ x: '6', group: 'United Income', series: 'Pan' } ...]
+    // x should exist, should be one of the values of xField column in data
+    // group should exist, should be one of the values of groupField column in data
+    // series should exist, should be one of the values of seriesField column in data
+
+    // verticalDashedLineLabels = [ { series: 'Pan', label: 'Pan Avg' }]
+    // can't have more than the number of unique series values than in the data
+    // label can't be empty
+    // each item should have a unique series value
+
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
     d3__namespace.csv(dataPath).then(data => {
