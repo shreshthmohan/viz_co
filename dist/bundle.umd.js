@@ -771,7 +771,7 @@
     });
   }
 
-  function renderChart$7({
+  function renderChart$8({
     data,
     options: {
       aspectRatio = 2,
@@ -1314,7 +1314,7 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$7 = ({
+  const validateAndRender$8 = ({
     dataPath,
     options,
     dimensions,
@@ -1351,7 +1351,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1381,7 +1381,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$6({
+  function renderChart$7({
     data,
     options: {
       aspectRatio = 2,
@@ -1825,7 +1825,7 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$6 = ({
+  const validateAndRender$7 = ({
     dataPath,
     options,
     dimensions,
@@ -1862,7 +1862,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2150,7 +2150,7 @@
 
   /* global window, console */
 
-  function renderChart$5({
+  function renderChart$6({
     data,
     dimensions: {
       sizeField,
@@ -2760,7 +2760,7 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
@@ -2796,7 +2796,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3129,7 +3129,7 @@
     return search
   }
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 2,
@@ -3298,7 +3298,7 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
@@ -3335,7 +3335,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3770,7 +3770,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3955,7 +3955,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
@@ -3992,7 +3992,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4261,7 +4261,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 0.8,
@@ -4432,7 +4432,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
@@ -4483,7 +4483,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4553,7 +4553,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
@@ -5102,7 +5102,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames: '',
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
@@ -5134,7 +5134,7 @@ g.circles circle.circle.circle-hovered {
         }
       });
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -5729,7 +5729,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.8,
@@ -5967,7 +5967,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender = ({
+  const validateAndRender$1 = ({
     dataPath,
     options,
     dimensions,
@@ -6004,27 +6004,49 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
-  exports.renderBubbleHorizontal = renderChart$5;
-  exports.renderCalendar = renderChart$2;
-  exports.renderDominoBase = renderChart$4;
-  exports.renderDominoRibbon = renderChart;
-  exports.renderMace = renderChart$7;
-  exports.renderMotionBubble = renderChart$1;
-  exports.renderRidgeline = renderChart$3;
-  exports.renderSankey = renderChart$6;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$5;
-  exports.validateAndRenderCalendar = validateAndRender$2;
-  exports.validateAndRenderDominoBase = validateAndRender$4;
-  exports.validateAndRenderDominoRibbon = validateAndRender;
-  exports.validateAndRenderMace = validateAndRender$7;
-  exports.validateAndRenderMotionBubble = validateAndRender$1;
-  exports.validateAndRenderRidgeline = validateAndRender$3;
-  exports.validateAndRenderSankey = validateAndRender$6;
+  function renderChart({
+    data,
+    dimensions: {},
+    options: {},
+    chartContainerSelector,
+  }) {
+    console.log(data);
+  }
+
+  const validateAndRender = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    d3__namespace.csv(dataPath).then(data => {
+      renderChart({ data, dimensions, options, chartContainerSelector });
+    });
+  };
+
+  exports.renderBubbleHorizontal = renderChart$6;
+  exports.renderCalendar = renderChart$3;
+  exports.renderDominoBase = renderChart$5;
+  exports.renderDominoRibbon = renderChart$1;
+  exports.renderMace = renderChart$8;
+  exports.renderMotionBubble = renderChart$2;
+  exports.renderOverlapArea = renderChart;
+  exports.renderRidgeline = renderChart$4;
+  exports.renderSankey = renderChart$7;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$6;
+  exports.validateAndRenderCalendar = validateAndRender$3;
+  exports.validateAndRenderDominoBase = validateAndRender$5;
+  exports.validateAndRenderDominoRibbon = validateAndRender$1;
+  exports.validateAndRenderMace = validateAndRender$8;
+  exports.validateAndRenderMotionBubble = validateAndRender$2;
+  exports.validateAndRenderOverlapArea = validateAndRender;
+  exports.validateAndRenderRidgeline = validateAndRender$4;
+  exports.validateAndRenderSankey = validateAndRender$7;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

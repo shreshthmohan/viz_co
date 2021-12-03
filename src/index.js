@@ -37,3 +37,8 @@ export {
   renderChart as renderDominoRibbon,
   validateAndRender as validateAndRenderDominoRibbon,
 } from './charts/domino_ribbon/index'
+
+export {
+  renderChart as renderOverlapArea,
+  validateAndRender as validateAndRenderOverlapArea,
+} from './charts/overlap_area/index'
