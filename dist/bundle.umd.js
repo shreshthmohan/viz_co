@@ -6112,6 +6112,7 @@ g.circles circle.circle.circle-hovered {
       valuePostfix,
       arcLabelFontSize,
       clickInteraction,
+      chordType,
     });
 
     const handleSearch = searchEventHandler(names, index);
@@ -6271,6 +6272,7 @@ g.circles circle.circle.circle-hovered {
     valuePostfix,
     arcLabelFontSize,
     clickInteraction,
+    chordType,
   }) {
     const chords = chord(matrix);
     const textId = 'arcId';
@@ -6424,6 +6426,21 @@ g.circles circle.circle.circle-hovered {
         ).classed('ribbon-hovered', true);
         d3__namespace.select(`.arc-${d[sourceField].index}`).classed('arc-hovered', true);
         d3__namespace.select(`.arc-${d[targetField].index}`).classed('arc-hovered', true);
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        const sourceName = names[d.source.index];
+        const targetName = names[d.target.index];
+        const flowValue = d.source.value;
+        const arrowSymbol =
+          chordType === 'undirected' ? '<b>&harr;</b>' : '&rarr;';
+        tooltipDiv.html(
+          `${sourceName} ${arrowSymbol} ${targetName}: ${
+          valuePrefix + formatNumber(flowValue, valueFormatter) + valuePostfix
+        }
+        `,
+        );
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
       .on('mouseout', (e, d) => {
         d3__namespace.select(
@@ -6434,6 +6451,11 @@ g.circles circle.circle.circle-hovered {
         if (currentState == 'showAll') {
           setShowAllState();
         }
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
       })
       .on('click', (e, d) => {
         if (clickInteraction) {
