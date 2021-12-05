@@ -31,7 +31,10 @@ const options = {
 
   inactiveOpacity: 0.2,
   activeOpacity: 0.8,
+  arcLabelFontSize: '8px',
   clickInteraction: false,
+
+  startingState: 'showAll',
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
@@ -39,6 +42,8 @@ const options = {
   goToInitialStateButtonClassNames:
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
   clearAllButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+  showAllButtonClassNames:
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 

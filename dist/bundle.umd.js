@@ -3752,7 +3752,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton({
+  function setupShowAllButton$1({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3911,7 +3911,7 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupShowAllButton({
+    setupShowAllButton$1({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -6011,6 +6011,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
+  let currentState = 'global';
   function renderChart({
     data,
     options: {
@@ -6032,6 +6033,7 @@ g.circles circle.circle.circle-hovered {
       defaultState = [],
 
       colorScheme = d3__namespace.schemeCategory10,
+      arcLabelFontSize = '8px',
 
       inactiveOpacity = 0.2,
       activeOpacity = 0.8,
@@ -6039,6 +6041,9 @@ g.circles circle.circle.circle-hovered {
 
       searchInputClassNames = '',
       clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
+
+      startingState = 'showAll',
     },
     dimensions: { sourceField, targetField, valueField },
     chartContainerSelector,
@@ -6105,6 +6110,7 @@ g.circles circle.circle.circle-hovered {
       valuePrefix,
       valueFormatter,
       valuePostfix,
+      arcLabelFontSize,
       clickInteraction,
     });
 
@@ -6124,6 +6130,20 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
       index,
     });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    currentState = startingState;
+    if (currentState === 'showAll') {
+      setShowAllState();
+    } else if (currentState === 'clearAll') {
+      setClearAllState();
+    }
 
     // For responsiveness
     // adjust svg to prevent overflows
@@ -6249,6 +6269,7 @@ g.circles circle.circle.circle-hovered {
     valuePrefix,
     valueFormatter,
     valuePostfix,
+    arcLabelFontSize,
     clickInteraction,
   }) {
     const chords = chord(matrix);
@@ -6285,13 +6306,16 @@ g.circles circle.circle.circle-hovered {
           .append('textPath')
           .attr('xlink:href', `#${textId}`)
           .attr('startOffset', d => d.startAngle * outerRadius)
-          .style('font-size', '12px')
+          .style('font-size', arcLabelFontSize)
           .style('fill', 'black')
           .text(d => {
             return names[d.index]
           }),
       )
       .on('mouseover', (e, d) => {
+        if (currentState === 'showAll') {
+          d3__namespace.selectAll(`.ribbon`).classed('ribbon-active', false);
+        }
         d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', true);
         d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true);
         d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', true);
@@ -6347,6 +6371,10 @@ g.circles circle.circle.circle-hovered {
           .transition()
           .duration(500)
           .style('opacity', 0);
+
+        if (currentState === 'showAll') {
+          d3__namespace.selectAll(`.ribbon`).classed('ribbon-active', true);
+        }
       })
       .on('click', (e, d) => {
         if (clickInteraction) {
@@ -6423,26 +6451,18 @@ g.circles circle.circle.circle-hovered {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       const matchedIndexes = [];
-      const matchedArcs = [];
       referenceList.forEach(val => {
         const arcName = toClassText(val).toLowerCase();
         const index_ = index.get(arcName);
         if (arcName.toLowerCase().includes(lqstr)) {
           matchedIndexes.push(index_);
-          matchedArcs.push(arcName);
-          // d3.select(`.arc-${index_}`).classed('arc-matched', true)
-          // d3.selectAll(`.ribbon-source-${index_}`).classed('ribbon-matched', true)
-          // d3.selectAll(`.ribbon-target-${index_}`).classed('ribbon-matched', true)
         }
-        // d3.select('.ribbons').classed('searching', true)
-        // d3.select('.arcs').classed('searching', true)
       });
-      console.log(matchedIndexes);
-      console.log(matchedArcs);
       d3__namespace.select('.ribbons').classed('searching', true);
       d3__namespace.select('.arcs').classed('searching', true);
       d3__namespace.selectAll('.arc').classed('arc-matched', false);
       d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      setClearAllState();
       matchedIndexes.forEach(val => {
         // debugger
         d3__namespace.select(`.arc-${val}`).classed('arc-matched', true);
@@ -6450,17 +6470,15 @@ g.circles circle.circle.circle-hovered {
         d3__namespace.selectAll(`.ribbon-target-${val}`).classed('ribbon-matched', true);
       });
     } else {
-      d3__namespace.selectAll('.arc').classed('arc-matched', false);
-      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
-      // referenceList.forEach(val => {
-      //   const arcName = toClassText(val)
-      //   vconst index_ = index.get(arcName)
-      //   d3.select(`.arc-${index_}`).classed('arc-matched', false)
-      //   d3.selectAll(`.ribbon-source-${index_}`).classed('ribbon-matched', false)
-      //   d3.selectAll(`.ribbon-target-${index_}`).classed('ribbon-matched', false)
-      // })
       d3__namespace.select('.ribbons').classed('searching', false);
       d3__namespace.select('.arcs').classed('searching', false);
+      d3__namespace.selectAll('.arc').classed('arc-matched', false);
+      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      if (currentState === 'showAll') {
+        setShowAllState();
+      } else if (currentState === 'clearAll') {
+        setClearAllState();
+      }
     }
   };
 
@@ -6497,16 +6515,45 @@ g.circles circle.circle.circle-hovered {
       .attr('class', clearAllButtonClassNames);
     clearAll.classed('hidden', false);
     clearAll.on('click', () => {
-      d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
-      d3__namespace.selectAll('.arc').classed('arc-active', false);
-      ___default["default"].forEach(defaultStateAll, val => {
-        const index_ = index.get(val);
-        d3__namespace.select(`.arc-${index_}`).classed('arc-active', true);
-        d3__namespace.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true);
-      });
+      currentState = 'clearAll';
+      setClearAllState();
+      // _.forEach(defaultStateAll, val => {
+      //   const index_ = index.get(val)
+      //   d3.select(`.arc-${index_}`).classed('arc-active', true)
+      //   d3.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true)
+      // })
       search.node().value = '';
       handleSearch('');
     });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      currentState = 'showAll';
+      setShowAllState();
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setShowAllState() {
+    d3__namespace.selectAll('.ribbon').classed('ribbon-active', true);
+    d3__namespace.selectAll('.arc').classed('arc-active', true);
+  }
+
+  function setClearAllState() {
+    d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
+    d3__namespace.selectAll('.arc').classed('arc-active', false);
   }
 
   // export function that

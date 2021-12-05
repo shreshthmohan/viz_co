@@ -11,6 +11,7 @@ import {
   initializeTooltip,
 } from '../../utils/helpers/commonChartHelpers'
 
+let currentState = 'global'
 export function renderChart({
   data,
   options: {
@@ -32,6 +33,7 @@ export function renderChart({
     defaultState = [],
 
     colorScheme = d3.schemeCategory10,
+    arcLabelFontSize = '8px',
 
     inactiveOpacity = 0.2,
     activeOpacity = 0.8,
@@ -39,6 +41,9 @@ export function renderChart({
 
     searchInputClassNames = '',
     clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
+
+    startingState = 'showAll',
   },
   dimensions: { sourceField, targetField, valueField },
   chartContainerSelector,
@@ -105,6 +110,7 @@ export function renderChart({
     valuePrefix,
     valueFormatter,
     valuePostfix,
+    arcLabelFontSize,
     clickInteraction,
   })
 
@@ -124,6 +130,20 @@ export function renderChart({
     defaultStateAll,
     index,
   })
+
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  })
+
+  currentState = startingState
+  if (currentState === 'showAll') {
+    setShowAllState()
+  } else if (currentState === 'clearAll') {
+    setClearAllState()
+  }
 
   // For responsiveness
   // adjust svg to prevent overflows
@@ -249,6 +269,7 @@ function renderChords({
   valuePrefix,
   valueFormatter,
   valuePostfix,
+  arcLabelFontSize,
   clickInteraction,
 }) {
   const chords = chord(matrix)
@@ -285,13 +306,16 @@ function renderChords({
         .append('textPath')
         .attr('xlink:href', `#${textId}`)
         .attr('startOffset', d => d.startAngle * outerRadius)
-        .style('font-size', '12px')
+        .style('font-size', arcLabelFontSize)
         .style('fill', 'black')
         .text(d => {
           return names[d.index]
         }),
     )
     .on('mouseover', (e, d) => {
+      if (currentState === 'showAll') {
+        d3.selectAll(`.ribbon`).classed('ribbon-active', false)
+      }
       d3.select(`.arc-${d.index}`).classed('arc-hovered', true)
       d3.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true)
       d3.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', true)
@@ -347,6 +371,10 @@ function renderChords({
         .transition()
         .duration(500)
         .style('opacity', 0)
+
+      if (currentState === 'showAll') {
+        d3.selectAll(`.ribbon`).classed('ribbon-active', true)
+      }
     })
     .on('click', (e, d) => {
       if (clickInteraction) {
@@ -436,6 +464,7 @@ const searchEventHandler = (referenceList, index) => qstr => {
     d3.select('.arcs').classed('searching', true)
     d3.selectAll('.arc').classed('arc-matched', false)
     d3.selectAll('.ribbon').classed('ribbon-matched', false)
+    setClearAllState()
     matchedIndexes.forEach(val => {
       // debugger
       d3.select(`.arc-${val}`).classed('arc-matched', true)
@@ -447,6 +476,11 @@ const searchEventHandler = (referenceList, index) => qstr => {
     d3.select('.arcs').classed('searching', false)
     d3.selectAll('.arc').classed('arc-matched', false)
     d3.selectAll('.ribbon').classed('ribbon-matched', false)
+    if (currentState === 'showAll') {
+      setShowAllState()
+    } else if (currentState === 'clearAll') {
+      setClearAllState()
+    }
   }
 }
 
@@ -483,14 +517,43 @@ function setupClearAllButton({
     .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
-    d3.selectAll('.ribbon').classed('ribbon-active', false)
-    d3.selectAll('.arc').classed('arc-active', false)
-    _.forEach(defaultStateAll, val => {
-      const index_ = index.get(val)
-      d3.select(`.arc-${index_}`).classed('arc-active', true)
-      d3.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true)
-    })
+    currentState = 'clearAll'
+    setClearAllState()
+    // _.forEach(defaultStateAll, val => {
+    //   const index_ = index.get(val)
+    //   d3.select(`.arc-${index_}`).classed('arc-active', true)
+    //   d3.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true)
+    // })
     search.node().value = ''
     handleSearch('')
   })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    currentState = 'showAll'
+    setShowAllState()
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setShowAllState() {
+  d3.selectAll('.ribbon').classed('ribbon-active', true)
+  d3.selectAll('.arc').classed('arc-active', true)
+}
+
+function setClearAllState() {
+  d3.selectAll('.ribbon').classed('ribbon-active', false)
+  d3.selectAll('.arc').classed('arc-active', false)
 }
