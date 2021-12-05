@@ -6145,7 +6145,7 @@ g.circles circle.circle.circle-hovered {
   path.ribbon.ribbon-hovered {
     fill-opacity: ${activeOpacity}
   }
-  g.ribbons.searching .ribbon.ribbon-matched {
+  g.ribbons.searching path.ribbon.ribbon-matched {
     fill-opacity: ${activeOpacity}
   }
   g.arc path.chord{
@@ -6293,7 +6293,8 @@ g.circles circle.circle.circle-hovered {
       )
       .on('mouseover', (e, d) => {
         d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', true);
-        d3__namespace.selectAll(`.ribbon-${d.index}`).classed('ribbon-hovered', true);
+        d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true);
+        d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', true);
         tooltipDiv.transition().duration(200).style('opacity', 1);
         const arcName = names[d.index];
         const arcData = ___default["default"].filter(dataParsed, row => {
@@ -6339,7 +6340,8 @@ g.circles circle.circle.circle-hovered {
       })
       .on('mouseout', (e, d) => {
         d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', false);
-        d3__namespace.selectAll(`.ribbon-${d.index}`).classed('ribbon-hovered', false);
+        d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', false);
+        d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', false);
         tooltipDiv
           .style('left', '-300px')
           .transition()
@@ -6369,7 +6371,8 @@ g.circles circle.circle.circle-hovered {
       .attr('class', d => {
         return `ribbon 
       ribbon-${d[sourceField].index}-${d[targetField].index} 
-      ribbon-${d[sourceField].index} ribbon-${d[targetField].index}
+      ribbon-source-${d[sourceField].index} 
+      ribbon-target-${d[targetField].index}
       ${
         defaultStateAll.includes(reverseIndex.get(d[sourceField].index))
           ? 'ribbon-active'
@@ -6419,27 +6422,43 @@ g.circles circle.circle.circle-hovered {
   const searchEventHandler = (referenceList, index) => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
+      const matchedIndexes = [];
+      const matchedArcs = [];
       referenceList.forEach(val => {
         const arcName = toClassText(val).toLowerCase();
         const index_ = index.get(arcName);
         if (arcName.toLowerCase().includes(lqstr)) {
-          // debugger
-          d3__namespace.select(`.arc-${index_}`).classed('arc-matched', true);
-          d3__namespace.selectAll(`.ribbon-${index_}`).classed('ribbon-matched', true);
-        } else {
-          d3__namespace.select(`.arc-${index_}`).classed('arc-matched', false);
-          d3__namespace.selectAll(`.ribbon-${index_}`).classed('ribbon-matched', false);
+          matchedIndexes.push(index_);
+          matchedArcs.push(arcName);
+          // d3.select(`.arc-${index_}`).classed('arc-matched', true)
+          // d3.selectAll(`.ribbon-source-${index_}`).classed('ribbon-matched', true)
+          // d3.selectAll(`.ribbon-target-${index_}`).classed('ribbon-matched', true)
         }
-        d3__namespace.select('.ribbons').classed('searching', true);
-        d3__namespace.select('.arcs').classed('searching', true);
+        // d3.select('.ribbons').classed('searching', true)
+        // d3.select('.arcs').classed('searching', true)
+      });
+      console.log(matchedIndexes);
+      console.log(matchedArcs);
+      d3__namespace.select('.ribbons').classed('searching', true);
+      d3__namespace.select('.arcs').classed('searching', true);
+      d3__namespace.selectAll('.arc').classed('arc-matched', false);
+      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      matchedIndexes.forEach(val => {
+        // debugger
+        d3__namespace.select(`.arc-${val}`).classed('arc-matched', true);
+        d3__namespace.selectAll(`.ribbon-source-${val}`).classed('ribbon-matched', true);
+        d3__namespace.selectAll(`.ribbon-target-${val}`).classed('ribbon-matched', true);
       });
     } else {
-      referenceList.forEach(val => {
-        const arcName = toClassText(val);
-        const index_ = index.get(arcName);
-        d3__namespace.select(`.arc-${index_}`).classed('arc-matched', false);
-        d3__namespace.selectAll(`.ribbon-${index_}`).classed('ribbon-matched', false);
-      });
+      d3__namespace.selectAll('.arc').classed('arc-matched', false);
+      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      // referenceList.forEach(val => {
+      //   const arcName = toClassText(val)
+      //   vconst index_ = index.get(arcName)
+      //   d3.select(`.arc-${index_}`).classed('arc-matched', false)
+      //   d3.selectAll(`.ribbon-source-${index_}`).classed('ribbon-matched', false)
+      //   d3.selectAll(`.ribbon-target-${index_}`).classed('ribbon-matched', false)
+      // })
       d3__namespace.select('.ribbons').classed('searching', false);
       d3__namespace.select('.arcs').classed('searching', false);
     }
