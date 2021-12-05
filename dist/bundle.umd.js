@@ -6314,7 +6314,7 @@ g.circles circle.circle.circle-hovered {
       )
       .on('mouseover', (e, d) => {
         if (currentState === 'showAll') {
-          d3__namespace.selectAll(`.ribbon`).classed('ribbon-active', false);
+          setClearAllState();
         }
         d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', true);
         d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true);
@@ -6373,7 +6373,7 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
 
         if (currentState === 'showAll') {
-          d3__namespace.selectAll(`.ribbon`).classed('ribbon-active', true);
+          setShowAllState();
         }
       })
       .on('click', (e, d) => {
@@ -6416,6 +6416,9 @@ g.circles circle.circle.circle-hovered {
       .attr('fill', d => colorScale(names[d[targetField].index]))
       .style('mix-blend-mode', 'multiply')
       .on('mouseover', (e, d) => {
+        if (currentState == 'showAll') {
+          setClearAllState();
+        }
         d3__namespace.select(
           `.ribbon-${d[sourceField].index}-${d[targetField].index}`,
         ).classed('ribbon-hovered', true);
@@ -6428,6 +6431,9 @@ g.circles circle.circle.circle-hovered {
         ).classed('ribbon-hovered', false);
         d3__namespace.select(`.arc-${d[sourceField].index}`).classed('arc-hovered', false);
         d3__namespace.select(`.arc-${d[targetField].index}`).classed('arc-hovered', false);
+        if (currentState == 'showAll') {
+          setShowAllState();
+        }
       })
       .on('click', (e, d) => {
         if (clickInteraction) {
@@ -6464,7 +6470,6 @@ g.circles circle.circle.circle-hovered {
       d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
       setClearAllState();
       matchedIndexes.forEach(val => {
-        // debugger
         d3__namespace.select(`.arc-${val}`).classed('arc-matched', true);
         d3__namespace.selectAll(`.ribbon-source-${val}`).classed('ribbon-matched', true);
         d3__namespace.selectAll(`.ribbon-target-${val}`).classed('ribbon-matched', true);
@@ -6506,8 +6511,6 @@ g.circles circle.circle.circle-hovered {
     clearAllButtonClassNames,
     search,
     handleSearch,
-    defaultStateAll,
-    index,
   }) {
     const clearAll = widgetsLeft
       .append('button')

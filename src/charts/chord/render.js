@@ -314,7 +314,7 @@ function renderChords({
     )
     .on('mouseover', (e, d) => {
       if (currentState === 'showAll') {
-        d3.selectAll(`.ribbon`).classed('ribbon-active', false)
+        setClearAllState()
       }
       d3.select(`.arc-${d.index}`).classed('arc-hovered', true)
       d3.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true)
@@ -373,7 +373,7 @@ function renderChords({
         .style('opacity', 0)
 
       if (currentState === 'showAll') {
-        d3.selectAll(`.ribbon`).classed('ribbon-active', true)
+        setShowAllState()
       }
     })
     .on('click', (e, d) => {
@@ -416,6 +416,9 @@ function renderChords({
     .attr('fill', d => colorScale(names[d[targetField].index]))
     .style('mix-blend-mode', 'multiply')
     .on('mouseover', (e, d) => {
+      if (currentState == 'showAll') {
+        setClearAllState()
+      }
       d3.select(
         `.ribbon-${d[sourceField].index}-${d[targetField].index}`,
       ).classed('ribbon-hovered', true)
@@ -428,6 +431,9 @@ function renderChords({
       ).classed('ribbon-hovered', false)
       d3.select(`.arc-${d[sourceField].index}`).classed('arc-hovered', false)
       d3.select(`.arc-${d[targetField].index}`).classed('arc-hovered', false)
+      if (currentState == 'showAll') {
+        setShowAllState()
+      }
     })
     .on('click', (e, d) => {
       if (clickInteraction) {
@@ -466,7 +472,6 @@ const searchEventHandler = (referenceList, index) => qstr => {
     d3.selectAll('.ribbon').classed('ribbon-matched', false)
     setClearAllState()
     matchedIndexes.forEach(val => {
-      // debugger
       d3.select(`.arc-${val}`).classed('arc-matched', true)
       d3.selectAll(`.ribbon-source-${val}`).classed('ribbon-matched', true)
       d3.selectAll(`.ribbon-target-${val}`).classed('ribbon-matched', true)
@@ -508,8 +513,6 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
-  defaultStateAll,
-  index,
 }) {
   const clearAll = widgetsLeft
     .append('button')
