@@ -1,5 +1,7 @@
-source,target,value
+fromCountry,toCountry,debt
 France,Britain,22.4
+France,France,50
+Britain,France,25
 Greece,Britain,0.55
 Italy,Britain,26
 Portugal,Britain,19.4

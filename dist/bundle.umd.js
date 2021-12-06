@@ -6400,38 +6400,38 @@ g.circles circle.circle.circle-hovered {
       .attr('d', ribbon)
       .attr('class', d => {
         return `ribbon 
-      ribbon-${d[sourceField].index}-${d[targetField].index} 
-      ribbon-source-${d[sourceField].index} 
-      ribbon-target-${d[targetField].index}
+      ribbon-${d.source.index}-${d.target.index} 
+      ribbon-source-${d.source.index} 
+      ribbon-target-${d.target.index}
       ${
-        defaultStateAll.includes(reverseIndex.get(d[sourceField].index))
+        defaultStateAll.includes(reverseIndex.get(d.source.index))
           ? 'ribbon-active'
           : ''
       }
         ${
-          defaultStateAll.includes(reverseIndex.get(d[targetField].index))
+          defaultStateAll.includes(reverseIndex.get(d.target.index))
             ? 'ribbon-active'
             : ''
         }
       `
       })
-      .attr('fill', d => colorScale(names[d[targetField].index]))
+      .attr('fill', d => colorScale(names[d.target.index]))
       .style('mix-blend-mode', 'multiply')
       .on('mouseover', (e, d) => {
         if (currentState == 'showAll') {
           setClearAllState();
         }
-        d3__namespace.select(
-          `.ribbon-${d[sourceField].index}-${d[targetField].index}`,
-        ).classed('ribbon-hovered', true);
-        d3__namespace.select(`.arc-${d[sourceField].index}`).classed('arc-hovered', true);
-        d3__namespace.select(`.arc-${d[targetField].index}`).classed('arc-hovered', true);
+        d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+          'ribbon-hovered',
+          true,
+        );
+        d3__namespace.select(`.arc-${d.source.index}`).classed('arc-hovered', true);
+        d3__namespace.select(`.arc-${d.target.index}`).classed('arc-hovered', true);
         tooltipDiv.transition().duration(200).style('opacity', 1);
         const sourceName = names[d.source.index];
         const targetName = names[d.target.index];
         const flowValue = d.source.value;
-        const arrowSymbol =
-          chordType === 'undirected' ? '<b>&harr;</b>' : '&rarr;';
+        const arrowSymbol = chordType === 'undirected' ? '&harr;' : '&rarr;';
         tooltipDiv.html(
           `${sourceName} ${arrowSymbol} ${targetName}: ${
           valuePrefix + formatNumber(flowValue, valueFormatter) + valuePostfix
@@ -6443,11 +6443,12 @@ g.circles circle.circle.circle-hovered {
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
       .on('mouseout', (e, d) => {
-        d3__namespace.select(
-          `.ribbon-${d[sourceField].index}-${d[targetField].index}`,
-        ).classed('ribbon-hovered', false);
-        d3__namespace.select(`.arc-${d[sourceField].index}`).classed('arc-hovered', false);
-        d3__namespace.select(`.arc-${d[targetField].index}`).classed('arc-hovered', false);
+        d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+          'ribbon-hovered',
+          false,
+        );
+        d3__namespace.select(`.arc-${d.source.index}`).classed('arc-hovered', false);
+        d3__namespace.select(`.arc-${d.target.index}`).classed('arc-hovered', false);
         if (currentState == 'showAll') {
           setShowAllState();
         }
@@ -6460,17 +6461,12 @@ g.circles circle.circle.circle-hovered {
       .on('click', (e, d) => {
         if (clickInteraction) {
           const clickedState = d3__namespace.select(e.target).classed('ribbon-active');
-          d3__namespace.select(
-            `.ribbon-${d[sourceField].index}-${d[targetField].index}`,
-          ).classed('ribbon-active', !clickedState);
-          d3__namespace.select(`.arc-${d[sourceField].index}`).classed(
-            'arc-active',
+          d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+            'ribbon-active',
             !clickedState,
           );
-          d3__namespace.select(`.arc-${d[targetField].index}`).classed(
-            'arc-active',
-            !clickedState,
-          );
+          d3__namespace.select(`.arc-${d.source.index}`).classed('arc-active', !clickedState);
+          d3__namespace.select(`.arc-${d.target.index}`).classed('arc-active', !clickedState);
         }
       });
   }

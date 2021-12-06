@@ -5,9 +5,9 @@ const dataPath = 'data.csv'
 
 // eslint-disable-next-line no-unused-vars
 const dimensions = {
-  sourceField: 'source', // Categorical
-  targetField: 'target', // Categorical
-  valueField: 'value', // Numeric
+  sourceField: 'fromCountry', // Categorical
+  targetField: 'toCountry', // Categorical
+  valueField: 'debt', // Numeric
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -25,7 +25,7 @@ const options = {
   valuePostfix: '',
   valueFormatter: '',
 
-  chordType: 'undirected',
+  chordType: 'directed',
 
   defaultState: [],
 
