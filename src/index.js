@@ -37,3 +37,8 @@ export {
   renderChart as renderDominoRibbon,
   validateAndRender as validateAndRenderDominoRibbon,
 } from './charts/domino_ribbon/index'
+
+export {
+  renderChart as renderChoroplethCounties,
+  validateAndRender as validateAndRenderChoroplethCounties,
+} from './charts/choropleth_counties'
