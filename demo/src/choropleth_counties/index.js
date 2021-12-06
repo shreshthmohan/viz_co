@@ -3,6 +3,7 @@
 const dimensions = {
   valueField: 'bachelorsOrHigher',
   fipsField: 'fips',
+  // TODO: user need not provide these:
   countyNameField: 'area_name',
   stateField: 'state',
 }
