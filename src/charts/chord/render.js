@@ -337,14 +337,17 @@ function renderChords({
       })
       const arcValue = _(ribbonData)
         .filter(row => row['name'] === arcName)
-        .sumBy(valueField)
+        .sumBy('value')
 
+      // debugger
+      const arrowSymbol = chordType === 'undirected' ? '' : '&rarr;'
+      debugger
       const values = names
         .map(_name_ => {
           const _value_ = _(ribbonData)
             .filter(row => row['name'] === _name_)
-            .sumBy(valueField)
-          return `<div class="w-2 h-2 inline-block" style="background: ${colorScale(
+            .sumBy('value')
+          return `${arrowSymbol} <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
             _name_,
           )}"></div> ${_name_}: ${
             valuePrefix + formatNumber(_value_, valueFormatter) + valuePostfix
@@ -433,9 +436,15 @@ function renderChords({
       const flowValue = d.source.value
       const arrowSymbol = chordType === 'undirected' ? '&harr;' : '&rarr;'
       tooltipDiv.html(
-        `${sourceName} ${arrowSymbol} ${targetName}: ${
+        `<div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+          sourceName,
+        )}"></div> ${sourceName} 
+        ${arrowSymbol} 
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+          targetName,
+        )}"></div> ${targetName}: <b>${
           valuePrefix + formatNumber(flowValue, valueFormatter) + valuePostfix
-        }
+        }</b>
         `,
       )
       tooltipDiv
