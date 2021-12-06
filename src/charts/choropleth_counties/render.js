@@ -4,12 +4,13 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson'
 import { legend } from '../../utils/helpers/colorLegend'
 
+import { fipsToCounty } from './fipslookup'
 import { initializeTooltip } from '../../utils/helpers/commonChartHelpers'
 import { usStatesAndCountiesTopo as topo } from './counties-albers-10m'
 
 export function renderChart({
   data,
-  dimensions: { valueField, fipsField, countyNameField, stateField },
+  dimensions: { valueField, fipsField },
   options: {
     interpolateScheme = d3.interpolateBlues,
     colorLegendTitle = valueField,
@@ -28,6 +29,7 @@ export function renderChart({
   d3.select('body').append('style').html(`
   .group-counties.searching > .iv-county.s-match {
     stroke: #333;
+    stroke-width: 2;
   }`)
 
   const coreChartHeight = 610
@@ -81,16 +83,21 @@ export function renderChart({
       }
       return 'gray'
     })
-    .on('mouseover', (e, d) => {
+    .on('mouseover', function (e, d) {
+      d3.select(this).raise()
       tooltipDiv.transition().duration(200).style('opacity', 1)
+
+      const fipsCode = d.id
+
       const found = dataParsed.find(
-        el => Number.parseInt(el[fipsField], 10) === Number.parseInt(d.id, 10),
+        el =>
+          Number.parseInt(el[fipsField], 10) === Number.parseInt(fipsCode, 10),
       )
+
       if (found) {
+        const countyInfo = fipsToCounty[fipsCode]
         tooltipDiv.html(
-          `${found[countyNameField]}${
-            stateField && found[stateField] ? `, ${found[stateField]}` : ''
-          }
+          `${countyInfo.county}, ${countyInfo.state}
             <br/>
             ${valueField}: ${found[valueField]}`,
         )
@@ -132,7 +139,7 @@ export function renderChart({
         's-match',
         // should be boolean
         d => {
-          return dataObj[Number.parseInt(d.id, 10)][countyNameField]
+          return fipsToCounty[d.id].county
             .toLowerCase()
             .includes(term.toLowerCase())
         },
