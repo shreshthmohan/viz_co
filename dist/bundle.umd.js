@@ -24891,6 +24891,10 @@ g.circles circle.circle.circle-hovered {
   .group-counties.searching > .iv-county.s-match {
     stroke: #333;
     stroke-width: 2;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
   }`);
 
     const coreChartHeight = 610;
@@ -24926,9 +24930,8 @@ g.circles circle.circle.circle-hovered {
 
     const path = d3__namespace.geoPath();
 
-    const allCounties = chartCore
-      .append('g')
-      .attr('class', 'group-counties')
+    const allCountiesGroup = chartCore.append('g').attr('class', 'group-counties');
+    const allCounties = allCountiesGroup
       .selectAll('path')
       .data(topojson__namespace.feature(usStatesAndCountiesTopo, usStatesAndCountiesTopo.objects.counties).features)
       .join('path')
@@ -24945,7 +24948,7 @@ g.circles circle.circle.circle-hovered {
         return 'gray'
       })
       .on('mouseover', function (e, d) {
-        d3__namespace.select(this).raise();
+        d3__namespace.select(this).classed('hovered', true).raise();
         tooltipDiv.transition().duration(200).style('opacity', 1);
 
         const fipsCode = d.id;
@@ -24964,13 +24967,12 @@ g.circles circle.circle.circle-hovered {
           );
         }
 
-        d3__namespace.select(e.target).attr('stroke', '#333').attr('stroke-width', 1).raise();
         tooltipDiv
           .style('left', `${e.clientX}px`)
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
-      .on('mouseout', e => {
-        d3__namespace.select(e.target).attr('stroke', 'transparent');
+      .on('mouseout', function () {
+        d3__namespace.select(this).classed('hovered', false).lower();
         tooltipDiv
           .style('left', '-300px')
           .transition()
@@ -24978,14 +24980,13 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
-    chartCore
+    allCountiesGroup
       .append('path')
       .datum(topojson__namespace.mesh(usStatesAndCountiesTopo, usStatesAndCountiesTopo.objects.states, (a, b) => a !== b))
       .attr('fill', 'none')
       .attr('stroke', 'white')
       .attr('stroke-linejoin', 'round')
-      .attr('d', path)
-      .attr('opacity', 0.5);
+      .attr('d', path);
 
     const search = widgetsLeft
       .append('input')
@@ -24995,7 +24996,7 @@ g.circles circle.circle.circle-hovered {
 
     function searchBy(term) {
       if (term) {
-        d3__namespace.select('.group-counties').classed('searching', true);
+        chartCore.select('.group-counties').classed('searching', true);
         allCounties.classed(
           's-match',
           // should be boolean
@@ -25005,8 +25006,10 @@ g.circles circle.circle.circle-hovered {
               .includes(term.toLowerCase())
           },
         );
+        chartCore.selectAll('.s-match').raise();
       } else {
         d3__namespace.select('.group-counties').classed('searching', false);
+        chartCore.selectAll('.iv-county').lower();
       }
     }
 
@@ -25022,22 +25025,6 @@ g.circles circle.circle.circle-hovered {
       }),
     );
   }
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
   function setupChartArea({
     chartContainerSelector,

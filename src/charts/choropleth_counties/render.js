@@ -30,6 +30,10 @@ export function renderChart({
   .group-counties.searching > .iv-county.s-match {
     stroke: #333;
     stroke-width: 2;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
   }`)
 
   const coreChartHeight = 610
@@ -65,9 +69,8 @@ export function renderChart({
 
   const path = d3.geoPath()
 
-  const allCounties = chartCore
-    .append('g')
-    .attr('class', 'group-counties')
+  const allCountiesGroup = chartCore.append('g').attr('class', 'group-counties')
+  const allCounties = allCountiesGroup
     .selectAll('path')
     .data(topojson.feature(topo, topo.objects.counties).features)
     .join('path')
@@ -84,7 +87,7 @@ export function renderChart({
       return 'gray'
     })
     .on('mouseover', function (e, d) {
-      d3.select(this).raise()
+      d3.select(this).classed('hovered', true).raise()
       tooltipDiv.transition().duration(200).style('opacity', 1)
 
       const fipsCode = d.id
@@ -103,13 +106,12 @@ export function renderChart({
         )
       }
 
-      d3.select(e.target).attr('stroke', '#333').attr('stroke-width', 1).raise()
       tooltipDiv
         .style('left', `${e.clientX}px`)
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
-    .on('mouseout', e => {
-      d3.select(e.target).attr('stroke', 'transparent')
+    .on('mouseout', function () {
+      d3.select(this).classed('hovered', false).lower()
       tooltipDiv
         .style('left', '-300px')
         .transition()
@@ -117,14 +119,13 @@ export function renderChart({
         .style('opacity', 0)
     })
 
-  chartCore
+  allCountiesGroup
     .append('path')
     .datum(topojson.mesh(topo, topo.objects.states, (a, b) => a !== b))
     .attr('fill', 'none')
     .attr('stroke', 'white')
     .attr('stroke-linejoin', 'round')
     .attr('d', path)
-    .attr('opacity', 0.5)
 
   const search = widgetsLeft
     .append('input')
@@ -134,7 +135,7 @@ export function renderChart({
 
   function searchBy(term) {
     if (term) {
-      d3.select('.group-counties').classed('searching', true)
+      chartCore.select('.group-counties').classed('searching', true)
       allCounties.classed(
         's-match',
         // should be boolean
@@ -144,8 +145,10 @@ export function renderChart({
             .includes(term.toLowerCase())
         },
       )
+      chartCore.selectAll('.s-match').raise()
     } else {
       d3.select('.group-counties').classed('searching', false)
+      chartCore.selectAll('.iv-county').lower()
     }
   }
 
@@ -161,22 +164,6 @@ export function renderChart({
     }),
   )
 }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 function setupChartArea({
   chartContainerSelector,
