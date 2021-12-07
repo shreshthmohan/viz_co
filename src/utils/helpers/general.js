@@ -1,3 +1,5 @@
+import { throttle } from 'lodash-es'
+
 export function toClassText(str) {
   return str.replace(/[\s&',.]/g, '').toLowerCase()
 }
@@ -5,7 +7,7 @@ export function toClassText(str) {
 export function preventOverflow({
   allComponents,
   svg,
-  safetyMargin = 20,
+  safetyMargin = 5,
   margins,
 }) {
   const { marginLeft, marginRight, marginTop, marginBottom } = margins
@@ -26,6 +28,9 @@ export function preventOverflow({
     })`,
   )
 }
+
+// Throttled this function for use in force simulations
+export const preventOverflowThrottled = throttle(preventOverflow, 500)
 
 export const fileExtension = filename => {
   const [ext] = filename.split('.').slice(-1)
