@@ -87,7 +87,8 @@ export function renderChart({
       const stateData = dataObj[stateAbbr]
       return stateData ? colorScale(stateData[valueField]) : 'gray'
     })
-    .on('mouseover', (e, d) => {
+    .on('mouseover', function (e, d) {
+      d3.select(this).classed('hovered', true).raise()
       tooltipDiv.transition().duration(200).style('opacity', 1)
       const stateData = dataObj[d.properties.abbr]
       if (stateData) {
@@ -99,13 +100,13 @@ export function renderChart({
         tooltipDiv.html(`${d.properties.name} <br/>Data not available`)
       }
 
-      d3.select(e.target).attr('stroke', '#333').attr('stroke-width', 2).raise()
+      d3.select(this).classed('hovered', true).raise()
       tooltipDiv
         .style('left', `${e.clientX}px`)
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
-    .on('mouseout', e => {
-      d3.select(e.target).attr('stroke', 'transparent')
+    .on('mouseout', function () {
+      d3.select(this).classed('hovered', false).lower()
       tooltipDiv
         .style('left', '-300px')
         .transition()
