@@ -31,7 +31,7 @@ import { renderChart } from './render'
 const dimensionTypes = {
   sourceField: [shouldNotBeBlank], // Categorical
   targetField: [shouldNotBeBlank], // Categorical
-  valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric
+  valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
 }
 
 const optionTypes = {

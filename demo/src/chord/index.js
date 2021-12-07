@@ -25,7 +25,7 @@ const options = {
   valuePostfix: '',
   valueFormatter: '',
 
-  chordType: 'directed',
+  chordType: 'undirected',
 
   defaultState: [],
 

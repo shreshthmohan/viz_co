@@ -6328,39 +6328,83 @@ g.circles circle.circle.circle-hovered {
         });
 
         const ribbonData = ___default["default"].map(names, _name_ => {
-          const value = ___default["default"](arcData)
+          // Same as arc
+          if (arcName === _name_) {
+            const value = ___default["default"](arcData)
+              .filter(row => {
+                return row[sourceField] === _name_ && row[targetField] === _name_
+              })
+              .sumBy(valueField);
+            const arrowSymbol =
+              chordType === 'undirected' ? '' : value >= 0 ? '&rarr;' : '&larr;';
+            return {
+              _name_: _name_,
+              _value_: Math.abs(value),
+              arrowSymbol: arrowSymbol,
+            }
+          }
+          // Get sources
+          const sourceValue = ___default["default"](arcData)
             .filter(row => {
-              return row[sourceField] === _name_ || row[targetField] === _name_
+              return row[targetField] === _name_
             })
             .sumBy(valueField);
-          return { name: _name_, value: value }
-        });
-        const arcValue = ___default["default"](ribbonData)
-          .filter(row => row['name'] === arcName)
-          .sumBy('value');
+          // Get target
+          const targetValue = ___default["default"](arcData)
+            .filter(row => {
+              return row[sourceField] === _name_
+            })
+            .sumBy(valueField);
+          // Net off
+          const value =
+            chordType === 'undirected'
+              ? sourceValue + targetValue
+              : sourceValue - targetValue;
 
+          const arrowSymbol =
+            chordType === 'undirected' ? '' : value >= 0 ? '&rarr;' : '&larr;';
+
+          return {
+            _name_: _name_,
+            _value_: Math.abs(value),
+            arrowSymbol: arrowSymbol,
+          }
+        });
+
+        const arcValue = ___default["default"](arcData).sumBy(valueField);
         // debugger
-        const arrowSymbol = chordType === 'undirected' ? '' : '&rarr;';
-        debugger
-        const values = names
-          .map(_name_ => {
-            const _value_ = ___default["default"](ribbonData)
-              .filter(row => row['name'] === _name_)
-              .sumBy('value');
-            return `${arrowSymbol} <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
-            _name_,
-          )}"></div> ${_name_}: ${
-            valuePrefix + formatNumber(_value_, valueFormatter) + valuePostfix
+        const tooltipValues = ribbonData
+          .map(ribbon => {
+            return `${
+            ribbon.arrowSymbol
+          } <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+            ribbon._name_,
+          )}"></div> ${ribbon._name_}: ${
+            valuePrefix +
+            formatNumber(ribbon._value_, valueFormatter) +
+            valuePostfix
           }`
           })
           .reverse();
+        // const values = names
+        //   .map(_name_ => {
+        //     const _value_ = _(ribbonData)
+        //       .filter(row => row._name_ === _name_)
+        //       .sumBy(_value_)
+        //     return `${arrowSymbol} <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+        //       _name_,
+        //     )}"></div> ${_name_}: ${
+        //       valuePrefix + formatNumber(_value_, valueFormatter) + valuePostfix
+        //     }`
+        //   })
+        //   .reverse()
 
         tooltipDiv.html(
           `<b>${arcName}</b>: ${
           valuePrefix + formatNumber(arcValue, valueFormatter) + valuePostfix
         }
         <br/>
-        ${values.join('<br/>')}
+        ${tooltipValues.join('<br/>')}
         `,
         );
         tooltipDiv
@@ -6591,7 +6635,7 @@ g.circles circle.circle.circle-hovered {
   const dimensionTypes = {
     sourceField: [shouldNotBeBlank], // Categorical
     targetField: [shouldNotBeBlank], // Categorical
-    valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric
+    valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
   };
 
   const optionTypes = {
