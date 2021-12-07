@@ -4,21 +4,24 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson'
 import { legend } from '../../utils/helpers/colorLegend'
 import { usStatesAndCountiesTopo as topo } from '../choropleth_counties/counties-albers-10m'
+import { formatNumber } from '../../utils/helpers/formatters'
 
 import { initializeTooltip } from '../../utils/helpers/commonChartHelpers'
 export function renderChart({
   data,
   dimensions: { valueField, stateAbbrField },
   options: {
-    interpolateScheme = d3.interpolateBlues,
-    colorLegendTitle = valueField,
-
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
     marginLeft = 0,
 
     bgColor = 'transparent',
+
+    valueFormat = '',
+
+    interpolateScheme = d3.interpolateBlues,
+    colorLegendTitle = valueField,
 
     searchButtonClassNames = '',
   },
@@ -33,6 +36,8 @@ export function renderChart({
     stroke-width: 2;
   }
   `)
+
+  const valueFormatter = val => formatNumber(val, valueFormat)
 
   // console.log(data)
   const coreChartHeight = 610
@@ -88,7 +93,7 @@ export function renderChart({
       if (stateData) {
         tooltipDiv.html(`${d.properties.name}
           <br />
-          ${valueField}: ${d3.format('.2f')(stateData[valueField])}
+          ${valueField}: ${valueFormatter(stateData[valueField])}
           `)
       } else {
         tooltipDiv.html(`${d.properties.name} <br/>Data not available`)
@@ -143,6 +148,7 @@ export function renderChart({
       color: colorScale,
       title: colorLegendTitle,
       width: 260,
+      tickFormat: valueFormatter,
     }),
   )
 }

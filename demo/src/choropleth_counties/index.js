@@ -6,15 +6,17 @@ const dimensions = {
 }
 
 const options = {
-  colorLegendTitle: 'Higher education rate',
-  interpolateScheme: d3.interpolateGreens,
-
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
   marginLeft: 0,
 
   bgColor: '#fafafa', // try white, gray, black, #333
+
+  valueFormat: '.2f',
+
+  colorLegendTitle: 'Higher education rate',
+  interpolateScheme: d3.interpolateGreens,
 
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs

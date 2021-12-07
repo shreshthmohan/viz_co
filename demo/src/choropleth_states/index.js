@@ -7,15 +7,17 @@ const dimensions = {
 
 // eslint-disable-next-line no-unused-vars
 const options = {
-  colorLegendTitle: 'Higher education rate',
-  interpolateScheme: d3.interpolateBlues, // see numbers in inbuiltSchemeOptions above for options
-
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
   marginLeft: 0,
 
   bgColor: 'transparent', // try white, gray, black, #333
+
+  valueFormat: '.0f',
+
+  colorLegendTitle: 'Higher education rate',
+  interpolateScheme: d3.interpolateBlues,
 
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs

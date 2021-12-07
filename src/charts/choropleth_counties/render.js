@@ -8,13 +8,12 @@ import { fipsToCounty } from './fipslookup'
 import { initializeTooltip } from '../../utils/helpers/commonChartHelpers'
 import { usStatesAndCountiesTopo as topo } from './counties-albers-10m'
 
+import { formatNumber } from '../../utils/helpers/formatters'
+
 export function renderChart({
   data,
   dimensions: { valueField, fipsField },
   options: {
-    interpolateScheme = d3.interpolateBlues,
-    colorLegendTitle = valueField,
-
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
@@ -22,10 +21,17 @@ export function renderChart({
 
     bgColor = 'transparent',
 
+    valueFormat = '',
+
+    interpolateScheme = d3.interpolateBlues,
+    colorLegendTitle = valueField,
+
     searchButtonClassNames,
   },
   chartContainerSelector,
 }) {
+  const valueFormatter = val => formatNumber(val, valueFormat)
+
   d3.select('body').append('style').html(`
   .group-counties.searching > .iv-county.s-match {
     stroke: #333;
@@ -102,7 +108,7 @@ export function renderChart({
         tooltipDiv.html(
           `${countyInfo.county}, ${countyInfo.state}
             <br/>
-            ${valueField}: ${found[valueField]}`,
+            ${valueField}: ${valueFormatter(found[valueField])}`,
         )
       }
 
@@ -161,6 +167,7 @@ export function renderChart({
       color: colorScale,
       title: colorLegendTitle,
       width: 260,
+      tickFormat: valueFormatter,
     }),
   )
 }
