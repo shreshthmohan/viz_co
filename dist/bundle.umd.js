@@ -1036,6 +1036,19 @@
     return { valid: false, message: invalidRows }
   };
 
+  const shouldBeZeroOrPositiveNumber = ({ data, dimensions, dim }) => {
+    const invalidRows = ___default["default"].filter(data, (row, i) => {
+      // eslint-disable-next-line no-param-reassign
+      row.rowNumber = i + 1;
+      const value = Number(row[dimensions[dim]]);
+      return Number.isNaN(value) || value < 0
+    });
+
+    if (___default["default"].isEmpty(invalidRows)) return { valid: true, message: '' }
+
+    return { valid: false, message: invalidRows }
+  };
+
   const shouldBeUnique = ({ data, dimensions, dim }) => {
     // return true if valid number, false if not a valid number
     const duplicates = ___default["default"](data)
@@ -1207,6 +1220,14 @@
       return { valid: true }
     }
     return { valid: false, message: 'Should be a valid array or "All"' }
+  };
+
+  const checkFontSizeString = val => {
+    const valid = val.match(/^[0-9]*?px$/);
+    if (valid) {
+      return { valid: true }
+    }
+    return { valid: false, message: 'Should be a valid string like "14px"' }
   };
 
   function validateColumnsWithDimensions({ columns, dimensions }) {
@@ -6030,8 +6051,6 @@ g.circles circle.circle.circle-hovered {
 
       chordType = 'undirected',
 
-      defaultState = [],
-
       colorScheme = d3__namespace.schemeCategory10,
       arcLabelFontSize = '8px',
 
@@ -6071,14 +6090,12 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const { dataParsed, names, defaultStateAll, matrix, index, reverseIndex } =
-      parseData({
-        data,
-        valueField,
-        sourceField,
-        targetField,
-        defaultState,
-      });
+    const { dataParsed, names, matrix, index, reverseIndex } = parseData({
+      data,
+      valueField,
+      sourceField,
+      targetField,
+    });
 
     const innerRadius = Math.min(coreChartWidth, coreChartHeight) * 0.5 - 20;
     const outerRadius = innerRadius + 20;
@@ -6101,7 +6118,6 @@ g.circles circle.circle.circle-hovered {
       ribbon,
       colorScale,
       outerRadius,
-      defaultStateAll,
       reverseIndex,
       targetField,
       sourceField,
@@ -6128,7 +6144,6 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
-      defaultStateAll,
       index,
     });
 
@@ -6186,13 +6201,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData({
-    data,
-    valueField,
-    sourceField,
-    targetField,
-    defaultState,
-  }) {
+  function parseData({ data, valueField, sourceField, targetField }) {
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[valueField] = Number.parseFloat(el[valueField]);
@@ -6203,10 +6212,6 @@ g.circles circle.circle.circle-hovered {
       .flatMap(d => [d[sourceField], d[targetField]])
       .uniq()
       .value();
-    let defaultStateAll = defaultState === 'All' ? names : defaultState;
-    defaultStateAll = ___default["default"].map(defaultStateAll, val =>
-      toClassText(val).toLowerCase(),
-    );
 
     const matrix = ___default["default"].chunk(
       ___default["default"].times(___default["default"].multiply(names.length, names.length), ___default["default"].constant(0)),
@@ -6224,7 +6229,6 @@ g.circles circle.circle.circle-hovered {
     return {
       dataParsed,
       names,
-      defaultStateAll,
       matrix,
       index,
       reverseIndex,
@@ -6261,7 +6265,6 @@ g.circles circle.circle.circle-hovered {
     ribbon,
     colorScale,
     outerRadius,
-    defaultStateAll,
     reverseIndex,
     targetField,
     sourceField,
@@ -6289,11 +6292,6 @@ g.circles circle.circle.circle-hovered {
       .selectAll('g')
       .data(chords.groups)
       .join('g')
-      .attr('class', d => {
-        return `arc arc-${d.index}
-      ${defaultStateAll.includes(reverseIndex.get(d.index)) ? 'arc-active' : ''}
-      `
-      })
       .call(g =>
         g
           .append('path')
@@ -6450,16 +6448,6 @@ g.circles circle.circle.circle-hovered {
       ribbon-${d.source.index}-${d.target.index} 
       ribbon-source-${d.source.index} 
       ribbon-target-${d.target.index}
-      ${
-        defaultStateAll.includes(reverseIndex.get(d.source.index))
-          ? 'ribbon-active'
-          : ''
-      }
-        ${
-          defaultStateAll.includes(reverseIndex.get(d.target.index))
-            ? 'ribbon-active'
-            : ''
-        }
       `
       })
       .attr('fill', d => colorScale(names[d.target.index]))
@@ -6591,11 +6579,6 @@ g.circles circle.circle.circle-hovered {
     clearAll.on('click', () => {
       currentState = 'clearAll';
       setClearAllState();
-      // _.forEach(defaultStateAll, val => {
-      //   const index_ = index.get(val)
-      //   d3.select(`.arc-${index_}`).classed('arc-active', true)
-      //   d3.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true)
-      // })
       search.node().value = '';
       handleSearch('');
     });
@@ -6635,7 +6618,7 @@ g.circles circle.circle.circle-hovered {
   const dimensionTypes = {
     sourceField: [shouldNotBeBlank], // Categorical
     targetField: [shouldNotBeBlank], // Categorical
-    valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
+    valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
   };
 
   const optionTypes = {
@@ -6648,13 +6631,20 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    defaultState: checkDefaultState,
+    chordType: checkOneOf(['directed', 'undirected']),
 
-    chordType: checkOneOf(['directed', 'undirected']), // directed or undirected
+    colorScheme: checkColorArray,
+    arcLabelFontSize: checkFontSizeString,
 
     activeOpacity: checkNumberBetween([0, 1]),
     inactiveOpacity: checkNumberBetween([0, 1]),
     clickInteraction: checkBoolean,
+
+    // searchInputClassNames: checkString,
+    // clearAllButtonClassNames: checkString,
+    // showAllButtonClassNames: checkString,
+
+    startingState: checkOneOf(['showAll', 'clearAll']),
   };
 
   const validateAndRender = ({

@@ -142,3 +142,11 @@ export const checkDefaultState = val => {
   }
   return { valid: false, message: 'Should be a valid array or "All"' }
 }
+
+export const checkFontSizeString = val => {
+  const valid = val.match(/^[0-9]*?px$/)
+  if (valid) {
+    return { valid: true }
+  }
+  return { valid: false, message: 'Should be a valid string like "14px"' }
+}

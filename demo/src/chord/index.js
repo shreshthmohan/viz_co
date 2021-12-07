@@ -25,14 +25,11 @@ const options = {
   valuePostfix: '',
   valueFormatter: '',
 
-  chordType: 'undirected',
-
-  defaultState: [],
+  chordType: 'directed',
 
   inactiveOpacity: 0.2,
   activeOpacity: 0.8,
   arcLabelFontSize: '8px',
-  clickInteraction: false,
 
   startingState: 'showAll',
 

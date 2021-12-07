@@ -6,8 +6,8 @@
 import * as d3 from 'd3'
 
 import {
-  shouldBeNumber,
   shouldNotBeBlank,
+  shouldBeZeroOrPositiveNumber,
   validateData,
 } from '../../utils/validation/dataValidations'
 
@@ -17,7 +17,8 @@ import {
   checkNumberBetween,
   checkColor,
   checkBoolean,
-  checkDefaultState,
+  checkFontSizeString,
+  checkColorArray,
   optionValidation,
 } from '../../utils/validation/optionValidations'
 
@@ -31,7 +32,7 @@ import { renderChart } from './render'
 const dimensionTypes = {
   sourceField: [shouldNotBeBlank], // Categorical
   targetField: [shouldNotBeBlank], // Categorical
-  valueField: [shouldBeNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
+  valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
 }
 
 const optionTypes = {
@@ -44,13 +45,20 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  defaultState: checkDefaultState,
+  chordType: checkOneOf(['directed', 'undirected']),
 
-  chordType: checkOneOf(['directed', 'undirected']), // directed or undirected
+  colorScheme: checkColorArray,
+  arcLabelFontSize: checkFontSizeString,
 
   activeOpacity: checkNumberBetween([0, 1]),
   inactiveOpacity: checkNumberBetween([0, 1]),
   clickInteraction: checkBoolean,
+
+  // searchInputClassNames: checkString,
+  // clearAllButtonClassNames: checkString,
+  // showAllButtonClassNames: checkString,
+
+  startingState: checkOneOf(['showAll', 'clearAll']),
 }
 
 export const validateAndRender = ({

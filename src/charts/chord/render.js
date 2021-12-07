@@ -30,8 +30,6 @@ export function renderChart({
 
     chordType = 'undirected',
 
-    defaultState = [],
-
     colorScheme = d3.schemeCategory10,
     arcLabelFontSize = '8px',
 
@@ -71,14 +69,12 @@ export function renderChart({
 
   const tooltipDiv = initializeTooltip()
 
-  const { dataParsed, names, defaultStateAll, matrix, index, reverseIndex } =
-    parseData({
-      data,
-      valueField,
-      sourceField,
-      targetField,
-      defaultState,
-    })
+  const { dataParsed, names, matrix, index, reverseIndex } = parseData({
+    data,
+    valueField,
+    sourceField,
+    targetField,
+  })
 
   const innerRadius = Math.min(coreChartWidth, coreChartHeight) * 0.5 - 20
   const outerRadius = innerRadius + 20
@@ -101,7 +97,6 @@ export function renderChart({
     ribbon,
     colorScale,
     outerRadius,
-    defaultStateAll,
     reverseIndex,
     targetField,
     sourceField,
@@ -128,7 +123,6 @@ export function renderChart({
     clearAllButtonClassNames,
     search,
     handleSearch,
-    defaultStateAll,
     index,
   })
 
@@ -186,13 +180,7 @@ function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   `)
 }
 
-function parseData({
-  data,
-  valueField,
-  sourceField,
-  targetField,
-  defaultState,
-}) {
+function parseData({ data, valueField, sourceField, targetField }) {
   const dataParsed = data.map(el => {
     const elParsed = { ...el }
     elParsed[valueField] = Number.parseFloat(el[valueField])
@@ -203,10 +191,6 @@ function parseData({
     .flatMap(d => [d[sourceField], d[targetField]])
     .uniq()
     .value()
-  let defaultStateAll = defaultState === 'All' ? names : defaultState
-  defaultStateAll = _.map(defaultStateAll, val =>
-    toClassText(val).toLowerCase(),
-  )
 
   const matrix = _.chunk(
     _.times(_.multiply(names.length, names.length), _.constant(0)),
@@ -224,7 +208,6 @@ function parseData({
   return {
     dataParsed,
     names,
-    defaultStateAll,
     matrix,
     index,
     reverseIndex,
@@ -261,7 +244,6 @@ function renderChords({
   ribbon,
   colorScale,
   outerRadius,
-  defaultStateAll,
   reverseIndex,
   targetField,
   sourceField,
@@ -289,11 +271,6 @@ function renderChords({
     .selectAll('g')
     .data(chords.groups)
     .join('g')
-    .attr('class', d => {
-      return `arc arc-${d.index}
-      ${defaultStateAll.includes(reverseIndex.get(d.index)) ? 'arc-active' : ''}
-      `
-    })
     .call(g =>
       g
         .append('path')
@@ -450,16 +427,6 @@ function renderChords({
       ribbon-${d.source.index}-${d.target.index} 
       ribbon-source-${d.source.index} 
       ribbon-target-${d.target.index}
-      ${
-        defaultStateAll.includes(reverseIndex.get(d.source.index))
-          ? 'ribbon-active'
-          : ''
-      }
-        ${
-          defaultStateAll.includes(reverseIndex.get(d.target.index))
-            ? 'ribbon-active'
-            : ''
-        }
       `
     })
     .attr('fill', d => colorScale(names[d.target.index]))
@@ -593,11 +560,6 @@ function setupClearAllButton({
   clearAll.on('click', () => {
     currentState = 'clearAll'
     setClearAllState()
-    // _.forEach(defaultStateAll, val => {
-    //   const index_ = index.get(val)
-    //   d3.select(`.arc-${index_}`).classed('arc-active', true)
-    //   d3.selectAll(`.ribbon-${index_}`).classed('ribbon-active', true)
-    // })
     search.node().value = ''
     handleSearch('')
   })
