@@ -215,7 +215,7 @@
 
   /* global window */
 
-  function applyInteractionStyles$4({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$5({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -307,7 +307,7 @@
       )
   }
 
-  function parseData$5({
+  function parseData$6({
     data,
     xFieldStart,
     xFieldEnd,
@@ -331,7 +331,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$5({
+  function setupScales$6({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -690,7 +690,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$3 = referenceList => qstr => {
+  const searchEventHandler$4 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -712,7 +712,7 @@
     }
   };
 
-  function setupSearch$4({
+  function setupSearch$5({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -753,7 +753,7 @@
     });
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -771,7 +771,7 @@
     });
   }
 
-  function renderChart$7({
+  function renderChart$8({
     data,
     options: {
       aspectRatio = 2,
@@ -829,7 +829,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$5({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -852,7 +852,7 @@
 
     const tooltipDiv = initializeTooltip$5();
 
-    const dataParsed = parseData$5({
+    const dataParsed = parseData$6({
       data,
       xFieldStart,
       xFieldEnd,
@@ -862,7 +862,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$5({
+      setupScales$6({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -958,8 +958,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$3(nameValues);
-    const search = setupSearch$4({
+    const handleSearch = searchEventHandler$4(nameValues);
+    const search = setupSearch$5({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -973,7 +973,7 @@
       search,
       handleSearch,
     });
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -1029,6 +1029,19 @@
       // eslint-disable-next-line no-param-reassign
       row.rowNumber = i + 1;
       return Number.isNaN(Number(row[dimensions[dim]]))
+    });
+
+    if (___default["default"].isEmpty(invalidRows)) return { valid: true, message: '' }
+
+    return { valid: false, message: invalidRows }
+  };
+
+  const shouldBeZeroOrPositiveNumber = ({ data, dimensions, dim }) => {
+    const invalidRows = ___default["default"].filter(data, (row, i) => {
+      // eslint-disable-next-line no-param-reassign
+      row.rowNumber = i + 1;
+      const value = Number(row[dimensions[dim]]);
+      return Number.isNaN(value) || value < 0
     });
 
     if (___default["default"].isEmpty(invalidRows)) return { valid: true, message: '' }
@@ -1209,6 +1222,14 @@
     return { valid: false, message: 'Should be a valid array or "All"' }
   };
 
+  const checkFontSizeString = val => {
+    const valid = val.match(/^[0-9]*?px$/);
+    if (valid) {
+      return { valid: true }
+    }
+    return { valid: false, message: 'Should be a valid string like "14px"' }
+  };
+
   function validateColumnsWithDimensions({ columns, dimensions }) {
     // 1. dimensions is an empty object
     // Object.keys(dimensions).length
@@ -1258,7 +1279,7 @@
 
   // export function that
 
-  const dimensionTypes$7 = {
+  const dimensionTypes$8 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1267,7 +1288,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$7 = {
+  const optionTypes$8 = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1314,13 +1335,13 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$7 = ({
+  const validateAndRender$8 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$7, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1330,7 +1351,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$7, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$8, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1351,7 +1372,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1381,7 +1402,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$6({
+  function renderChart$7({
     data,
     options: {
       aspectRatio = 2,
@@ -1803,13 +1824,13 @@
     });
   }
 
-  const dimensionTypes$6 = {
+  const dimensionTypes$7 = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$6 = {
+  const optionTypes$7 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1825,13 +1846,13 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$6 = ({
+  const validateAndRender$7 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$6, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$7, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -1841,7 +1862,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$6, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$7, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1862,7 +1883,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2150,7 +2171,7 @@
 
   /* global window, console */
 
-  function renderChart$5({
+  function renderChart$6({
     data,
     dimensions: {
       sizeField,
@@ -2708,14 +2729,14 @@
     'schemeOranges',
   ];
 
-  const dimensionTypes$5 = {
+  const dimensionTypes$6 = {
     sizeField: [shouldBeNumber],
     xField: [shouldBeNumber],
     nameField: [shouldNotBeBlank], // also search field
     segmentField: [shouldNotBeBlank],
   };
 
-  const optionTypes$5 = {
+  const optionTypes$6 = {
     aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
     aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
 
@@ -2760,13 +2781,13 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$6, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -2775,7 +2796,7 @@
         columns,
         dimensions,
       });
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$6, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -2796,14 +2817,14 @@
       });
 
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$3() {
+  function applyInteractionStyles$4() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -2876,7 +2897,7 @@
       )
   }
 
-  function parseData$4({ data, colorField, yField }) {
+  function parseData$5({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -2903,7 +2924,7 @@
     return dataParsed
   }
 
-  function setupScales$4({
+  function setupScales$5({
     dataParsed,
     xField,
     yField,
@@ -3038,7 +3059,7 @@
       });
   }
 
-  const searchEventHandler$2 = referenceList => qstr => {
+  const searchEventHandler$3 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -3110,7 +3131,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$3({
+  function setupSearch$4({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3129,7 +3150,7 @@
     return search
   }
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 2,
@@ -3164,7 +3185,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$3();
+    applyInteractionStyles$4();
 
     const coreChartWidth = 1000;
     const {
@@ -3187,13 +3208,13 @@
 
     const tooltipDiv = initializeTooltip$4();
 
-    const dataParsed = parseData$4({
+    const dataParsed = parseData$5({
       data,
       colorField,
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$4({
+    const { xScale, yScale, colorScale } = setupScales$5({
       dataParsed,
       xField,
       yField,
@@ -3229,8 +3250,8 @@
     renderXAxis$3({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$2(dominoValues);
-    setupSearch$3({
+    const handleSearch = searchEventHandler$3(dominoValues);
+    setupSearch$4({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3257,14 +3278,14 @@
     });
   }
 
-  const dimensionTypes$4 = {
+  const dimensionTypes$5 = {
     xField: [shouldNotBeBlank],
     yField: [shouldNotBeBlank],
     colorField: [shouldBeNumber],
     dominoField: [shouldNotBeBlank],
   };
 
-  const optionTypes$4 = {
+  const optionTypes$5 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3298,13 +3319,13 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3314,7 +3335,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3335,14 +3356,14 @@
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$2({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$3({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
 g.serieses .series {
   fill-opacity: ${inactiveOpacity};
@@ -3440,7 +3461,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$3({ data, yField, xField, seriesField, colorField }) {
+  function parseData$4({ data, yField, xField, seriesField, colorField }) {
     const parsedData = data.map(d => ({
       ...d,
       [yField]: Number.parseFloat(d[yField]),
@@ -3465,7 +3486,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$3({
+  function setupScales$4({
     parsedData,
     nestedData,
     xField,
@@ -3672,7 +3693,7 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$1 = referenceList => qstr => {
+  const searchEventHandler$2 = referenceList => qstr => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
@@ -3693,7 +3714,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$2({
+  function setupSearch$3({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3734,7 +3755,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$1({
+  function setupClearAllButton$2({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3752,7 +3773,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton({
+  function setupShowAllButton$1({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3770,7 +3791,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3809,7 +3830,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$2({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$3({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3832,7 +3853,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { parsedData, nestedData } = parseData$3({
+    const { parsedData, nestedData } = parseData$4({
       data,
       yField,
       xField,
@@ -3841,7 +3862,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$3({
+      setupScales$4({
         parsedData,
         nestedData,
         xField,
@@ -3888,8 +3909,8 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     });
 
-    const handleSearch = searchEventHandler$1(categoryDomain);
-    const search = setupSearch$2({
+    const handleSearch = searchEventHandler$2(categoryDomain);
+    const search = setupSearch$3({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3904,14 +3925,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$1({
+    setupClearAllButton$2({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton({
+    setupShowAllButton$1({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -3926,14 +3947,14 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$3 = {
+  const dimensionTypes$4 = {
     xField: [shouldNotBeBlank],
     yField: [shouldBeNumber],
     seriesField: [shouldNotBeBlank],
     colorField: [shouldNotBeBlank],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3955,13 +3976,13 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3971,7 +3992,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3992,7 +4013,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4062,7 +4083,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$2({ data, yFields, nameField, xGridField, yGridField }) {
+  function parseData$3({ data, yFields, nameField, xGridField, yGridField }) {
     let maxSum = 0;
 
     data.forEach(el => {
@@ -4104,7 +4125,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$2({
+  function setupScales$3({
     data,
     maxY,
     xGridField,
@@ -4261,7 +4282,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 0.8,
@@ -4310,7 +4331,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$2();
 
-    const { maxY, stackedDataByYear, names } = parseData$2({
+    const { maxY, stackedDataByYear, names } = parseData$3({
       data,
       yFields,
       nameField,
@@ -4325,7 +4346,7 @@ g.circles circle.circle.circle-hovered {
       colorScaleForLegend,
       xGridScale,
       yGridScale,
-    } = setupScales$2({
+    } = setupScales$3({
       data,
       maxY,
       xGridField,
@@ -4372,7 +4393,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
     xField: [shouldNotBeBlank],
@@ -4381,7 +4402,7 @@ g.circles circle.circle.circle-hovered {
     // yFieldsDimensionTypes will be added dynamically
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -4432,7 +4453,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
@@ -4444,8 +4465,8 @@ g.circles circle.circle.circle-hovered {
       const { flatDimensions, dimensionTypesWYFields, optionTypesWYFields } =
         buildDimensionAndTypes({
           dimensions,
-          dimensionTypes: dimensionTypes$2,
-          optionTypes: optionTypes$2,
+          dimensionTypes: dimensionTypes$3,
+          optionTypes: optionTypes$3,
         });
 
       const optionsValidationResult = optionValidation({
@@ -4483,7 +4504,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4553,7 +4574,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
@@ -4590,7 +4611,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$1({ inactiveOpacity });
+    applyInteractionStyles$2({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -4611,7 +4632,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$1({
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$2({
       data,
       xField,
       yField,
@@ -4619,7 +4640,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$1({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$2({
       dataParsed,
       sizeField,
       sizeRange,
@@ -4694,7 +4715,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$1({
+    setupSearch$2({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -4896,7 +4917,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$1({
+  function setupSearch$2({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -4939,7 +4960,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$1({ inactiveOpacity }) {
+  function applyInteractionStyles$2({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     opacity: ${inactiveOpacity};
@@ -4950,7 +4971,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$1({ data, xField, yField, sizeField, timeField }) {
+  function parseData$2({ data, xField, yField, sizeField, timeField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -4967,7 +4988,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$1({
+  function setupScales$2({
     dataParsed,
     sizeField,
     sizeRange,
@@ -5068,7 +5089,7 @@ g.circles circle.circle.circle-hovered {
       .text(yAxisLabel);
   }
 
-  const dimensionTypes$1 = {
+  const dimensionTypes$2 = {
     sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
     xField: [shouldNotBeBlank, shouldBeNumber],
     yField: [shouldNotBeBlank, shouldBeNumber],
@@ -5077,7 +5098,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [], // can be empty (if not provided, first color from scheme will be picked)
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5102,13 +5123,13 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames: '',
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -5117,7 +5138,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
 
       const allValidations = [
         dimensionValidation,
@@ -5134,14 +5155,14 @@ g.circles circle.circle.circle-hovered {
         }
       });
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$1({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
@@ -5230,14 +5251,14 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData({ data, dominoField, initialState }) {
+  function parseData$1({ data, dominoField, initialState }) {
     const allDominoFieldValues = ___default["default"].chain(data).map(dominoField).uniq().value();
     const dominoValues = ___default["default"](data).map(dominoField).uniq().value();
     const defaultStateAll = initialState === 'All' ? dominoValues : initialState;
     return { allDominoFieldValues, defaultStateAll }
   }
 
-  function setupScales({
+  function setupScales$1({
     data,
     xField,
     yField,
@@ -5569,7 +5590,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler = referenceList => qstr => {
+  const searchEventHandler$1 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -5673,7 +5694,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
-  function setupSearch({
+  function setupSearch$1({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -5712,7 +5733,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton({
+  function setupClearAllButton$1({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -5729,7 +5750,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.8,
@@ -5781,7 +5802,7 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ inactiveOpacity, activeOpacity });
+    applyInteractionStyles$1({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -5804,13 +5825,13 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip();
 
-    const { allDominoFieldValues, defaultStateAll } = parseData({
+    const { allDominoFieldValues, defaultStateAll } = parseData$1({
       data,
       dominoField,
       initialState,
     });
 
-    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales({
+    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$1({
       data,
       xField,
       yField,
@@ -5872,8 +5893,8 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    const handleSearch = searchEventHandler(allDominoFieldValues);
-    const search = setupSearch({
+    const handleSearch = searchEventHandler$1(allDominoFieldValues);
+    const search = setupSearch$1({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -5887,7 +5908,7 @@ g.circles circle.circle.circle-hovered {
       search,
       handleSearch,
     });
-    setupClearAllButton({
+    setupClearAllButton$1({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -5922,7 +5943,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes = {
+  const dimensionTypes$1 = {
     xField: [shouldBeNumber],
     yField: [shouldNotBeBlank],
     dominoField: [shouldNotBeBlank],
@@ -5930,7 +5951,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [shouldBeNumber],
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5967,6 +5988,665 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
+  const validateAndRender$1 = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      const { columns } = data;
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  };
+
+  /* global window */
+
+  let currentState = 'global';
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 1,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = 'transparent',
+
+      valuePrefix = '',
+      valuePostfix = '',
+      valueFormatter = '',
+
+      chordType = 'undirected',
+
+      colorScheme = d3__namespace.schemeCategory10,
+      arcLabelFontSize = '8px',
+
+      inactiveOpacity = 0.2,
+      activeOpacity = 0.8,
+      clickInteraction = false,
+
+      searchInputClassNames = '',
+      clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
+
+      startingState = 'showAll',
+    },
+    dimensions: { sourceField, targetField, valueField },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles({ activeOpacity, inactiveOpacity });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      // widgetsRight,
+    } = setupChartArea$1({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$1();
+
+    const { dataParsed, names, matrix, index, reverseIndex } = parseData({
+      data,
+      valueField,
+      sourceField,
+      targetField,
+    });
+
+    const innerRadius = Math.min(coreChartWidth, coreChartHeight) * 0.5 - 20;
+    const outerRadius = innerRadius + 20;
+
+    const { chord, arc, ribbon } = getShapes({
+      innerRadius,
+      outerRadius,
+      chordType,
+    });
+
+    const { colorScale } = setupScales({ names, colorScheme });
+
+    renderChords({
+      dataParsed,
+      matrix,
+      names,
+      chartCore,
+      chord,
+      arc,
+      ribbon,
+      colorScale,
+      outerRadius,
+      reverseIndex,
+      targetField,
+      sourceField,
+      valueField,
+      tooltipDiv,
+      valuePrefix,
+      valueFormatter,
+      valuePostfix,
+      arcLabelFontSize,
+      clickInteraction,
+      chordType,
+    });
+
+    const handleSearch = searchEventHandler(names, index);
+    const search = setupSearch({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      sourceField,
+    });
+
+    setupClearAllButton({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      index,
+    });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    currentState = startingState;
+    if (currentState === 'showAll') {
+      setShowAllState();
+    } else if (currentState === 'clearAll') {
+      setClearAllState();
+    }
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+    d3__namespace.select('body').append('style').html(`
+  path.ribbon {
+    fill-opacity: ${inactiveOpacity}
+  }
+  path.ribbon.ribbon-active {
+    fill-opacity: ${activeOpacity}
+  }
+  path.ribbon.ribbon-hovered {
+    fill-opacity: ${activeOpacity}
+  }
+  g.ribbons.searching path.ribbon.ribbon-matched {
+    fill-opacity: ${activeOpacity}
+  }
+  g.arc path.chord{
+    fill-opacity: ${inactiveOpacity};
+    stroke-width: 2; 
+    stroke: #fff;
+  }
+  g.arc.arc-active path.chord{
+    fill-opacity: ${activeOpacity}
+  }
+  g.arc.arc-hovered path.chord{
+    fill-opacity: ${activeOpacity}
+  }
+  g.arcs.searching g.arc.arc-matched path.chord{
+    fill-opacity: ${activeOpacity}
+  }
+  `);
+  }
+
+  function parseData({ data, valueField, sourceField, targetField }) {
+    const dataParsed = data.map(el => {
+      const elParsed = { ...el };
+      elParsed[valueField] = Number.parseFloat(el[valueField]);
+      return elParsed
+    });
+
+    const names = ___default["default"](dataParsed)
+      .flatMap(d => [d[sourceField], d[targetField]])
+      .uniq()
+      .value();
+
+    const matrix = ___default["default"].chunk(
+      ___default["default"].times(___default["default"].multiply(names.length, names.length), ___default["default"].constant(0)),
+      names.length,
+    );
+
+    const index = new Map(names.map((name, i) => [toClassText(name), i]));
+    const reverseIndex = new Map(names.map((name, i) => [i, toClassText(name)]));
+    ___default["default"].forEach(dataParsed, row => {
+      matrix[index.get(toClassText(row[sourceField]))][
+        index.get(toClassText(row[targetField]))
+      ] = Number(row[valueField]);
+    });
+
+    return {
+      dataParsed,
+      names,
+      matrix,
+      index,
+      reverseIndex,
+    }
+  }
+
+  function getShapes({ innerRadius, outerRadius, chordType }) {
+    const chord = d3__namespace
+      .chordDirected()
+      .padAngle(12 / innerRadius)
+      .sortSubgroups(d3__namespace.descending)
+      .sortChords(d3__namespace.descending);
+
+    const arc = d3__namespace.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+
+    let ribbon = chordType === 'directed' ? d3__namespace.ribbonArrow() : d3__namespace.ribbon();
+    ribbon = ribbon.radius(innerRadius - 0.5).padAngle(1 / innerRadius);
+    return { chord, arc, ribbon }
+  }
+
+  function setupScales({ names, colorScheme }) {
+    const colorScale = d3__namespace.scaleOrdinal(names, colorScheme);
+
+    return { colorScale }
+  }
+
+  function renderChords({
+    dataParsed,
+    matrix,
+    names,
+    chartCore,
+    chord,
+    arc,
+    ribbon,
+    colorScale,
+    outerRadius,
+    // reverseIndex,
+    targetField,
+    sourceField,
+    valueField,
+    tooltipDiv,
+    valuePrefix,
+    valueFormatter,
+    valuePostfix,
+    arcLabelFontSize,
+    clickInteraction,
+    chordType,
+  }) {
+    const chords = chord(matrix);
+    const textId = 'arcId';
+
+    chartCore
+      .append('path')
+      .attr('id', textId)
+      .attr('fill', 'none')
+      .attr('d', d3__namespace.arc()({ outerRadius, startAngle: 0, endAngle: 2 * Math.PI }));
+
+    const arcs = chartCore.append('g').attr('class', 'arcs');
+
+    arcs
+      .selectAll('g')
+      .data(chords.groups)
+      .join('g')
+      .call(g =>
+        g
+          .append('path')
+          .attr('d', arc)
+          .attr('class', 'chord')
+          .attr('fill', d => colorScale(names[d.index])),
+      )
+      .call(g =>
+        g
+          .append('text')
+          .attr('dy', -3)
+          .append('textPath')
+          .attr('xlink:href', `#${textId}`)
+          .attr('startOffset', d => d.startAngle * outerRadius)
+          .style('font-size', arcLabelFontSize)
+          .style('fill', 'black')
+          .text(d => {
+            return names[d.index]
+          }),
+      )
+      .on('mouseover', (e, d) => {
+        if (currentState === 'showAll') {
+          setClearAllState();
+        }
+        d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', true);
+        d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', true);
+        d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', true);
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        const arcName = names[d.index];
+        const arcData = ___default["default"].filter(dataParsed, row => {
+          return row[sourceField] === arcName || row[targetField] === arcName
+        });
+
+        const ribbonData = ___default["default"].map(names, _name_ => {
+          // Same as arc
+          if (arcName === _name_) {
+            const value = ___default["default"](arcData)
+              .filter(row => {
+                return row[sourceField] === _name_ && row[targetField] === _name_
+              })
+              .sumBy(valueField);
+            const arrowSymbol =
+              chordType === 'undirected' ? '' : value >= 0 ? '→' : '←';
+            return {
+              _name_: _name_,
+              _value_: Math.abs(value),
+              arrowSymbol: arrowSymbol,
+            }
+          }
+          // Get sources
+          const sourceValue = ___default["default"](arcData)
+            .filter(row => {
+              return row[targetField] === _name_
+            })
+            .sumBy(valueField);
+          // Get target
+          const targetValue = ___default["default"](arcData)
+            .filter(row => {
+              return row[sourceField] === _name_
+            })
+            .sumBy(valueField);
+          // Net off
+          const value =
+            chordType === 'undirected'
+              ? sourceValue + targetValue
+              : sourceValue - targetValue;
+
+          const arrowSymbol =
+            chordType === 'undirected' ? '' : value >= 0 ? '&rarr;' : '&larr;';
+
+          return {
+            _name_: _name_,
+            _value_: Math.abs(value),
+            arrowSymbol: arrowSymbol,
+          }
+        });
+
+        const arcValue = ___default["default"](arcData).sumBy(valueField);
+        // debugger
+        const tooltipValues = ribbonData
+          .map(ribbon => {
+            return `${
+            ribbon.arrowSymbol
+          } <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+            ribbon._name_,
+          )}"></div> ${ribbon._name_}: ${
+            valuePrefix +
+            formatNumber(ribbon._value_, valueFormatter) +
+            valuePostfix
+          }`
+          })
+          .reverse();
+        // const values = names
+        //   .map(_name_ => {
+        //     const _value_ = _(ribbonData)
+        //       .filter(row => row._name_ === _name_)
+        //       .sumBy(_value_)
+        //     return `${arrowSymbol} <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+        //       _name_,
+        //     )}"></div> ${_name_}: ${
+        //       valuePrefix + formatNumber(_value_, valueFormatter) + valuePostfix
+        //     }`
+        //   })
+        //   .reverse()
+
+        tooltipDiv.html(
+          `<b>${arcName}</b>: ${
+          valuePrefix + formatNumber(arcValue, valueFormatter) + valuePostfix
+        }
+        <br/>
+        ${tooltipValues.join('<br/>')}
+        `,
+        );
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', (e, d) => {
+        d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', false);
+        d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', false);
+        d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', false);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+
+        if (currentState === 'showAll') {
+          setShowAllState();
+        }
+      })
+      .on('click', (e, d) => {
+        if (clickInteraction) {
+          const clickedState = d3__namespace
+            .select(e.target.parentNode)
+            .classed('arc-active');
+          d3__namespace.select(`.arc-${d.index}`).classed('arc-active', !clickedState);
+          d3__namespace.selectAll(`.ribbon-${d.index}`).classed(
+            'ribbon-active',
+            !clickedState,
+          );
+        }
+      });
+
+    const ribbons = chartCore.append('g').attr('class', 'ribbons');
+
+    ribbons
+      .selectAll('g')
+      .data(chords)
+      .join('path')
+      .attr('d', ribbon)
+      .attr('class', d => {
+        return `ribbon 
+      ribbon-${d.source.index}-${d.target.index} 
+      ribbon-source-${d.source.index} 
+      ribbon-target-${d.target.index}
+      `
+      })
+      .attr('fill', d => colorScale(names[d.target.index]))
+      .style('mix-blend-mode', 'multiply')
+      .on('mouseover', (e, d) => {
+        if (currentState == 'showAll') {
+          setClearAllState();
+        }
+        d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+          'ribbon-hovered',
+          true,
+        );
+        d3__namespace.select(`.arc-${d.source.index}`).classed('arc-hovered', true);
+        d3__namespace.select(`.arc-${d.target.index}`).classed('arc-hovered', true);
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        const sourceName = names[d.source.index];
+        const targetName = names[d.target.index];
+        const flowValue = d.source.value;
+        const arrowSymbol = chordType === 'undirected' ? '⟷' : '→';
+        tooltipDiv.html(
+          `<div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+          sourceName,
+        )}"></div> ${sourceName} 
+        ${arrowSymbol} 
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
+          targetName,
+        )}"></div> ${targetName}: <b>${
+          valuePrefix + formatNumber(flowValue, valueFormatter) + valuePostfix
+        }</b>
+        `,
+        );
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', (e, d) => {
+        d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+          'ribbon-hovered',
+          false,
+        );
+        d3__namespace.select(`.arc-${d.source.index}`).classed('arc-hovered', false);
+        d3__namespace.select(`.arc-${d.target.index}`).classed('arc-hovered', false);
+        if (currentState == 'showAll') {
+          setShowAllState();
+        }
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      })
+      .on('click', (e, d) => {
+        if (clickInteraction) {
+          const clickedState = d3__namespace.select(e.target).classed('ribbon-active');
+          d3__namespace.select(`.ribbon-${d.source.index}-${d.target.index}`).classed(
+            'ribbon-active',
+            !clickedState,
+          );
+          d3__namespace.select(`.arc-${d.source.index}`).classed('arc-active', !clickedState);
+          d3__namespace.select(`.arc-${d.target.index}`).classed('arc-active', !clickedState);
+        }
+      });
+  }
+
+  const searchEventHandler = (referenceList, index) => qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      const matchedIndexes = [];
+      referenceList.forEach(val => {
+        const arcName = toClassText(val).toLowerCase();
+        const index_ = index.get(arcName);
+        if (arcName.toLowerCase().includes(lqstr)) {
+          matchedIndexes.push(index_);
+        }
+      });
+      d3__namespace.select('.ribbons').classed('searching', true);
+      d3__namespace.select('.arcs').classed('searching', true);
+      d3__namespace.selectAll('.arc').classed('arc-matched', false);
+      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      setClearAllState();
+      matchedIndexes.forEach(val => {
+        d3__namespace.select(`.arc-${val}`).classed('arc-matched', true);
+        d3__namespace.selectAll(`.ribbon-source-${val}`).classed('ribbon-matched', true);
+        d3__namespace.selectAll(`.ribbon-target-${val}`).classed('ribbon-matched', true);
+      });
+    } else {
+      d3__namespace.select('.ribbons').classed('searching', false);
+      d3__namespace.select('.arcs').classed('searching', false);
+      d3__namespace.selectAll('.arc').classed('arc-matched', false);
+      d3__namespace.selectAll('.ribbon').classed('ribbon-matched', false);
+      if (currentState === 'showAll') {
+        setShowAllState();
+      } else if (currentState === 'clearAll') {
+        setClearAllState();
+      }
+    }
+  };
+
+  function setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    sourceField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${sourceField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
+  }
+
+  function setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      currentState = 'clearAll';
+      setClearAllState();
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      currentState = 'showAll';
+      setShowAllState();
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setShowAllState() {
+    d3__namespace.selectAll('.ribbon').classed('ribbon-active', true);
+    d3__namespace.selectAll('.arc').classed('arc-active', true);
+  }
+
+  function setClearAllState() {
+    d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
+    d3__namespace.selectAll('.arc').classed('arc-active', false);
+  }
+
+  // export function that
+
+  const dimensionTypes = {
+    sourceField: [shouldNotBeBlank], // Categorical
+    targetField: [shouldNotBeBlank], // Categorical
+    valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
+  };
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    chordType: checkOneOf(['directed', 'undirected']),
+
+    colorScheme: checkColorArray,
+    arcLabelFontSize: checkFontSizeString,
+
+    activeOpacity: checkNumberBetween([0, 1]),
+    inactiveOpacity: checkNumberBetween([0, 1]),
+    clickInteraction: checkBoolean,
+
+    // searchInputClassNames: checkString,
+    // clearAllButtonClassNames: checkString,
+    // showAllButtonClassNames: checkString,
+
+    startingState: checkOneOf(['showAll', 'clearAll']),
+  };
+
   const validateAndRender = ({
     dataPath,
     options,
@@ -5976,8 +6656,8 @@ g.circles circle.circle.circle-hovered {
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
     d3__namespace.csv(dataPath).then(data => {
+      // Run validations
       const { columns } = data;
-
       const dimensionValidation = validateColumnsWithDimensions({
         columns,
         dimensions,
@@ -6006,25 +6686,30 @@ g.circles circle.circle.circle-hovered {
       combinedValidation.valid
         ? renderChart({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
+
+      // eslint-disable-next-line no-console
+      // console.log({ combinedValidation })
     });
   };
 
-  exports.renderBubbleHorizontal = renderChart$5;
-  exports.renderCalendar = renderChart$2;
-  exports.renderDominoBase = renderChart$4;
-  exports.renderDominoRibbon = renderChart;
-  exports.renderMace = renderChart$7;
-  exports.renderMotionBubble = renderChart$1;
-  exports.renderRidgeline = renderChart$3;
-  exports.renderSankey = renderChart$6;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$5;
-  exports.validateAndRenderCalendar = validateAndRender$2;
-  exports.validateAndRenderDominoBase = validateAndRender$4;
-  exports.validateAndRenderDominoRibbon = validateAndRender;
-  exports.validateAndRenderMace = validateAndRender$7;
-  exports.validateAndRenderMotionBubble = validateAndRender$1;
-  exports.validateAndRenderRidgeline = validateAndRender$3;
-  exports.validateAndRenderSankey = validateAndRender$6;
+  exports.renderBubbleHorizontal = renderChart$6;
+  exports.renderCalendar = renderChart$3;
+  exports.renderChord = renderChart;
+  exports.renderDominoBase = renderChart$5;
+  exports.renderDominoRibbon = renderChart$1;
+  exports.renderMace = renderChart$8;
+  exports.renderMotionBubble = renderChart$2;
+  exports.renderRidgeline = renderChart$4;
+  exports.renderSankey = renderChart$7;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$6;
+  exports.validateAndRenderCalendar = validateAndRender$3;
+  exports.validateAndRenderChord = validateAndRender;
+  exports.validateAndRenderDominoBase = validateAndRender$5;
+  exports.validateAndRenderDominoRibbon = validateAndRender$1;
+  exports.validateAndRenderMace = validateAndRender$8;
+  exports.validateAndRenderMotionBubble = validateAndRender$2;
+  exports.validateAndRenderRidgeline = validateAndRender$4;
+  exports.validateAndRenderSankey = validateAndRender$7;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
