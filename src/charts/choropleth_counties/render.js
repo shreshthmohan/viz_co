@@ -4,7 +4,6 @@ import * as d3 from 'd3'
 import * as topojson from 'topojson'
 import { legend } from '../../utils/helpers/colorLegend'
 
-import { fipsToCounty } from './fipslookup'
 import { initializeTooltip } from '../../utils/helpers/commonChartHelpers'
 import { usStatesAndCountiesTopo as topo } from './counties-albers-10m'
 
@@ -103,12 +102,18 @@ export function renderChart({
           Number.parseInt(el[fipsField], 10) === Number.parseInt(fipsCode, 10),
       )
 
+      const countyInfo = d.properties
       if (found) {
-        const countyInfo = fipsToCounty[fipsCode]
         tooltipDiv.html(
-          `${countyInfo.county}, ${countyInfo.state}
+          `${countyInfo.name}, ${countyInfo.state_name}
             <br/>
             ${valueField}: ${valueFormatter(found[valueField])}`,
+        )
+      } else {
+        tooltipDiv.html(
+          `${countyInfo.name}, ${countyInfo.state_name}
+            <br/> Data not available
+            `,
         )
       }
 
@@ -117,7 +122,8 @@ export function renderChart({
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
     .on('mouseout', function () {
-      d3.select(this).classed('hovered', false).lower()
+      d3.select(this).classed('hovered', false)
+      // .lower()
       tooltipDiv
         .style('left', '-300px')
         .transition()
@@ -146,9 +152,7 @@ export function renderChart({
         's-match',
         // should be boolean
         d => {
-          return fipsToCounty[d.id].county
-            .toLowerCase()
-            .includes(term.toLowerCase())
+          return d.properties.name.toLowerCase().includes(term.toLowerCase())
         },
       )
       chartCore.selectAll('.s-match').raise()
