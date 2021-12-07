@@ -12,24 +12,24 @@ const dimensions = {
 
 // eslint-disable-next-line no-unused-vars
 const options = {
-  aspectRatio: 2,
+  aspectRatio: 1,
 
-  marginTop: 60,
-  marginRight: 90,
-  marginBottom: 20,
-  marginLeft: 50,
+  marginTop: 0,
+  marginRight: 0,
+  marginBottom: 0,
+  marginLeft: 0,
 
   bgColor: 'transparent',
 
-  valuePrefix: '',
-  valuePostfix: '',
-  valueFormatter: '',
+  valuePrefix: '$',
+  valuePostfix: 'B',
+  valueFormatter: '.1f',
 
   chordType: 'directed',
 
   inactiveOpacity: 0.2,
   activeOpacity: 0.8,
-  arcLabelFontSize: '8px',
+  arcLabelFontSize: '12px',
 
   startingState: 'showAll',
 

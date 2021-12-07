@@ -15,12 +15,12 @@ let currentState = 'global'
 export function renderChart({
   data,
   options: {
-    aspectRatio = 2,
+    aspectRatio = 1,
 
-    marginTop = 60,
-    marginRight = 90,
-    marginBottom = 20,
-    marginLeft = 50,
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
 
     bgColor = 'transparent',
 
@@ -55,7 +55,7 @@ export function renderChart({
     allComponents,
     chartCore,
     widgetsLeft,
-    widgetsRight,
+    // widgetsRight,
   } = setupChartArea({
     chartContainerSelector,
     coreChartWidth,
@@ -244,7 +244,7 @@ function renderChords({
   ribbon,
   colorScale,
   outerRadius,
-  reverseIndex,
+  // reverseIndex,
   targetField,
   sourceField,
   valueField,
@@ -313,7 +313,7 @@ function renderChords({
             })
             .sumBy(valueField)
           const arrowSymbol =
-            chordType === 'undirected' ? '' : value >= 0 ? '&rarr;' : '&larr;'
+            chordType === 'undirected' ? '' : value >= 0 ? '→' : '←'
           return {
             _name_: _name_,
             _value_: Math.abs(value),
@@ -445,7 +445,7 @@ function renderChords({
       const sourceName = names[d.source.index]
       const targetName = names[d.target.index]
       const flowValue = d.source.value
-      const arrowSymbol = chordType === 'undirected' ? '&harr;' : '&rarr;'
+      const arrowSymbol = chordType === 'undirected' ? '⟷' : '→'
       tooltipDiv.html(
         `<div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
           sourceName,
