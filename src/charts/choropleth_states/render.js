@@ -2,6 +2,7 @@
 
 import * as d3 from 'd3'
 import * as topojson from 'topojson'
+import { legend } from '../../utils/helpers/colorLegend'
 import { usStatesAndCountiesTopo as topo } from '../choropleth_counties/counties-albers-10m'
 
 import { initializeTooltip } from '../../utils/helpers/commonChartHelpers'
@@ -18,9 +19,21 @@ export function renderChart({
     marginLeft = 0,
 
     bgColor = 'transparent',
+
+    searchButtonClassNames = '',
   },
   chartContainerSelector,
 }) {
+  d3.select('body').append('style').html(`
+  .group-states.searching > .iv-state.s-match {
+    stroke: #333;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  `)
+
   // console.log(data)
   const coreChartHeight = 610
   const coreChartWidth = 975
@@ -71,12 +84,6 @@ export function renderChart({
     })
     .on('mouseover', (e, d) => {
       tooltipDiv.transition().duration(200).style('opacity', 1)
-      // const found = data.find(
-      //   el => Number.parseInt(el[fipsField], 10) === Number.parseInt(d.id, 10),
-      // )
-
-      // const stateName = d.properties.name
-      // const stateCode = stateCodeMap[stateName].abbr
       const stateData = dataObj[d.properties.abbr]
       if (stateData) {
         tooltipDiv.html(`${d.properties.name}
@@ -84,7 +91,6 @@ export function renderChart({
           ${valueField}: ${d3.format('.2f')(stateData[valueField])}
           `)
       } else {
-        //
         tooltipDiv.html(`${d.properties.name} <br/>Data not available`)
       }
 
@@ -101,34 +107,45 @@ export function renderChart({
         .duration(500)
         .style('opacity', 0)
     })
-}
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+  allStatesGroup
+    .append('path')
+    .datum(topojson.mesh(topo, topo.objects.states /* (a, b) => a !== b */))
+    .attr('fill', 'none')
+    .attr('stroke', '#777')
+    .attr('stroke-linejoin', 'round')
+    .attr('d', path)
+
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('placeholder', 'Find by state')
+    .attr('class', searchButtonClassNames)
+
+  function searchBy(term) {
+    if (term) {
+      d3.select('.group-states').classed('searching', true)
+      allStates.classed('s-match', d => {
+        return d.properties.name.toLowerCase().includes(term.toLowerCase())
+      })
+      chartCore.selectAll('.s-match').raise()
+    } else {
+      d3.select('.group-states').classed('searching', false)
+      chartCore.selectAll('.iv-state').lower()
+    }
+  }
+
+  search.on('keyup', e => {
+    searchBy(e.target.value.trim())
+  })
+  widgetsRight.append(() =>
+    legend({
+      color: colorScale,
+      title: colorLegendTitle,
+      width: 260,
+    }),
+  )
+}
 
 function setupChartArea({
   chartContainerSelector,
