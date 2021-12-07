@@ -1,15 +1,15 @@
 import * as d3 from 'd3'
 import {
   shouldBeNumber,
-  shouldBeUnique,
   shouldNotBeBlank,
   validateData,
 } from '../../utils/validation/dataValidations'
 import {
-  checkNumber,
   checkColor,
+  checkNumber,
   optionValidation,
 } from '../../utils/validation/optionValidations'
+
 import {
   showErrors,
   validateColumnsWithDimensions,
@@ -19,7 +19,7 @@ import { renderChart } from './render'
 
 const dimensionTypes = {
   valueField: [shouldBeNumber],
-  fipsField: [shouldBeUnique, shouldNotBeBlank],
+  stateAbbrField: [shouldNotBeBlank],
 }
 
 const optionTypes = {
@@ -33,7 +33,7 @@ const optionTypes = {
   // interpolateScheme = d3.interpolateBlues,
   // colorLegendTitle = valueField,
 
-  // searchButtonClassNames,
+  // searchButtonClassNames = '',
 }
 
 export const validateAndRender = ({

@@ -42,3 +42,8 @@ export {
   renderChart as renderChoroplethCounties,
   validateAndRender as validateAndRenderChoroplethCounties,
 } from './charts/choropleth_counties'
+
+export {
+  renderChart as renderChoroplethStates,
+  validateAndRender as validateAndRenderChoroplethStates,
+} from './charts/choropleth_states'
