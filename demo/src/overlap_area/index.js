@@ -24,6 +24,7 @@ const options = {
   // colorScheme: ['red', 'blue', 'green'],
 
   areaOpacity: 0.6,
+  curveType: d3.curveBasis, //https://github.com/d3/d3-shape
 
   verticalLines: [
     { x: '6', group: 'United Income', series: 'Pan' },

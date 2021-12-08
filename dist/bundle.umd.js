@@ -6082,6 +6082,7 @@ g.circles circle.circle.circle-hovered {
       areaOpacity = 0.5,
 
       yAxisTickSizeOffset = 30,
+      curveType = null,
     },
     chartContainerSelector,
   }) {
@@ -6137,14 +6138,12 @@ g.circles circle.circle.circle-hovered {
     const colorScale = d3__namespace.scaleOrdinal().range(colorScheme).domain(seriesValues);
 
     const area = () => {
-      return (
-        d3__namespace
-          .area()
-          // .curve(d3.curveBasis)
-          .x(d => xScale(d[xField]))
-          .y1(d => yScale(d[yField]))
-          .y0(() => yScale(d3__namespace.min(yDomain)))
-      )
+      return d3__namespace
+        .area()
+        .curve(curveType)
+        .x(d => xScale(d[xField]))
+        .y1(d => yScale(d[yField]))
+        .y0(() => yScale(d3__namespace.min(yDomain)))
     };
 
     chartCore

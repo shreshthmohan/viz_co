@@ -38,6 +38,7 @@ export function renderChart({
     areaOpacity = 0.5,
 
     yAxisTickSizeOffset = 30,
+    curveType = null,
   },
   chartContainerSelector,
 }) {
@@ -93,14 +94,12 @@ export function renderChart({
   const colorScale = d3.scaleOrdinal().range(colorScheme).domain(seriesValues)
 
   const area = () => {
-    return (
-      d3
-        .area()
-        // .curve(d3.curveBasis)
-        .x(d => xScale(d[xField]))
-        .y1(d => yScale(d[yField]))
-        .y0(() => yScale(d3.min(yDomain)))
-    )
+    return d3
+      .area()
+      .curve(curveType)
+      .x(d => xScale(d[xField]))
+      .y1(d => yScale(d[yField]))
+      .y0(() => yScale(d3.min(yDomain)))
   }
 
   chartCore
