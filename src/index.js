@@ -42,3 +42,8 @@ export {
   renderChart as renderChord,
   validateAndRender as validateAndRenderChord,
 } from './charts/chord/index'
+
+export {
+  renderChart as renderTriangle,
+  validateAndRender as validateAndRenderTriangle,
+} from './charts/triangle/index'
