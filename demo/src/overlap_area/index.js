@@ -23,8 +23,16 @@ const options = {
   colorScheme: d3.schemeCategory10,
   // colorScheme: ['red', 'blue', 'green'],
 
+  yAxisTicksFontSize: '12px',
+  yAxisPosition: 'right',
+  yAxisTickSizeOffset: 10,
+
+  xAxisTicksFontSize: '12px',
+  xAxisPosition: 'bottom',
+  xAxisTickSizeOffset: 10,
+
   areaOpacity: 0.6,
-  curveType: d3.curveBasis, //https://github.com/d3/d3-shape
+  // curveType: d3.curveBasis, //https://github.com/d3/d3-shape
 
   verticalLines: [
     { x: '6', group: 'United Income', series: 'Pan' },

@@ -23,7 +23,7 @@ import {
 import { renderChart } from './render'
 
 const dimensionTypes = {
-  groupField: [shouldNotBeBlank],
+  groupField: [],
   xField: [shouldNotBeBlank],
   yField: [shouldNotBeBlank, shouldBeNumber],
   seriesField: [shouldNotBeBlank],

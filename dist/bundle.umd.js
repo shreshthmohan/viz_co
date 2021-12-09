@@ -307,7 +307,7 @@
       )
   }
 
-  function parseData$5({
+  function parseData$6({
     data,
     xFieldStart,
     xFieldEnd,
@@ -331,7 +331,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$5({
+  function setupScales$6({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -451,7 +451,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis$4({
+  function renderXAxis$5({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -479,7 +479,7 @@
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
   }
 
-  function renderYAxis$3({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  function renderYAxis$4({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -852,7 +852,7 @@
 
     const tooltipDiv = initializeTooltip$5();
 
-    const dataParsed = parseData$5({
+    const dataParsed = parseData$6({
       data,
       xFieldStart,
       xFieldEnd,
@@ -862,7 +862,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$5({
+      setupScales$6({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -921,7 +921,7 @@
       directionEndLabel,
     });
 
-    renderXAxis$4({
+    renderXAxis$5({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -931,7 +931,7 @@
     });
 
     // y-axis
-    renderYAxis$3({ chartCore, coreChartWidth, yScale, yAxisTitle });
+    renderYAxis$4({ chartCore, coreChartWidth, yScale, yAxisTitle });
 
     renderMaces({
       chartCore,
@@ -2876,7 +2876,7 @@
       )
   }
 
-  function parseData$4({ data, colorField, yField }) {
+  function parseData$5({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -2903,7 +2903,7 @@
     return dataParsed
   }
 
-  function setupScales$4({
+  function setupScales$5({
     dataParsed,
     xField,
     yField,
@@ -2957,7 +2957,7 @@
     }
   }
 
-  function renderYAxis$2({ chartCore, yScale }) {
+  function renderYAxis$3({ chartCore, yScale }) {
     chartCore
       .append('g')
       .attr('class', 'y-axis-left')
@@ -2965,7 +2965,7 @@
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$3({ chartCore, xAxisLabel, coreChartWidth }) {
+  function renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth }) {
     chartCore
       .append('text')
       .text(xAxisLabel)
@@ -3187,13 +3187,13 @@
 
     const tooltipDiv = initializeTooltip$4();
 
-    const dataParsed = parseData$4({
+    const dataParsed = parseData$5({
       data,
       colorField,
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$4({
+    const { xScale, yScale, colorScale } = setupScales$5({
       dataParsed,
       xField,
       yField,
@@ -3210,7 +3210,7 @@
       colorStrategy,
     });
 
-    renderYAxis$2({ chartCore, yScale });
+    renderYAxis$3({ chartCore, yScale });
 
     renderDominos({
       dataParsed,
@@ -3226,7 +3226,7 @@
       tooltipDiv,
     });
 
-    renderXAxis$3({ chartCore, xAxisLabel, coreChartWidth });
+    renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
     const handleSearch = searchEventHandler$2(dominoValues);
@@ -3440,7 +3440,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$3({ data, yField, xField, seriesField, colorField }) {
+  function parseData$4({ data, yField, xField, seriesField, colorField }) {
     const parsedData = data.map(d => ({
       ...d,
       [yField]: Number.parseFloat(d[yField]),
@@ -3465,7 +3465,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$3({
+  function setupScales$4({
     parsedData,
     nestedData,
     xField,
@@ -3508,7 +3508,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScale, categoryScale, categoryDomain, fillColorScale }
   }
 
-  function renderXAxis$2({
+  function renderXAxis$3({
     chartCore,
     coreChartHeight,
     xScale,
@@ -3832,7 +3832,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { parsedData, nestedData } = parseData$3({
+    const { parsedData, nestedData } = parseData$4({
       data,
       yField,
       xField,
@@ -3841,7 +3841,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$3({
+      setupScales$4({
         parsedData,
         nestedData,
         xField,
@@ -3857,7 +3857,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultStateAll = defaultState === 'All' ? categoryDomain : defaultState;
 
-    renderXAxis$2({
+    renderXAxis$3({
       chartCore,
       coreChartHeight,
       xScale,
@@ -4062,7 +4062,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$2({ data, yFields, nameField, xGridField, yGridField }) {
+  function parseData$3({ data, yFields, nameField, xGridField, yGridField }) {
     let maxSum = 0;
 
     data.forEach(el => {
@@ -4104,7 +4104,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$2({
+  function setupScales$3({
     data,
     maxY,
     xGridField,
@@ -4310,7 +4310,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$2();
 
-    const { maxY, stackedDataByYear, names } = parseData$2({
+    const { maxY, stackedDataByYear, names } = parseData$3({
       data,
       yFields,
       nameField,
@@ -4325,7 +4325,7 @@ g.circles circle.circle.circle-hovered {
       colorScaleForLegend,
       xGridScale,
       yGridScale,
-    } = setupScales$2({
+    } = setupScales$3({
       data,
       maxY,
       xGridField,
@@ -4611,7 +4611,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$1({
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$2({
       data,
       xField,
       yField,
@@ -4619,7 +4619,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$1({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$2({
       dataParsed,
       sizeField,
       sizeRange,
@@ -4702,7 +4702,7 @@ g.circles circle.circle.circle-hovered {
       sizeField,
     });
 
-    renderXAxis$1({
+    renderXAxis$2({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -4710,7 +4710,7 @@ g.circles circle.circle.circle-hovered {
       xAxisLabel,
     });
 
-    renderYAxis$1({
+    renderYAxis$2({
       chartCore,
       coreChartWidth,
       coreChartHeight,
@@ -4950,7 +4950,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$1({ data, xField, yField, sizeField, timeField }) {
+  function parseData$2({ data, xField, yField, sizeField, timeField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -4967,7 +4967,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$1({
+  function setupScales$2({
     dataParsed,
     sizeField,
     sizeRange,
@@ -5003,7 +5003,7 @@ g.circles circle.circle.circle-hovered {
     return { sizeScale, xScale, yScale, colorScale }
   }
 
-  function renderXAxis$1({
+  function renderXAxis$2({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -5035,7 +5035,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel);
   }
 
-  function renderYAxis$1({
+  function renderYAxis$2({
     chartCore,
     coreChartWidth,
     coreChartHeight,
@@ -5230,14 +5230,14 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData({ data, dominoField, initialState }) {
+  function parseData$1({ data, dominoField, initialState }) {
     const allDominoFieldValues = ___default["default"].chain(data).map(dominoField).uniq().value();
     const dominoValues = ___default["default"](data).map(dominoField).uniq().value();
     const defaultStateAll = initialState === 'All' ? dominoValues : initialState;
     return { allDominoFieldValues, defaultStateAll }
   }
 
-  function setupScales({
+  function setupScales$1({
     data,
     xField,
     yField,
@@ -5320,7 +5320,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function renderYAxis({
+  function renderYAxis$1({
     chartCore,
     xScale,
     xDomain,
@@ -5344,7 +5344,7 @@ g.circles circle.circle.circle-hovered {
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis({
+  function renderXAxis$1({
     chartCore,
     xAxisLabel,
     coreChartWidth,
@@ -5804,13 +5804,13 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip();
 
-    const { allDominoFieldValues, defaultStateAll } = parseData({
+    const { allDominoFieldValues, defaultStateAll } = parseData$1({
       data,
       dominoField,
       initialState,
     });
 
-    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales({
+    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$1({
       data,
       xField,
       yField,
@@ -5828,7 +5828,7 @@ g.circles circle.circle.circle-hovered {
       sizeRange,
     });
 
-    renderXAxis({
+    renderXAxis$1({
       chartCore,
       xAxisLabel,
       coreChartWidth,
@@ -5841,7 +5841,7 @@ g.circles circle.circle.circle-hovered {
       xAxisValueFormatter,
     });
 
-    renderYAxis({
+    renderYAxis$1({
       chartCore,
       xScale,
       xDomain,
@@ -6082,6 +6082,13 @@ g.circles circle.circle.circle-hovered {
       areaOpacity = 0.5,
 
       yAxisTickSizeOffset = 30,
+      yAxisTicksFontSize = '12px',
+      yAxisPosition = 'left',
+
+      xAxisTicksFontSize = '12px',
+      xAxisPosition = 'bottom',
+      xAxisTickSizeOffset = 10,
+
       curveType = null,
     },
     chartContainerSelector,
@@ -6100,50 +6107,47 @@ g.circles circle.circle.circle-hovered {
       });
 
     const tooltipDiv = initializeTooltip$1();
-    const dataParsed = data.map(el => {
-      const elParsed = { ...el };
-      elParsed[yField] = Number.parseFloat(el[yField]);
-      return elParsed
+
+    const defaultGroupFieldName = '_defaultGroup_';
+    groupField = groupField == null ? defaultGroupFieldName : groupField;
+    const { dataParsed, seriesValues } = parseData({
+      data,
+      yField,
+      defaultGroupFieldName,
+      seriesField,
     });
 
-    const yGridDomain = ___default["default"](dataParsed).map(groupField).uniq().value();
-    // console.log({ yGridDomain })
-
-    const yGridScale = d3__namespace
-      .scaleBand()
-      .range([coreChartHeight, 0])
-      .domain(yGridDomain)
-      .paddingInner(0.15);
-
-    // console.log(yGridScale.paddingInner())
-
-    const yDomain = d3__namespace.extent(___default["default"](dataParsed).map(yField));
-    // console.log({ yDomain })
-    const yScale = d3__namespace
-      .scaleLinear()
-      .range([yGridScale.bandwidth(), 0])
-      .domain(yDomain);
-    // .nice()
-
-    const xDomain = ___default["default"](dataParsed)
-      .map(xField)
-      .uniq()
-      .value()
-      // TODO handle case when not numbers
-      .sort((a, b) => Number.parseFloat(a) - Number.parseFloat(b));
-
-    const xScale = d3__namespace.scalePoint().range([0, coreChartWidth]).domain(xDomain);
-
-    const seriesValues = ___default["default"](dataParsed).map(seriesField).uniq().value();
-    const colorScale = d3__namespace.scaleOrdinal().range(colorScheme).domain(seriesValues);
+    const {
+      yGridScale,
+      xScale,
+      yScale,
+      colorScale,
+      yGridDomain,
+      xDomain,
+      yDomain,
+    } = setupScales({
+      dataParsed,
+      groupField,
+      coreChartHeight,
+      yField,
+      xField,
+      coreChartWidth,
+      colorScheme,
+      seriesValues,
+    });
 
     const area = () => {
-      return d3__namespace
+      const area_ = d3__namespace
         .area()
-        .curve(curveType)
         .x(d => xScale(d[xField]))
         .y1(d => yScale(d[yField]))
-        .y0(() => yScale(d3__namespace.min(yDomain)))
+        .y0(() => yScale(d3__namespace.min(yDomain)));
+
+      if (curveType) {
+        area_.curve(curveType);
+      }
+
+      return area_
     };
 
     chartCore
@@ -6155,20 +6159,26 @@ g.circles circle.circle.circle-hovered {
       .attr('transform', d => `translate(0, ${yGridScale(d)})`)
 
       .each(function (d, i) {
-        // x-axis
-        d3__namespace.select(this)
-          .append('g')
-          .attr('class', 'x-axis')
-          .attr('transform', `translate(0, ${yGridScale.bandwidth()})`)
-          .call(d3__namespace.axisBottom(xScale))
-          .call(g => {
-            g.selectAll('.domain').attr('stroke', '#333');
-            g.selectAll('.tick line').attr('stroke', '#333');
-            g.selectAll('.tick text').attr('fill', '#333');
-            if (i % 2 !== 0 && alternatingTickTextXAxis) {
-              g.selectAll('.tick text').remove();
-            }
-          });
+        let ctx = this;
+        renderXAxis({
+          ctx,
+          i,
+          xScale,
+          yGridScale,
+          alternatingTickTextXAxis,
+          xAxisTicksFontSize,
+          xAxisPosition,
+          xAxisTickSizeOffset,
+        });
+
+        renderYAxis({
+          ctx,
+          yScale,
+          yAxisPosition,
+          coreChartWidth,
+          yAxisTickSizeOffset,
+          yAxisTicksFontSize,
+        });
 
         // Group label
         d3__namespace.select(this)
@@ -6179,29 +6189,6 @@ g.circles circle.circle.circle-hovered {
           .style('font-weight', 'bold')
           .attr('dominant-baseline', 'middle');
 
-        // y -axis
-        d3__namespace.select(this)
-          .append('g')
-          .attr('class', 'y-axis')
-          .attr(
-            'transform',
-            `translate(${coreChartWidth + yAxisTickSizeOffset}, 0)`,
-          )
-          .call(
-            d3__namespace
-              .axisRight(yScale)
-              .tickSize(-coreChartWidth - yAxisTickSizeOffset)
-              .ticks(5),
-          )
-          .call(g => {
-            g.selectAll('.tick line').attr('stroke-opacity', '0.2');
-            g.selectAll('.tick text').attr('fill', '#333');
-            // .style('dominant-baseline', 'text-after-edge')
-            // .attr('dy', -1)
-            g.select('.domain').remove();
-          });
-      })
-      .each(function (d) {
         d3__namespace.select(this)
           .selectAll('path.series')
           .data(seriesValues)
@@ -6214,6 +6201,20 @@ g.circles circle.circle.circle-hovered {
           )
           .attr('fill', s => colorScale(s))
           .attr('opacity', areaOpacity);
+      })
+      .each(function (d) {
+        // d3.select(this)
+        //   .selectAll('path.series')
+        //   .data(seriesValues)
+        //   .join('path')
+        //   .attr('class', 'series')
+        //   .attr('d', s =>
+        //     area()(
+        //       dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
+        //     ),
+        //   )
+        //   .attr('fill', s => colorScale(s))
+        //   .attr('opacity', areaOpacity)
 
         // TODO: vertical line (dotted)
         const filteredLines = verticalLines.filter(c => c.group === d);
@@ -6363,8 +6364,138 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
+  function parseData({ data, yField, defaultGroupFieldName, seriesField }) {
+    const dataParsed = data.map(el => {
+      const elParsed = { ...el };
+      elParsed[yField] = Number.parseFloat(el[yField]);
+      elParsed[defaultGroupFieldName] = 'defaultGroup';
+      return elParsed
+    });
+
+    const seriesValues = ___default["default"](dataParsed).map(seriesField).uniq().value();
+
+    return { dataParsed, seriesValues }
+  }
+
+  function setupScales({
+    dataParsed,
+    groupField,
+    coreChartHeight,
+    yField,
+    xField,
+    coreChartWidth,
+    colorScheme,
+    seriesValues,
+  }) {
+    const yGridDomain = ___default["default"](dataParsed).map(groupField).uniq().value();
+
+    const yGridScale = d3__namespace
+      .scaleBand()
+      .range([coreChartHeight, 0])
+      .domain(yGridDomain)
+      .paddingInner(0.15);
+
+    const yDomain = d3__namespace.extent(___default["default"](dataParsed).map(yField));
+    // console.log({ yDomain })
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([yGridScale.bandwidth(), 0])
+      .domain(yDomain)
+      .nice();
+
+    const xDomain = ___default["default"](dataParsed)
+      .map(xField)
+      .uniq()
+      .value()
+      // TODO handle case when not numbers
+      .sort((a, b) => Number.parseFloat(a) - Number.parseFloat(b));
+
+    const xScale = d3__namespace.scalePoint().range([0, coreChartWidth]).domain(xDomain);
+
+    const colorScale = d3__namespace.scaleOrdinal().range(colorScheme).domain(seriesValues);
+
+    return {
+      yGridScale,
+      xScale,
+      yScale,
+      colorScale,
+      yGridDomain,
+      xDomain,
+      yDomain,
+    }
+  }
+
+  function renderXAxis({
+    ctx,
+    i,
+    xScale,
+    yGridScale,
+    alternatingTickTextXAxis,
+    xAxisTicksFontSize,
+    xAxisPosition,
+    xAxisTickSizeOffset,
+  }) {
+    let xAxis, xAxisOffset;
+    if (xAxisPosition === 'top') {
+      xAxis = d3__namespace.axisTop(xScale);
+      xAxisOffset = -xAxisTickSizeOffset;
+    } else {
+      xAxis = d3__namespace.axisBottom(xScale);
+      xAxisOffset = yGridScale.bandwidth() + xAxisTickSizeOffset;
+    }
+
+    d3__namespace.select(ctx)
+      .append('g')
+      .attr('class', 'x-axis')
+      .style('font-size', xAxisTicksFontSize)
+      .attr('transform', `translate(0, ${xAxisOffset})`)
+      .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
+      .call(g => {
+        g.selectAll('.domain').attr('stroke', '#333');
+        g.selectAll('.tick line').attr('stroke', '#333');
+        g.selectAll('.tick text').attr('fill', '#333');
+        g.selectAll('.tick line').attr('stroke-opacity', '0.2');
+        g.select('.domain').remove();
+        if (i % 2 !== 0 && alternatingTickTextXAxis) {
+          g.selectAll('.tick text').remove();
+        }
+      });
+  }
+
+  function renderYAxis({
+    ctx,
+    yScale,
+    yAxisPosition,
+    coreChartWidth,
+    yAxisTickSizeOffset,
+    yAxisTicksFontSize,
+  }) {
+    let yAxis, yAxisOffset;
+    if (yAxisPosition === 'right') {
+      yAxis = d3__namespace.axisRight(yScale);
+      yAxisOffset = coreChartWidth + yAxisTickSizeOffset;
+    } else {
+      yAxis = d3__namespace.axisLeft(yScale);
+      yAxisOffset = -yAxisTickSizeOffset;
+    }
+
+    d3__namespace.select(ctx)
+      .append('g')
+      .attr('class', 'y-axis')
+      .style('font-size', yAxisTicksFontSize)
+      .attr('transform', `translate(${yAxisOffset}, 0)`)
+      .call(yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset))
+      .call(g => {
+        g.selectAll('.tick line').attr('stroke-opacity', '0.2');
+        g.selectAll('.tick text').attr('fill', '#333');
+        // .style('dominant-baseline', 'text-after-edge')
+        // .attr('dy', -1)
+        g.select('.domain').remove();
+      });
+  }
+
   const dimensionTypes = {
-    groupField: [shouldNotBeBlank],
+    groupField: [],
     xField: [shouldNotBeBlank],
     yField: [shouldNotBeBlank, shouldBeNumber],
     seriesField: [shouldNotBeBlank],

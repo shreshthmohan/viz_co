@@ -38,6 +38,13 @@ export function renderChart({
     areaOpacity = 0.5,
 
     yAxisTickSizeOffset = 30,
+    yAxisTicksFontSize = '12px',
+    yAxisPosition = 'left',
+
+    xAxisTicksFontSize = '12px',
+    xAxisPosition = 'bottom',
+    xAxisTickSizeOffset = 10,
+
     curveType = null,
   },
   chartContainerSelector,
@@ -56,50 +63,47 @@ export function renderChart({
     })
 
   const tooltipDiv = initializeTooltip()
-  const dataParsed = data.map(el => {
-    const elParsed = { ...el }
-    elParsed[yField] = Number.parseFloat(el[yField])
-    return elParsed
+
+  const defaultGroupFieldName = '_defaultGroup_'
+  groupField = groupField == null ? defaultGroupFieldName : groupField
+  const { dataParsed, seriesValues } = parseData({
+    data,
+    yField,
+    defaultGroupFieldName,
+    seriesField,
   })
 
-  const yGridDomain = _(dataParsed).map(groupField).uniq().value()
-  // console.log({ yGridDomain })
-
-  const yGridScale = d3
-    .scaleBand()
-    .range([coreChartHeight, 0])
-    .domain(yGridDomain)
-    .paddingInner(0.15)
-
-  // console.log(yGridScale.paddingInner())
-
-  const yDomain = d3.extent(_(dataParsed).map(yField))
-  // console.log({ yDomain })
-  const yScale = d3
-    .scaleLinear()
-    .range([yGridScale.bandwidth(), 0])
-    .domain(yDomain)
-  // .nice()
-
-  const xDomain = _(dataParsed)
-    .map(xField)
-    .uniq()
-    .value()
-    // TODO handle case when not numbers
-    .sort((a, b) => Number.parseFloat(a) - Number.parseFloat(b))
-
-  const xScale = d3.scalePoint().range([0, coreChartWidth]).domain(xDomain)
-
-  const seriesValues = _(dataParsed).map(seriesField).uniq().value()
-  const colorScale = d3.scaleOrdinal().range(colorScheme).domain(seriesValues)
+  const {
+    yGridScale,
+    xScale,
+    yScale,
+    colorScale,
+    yGridDomain,
+    xDomain,
+    yDomain,
+  } = setupScales({
+    dataParsed,
+    groupField,
+    coreChartHeight,
+    yField,
+    xField,
+    coreChartWidth,
+    colorScheme,
+    seriesValues,
+  })
 
   const area = () => {
-    return d3
+    const area_ = d3
       .area()
-      .curve(curveType)
       .x(d => xScale(d[xField]))
       .y1(d => yScale(d[yField]))
       .y0(() => yScale(d3.min(yDomain)))
+
+    if (curveType) {
+      area_.curve(curveType)
+    }
+
+    return area_
   }
 
   chartCore
@@ -111,20 +115,26 @@ export function renderChart({
     .attr('transform', d => `translate(0, ${yGridScale(d)})`)
 
     .each(function (d, i) {
-      // x-axis
-      d3.select(this)
-        .append('g')
-        .attr('class', 'x-axis')
-        .attr('transform', `translate(0, ${yGridScale.bandwidth()})`)
-        .call(d3.axisBottom(xScale))
-        .call(g => {
-          g.selectAll('.domain').attr('stroke', '#333')
-          g.selectAll('.tick line').attr('stroke', '#333')
-          g.selectAll('.tick text').attr('fill', '#333')
-          if (i % 2 !== 0 && alternatingTickTextXAxis) {
-            g.selectAll('.tick text').remove()
-          }
-        })
+      let ctx = this
+      renderXAxis({
+        ctx,
+        i,
+        xScale,
+        yGridScale,
+        alternatingTickTextXAxis,
+        xAxisTicksFontSize,
+        xAxisPosition,
+        xAxisTickSizeOffset,
+      })
+
+      renderYAxis({
+        ctx,
+        yScale,
+        yAxisPosition,
+        coreChartWidth,
+        yAxisTickSizeOffset,
+        yAxisTicksFontSize,
+      })
 
       // Group label
       d3.select(this)
@@ -135,29 +145,6 @@ export function renderChart({
         .style('font-weight', 'bold')
         .attr('dominant-baseline', 'middle')
 
-      // y -axis
-      d3.select(this)
-        .append('g')
-        .attr('class', 'y-axis')
-        .attr(
-          'transform',
-          `translate(${coreChartWidth + yAxisTickSizeOffset}, 0)`,
-        )
-        .call(
-          d3
-            .axisRight(yScale)
-            .tickSize(-coreChartWidth - yAxisTickSizeOffset)
-            .ticks(5),
-        )
-        .call(g => {
-          g.selectAll('.tick line').attr('stroke-opacity', '0.2')
-          g.selectAll('.tick text').attr('fill', '#333')
-          // .style('dominant-baseline', 'text-after-edge')
-          // .attr('dy', -1)
-          g.select('.domain').remove()
-        })
-    })
-    .each(function (d) {
       d3.select(this)
         .selectAll('path.series')
         .data(seriesValues)
@@ -170,6 +157,20 @@ export function renderChart({
         )
         .attr('fill', s => colorScale(s))
         .attr('opacity', areaOpacity)
+    })
+    .each(function (d) {
+      // d3.select(this)
+      //   .selectAll('path.series')
+      //   .data(seriesValues)
+      //   .join('path')
+      //   .attr('class', 'series')
+      //   .attr('d', s =>
+      //     area()(
+      //       dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
+      //     ),
+      //   )
+      //   .attr('fill', s => colorScale(s))
+      //   .attr('opacity', areaOpacity)
 
       // TODO: vertical line (dotted)
       const filteredLines = verticalLines.filter(c => c.group === d)
@@ -317,4 +318,134 @@ export function renderChart({
     svg,
     margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
+}
+
+function parseData({ data, yField, defaultGroupFieldName, seriesField }) {
+  const dataParsed = data.map(el => {
+    const elParsed = { ...el }
+    elParsed[yField] = Number.parseFloat(el[yField])
+    elParsed[defaultGroupFieldName] = 'defaultGroup'
+    return elParsed
+  })
+
+  const seriesValues = _(dataParsed).map(seriesField).uniq().value()
+
+  return { dataParsed, seriesValues }
+}
+
+function setupScales({
+  dataParsed,
+  groupField,
+  coreChartHeight,
+  yField,
+  xField,
+  coreChartWidth,
+  colorScheme,
+  seriesValues,
+}) {
+  const yGridDomain = _(dataParsed).map(groupField).uniq().value()
+
+  const yGridScale = d3
+    .scaleBand()
+    .range([coreChartHeight, 0])
+    .domain(yGridDomain)
+    .paddingInner(0.15)
+
+  const yDomain = d3.extent(_(dataParsed).map(yField))
+  // console.log({ yDomain })
+  const yScale = d3
+    .scaleLinear()
+    .range([yGridScale.bandwidth(), 0])
+    .domain(yDomain)
+    .nice()
+
+  const xDomain = _(dataParsed)
+    .map(xField)
+    .uniq()
+    .value()
+    // TODO handle case when not numbers
+    .sort((a, b) => Number.parseFloat(a) - Number.parseFloat(b))
+
+  const xScale = d3.scalePoint().range([0, coreChartWidth]).domain(xDomain)
+
+  const colorScale = d3.scaleOrdinal().range(colorScheme).domain(seriesValues)
+
+  return {
+    yGridScale,
+    xScale,
+    yScale,
+    colorScale,
+    yGridDomain,
+    xDomain,
+    yDomain,
+  }
+}
+
+function renderXAxis({
+  ctx,
+  i,
+  xScale,
+  yGridScale,
+  alternatingTickTextXAxis,
+  xAxisTicksFontSize,
+  xAxisPosition,
+  xAxisTickSizeOffset,
+}) {
+  let xAxis, xAxisOffset
+  if (xAxisPosition === 'top') {
+    xAxis = d3.axisTop(xScale)
+    xAxisOffset = -xAxisTickSizeOffset
+  } else {
+    xAxis = d3.axisBottom(xScale)
+    xAxisOffset = yGridScale.bandwidth() + xAxisTickSizeOffset
+  }
+
+  d3.select(ctx)
+    .append('g')
+    .attr('class', 'x-axis')
+    .style('font-size', xAxisTicksFontSize)
+    .attr('transform', `translate(0, ${xAxisOffset})`)
+    .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
+    .call(g => {
+      g.selectAll('.domain').attr('stroke', '#333')
+      g.selectAll('.tick line').attr('stroke', '#333')
+      g.selectAll('.tick text').attr('fill', '#333')
+      g.selectAll('.tick line').attr('stroke-opacity', '0.2')
+      g.select('.domain').remove()
+      if (i % 2 !== 0 && alternatingTickTextXAxis) {
+        g.selectAll('.tick text').remove()
+      }
+    })
+}
+
+function renderYAxis({
+  ctx,
+  yScale,
+  yAxisPosition,
+  coreChartWidth,
+  yAxisTickSizeOffset,
+  yAxisTicksFontSize,
+}) {
+  let yAxis, yAxisOffset
+  if (yAxisPosition === 'right') {
+    yAxis = d3.axisRight(yScale)
+    yAxisOffset = coreChartWidth + yAxisTickSizeOffset
+  } else {
+    yAxis = d3.axisLeft(yScale)
+    yAxisOffset = -yAxisTickSizeOffset
+  }
+
+  d3.select(ctx)
+    .append('g')
+    .attr('class', 'y-axis')
+    .style('font-size', yAxisTicksFontSize)
+    .attr('transform', `translate(${yAxisOffset}, 0)`)
+    .call(yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset))
+    .call(g => {
+      g.selectAll('.tick line').attr('stroke-opacity', '0.2')
+      g.selectAll('.tick text').attr('fill', '#333')
+      // .style('dominant-baseline', 'text-after-edge')
+      // .attr('dy', -1)
+      g.select('.domain').remove()
+    })
 }
