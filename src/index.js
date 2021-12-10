@@ -47,3 +47,8 @@ export {
   renderChart as renderChoroplethStates,
   validateAndRender as validateAndRenderChoroplethStates,
 } from './charts/choropleth_states'
+
+export {
+  renderChart as renderChord,
+  validateAndRender as validateAndRenderChord,
+} from './charts/chord/index'
