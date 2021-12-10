@@ -17,6 +17,10 @@ const options = {
 
   colorLegendTitle: 'Higher education rate',
   interpolateScheme: d3.interpolateGreens,
+  missingDataColor: 'gray',
+  nullDataColor: 'gray',
+  missingDataMessage: 'Data Missing',
+  nullDataMessage: 'Data Not Available',
 
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs

@@ -24,6 +24,10 @@ export function renderChart({
 
     interpolateScheme = d3.interpolateBlues,
     colorLegendTitle = valueField,
+    missingDataColor = 'gray',
+    nullDataColor = 'gray',
+    missingDataMessage = 'Data Missing',
+    nullDataMessage = 'Data Not Available',
 
     searchButtonClassNames,
   },
@@ -86,10 +90,8 @@ export function renderChart({
       const found = dataParsed.find(
         el => Number.parseInt(el[fipsField], 10) === Number.parseInt(d.id, 10),
       )
-      if (found) {
-        return colorScale(found[valueField])
-      }
-      return 'gray'
+      const fillColor = found ? colorScale(found[valueField]) : missingDataColor
+      return fillColor ? fillColor : nullDataColor
     })
     .on('mouseover', function (e, d) {
       d3.select(this).classed('hovered', true).raise()
@@ -103,16 +105,18 @@ export function renderChart({
       )
 
       const countyInfo = d.properties
-      if (found) {
+      if (found && found[valueField]) {
         tooltipDiv.html(
           `${countyInfo.name}, ${countyInfo.state_name}
             <br/>
             ${valueField}: ${valueFormatter(found[valueField])}`,
         )
+      } else if (found && !found[valueField]) {
+        tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
       } else {
         tooltipDiv.html(
           `${countyInfo.name}, ${countyInfo.state_name}
-            <br/> Data not available
+            <br/> ${missingDataMessage}
             `,
         )
       }

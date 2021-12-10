@@ -22,6 +22,10 @@ export function renderChart({
 
     interpolateScheme = d3.interpolateBlues,
     colorLegendTitle = valueField,
+    missingDataColor = 'gray',
+    nullDataColor = 'gray',
+    missingDataMessage = 'Data Missing',
+    nullDataMessage = 'Data Not Available',
 
     searchButtonClassNames = '',
   },
@@ -85,19 +89,24 @@ export function renderChart({
     .attr('fill', d => {
       const stateAbbr = d.properties.abbr
       const stateData = dataObj[stateAbbr]
-      return stateData ? colorScale(stateData[valueField]) : 'gray'
+      const fillColor = stateData
+        ? colorScale(stateData[valueField])
+        : missingDataColor
+      return fillColor ? fillColor : nullDataColor
     })
     .on('mouseover', function (e, d) {
       d3.select(this).classed('hovered', true).raise()
       tooltipDiv.transition().duration(200).style('opacity', 1)
       const stateData = dataObj[d.properties.abbr]
-      if (stateData) {
+      if (stateData && stateData[valueField]) {
         tooltipDiv.html(`${d.properties.name}
           <br />
           ${valueField}: ${valueFormatter(stateData[valueField])}
           `)
+      } else if (stateData && !stateData[valueField]) {
+        tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
       } else {
-        tooltipDiv.html(`${d.properties.name} <br/>Data not available`)
+        tooltipDiv.html(`${d.properties.name} <br/>${missingDataMessage}`)
       }
 
       d3.select(this).classed('hovered', true).raise()
