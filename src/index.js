@@ -39,6 +39,16 @@ export {
 } from './charts/domino_ribbon/index'
 
 export {
+  renderChart as renderChoroplethCounties,
+  validateAndRender as validateAndRenderChoroplethCounties,
+} from './charts/choropleth_counties'
+
+export {
+  renderChart as renderChoroplethStates,
+  validateAndRender as validateAndRenderChoroplethStates,
+} from './charts/choropleth_states'
+
+export {
   renderChart as renderChord,
   validateAndRender as validateAndRenderChord,
 } from './charts/chord/index'
