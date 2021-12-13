@@ -82,16 +82,28 @@ export function renderChart({
   )
   const maxOverall = d3.max([maxLeft, maxRight])
 
-  const xStart = barValueMidPoint
+  const minRight = d3.min(
+    data.map(el => Number.parseFloat(el[barRightValueField])),
+  )
+  const minLeft = d3.min(
+    data.map(el => Number.parseFloat(el[barLeftValueField])),
+  )
+  const minOverall = d3.min([minLeft, minRight])
+
+  const xStartActual = d3.min([barValueMidPoint, minOverall])
 
   const xScaleLeft = d3
     .scaleLinear()
     .range([coreChartWidth / 2, 0])
-    .domain([xStart, maxOverall])
+    .domain([xStartActual, maxOverall])
+    .nice()
   const xScaleRight = d3
     .scaleLinear()
     .range([coreChartWidth / 2, coreChartWidth])
-    .domain([xStart, maxOverall])
+    .domain([xStartActual, maxOverall])
+    .nice()
+
+  const xStart = d3.min(xScaleRight.domain())
 
   const symbolSize = yScale.bandwidth() ** 2 * 1
   const testSymbol = chartCore
@@ -292,8 +304,8 @@ export function renderChart({
       g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12)
 
       // Remove overlapping duplicate elements
-      g.select('.tick > line:first-of-type').remove()
-      g.select('.tick > text:first-of-type').remove()
+      // g.select('.tick > line:first-of-type').remove()
+      // g.select('.tick > text:first-of-type').remove()
     })
 
   const topLegend = chartCore.append('g').attr('class', 'top-legend')

@@ -27,6 +27,8 @@ const options = {
   rightXAxisLabel: 'Chance of voting republican',
   xAxisLabel: 'Probability of voting, %',
 
+  barValueMidPoint: 60,
+
   /* Chart Specific */
   colorScheme: ['#3077aa', '#ed3833'], // [leftColor, rightColor]
   // barValueMidPoint: 50, // default is 50

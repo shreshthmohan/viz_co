@@ -6768,16 +6768,28 @@ g.circles circle.circle.circle-hovered {
     );
     const maxOverall = d3__namespace.max([maxLeft, maxRight]);
 
-    const xStart = barValueMidPoint;
+    const minRight = d3__namespace.min(
+      data.map(el => Number.parseFloat(el[barRightValueField])),
+    );
+    const minLeft = d3__namespace.min(
+      data.map(el => Number.parseFloat(el[barLeftValueField])),
+    );
+    const minOverall = d3__namespace.min([minLeft, minRight]);
+
+    const xStartActual = d3__namespace.min([barValueMidPoint, minOverall]);
 
     const xScaleLeft = d3__namespace
       .scaleLinear()
       .range([coreChartWidth / 2, 0])
-      .domain([xStart, maxOverall]);
+      .domain([xStartActual, maxOverall])
+      .nice();
     const xScaleRight = d3__namespace
       .scaleLinear()
       .range([coreChartWidth / 2, coreChartWidth])
-      .domain([xStart, maxOverall]);
+      .domain([xStartActual, maxOverall])
+      .nice();
+
+    const xStart = d3__namespace.min(xScaleRight.domain());
 
     const symbolSize = yScale.bandwidth() ** 2 * 1;
     const testSymbol = chartCore
@@ -6978,8 +6990,8 @@ g.circles circle.circle.circle-hovered {
         g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12);
 
         // Remove overlapping duplicate elements
-        g.select('.tick > line:first-of-type').remove();
-        g.select('.tick > text:first-of-type').remove();
+        // g.select('.tick > line:first-of-type').remove()
+        // g.select('.tick > text:first-of-type').remove()
       });
 
     const topLegend = chartCore.append('g').attr('class', 'top-legend');
