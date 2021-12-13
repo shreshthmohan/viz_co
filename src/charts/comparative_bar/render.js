@@ -39,15 +39,7 @@ export function renderChart({
   },
   chartContainerSelector,
 }) {
-  d3.select('body').append('style').html(`
-  g.bar {
-    stroke: ${bgColor};
-  }
-  g.bar.bar-hovered {
-    stroke: #333;
-    stroke-width: 1;
-  }
-`)
+  applyInteractionStyles({ bgColor })
 
   const tooltipDiv = initializeTooltip()
 
@@ -64,16 +56,96 @@ export function renderChart({
     bgColor,
   })
 
-  const markerSymbol = d3.symbol().type(d3.symbols[5]) // 5 is for triangle
+  const { yDomain, maxOverall, xStartActual } = parseData({
+    data,
+    yField,
+    barRightValueField,
+    barLeftValueField,
+    barValueMidPoint,
+  })
 
+  const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales({
+    coreChartHeight,
+    coreChartWidth,
+    yDomain,
+    xStartActual,
+    maxOverall,
+  })
+
+  const { markerSymbol, symbolSize, triangleOffset, symbolConstant } =
+    setupBarSymbol({ yScale, chartCore })
+
+  const { leftBarsContainer, rightBarsContainer } = renderBars({
+    chartCore,
+    coreChartWidth,
+    data,
+    tooltipDiv,
+    leftXAxisLabel,
+    barLeftValueField,
+    xScaleLeft,
+    yScale,
+    yField,
+    triangleOffset,
+    xStart,
+    colorScheme,
+    barOpacity,
+    markerSymbol,
+    symbolSize,
+    symbolConstant,
+    barLeftLabelField,
+    rightXAxisLabel,
+    barRightValueField,
+    xScaleRight,
+    barRightLabelField,
+  })
+
+  renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize })
+
+  renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize })
+
+  renderLegends({
+    chartCore,
+    xScaleLeft,
+    xStart,
+    axesTickSize,
+    markerSymbol,
+    symbolSize,
+    triangleOffset,
+    colorScheme,
+    leftXAxisLabel,
+    rightXAxisLabel,
+    xAxisLabel,
+  })
+
+  // For responsiveness
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
+
+function applyInteractionStyles({ bgColor }) {
+  d3.select('body').append('style').html(`
+  g.bar {
+    stroke: ${bgColor};
+  }
+  g.bar.bar-hovered {
+    stroke: #333;
+    stroke-width: 1;
+  }
+`)
+}
+
+function parseData({
+  data,
+  yField,
+  barRightValueField,
+  barLeftValueField,
+  barValueMidPoint,
+}) {
   const yDomain = data.map(el => el[yField])
-  const yScale = d3
-    .scaleBand()
-    .range([0, coreChartHeight])
-    .domain(yDomain)
-    .paddingInner(0.8)
-    .paddingOuter(0.7)
-
   const maxRight = d3.max(
     data.map(el => Number.parseFloat(el[barRightValueField])),
   )
@@ -92,6 +164,23 @@ export function renderChart({
 
   const xStartActual = d3.min([barValueMidPoint, minOverall])
 
+  return { yDomain, maxOverall, xStartActual }
+}
+
+function setupScales({
+  coreChartHeight,
+  coreChartWidth,
+  yDomain,
+  xStartActual,
+  maxOverall,
+}) {
+  const yScale = d3
+    .scaleBand()
+    .range([0, coreChartHeight])
+    .domain(yDomain)
+    .paddingInner(0.8)
+    .paddingOuter(0.7)
+
   const xScaleLeft = d3
     .scaleLinear()
     .range([coreChartWidth / 2, 0])
@@ -104,7 +193,137 @@ export function renderChart({
     .nice()
 
   const xStart = d3.min(xScaleRight.domain())
+  return { yScale, xScaleLeft, xScaleRight, xStart }
+}
 
+function renderLegends({
+  chartCore,
+  xScaleLeft,
+  xStart,
+  axesTickSize,
+  markerSymbol,
+  symbolSize,
+  triangleOffset,
+  colorScheme,
+  leftXAxisLabel,
+  rightXAxisLabel,
+  xAxisLabel,
+}) {
+  const topLegend = chartCore.append('g').attr('class', 'top-legend')
+
+  // Center divider
+  const centerDividerWidth = 2
+
+  topLegend
+    .append('rect')
+    .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
+    .attr('y', -axesTickSize * 5)
+    .attr('height', axesTickSize * 2)
+    .attr('width', centerDividerWidth)
+    .attr('fill', '#000')
+
+  // left triangle
+  topLegend
+    .append('path')
+    .attr('d', markerSymbol.size(symbolSize / 2))
+    .attr(
+      'transform',
+      `translate(${
+        xScaleLeft(xStart) -
+        triangleOffset / 4 -
+        5 -
+        (centerDividerWidth - 1) / 2
+      }, ${-axesTickSize * 4}) rotate(-90)`,
+    )
+    .attr('fill', colorScheme[0])
+
+  // left label
+  topLegend
+    .append('text')
+    .text(leftXAxisLabel)
+    .attr(
+      'transform',
+      `translate(${
+        xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
+      }, ${-axesTickSize * 4}) `,
+    )
+    .attr('fill', colorScheme[0])
+    .attr('dominant-baseline', 'middle')
+    .attr('text-anchor', 'end')
+    .attr('style', 'font-weight: bold;')
+
+  // right triangle
+  topLegend
+    .append('path')
+    .attr('d', markerSymbol.size(symbolSize / 2))
+    .attr(
+      'transform',
+      `translate(${
+        xScaleLeft(xStart) +
+        triangleOffset / 4 +
+        5 +
+        (centerDividerWidth + 1) / 2
+      }, ${-axesTickSize * 4}) rotate(90)`,
+    )
+    .attr('fill', colorScheme[1])
+
+  // right label
+  topLegend
+    .append('text')
+    .text(rightXAxisLabel)
+    .attr(
+      'transform',
+      `translate(${
+        xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
+      }, ${-axesTickSize * 4}) `,
+    )
+    .attr('fill', colorScheme[1])
+    .attr('dominant-baseline', 'middle')
+    .attr('text-anchor', 'start')
+    .attr('style', 'font-weight: bold;')
+
+  // top label
+  topLegend
+    .append('text')
+    .text(xAxisLabel)
+    .attr(
+      'transform',
+      `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
+    )
+    .attr('fill', '#333')
+    .attr('dominant-baseline', 'middle')
+    .attr('text-anchor', 'middle')
+    .attr('style', 'font-weight: bold;')
+}
+
+function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+  leftBarsContainer
+    .append('g')
+    .call(d3.axisTop(xScaleLeft).tickSize(axesTickSize))
+    .call(g => {
+      g.select('.domain').remove()
+      g.selectAll('.tick line').attr('stroke', '#555')
+      g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12)
+    })
+}
+
+function renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize }) {
+  rightBarsContainer
+    .append('g')
+    .call(d3.axisTop(xScaleRight).tickSize(axesTickSize))
+    .call(g => {
+      g.select('.domain').remove()
+      g.selectAll('.tick line').attr('stroke', '#555')
+      g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12)
+
+      // Remove overlapping duplicate elements
+      // g.select('.tick > line:first-of-type').remove()
+      // g.select('.tick > text:first-of-type').remove()
+    })
+}
+
+function setupBarSymbol({ yScale, chartCore }) {
+  const markerSymbol = d3.symbol().type(d3.symbols[5]) // 5 is for triangle
   const symbolSize = yScale.bandwidth() ** 2 * 1
   const testSymbol = chartCore
     .append('g')
@@ -117,6 +336,32 @@ export function renderChart({
   const symbolConstant = Math.sqrt(symbolSize) / triangleOffset
   testSymbol.remove()
 
+  return { markerSymbol, symbolSize, triangleOffset, symbolConstant }
+}
+
+function renderBars({
+  chartCore,
+  coreChartWidth,
+  data,
+  tooltipDiv,
+  leftXAxisLabel,
+  barLeftValueField,
+  xScaleLeft,
+  yScale,
+  yField,
+  triangleOffset,
+  xStart,
+  colorScheme,
+  barOpacity,
+  markerSymbol,
+  symbolSize,
+  symbolConstant,
+  barLeftLabelField,
+  rightXAxisLabel,
+  barRightValueField,
+  xScaleRight,
+  barRightLabelField,
+}) {
   const leftBarsContainer = chartCore.append('g').attr('class', 'left-bars')
 
   const leftBars = leftBarsContainer
@@ -284,121 +529,5 @@ export function renderChart({
     .attr('fill', '#444')
     .attr('font-weight', 'bold')
 
-  // Left axis
-  leftBarsContainer
-    .append('g')
-    .call(d3.axisTop(xScaleLeft).tickSize(axesTickSize))
-    .call(g => {
-      g.select('.domain').remove()
-      g.selectAll('.tick line').attr('stroke', '#555')
-      g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12)
-    })
-
-  // Right axis
-  rightBarsContainer
-    .append('g')
-    .call(d3.axisTop(xScaleRight).tickSize(axesTickSize))
-    .call(g => {
-      g.select('.domain').remove()
-      g.selectAll('.tick line').attr('stroke', '#555')
-      g.selectAll('.tick text').attr('fill', '#555').attr('font-size', 12)
-
-      // Remove overlapping duplicate elements
-      // g.select('.tick > line:first-of-type').remove()
-      // g.select('.tick > text:first-of-type').remove()
-    })
-
-  const topLegend = chartCore.append('g').attr('class', 'top-legend')
-
-  // Center divider
-  const centerDividerWidth = 2
-
-  topLegend
-    .append('rect')
-    .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
-    .attr('y', -axesTickSize * 5)
-    .attr('height', axesTickSize * 2)
-    .attr('width', centerDividerWidth)
-    .attr('fill', '#000')
-
-  // left triangle
-  topLegend
-    .append('path')
-    .attr('d', markerSymbol.size(symbolSize / 2))
-    .attr(
-      'transform',
-      `translate(${
-        xScaleLeft(xStart) -
-        triangleOffset / 4 -
-        5 -
-        (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) rotate(-90)`,
-    )
-    .attr('fill', colorScheme[0])
-
-  // left label
-  topLegend
-    .append('text')
-    .text(leftXAxisLabel)
-    .attr(
-      'transform',
-      `translate(${
-        xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) `,
-    )
-    .attr('fill', colorScheme[0])
-    .attr('dominant-baseline', 'middle')
-    .attr('text-anchor', 'end')
-    .attr('style', 'font-weight: bold;')
-
-  // right triangle
-  topLegend
-    .append('path')
-    .attr('d', markerSymbol.size(symbolSize / 2))
-    .attr(
-      'transform',
-      `translate(${
-        xScaleLeft(xStart) +
-        triangleOffset / 4 +
-        5 +
-        (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) rotate(90)`,
-    )
-    .attr('fill', colorScheme[1])
-
-  // right label
-  topLegend
-    .append('text')
-    .text(rightXAxisLabel)
-    .attr(
-      'transform',
-      `translate(${
-        xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) `,
-    )
-    .attr('fill', colorScheme[1])
-    .attr('dominant-baseline', 'middle')
-    .attr('text-anchor', 'start')
-    .attr('style', 'font-weight: bold;')
-
-  // top label
-  topLegend
-    .append('text')
-    .text(xAxisLabel)
-    .attr(
-      'transform',
-      `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
-    )
-    .attr('fill', '#333')
-    .attr('dominant-baseline', 'middle')
-    .attr('text-anchor', 'middle')
-    .attr('style', 'font-weight: bold;')
-
-  // For responsiveness
-  // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
-  })
+  return { leftBarsContainer, rightBarsContainer }
 }
