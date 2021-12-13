@@ -6847,8 +6847,10 @@ g.circles circle.circle.circle-hovered {
       data.map(el => Number.parseFloat(el[barLeftValueField])),
     );
     const minOverall = d3__namespace.min([minLeft, minRight]);
+    console.log({ minOverall });
 
     const xStartActual = d3__namespace.min([barValueMidPoint, minOverall]);
+    console.log({ xStartActual });
 
     return { yDomain, maxOverall, xStartActual }
   }
