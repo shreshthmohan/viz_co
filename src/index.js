@@ -57,3 +57,8 @@ export {
   renderChart as renderComparativeBar,
   validateAndRender as validateAndRenderComparativeBar,
 } from './charts/comparative_bar/index'
+
+export {
+  renderChart as renderStackedBar,
+  validateAndRender as validateAndRenderStackedBar,
+} from './charts/stacked_bar/index'

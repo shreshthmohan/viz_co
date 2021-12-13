@@ -772,7 +772,7 @@
     });
   }
 
-  function renderChart$b({
+  function renderChart$c({
     data,
     options: {
       aspectRatio = 2,
@@ -1336,7 +1336,7 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$b = ({
+  const validateAndRender$c = ({
     dataPath,
     options,
     dimensions,
@@ -1373,7 +1373,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$b({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$c({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1403,7 +1403,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$a({
+  function renderChart$b({
     data,
     options: {
       aspectRatio = 2,
@@ -1847,7 +1847,7 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$a = ({
+  const validateAndRender$b = ({
     dataPath,
     options,
     dimensions,
@@ -1884,7 +1884,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$a({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$b({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2172,7 +2172,7 @@
 
   /* global window, console */
 
-  function renderChart$9({
+  function renderChart$a({
     data,
     dimensions: {
       sizeField,
@@ -2782,7 +2782,7 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$9 = ({
+  const validateAndRender$a = ({
     dataPath,
     options,
     dimensions,
@@ -2818,7 +2818,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$a({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3151,7 +3151,7 @@
     return search
   }
 
-  function renderChart$8({
+  function renderChart$9({
     data,
     options: {
       aspectRatio = 2,
@@ -3320,7 +3320,7 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$8 = ({
+  const validateAndRender$9 = ({
     dataPath,
     options,
     dimensions,
@@ -3357,7 +3357,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3792,7 +3792,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$7({
+  function renderChart$8({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3977,7 +3977,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$7 = ({
+  const validateAndRender$8 = ({
     dataPath,
     options,
     dimensions,
@@ -4014,7 +4014,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4283,7 +4283,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$6({
+  function renderChart$7({
     data,
     options: {
       aspectRatio = 0.8,
@@ -4454,7 +4454,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$6 = ({
+  const validateAndRender$7 = ({
     dataPath,
     options,
     dimensions,
@@ -4505,7 +4505,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4575,7 +4575,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$5({
+  function renderChart$6({
     data,
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
@@ -5124,7 +5124,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames: '',
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
@@ -5156,7 +5156,7 @@ g.circles circle.circle.circle-hovered {
         }
       });
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -5751,7 +5751,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 0.8,
@@ -5989,7 +5989,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
@@ -6026,7 +6026,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6035,7 +6035,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     dimensions: { valueField, fipsField },
     options: {
@@ -6275,7 +6275,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames,
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
@@ -6312,13 +6312,13 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* global window */
-  function renderChart$2({
+  function renderChart$3({
     data,
     dimensions: { valueField, stateAbbrField },
     options: {
@@ -6543,7 +6543,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames = '',
   };
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
@@ -6580,7 +6580,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6588,7 +6588,7 @@ g.circles circle.circle.circle-hovered {
   /* global window */
 
   let currentState = 'global';
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 1,
@@ -7202,7 +7202,7 @@ g.circles circle.circle.circle-hovered {
     startingState: checkOneOf(['showAll', 'clearAll']),
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
@@ -7239,7 +7239,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -7249,7 +7249,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.7,
@@ -7805,7 +7805,7 @@ g.circles circle.circle.circle-hovered {
     barOpacity: checkNumberBetween([0, 1]),
   };
 
-  function validateAndRender({
+  function validateAndRender$1({
     dataPath,
     options,
     dimensions,
@@ -7842,35 +7842,395 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  }
+
+  /* global window */
+
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      // background-color
+      bgColor = 'transparent',
+      colorScheme = d3__namespace.schemeSpectral[9],
+
+      yDomainCustom,
+
+      yGridPaddingInner = 0.1,
+      showYGridLabels = false,
+
+      yAxisLocation = 'left',
+      yAxisOffset = 10,
+
+      yValueFormatter = '',
+      yValuePrefix = '',
+      yValueSuffix = '',
+
+      xValueTimeParser = '',
+      xValueTimeFormatter = '',
+    },
+    dimensions: { xGridField, yGridField, xField, yFields },
+
+    chartContainerSelector,
+  }) {
+    const coreChartWidth = 1000;
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+      setupChartArea$3({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const tooltipDiv = initializeTooltip$1();
+
+    const uniqCellField = `${xGridField}-${yGridField}`;
+    const dataParsed = data.map(el => {
+      const elParsed = { ...el };
+      let yFieldSum = 0;
+      yFields.forEach(yf => {
+        elParsed[yf] = Number.parseFloat(el[yf]);
+        yFieldSum += elParsed[yf];
+      });
+      elParsed.yFieldSum = yFieldSum;
+      elParsed[uniqCellField] = `${el[xGridField]}-${el[yGridField]}`;
+      return elParsed
+    });
+
+    const yMax = d3__namespace.max(dataParsed.map(d => d.yFieldSum));
+    const yDomain = yDomainCustom || [0, yMax];
+    // console.log({ yDomain })
+
+    const yGridDomain = ___default["default"].uniq(data.map(d => d[yGridField]));
+    const yGridScale = d3__namespace
+      .scaleBand()
+      .domain(yGridDomain)
+      .range([0, coreChartHeight])
+      // .range(descending ? yGridRange.reverse() : yGridRange)
+      .paddingInner(yGridPaddingInner);
+
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([yGridScale.bandwidth(), 0])
+      .domain(yDomain)
+      .nice();
+
+    const yTicks = yScale.ticks().length;
+
+    const xGridDomain = ___default["default"].uniq(data.map(d => d[xGridField])).sort();
+
+    const xGridScale = d3__namespace
+      .scaleBand()
+      .domain(xGridDomain)
+      .range([0, coreChartWidth])
+      .paddingInner(0.2);
+
+    const cells = ___default["default"].uniqBy(
+      dataParsed.map(d => ({
+        [xGridField]: d[xGridField],
+        [yGridField]: d[yGridField],
+        [uniqCellField]: `${d[xGridField]}-${d[yGridField]}`,
+      })),
+      uniqCellField,
+    );
+
+    const dataByCell = {};
+    dataParsed.forEach(d => {
+      const cell = d[uniqCellField];
+      if (dataByCell[cell]) {
+        dataByCell[cell].push(d);
+      } else {
+        dataByCell[cell] = [d];
+      }
+    });
+
+    const stackedDataByCell = {};
+    Object.keys(dataByCell).forEach(c => {
+      stackedDataByCell[c] = d3__namespace.stack().keys(yFields)(dataByCell[c]);
+    });
+    const colorScale = d3__namespace.scaleOrdinal(colorScheme).domain(yFields);
+
+    const yFormatter = t =>
+      `${yValuePrefix}${d3__namespace.format(yValueFormatter)(t)}${yValueSuffix}`;
+
+    chartCore
+      .selectAll('g.cell')
+      .data(cells)
+      .join('g')
+      .attr(
+        'transform',
+        d =>
+          `translate(
+            ${xGridScale(d[xGridField])},
+            ${yGridScale(d[yGridField])}
+          )`,
+      )
+      .each(function (d) {
+        const xDomain = dataByCell[d[uniqCellField]].map(dc => dc[xField]).sort();
+
+        // Evaluate xScale for each cell to tackle case when x values don't match across cells
+        const xScale = d3__namespace
+          .scaleBand()
+          .domain(xDomain)
+          .range([0, xGridScale.bandwidth()]);
+
+        // Use area with step to avoid jarring rect boundaries
+        d3__namespace.select(this)
+          .selectAll('path')
+          .data(stackedDataByCell[d[uniqCellField]])
+          .join('path')
+          .attr('fill', dd => colorScale(dd.key))
+          .attr(
+            'd',
+            d3__namespace
+              .area()
+              .curve(d3__namespace.curveStep)
+              .x(function (dd) {
+                return xScale(dd.data[xField])
+              })
+              .y0(function (dd) {
+                return yScale(dd[0])
+              })
+              .y1(function (dd) {
+                return yScale(dd[1])
+              }),
+          );
+
+        // Use transparent rect to trigger tooltip for individual bar stacks
+        d3__namespace.select(this)
+          .selectAll('g')
+          .data([stackedDataByCell[d[uniqCellField]][0]])
+          .join('g')
+          .attr('fill', 'transparent')
+          .selectAll('rect')
+          .data(dd => dd)
+          .join('rect')
+          .attr('x', dd => xScale(dd.data[xField]))
+          .attr('y', yScale(yScale.domain()[1]))
+          .attr('height', yGridScale.bandwidth())
+          .attr('width', xScale.bandwidth())
+          .on('mouseover', (e, dd) => {
+            tooltipDiv.transition().duration(200).style('opacity', 1);
+
+            const xValue = dd.data[xField];
+            const xValueParsedFormatted =
+              d3__namespace.timeFormat(xValueTimeFormatter)(
+                d3__namespace.timeParse(xValueTimeParser)(xValue),
+              ) || xValue;
+            tooltipDiv.html(`${dd.data[yGridField]}: ${xValueParsedFormatted}
+          <br/>
+          ${yFields
+            .map(
+              yf =>
+                `<div class="w-2 h-2 inline-block"
+                  style="background: ${colorScale(yf)};"></div>
+                ${yf}: ${yFormatter(dd.data[yf])}`,
+            )
+            .join('<br/>')}
+          `);
+
+            tooltipDiv
+              .style('left', `${e.clientX}px`)
+              .style('top', `${e.clientY + 20 + window.scrollY}px`);
+          })
+          .on('mouseout', () => {
+            tooltipDiv
+              .style('left', '-300px')
+              .transition()
+              .duration(500)
+              .style('opacity', 0);
+          });
+        d3__namespace.select(this)
+          .append('text')
+          .text(d[xGridField])
+          .style('font-size', 10)
+          .attr(
+            'transform',
+            `translate(${xGridScale.bandwidth() / 2}, ${
+            yGridScale.bandwidth() + 5
+          })`,
+          )
+          .attr('dominant-baseline', 'hanging')
+          .attr('text-anchor', 'middle');
+      });
+
+    const yAxis =
+      yAxisLocation === 'left' ? d3__namespace.axisLeft(yScale) : d3__namespace.axisRight(yScale);
+    chartCore
+      .append('g')
+      .attr('class', 'y-axes')
+      .selectAll('g')
+      .data(yGridDomain)
+      .join('g')
+      .attr(
+        'transform',
+        d =>
+          `translate(${
+          yAxisLocation === 'left' ? -yAxisOffset : coreChartWidth + yAxisOffset
+        }, ${yGridScale(d)})`,
+      )
+      .call(yAxis.ticks(Math.floor(yTicks / 4)).tickFormat(yFormatter))
+      .call(g => {
+        g.select('.domain').remove();
+      });
+    showYGridLabels &&
+      chartCore
+        .append('g')
+        .attr('class', 'y-grid-scale')
+        .attr('transform', `translate(0, ${yGridScale.bandwidth() / 2})`)
+        .call(d3__namespace.axisLeft(yGridScale))
+        .call(g => {
+          g.select('.domain').remove();
+          g.selectAll('.tick line').remove();
+          g.selectAll('.tick text')
+            .attr('font-weight', 'bold')
+            .classed('capitalize', true)
+            .attr('dominant-baseline', 'text-after-edge')
+            .attr('font-size', 14);
+        });
+
+    widgetsRight
+      .append('div')
+      .html(swatches({ color: colorScale, uid: 'stacked-bar-color-legend' }));
+
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function validateAndRender({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) {
+    const yFieldsDimensionTypes = {};
+    const yFieldDimensions = {};
+    dimensions.yFields.forEach((yf, i) => {
+      yFieldsDimensionTypes[`__yField${i}__`] = [shouldBeNumber];
+      yFieldDimensions[`__yField${i}__`] = yf;
+    });
+
+    const dimensionTypes = {
+      xGridField: [shouldNotBeBlank],
+      yGridField: [shouldNotBeBlank],
+      xField: [shouldNotBeBlank],
+      // yFields: ['very poor', 'poor'],
+      ...yFieldsDimensionTypes,
+    };
+
+    // after spreading out yFields; needed since yFields is an array unlike other dimensions
+    const flatDimensions = { ...dimensions, ...yFieldDimensions };
+    const optionTypes = {
+      /* Headers */
+      // heading: checkString,
+      // subheading: checkString,
+
+      /* Chart Area */
+      aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+
+      marginTop: checkNumber,
+      marginRight: checkNumber,
+      marginBottom: checkNumber,
+      marginLeft: checkNumber,
+
+      bgColor: checkColor,
+
+      colorScheme: checkColorArray(dimensions.yFields.length),
+      // colorScheme: ['#926759', '#d0a558'], // // length of colorScheme should be more than or equal to length of dimensions.yFields
+
+      /* Dimensions */
+      // xValueTimeParser: '%Y-%m-%d', // 1997-08-17
+      // xValueTimeFormatter: '%e %b %Y', // 17 Aug 1997
+
+      /* yField */
+      yDomainCustom: checkNumericArray, // [0, 100],
+      yGridPaddingInner: checkNumberBetween([0, 1]),
+      showYGridLabels: checkBoolean, // default: false
+      yAxisLocation: checkOneOf(['left', 'right']), // default: left
+      // yValueFormatter: '.0%',
+      // yValuePrefix: '',
+      // yValueSuffix: '%',
+    };
+    const optionsValidationResult = optionValidation({ optionTypes, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      // Run validations
+      const { columns } = data;
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions: flatDimensions,
+      });
+
+      const dataValidations = validateData({
+        data,
+        dimensionTypes,
+        dimensions: flatDimensions,
+      });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [dimensionValidation, optionsValidationResult];
+
+      if (dimensionValidation.valid) allValidations.push(dataValidations);
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
         ? renderChart({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   }
 
-  exports.renderBubbleHorizontal = renderChart$9;
-  exports.renderCalendar = renderChart$6;
-  exports.renderChord = renderChart$1;
-  exports.renderChoroplethCounties = renderChart$3;
-  exports.renderChoroplethStates = renderChart$2;
-  exports.renderComparativeBar = renderChart;
-  exports.renderDominoBase = renderChart$8;
-  exports.renderDominoRibbon = renderChart$4;
-  exports.renderMace = renderChart$b;
-  exports.renderMotionBubble = renderChart$5;
-  exports.renderRidgeline = renderChart$7;
-  exports.renderSankey = renderChart$a;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$9;
-  exports.validateAndRenderCalendar = validateAndRender$6;
-  exports.validateAndRenderChord = validateAndRender$1;
-  exports.validateAndRenderChoroplethCounties = validateAndRender$3;
-  exports.validateAndRenderChoroplethStates = validateAndRender$2;
-  exports.validateAndRenderComparativeBar = validateAndRender;
-  exports.validateAndRenderDominoBase = validateAndRender$8;
-  exports.validateAndRenderDominoRibbon = validateAndRender$4;
-  exports.validateAndRenderMace = validateAndRender$b;
-  exports.validateAndRenderMotionBubble = validateAndRender$5;
-  exports.validateAndRenderRidgeline = validateAndRender$7;
-  exports.validateAndRenderSankey = validateAndRender$a;
+  exports.renderBubbleHorizontal = renderChart$a;
+  exports.renderCalendar = renderChart$7;
+  exports.renderChord = renderChart$2;
+  exports.renderChoroplethCounties = renderChart$4;
+  exports.renderChoroplethStates = renderChart$3;
+  exports.renderComparativeBar = renderChart$1;
+  exports.renderDominoBase = renderChart$9;
+  exports.renderDominoRibbon = renderChart$5;
+  exports.renderMace = renderChart$c;
+  exports.renderMotionBubble = renderChart$6;
+  exports.renderRidgeline = renderChart$8;
+  exports.renderSankey = renderChart$b;
+  exports.renderStackedBar = renderChart;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$a;
+  exports.validateAndRenderCalendar = validateAndRender$7;
+  exports.validateAndRenderChord = validateAndRender$2;
+  exports.validateAndRenderChoroplethCounties = validateAndRender$4;
+  exports.validateAndRenderChoroplethStates = validateAndRender$3;
+  exports.validateAndRenderComparativeBar = validateAndRender$1;
+  exports.validateAndRenderDominoBase = validateAndRender$9;
+  exports.validateAndRenderDominoRibbon = validateAndRender$5;
+  exports.validateAndRenderMace = validateAndRender$c;
+  exports.validateAndRenderMotionBubble = validateAndRender$6;
+  exports.validateAndRenderRidgeline = validateAndRender$8;
+  exports.validateAndRenderSankey = validateAndRender$b;
+  exports.validateAndRenderStackedBar = validateAndRender;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
