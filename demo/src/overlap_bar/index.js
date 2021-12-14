@@ -17,6 +17,10 @@ const options = {
 
   barOpacity: 0.5,
   colors: ['orange', 'blue', '#8c8d85', '#29b1c4'],
+
+  // to tackle too many x tick labels
+  // remove this to show all values
+  showOnlyEveryNthValue: 5,
 }
 
 const dataPath = 'data.csv'

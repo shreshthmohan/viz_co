@@ -7864,10 +7864,18 @@ g.circles circle.circle.circle-hovered {
       barOpacity = 0.5,
 
       colors = d3__namespace.schemeSpectral[9],
+
+      showOnlyEveryNthValue = 1,
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
   }) {
+    d3__namespace.select('body').append('style').html(`
+  .hovered {
+    stroke: #333;
+  }
+  `);
+
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
       setupChartArea$3({
@@ -7880,6 +7888,8 @@ g.circles circle.circle.circle-hovered {
         marginRight,
         bgColor,
       });
+
+    const tooltipDiv = initializeTooltip$1();
 
     const allYValues = [];
     const dataParsed = data.map(el => {
@@ -7900,6 +7910,12 @@ g.circles circle.circle.circle-hovered {
 
     const yMax = d3__namespace.max(allYValues);
 
+    const colorsRgba = colors.map(c => {
+      const parsedColor = d3__namespace.rgb(c);
+      parsedColor.opacity = barOpacity;
+      return parsedColor
+    });
+
     const yScale = d3__namespace.scaleLinear().range([coreChartHeight, 0]).domain([0, yMax]);
     yFields.forEach((yf, i) => {
       chartCore
@@ -7909,19 +7925,56 @@ g.circles circle.circle.circle-hovered {
         .join('rect')
         .attr('x', d => xScale(d[xField]))
         .attr('y', d => yScale(d[yf]))
+        .attr('class', d => `rect-${toClassText(d[xField])}`)
         .attr('height', d => yScale(0) - yScale(d[yf]))
         .attr('width', xScale.bandwidth())
-        .attr('fill', colors[i])
-        .attr('opacity', barOpacity);
+        .attr('fill', colorsRgba[i]);
+      // .attr('stroke', '#333')
     });
-    const xAxis = d3__namespace
-      .axisBottom(xScale)
-      // TODO hardcoded see how to give user some control of this
-      .tickValues(
-        xScale.domain().filter(function (d, i) {
-          return !(i % 10)
-        }),
-      );
+
+    chartCore
+      .append('g')
+      .selectAll('rect')
+      .data(dataParsed)
+      .join('rect')
+      .attr('x', d => xScale(d[xField]))
+      .attr('y', 0)
+      .attr('height', coreChartHeight)
+      .attr('width', xScale.bandwidth())
+      .attr('opacity', 0)
+      .on('mouseover', function (e, d) {
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+
+        tooltipDiv.html(`${xField}: ${d[xField]}
+      <br/>
+      ${yFields
+        .map(
+          (yff, i) =>
+            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${colorsRgba[i]}"></div> ${yff}: ${d[yff]}`,
+        )
+        .join('<br/>')}
+      `);
+
+        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true);
+      })
+      .on('mouseout', function (e, d) {
+        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false);
+
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+
+    const xAxis = d3__namespace.axisBottom(xScale).tickValues(
+      xScale.domain().filter(function (d, i) {
+        return !(i % showOnlyEveryNthValue)
+      }),
+    );
 
     chartCore
       .append('g')
@@ -7948,12 +8001,6 @@ g.circles circle.circle.circle-hovered {
       allComponents,
       svg,
       margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
-
-    const colorsRgba = colors.map(c => {
-      const parsedColor = d3__namespace.rgb(c);
-      parsedColor.opacity = barOpacity;
-      return parsedColor
     });
 
     const colorScaleForLegend = d3__namespace.scaleOrdinal(colorsRgba).domain(yFields);
