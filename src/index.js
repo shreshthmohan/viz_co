@@ -57,3 +57,8 @@ export {
   renderChart as renderComparativeBar,
   validateAndRender as validateAndRenderComparativeBar,
 } from './charts/comparative_bar/index'
+
+export {
+  renderChart as renderBulletBeforeAfter,
+  validateAndRender as validateAndRenderBulletBeforeAfter,
+} from './charts/bullet_before_after/index'

@@ -216,7 +216,7 @@
 
   /* global window */
 
-  function applyInteractionStyles$6({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$7({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -332,7 +332,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$7({
+  function setupScales$8({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -452,7 +452,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis$5({
+  function renderXAxis$6({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -691,7 +691,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$4 = referenceList => qstr => {
+  const searchEventHandler$5 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -713,7 +713,7 @@
     }
   };
 
-  function setupSearch$5({
+  function setupSearch$6({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -772,7 +772,7 @@
     });
   }
 
-  function renderChart$b({
+  function renderChart$c({
     data,
     options: {
       aspectRatio = 2,
@@ -830,7 +830,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$6({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$7({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -863,7 +863,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$7({
+      setupScales$8({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -922,7 +922,7 @@
       directionEndLabel,
     });
 
-    renderXAxis$5({
+    renderXAxis$6({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -959,8 +959,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$4(nameValues);
-    const search = setupSearch$5({
+    const handleSearch = searchEventHandler$5(nameValues);
+    const search = setupSearch$6({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -1280,7 +1280,7 @@
 
   // export function that
 
-  const dimensionTypes$b = {
+  const dimensionTypes$c = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1289,7 +1289,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$b = {
+  const optionTypes$c = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1336,13 +1336,13 @@
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$b = ({
+  const validateAndRender$c = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$b, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$c, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1352,7 +1352,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$b, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$c, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1373,7 +1373,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$b({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$c({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1403,7 +1403,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$a({
+  function renderChart$b({
     data,
     options: {
       aspectRatio = 2,
@@ -1825,13 +1825,13 @@
     });
   }
 
-  const dimensionTypes$a = {
+  const dimensionTypes$b = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$a = {
+  const optionTypes$b = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1847,13 +1847,13 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$a = ({
+  const validateAndRender$b = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$a, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$b, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -1863,7 +1863,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$a, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$b, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1884,7 +1884,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$a({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$b({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2172,7 +2172,7 @@
 
   /* global window, console */
 
-  function renderChart$9({
+  function renderChart$a({
     data,
     dimensions: {
       sizeField,
@@ -2730,14 +2730,14 @@
     'schemeOranges',
   ];
 
-  const dimensionTypes$9 = {
+  const dimensionTypes$a = {
     sizeField: [shouldBeNumber],
     xField: [shouldBeNumber],
     nameField: [shouldNotBeBlank], // also search field
     segmentField: [shouldNotBeBlank],
   };
 
-  const optionTypes$9 = {
+  const optionTypes$a = {
     aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
     aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
 
@@ -2782,13 +2782,13 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$9 = ({
+  const validateAndRender$a = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$9, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$a, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -2797,7 +2797,7 @@
         columns,
         dimensions,
       });
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$9, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$a, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -2818,14 +2818,14 @@
       });
 
       combinedValidation.valid
-        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$a({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$5() {
+  function applyInteractionStyles$6() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -2925,7 +2925,7 @@
     return dataParsed
   }
 
-  function setupScales$6({
+  function setupScales$7({
     dataParsed,
     xField,
     yField,
@@ -2987,7 +2987,7 @@
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth }) {
+  function renderXAxis$5({ chartCore, xAxisLabel, coreChartWidth }) {
     chartCore
       .append('text')
       .text(xAxisLabel)
@@ -3060,7 +3060,7 @@
       });
   }
 
-  const searchEventHandler$3 = referenceList => qstr => {
+  const searchEventHandler$4 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -3132,7 +3132,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$4({
+  function setupSearch$5({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3151,7 +3151,7 @@
     return search
   }
 
-  function renderChart$8({
+  function renderChart$9({
     data,
     options: {
       aspectRatio = 2,
@@ -3186,7 +3186,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$5();
+    applyInteractionStyles$6();
 
     const coreChartWidth = 1000;
     const {
@@ -3215,7 +3215,7 @@
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$6({
+    const { xScale, yScale, colorScale } = setupScales$7({
       dataParsed,
       xField,
       yField,
@@ -3248,11 +3248,11 @@
       tooltipDiv,
     });
 
-    renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth });
+    renderXAxis$5({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$3(dominoValues);
-    setupSearch$4({
+    const handleSearch = searchEventHandler$4(dominoValues);
+    setupSearch$5({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3279,14 +3279,14 @@
     });
   }
 
-  const dimensionTypes$8 = {
+  const dimensionTypes$9 = {
     xField: [shouldNotBeBlank],
     yField: [shouldNotBeBlank],
     colorField: [shouldBeNumber],
     dominoField: [shouldNotBeBlank],
   };
 
-  const optionTypes$8 = {
+  const optionTypes$9 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3320,13 +3320,13 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$8 = ({
+  const validateAndRender$9 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$9, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3336,7 +3336,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$8, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$9, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3357,14 +3357,14 @@
       });
 
       combinedValidation.valid
-        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$4({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$5({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
 g.serieses .series {
   fill-opacity: ${inactiveOpacity};
@@ -3487,7 +3487,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$5({
+  function setupScales$6({
     parsedData,
     nestedData,
     xField,
@@ -3530,7 +3530,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScale, categoryScale, categoryDomain, fillColorScale }
   }
 
-  function renderXAxis$3({
+  function renderXAxis$4({
     chartCore,
     coreChartHeight,
     xScale,
@@ -3694,7 +3694,7 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$2 = referenceList => qstr => {
+  const searchEventHandler$3 = referenceList => qstr => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
@@ -3715,7 +3715,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$3({
+  function setupSearch$4({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3792,7 +3792,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$7({
+  function renderChart$8({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3831,7 +3831,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$5({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3863,7 +3863,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$5({
+      setupScales$6({
         parsedData,
         nestedData,
         xField,
@@ -3879,7 +3879,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultStateAll = defaultState === 'All' ? categoryDomain : defaultState;
 
-    renderXAxis$3({
+    renderXAxis$4({
       chartCore,
       coreChartHeight,
       xScale,
@@ -3910,8 +3910,8 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     });
 
-    const handleSearch = searchEventHandler$2(categoryDomain);
-    const search = setupSearch$3({
+    const handleSearch = searchEventHandler$3(categoryDomain);
+    const search = setupSearch$4({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3948,14 +3948,14 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$7 = {
+  const dimensionTypes$8 = {
     xField: [shouldNotBeBlank],
     yField: [shouldBeNumber],
     seriesField: [shouldNotBeBlank],
     colorField: [shouldNotBeBlank],
   };
 
-  const optionTypes$7 = {
+  const optionTypes$8 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3977,13 +3977,13 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$7 = ({
+  const validateAndRender$8 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$7, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3993,7 +3993,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$7, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$8, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -4014,7 +4014,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4126,7 +4126,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$4({
+  function setupScales$5({
     data,
     maxY,
     xGridField,
@@ -4185,7 +4185,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function renderLegends$1({ widgetsRight, colorScaleForLegend }) {
+  function renderLegends$2({ widgetsRight, colorScaleForLegend }) {
     widgetsRight.html(
       swatches({
         color: colorScaleForLegend,
@@ -4283,7 +4283,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$6({
+  function renderChart$7({
     data,
     options: {
       aspectRatio = 0.8,
@@ -4347,7 +4347,7 @@ g.circles circle.circle.circle-hovered {
       colorScaleForLegend,
       xGridScale,
       yGridScale,
-    } = setupScales$4({
+    } = setupScales$5({
       data,
       maxY,
       xGridField,
@@ -4384,7 +4384,7 @@ g.circles circle.circle.circle-hovered {
       yFieldLabels,
     });
 
-    renderLegends$1({ widgetsRight, colorScaleForLegend });
+    renderLegends$2({ widgetsRight, colorScaleForLegend });
 
     // adjust svg to prevent overflows
     preventOverflow({
@@ -4394,7 +4394,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$6 = {
+  const dimensionTypes$7 = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
     xField: [shouldNotBeBlank],
@@ -4403,7 +4403,7 @@ g.circles circle.circle.circle-hovered {
     // yFieldsDimensionTypes will be added dynamically
   };
 
-  const optionTypes$6 = {
+  const optionTypes$7 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -4454,7 +4454,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$6 = ({
+  const validateAndRender$7 = ({
     dataPath,
     options,
     dimensions,
@@ -4466,8 +4466,8 @@ g.circles circle.circle.circle-hovered {
       const { flatDimensions, dimensionTypesWYFields, optionTypesWYFields } =
         buildDimensionAndTypes({
           dimensions,
-          dimensionTypes: dimensionTypes$6,
-          optionTypes: optionTypes$6,
+          dimensionTypes: dimensionTypes$7,
+          optionTypes: optionTypes$7,
         });
 
       const optionsValidationResult = optionValidation({
@@ -4505,7 +4505,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4575,7 +4575,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$5({
+  function renderChart$6({
     data,
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
@@ -4612,7 +4612,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$3({ inactiveOpacity });
+    applyInteractionStyles$4({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -4641,7 +4641,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$3({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$4({
       dataParsed,
       sizeField,
       sizeRange,
@@ -4716,7 +4716,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$2({
+    setupSearch$3({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -4724,7 +4724,7 @@ g.circles circle.circle.circle-hovered {
       sizeField,
     });
 
-    renderXAxis$2({
+    renderXAxis$3({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -4918,7 +4918,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$2({
+  function setupSearch$3({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -4961,7 +4961,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$3({ inactiveOpacity }) {
+  function applyInteractionStyles$4({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     opacity: ${inactiveOpacity};
@@ -4989,7 +4989,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$3({
+  function setupScales$4({
     dataParsed,
     sizeField,
     sizeRange,
@@ -5025,7 +5025,7 @@ g.circles circle.circle.circle-hovered {
     return { sizeScale, xScale, yScale, colorScale }
   }
 
-  function renderXAxis$2({
+  function renderXAxis$3({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -5090,7 +5090,7 @@ g.circles circle.circle.circle-hovered {
       .text(yAxisLabel);
   }
 
-  const dimensionTypes$5 = {
+  const dimensionTypes$6 = {
     sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
     xField: [shouldNotBeBlank, shouldBeNumber],
     yField: [shouldNotBeBlank, shouldBeNumber],
@@ -5099,7 +5099,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [], // can be empty (if not provided, first color from scheme will be picked)
   };
 
-  const optionTypes$5 = {
+  const optionTypes$6 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5124,13 +5124,13 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames: '',
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$6, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -5139,7 +5139,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$6, dimensions });
 
       const allValidations = [
         dimensionValidation,
@@ -5156,14 +5156,14 @@ g.circles circle.circle.circle-hovered {
         }
       });
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$2({ inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$3({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
@@ -5259,7 +5259,7 @@ g.circles circle.circle.circle-hovered {
     return { allDominoFieldValues, defaultStateAll }
   }
 
-  function setupScales$2({
+  function setupScales$3({
     data,
     xField,
     yField,
@@ -5366,7 +5366,7 @@ g.circles circle.circle.circle-hovered {
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$1({
+  function renderXAxis$2({
     chartCore,
     xAxisLabel,
     coreChartWidth,
@@ -5591,7 +5591,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$1 = referenceList => qstr => {
+  const searchEventHandler$2 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -5695,7 +5695,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
-  function setupSearch$1({
+  function setupSearch$2({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -5751,7 +5751,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 0.8,
@@ -5803,7 +5803,7 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$2({ inactiveOpacity, activeOpacity });
+    applyInteractionStyles$3({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -5832,7 +5832,7 @@ g.circles circle.circle.circle-hovered {
       initialState,
     });
 
-    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$2({
+    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$3({
       data,
       xField,
       yField,
@@ -5850,7 +5850,7 @@ g.circles circle.circle.circle-hovered {
       sizeRange,
     });
 
-    renderXAxis$1({
+    renderXAxis$2({
       chartCore,
       xAxisLabel,
       coreChartWidth,
@@ -5894,8 +5894,8 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    const handleSearch = searchEventHandler$1(allDominoFieldValues);
-    const search = setupSearch$1({
+    const handleSearch = searchEventHandler$2(allDominoFieldValues);
+    const search = setupSearch$2({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -5944,7 +5944,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$4 = {
+  const dimensionTypes$5 = {
     xField: [shouldBeNumber],
     yField: [shouldNotBeBlank],
     dominoField: [shouldNotBeBlank],
@@ -5952,7 +5952,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [shouldBeNumber],
   };
 
-  const optionTypes$4 = {
+  const optionTypes$5 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5989,13 +5989,13 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween([0, 1]),
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -6005,7 +6005,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -6026,7 +6026,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6035,7 +6035,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     dimensions: { valueField, fipsField },
     options: {
@@ -6256,12 +6256,12 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  const dimensionTypes$3 = {
+  const dimensionTypes$4 = {
     valueField: [shouldBeNumber],
     fipsField: [shouldBeUnique, shouldNotBeBlank],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     marginTop: checkNumber,
     marginRight: checkNumber,
     marginBottom: checkNumber,
@@ -6275,13 +6275,13 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames,
   };
 
-  const validateAndRender$3 = ({
+  const validateAndRender$4 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -6291,7 +6291,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -6312,13 +6312,13 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* global window */
-  function renderChart$2({
+  function renderChart$3({
     data,
     dimensions: { valueField, stateAbbrField },
     options: {
@@ -6524,12 +6524,12 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     valueField: [shouldBeNumber],
     stateAbbrField: [shouldNotBeBlank],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     marginTop: checkNumber,
     marginRight: checkNumber,
     marginBottom: checkNumber,
@@ -6543,13 +6543,13 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames = '',
   };
 
-  const validateAndRender$2 = ({
+  const validateAndRender$3 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -6559,7 +6559,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -6580,7 +6580,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6588,7 +6588,7 @@ g.circles circle.circle.circle-hovered {
   /* global window */
 
   let currentState = 'global';
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 1,
@@ -6622,7 +6622,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { sourceField, targetField, valueField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$1({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$2({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -6661,7 +6661,7 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const { colorScale } = setupScales$1({ names, colorScheme });
+    const { colorScale } = setupScales$2({ names, colorScheme });
 
     renderChords({
       dataParsed,
@@ -6686,8 +6686,8 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const handleSearch = searchEventHandler(names, index);
-    const search = setupSearch({
+    const handleSearch = searchEventHandler$1(names, index);
+    const search = setupSearch$1({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -6725,7 +6725,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$1({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$2({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   path.ribbon {
     fill-opacity: ${inactiveOpacity}
@@ -6804,7 +6804,7 @@ g.circles circle.circle.circle-hovered {
     return { chord, arc, ribbon }
   }
 
-  function setupScales$1({ names, colorScheme }) {
+  function setupScales$2({ names, colorScheme }) {
     const colorScale = d3__namespace.scaleOrdinal(names, colorScheme);
 
     return { colorScale }
@@ -7067,7 +7067,7 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  const searchEventHandler = (referenceList, index) => qstr => {
+  const searchEventHandler$1 = (referenceList, index) => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       const matchedIndexes = [];
@@ -7101,7 +7101,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch({
+  function setupSearch$1({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -7170,13 +7170,13 @@ g.circles circle.circle.circle-hovered {
 
   // export function that
 
-  const dimensionTypes$1 = {
+  const dimensionTypes$2 = {
     sourceField: [shouldNotBeBlank], // Categorical
     targetField: [shouldNotBeBlank], // Categorical
     valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -7202,13 +7202,13 @@ g.circles circle.circle.circle-hovered {
     startingState: checkOneOf(['showAll', 'clearAll']),
   };
 
-  const validateAndRender$1 = ({
+  const validateAndRender$2 = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -7218,7 +7218,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -7239,7 +7239,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -7249,7 +7249,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 0.7,
@@ -7280,7 +7280,7 @@ g.circles circle.circle.circle-hovered {
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ bgColor });
+    applyInteractionStyles$1({ bgColor });
 
     const tooltipDiv = initializeTooltip$1();
 
@@ -7305,7 +7305,7 @@ g.circles circle.circle.circle-hovered {
       barValueMidPoint,
     });
 
-    const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales({
+    const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales$1({
       coreChartHeight,
       coreChartWidth,
       yDomain,
@@ -7340,11 +7340,11 @@ g.circles circle.circle.circle-hovered {
       barRightLabelField,
     });
 
-    renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize });
+    renderXAxis$1({ leftBarsContainer, xScaleLeft, axesTickSize });
 
     renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize });
 
-    renderLegends({
+    renderLegends$1({
       chartCore,
       xScaleLeft,
       xStart,
@@ -7367,7 +7367,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles({ bgColor }) {
+  function applyInteractionStyles$1({ bgColor }) {
     d3__namespace.select('body').append('style').html(`
   g.bar {
     stroke: ${bgColor};
@@ -7408,7 +7408,7 @@ g.circles circle.circle.circle-hovered {
     return { yDomain, maxOverall, xStartActual }
   }
 
-  function setupScales({
+  function setupScales$1({
     coreChartHeight,
     coreChartWidth,
     yDomain,
@@ -7437,7 +7437,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScaleLeft, xScaleRight, xStart }
   }
 
-  function renderLegends({
+  function renderLegends$1({
     chartCore,
     xScaleLeft,
     xStart,
@@ -7537,7 +7537,7 @@ g.circles circle.circle.circle-hovered {
       .attr('style', 'font-weight: bold;');
   }
 
-  function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+  function renderXAxis$1({ leftBarsContainer, xScaleLeft, axesTickSize }) {
     leftBarsContainer
       .append('g')
       .call(d3__namespace.axisTop(xScaleLeft).tickSize(axesTickSize))
@@ -7773,7 +7773,7 @@ g.circles circle.circle.circle-hovered {
     return { leftBarsContainer, rightBarsContainer }
   }
 
-  const dimensionTypes = {
+  const dimensionTypes$1 = {
     yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
 
     // barLeftLabelField: 'Democratic Label', // Categorical
@@ -7783,7 +7783,7 @@ g.circles circle.circle.circle-hovered {
     barRightValueField: [shouldBeNumber], // Numeric
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     aspectRatio: checkNumberBetween([0.1, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -7805,12 +7805,520 @@ g.circles circle.circle.circle-hovered {
     barOpacity: checkNumberBetween([0, 1]),
   };
 
-  function validateAndRender({
+  function validateAndRender$1({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+
+    d3__namespace.csv(dataPath).then(data => {
+      // Run validations
+      const { columns } = data;
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  }
+
+  /* global window */
+
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = 'transparent',
+
+      beforeFieldColor = '#43CAD7',
+      afterFieldColor = '#1570A6',
+      linkColor = 'farFromReference',
+      /* Legends */
+      beforeLegendLabel = beforeField,
+      afterLegendLabel = afterField,
+
+      /* Axes */
+      xAxisPosition = 'top',
+      xAxisOffset = 0,
+      xAxisLabel = '',
+      xAXisLabelFontSize = '12px',
+      xAxisLabelOffset = 30,
+      xAxisCustomDomain = null,
+      xAxisTickFontSize = '12px',
+      xAxisColor = 'black',
+      xAxisTickValues = null,
+      xAxisTickSizeOffset = 0,
+      xAxisLineThickness = 1,
+
+      sizeLegendLabelCustom,
+
+      sizeLegendValues = [1, 5, 10, 20],
+      sizeLegendGapInSymbols = 25,
+      sizeLegendMoveSymbolsDownBy = 15,
+
+      xDomainCustom,
+
+      glyphSize = 5,
+      connectorSize = 5,
+      activeOpacity = 1,
+      inactiveOpacity = 0.3,
+
+      // Labels
+      xLabelOffset = 10,
+
+      // Opinionated (currently cannot be changed from options)
+      yPaddingInner = 0.6,
+      yPaddingOuter = 1,
+
+      searchInputClassNames = '',
+    },
+    dimensions: { beforeField, afterField, topicField },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles({ inactiveOpacity });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$3({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    initializeTooltip$1();
+
+    const { yScale, xScale, colorScale } = setupScales({
+      coreChartHeight,
+      coreChartWidth,
+      yPaddingInner,
+      yPaddingOuter,
+      beforeLegendLabel,
+      afterLegendLabel,
+      beforeFieldColor,
+      afterFieldColor,
+      beforeField,
+      afterField,
+      topicField,
+      data,
+      xAxisCustomDomain,
+    });
+
+    renderLegends({ widgetsRight, colorScale });
+
+    const line = d3__namespace
+      .line()
+      .x(d => xScale(d.x))
+      .y(d => yScale(d.y));
+
+    renderXAxis({
+      chartCore,
+      xScale,
+      coreChartHeight,
+      coreChartWidth,
+      xAxisLabelOffset,
+      xAxisLabel,
+      xAxisPosition,
+      xAXisLabelFontSize,
+      xAxisTickFontSize,
+      xAxisColor,
+      xAxisTickValues,
+      xAxisOffset,
+      xAxisTickSizeOffset,
+      xAxisLineThickness,
+    });
+
+    renderBullets({
+      chartCore,
+      data,
+      topicField,
+      activeOpacity,
+      beforeField,
+      afterField,
+      connectorSize,
+      afterFieldColor,
+      glyphSize,
+      beforeFieldColor,
+      xScale,
+      yScale,
+      xLabelOffset,
+      line,
+    });
+
+    const topicValues = ___default["default"](data).map(topicField).uniq().value();
+
+    const handleSearch = searchEventHandler(topicValues);
+    setupSearch({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      topicField,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function applyInteractionStyles({ inactiveOpacity }) {
+    d3__namespace.select('body')
+      .append('style')
+      .html(
+        `.g-interaction .topic:not(.g-match, .g-hover) {
+        opacity: ${inactiveOpacity};
+      }
+      `,
+      );
+  }
+
+  function setupScales({
+    coreChartHeight,
+    coreChartWidth,
+    yPaddingInner,
+    yPaddingOuter,
+    beforeLegendLabel,
+    afterLegendLabel,
+    beforeFieldColor,
+    afterFieldColor,
+    beforeField,
+    afterField,
+    topicField,
+    data,
+    xAxisCustomDomain,
+  }) {
+    const yDomain = ___default["default"].map(data, topicField);
+    const xDomainDefault = d3__namespace.extent(
+      ___default["default"].concat(
+        ___default["default"].map(data, d => Number.parseFloat(d[beforeField])),
+        ___default["default"].map(data, d => Number.parseFloat(d[afterField])),
+      ),
+    );
+    const xDomain = (xAxisCustomDomain || xDomainDefault).slice();
+
+    const yScale = d3__namespace
+      .scaleBand()
+      .domain(yDomain)
+      .range([0, coreChartHeight])
+      .paddingInner(yPaddingInner)
+      .paddingOuter(yPaddingOuter);
+
+    const xScale = d3__namespace
+      .scaleLinear()
+      .domain(xDomain)
+      .range([0, coreChartWidth])
+      .nice();
+    // debugger
+    const colorScale = d3__namespace
+      .scaleOrdinal()
+      .domain([beforeLegendLabel, afterLegendLabel])
+      .range([beforeFieldColor, afterFieldColor]);
+
+    return { yScale, xScale, colorScale }
+  }
+
+  function renderXAxis({
+    chartCore,
+    xScale,
+    coreChartHeight,
+    coreChartWidth,
+    xAxisLabelOffset,
+    xAxisLabel,
+    xAxisPosition,
+    xAxisTickSizeOffset,
+    xAXisLabelFontSize,
+    xAxisTickFontSize,
+    xAxisColor,
+    xAxisTickValues,
+    xAxisOffset,
+    xAxisLineThickness,
+  }) {
+    let xAxis, tickSize, axisOffset, labelOffset, tickOffset;
+    if (xAxisPosition === 'top') {
+      xAxis = d3__namespace.axisTop(xScale);
+      tickSize = -coreChartHeight;
+      axisOffset = -xAxisOffset;
+      labelOffset = xAxisLabelOffset;
+      tickOffset = -xAxisTickSizeOffset;
+    } else {
+      xAxis = d3__namespace.axisBottom(xScale);
+      tickSize = coreChartHeight;
+      axisOffset = xAxisOffset;
+      labelOffset = -xAxisLabelOffset;
+      tickOffset = xAxisTickSizeOffset;
+    }
+
+    const xAxisGroup = chartCore
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0, ${axisOffset})`);
+
+    const xDomain = xScale.domain();
+    const tickValues =
+      xAxisTickValues === null
+        ? null
+        : ___default["default"].filter(xAxisTickValues, val => {
+            return val >= xDomain[0] && val <= xDomain[1]
+          });
+
+    xAxisGroup
+      .call(xAxis.tickSize(tickSize).tickSizeOuter(10).tickValues(tickValues))
+      .call(g =>
+        g
+          .select('.domain')
+          .attr('stroke', xAxisColor)
+          .attr('stroke-width', xAxisLineThickness),
+      )
+      .call(g => {
+        g.selectAll('.tick line')
+          .attr('stroke-opacity', 0.2)
+          .attr('transform', `translate(0, ${tickOffset / 2})`);
+        g.selectAll('.tick text')
+          .attr('transform', `translate(0, ${tickOffset})`)
+          .attr('font-size', xAxisTickFontSize)
+          .attr('fill', xAxisColor);
+      });
+
+    xAxisGroup
+      .append('text')
+      .attr('transform', `translate(${coreChartWidth / 2}, ${-labelOffset})`)
+      .text(xAxisLabel)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', xAXisLabelFontSize)
+      .attr('fill', xAxisColor);
+
+    // d3.select(ctx)
+    //   .append('g')
+    //   .attr('class', 'x-axis')
+    //   .style('font-size', xAxisTicksFontSize)
+    //   .attr('transform', `translate(0, ${xAxisOffset})`)
+    //   .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
+    //   .call(g => {
+    //     g.selectAll('.domain').attr('stroke', '#333')
+    //     g.selectAll('.tick line').attr('stroke', '#333')
+    //     g.selectAll('.tick text').attr('fill', '#333')
+    //     g.selectAll('.tick line').attr('stroke-opacity', '0.2')
+    //     g.select('.domain').remove()
+    //     if (i % 2 !== 0 && alternatingTickTextXAxis) {
+    //       g.selectAll('.tick text').remove()
+    //     }
+    //   })
+  }
+
+  function renderBullets({
+    chartCore,
+    data,
+    topicField,
+    activeOpacity,
+    beforeField,
+    afterField,
+    connectorSize,
+    afterFieldColor,
+    glyphSize,
+    beforeFieldColor,
+    xScale,
+    yScale,
+    xLabelOffset,
+    line,
+  }) {
+    const yGroups = chartCore
+      .append('g')
+      .attr('class', 'topics')
+      .selectAll('g')
+      .data(data);
+
+    // enter selection
+    const yGroupsEnter = yGroups
+      .enter()
+      .append('g')
+      .attr('class', 'topic')
+      .attr('id', d => `${d[topicField]}`)
+      .attr('opacity', activeOpacity)
+      .on('mouseover', (e, d) => {
+        d3__namespace.select('.topics').classed('g-interaction', true);
+        d3__namespace.select(e.target.parentNode).classed('g-hover', true);
+      })
+      .on('mouseout', (e, d) => {
+        d3__namespace.select('.topics').classed('g-interaction', false);
+        d3__namespace.select(e.target.parentNode).classed('g-hover', false);
+      });
+
+    yGroupsEnter
+      .append('path')
+      .attr('d', d => {
+        const d_ = [
+          { x: Number(d[beforeField]), y: d[topicField] },
+          { x: Number(d[afterField]), y: d[topicField] },
+        ];
+        return line(d_)
+      })
+      .attr('fill', 'none')
+      .attr('stroke-width', connectorSize)
+      .attr('stroke', afterFieldColor);
+
+    yGroupsEnter
+      .append('circle')
+      .attr('cx', d => xScale(d[beforeField]))
+      .attr('cy', d => yScale(d[topicField]))
+      .attr('r', glyphSize)
+      .attr('fill', beforeFieldColor);
+
+    yGroupsEnter
+      .append('circle')
+      .attr('cx', d => xScale(d[afterField]))
+      .attr('cy', d => yScale(d[topicField]))
+      .attr('r', glyphSize)
+      .attr('fill', afterFieldColor);
+
+    yGroupsEnter
+      .append('text')
+      .text(d => d[topicField])
+      .attr('x', d => glyphSize + xLabelOffset + xScale(d[afterField]))
+      .attr('y', d => yScale(d[topicField]))
+      .attr('fill', afterFieldColor)
+      .attr('dominant-baseline', 'middle');
+  }
+
+  const searchEventHandler = referenceList => qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      referenceList.forEach(val => {
+        // d3.selectAll('.mace').classed('mace-active', false)
+        const maceName = toClassText(val);
+        if (val.toLowerCase().includes(lqstr)) {
+          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
+        } else {
+          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+        }
+        d3__namespace.select('.maces').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const maceName = toClassText(val);
+        d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+      });
+      d3__namespace.select('.maces').classed('searching', false);
+    }
+  };
+
+  function setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    topicField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${topicField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
+  }
+
+  function renderLegends({ widgetsRight, colorScale }) {
+    widgetsRight.html(
+      swatches({
+        color: colorScale,
+        uid: 'rs',
+        customClass: '',
+      }),
+    );
+  }
+
+  // export function that
+
+  const dimensionTypes = {
+    beforeField: [shouldBeNumber],
+    afterField: [shouldBeNumber],
+    topicField: [shouldNotBeBlank, shouldBeUnique],
+  };
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    /* Series Colors */
+    beforeFieldColor: checkColor,
+    afterFieldColor: checkColor,
+
+    /* Glyphs */
+    glyphSize: checkNumber,
+    connectorSize: checkNumber,
+
+    /* Legends */
+    // beforeLegendLabel: checkString,
+    // afterLegendLabel: checkString,
+
+    /* Axes */
+    // xAxisTitle: checkString,
+    xAxisLabelOffset: checkNumber,
+    xDomainCustom: checkNumericArray,
+
+    activeOpacity: checkNumberBetween([0, 1]),
+    inactiveOpacity: checkNumberBetween([0, 1]),
+  };
+
+  const validateAndRender = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
     d3__namespace.csv(dataPath).then(data => {
@@ -7844,33 +8352,38 @@ g.circles circle.circle.circle-hovered {
       combinedValidation.valid
         ? renderChart({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
-    });
-  }
 
-  exports.renderBubbleHorizontal = renderChart$9;
-  exports.renderCalendar = renderChart$6;
-  exports.renderChord = renderChart$1;
-  exports.renderChoroplethCounties = renderChart$3;
-  exports.renderChoroplethStates = renderChart$2;
-  exports.renderComparativeBar = renderChart;
-  exports.renderDominoBase = renderChart$8;
-  exports.renderDominoRibbon = renderChart$4;
-  exports.renderMace = renderChart$b;
-  exports.renderMotionBubble = renderChart$5;
-  exports.renderRidgeline = renderChart$7;
-  exports.renderSankey = renderChart$a;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$9;
-  exports.validateAndRenderCalendar = validateAndRender$6;
-  exports.validateAndRenderChord = validateAndRender$1;
-  exports.validateAndRenderChoroplethCounties = validateAndRender$3;
-  exports.validateAndRenderChoroplethStates = validateAndRender$2;
-  exports.validateAndRenderComparativeBar = validateAndRender;
-  exports.validateAndRenderDominoBase = validateAndRender$8;
-  exports.validateAndRenderDominoRibbon = validateAndRender$4;
-  exports.validateAndRenderMace = validateAndRender$b;
-  exports.validateAndRenderMotionBubble = validateAndRender$5;
-  exports.validateAndRenderRidgeline = validateAndRender$7;
-  exports.validateAndRenderSankey = validateAndRender$a;
+      // eslint-disable-next-line no-console
+      // console.log({ combinedValidation })
+    });
+  };
+
+  exports.renderBubbleHorizontal = renderChart$a;
+  exports.renderBulletBeforeAfter = renderChart;
+  exports.renderCalendar = renderChart$7;
+  exports.renderChord = renderChart$2;
+  exports.renderChoroplethCounties = renderChart$4;
+  exports.renderChoroplethStates = renderChart$3;
+  exports.renderComparativeBar = renderChart$1;
+  exports.renderDominoBase = renderChart$9;
+  exports.renderDominoRibbon = renderChart$5;
+  exports.renderMace = renderChart$c;
+  exports.renderMotionBubble = renderChart$6;
+  exports.renderRidgeline = renderChart$8;
+  exports.renderSankey = renderChart$b;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$a;
+  exports.validateAndRenderBulletBeforeAfter = validateAndRender;
+  exports.validateAndRenderCalendar = validateAndRender$7;
+  exports.validateAndRenderChord = validateAndRender$2;
+  exports.validateAndRenderChoroplethCounties = validateAndRender$4;
+  exports.validateAndRenderChoroplethStates = validateAndRender$3;
+  exports.validateAndRenderComparativeBar = validateAndRender$1;
+  exports.validateAndRenderDominoBase = validateAndRender$9;
+  exports.validateAndRenderDominoRibbon = validateAndRender$5;
+  exports.validateAndRenderMace = validateAndRender$c;
+  exports.validateAndRenderMotionBubble = validateAndRender$6;
+  exports.validateAndRenderRidgeline = validateAndRender$8;
+  exports.validateAndRenderSankey = validateAndRender$b;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
