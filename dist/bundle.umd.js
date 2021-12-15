@@ -5329,8 +5329,6 @@ g.circles circle.circle.circle-hovered {
       data.map(d => Number.parseFloat(d[colorField])),
     );
 
-    console.log({ colorDomainFromData });
-
     const chooseColors = [0, 2, 3, 6];
 
     const colorRangeDefault = d3__namespace.schemeSpectral[9]
@@ -5345,9 +5343,6 @@ g.circles circle.circle.circle-hovered {
       .domain(colorDomain || colorDomainFromData);
     // .nice()
 
-    console.log(colorScale.domain());
-    console.log(xScale.domain());
-
     return {
       xScale,
       yScale,
@@ -5360,7 +5355,7 @@ g.circles circle.circle.circle-hovered {
   function renderYAxis$1({
     chartCore,
     xScale,
-    xDomain,
+    // xDomain,
     yScale,
     formatDate,
     yAxisDateParser,

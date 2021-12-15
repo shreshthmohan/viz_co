@@ -162,8 +162,6 @@ function setupScales({
     data.map(d => Number.parseFloat(d[colorField])),
   )
 
-  console.log({ colorDomainFromData })
-
   const chooseColors = [0, 2, 3, 6]
 
   const colorRangeDefault = d3.schemeSpectral[9]
@@ -178,9 +176,6 @@ function setupScales({
     .domain(colorDomain || colorDomainFromData)
   // .nice()
 
-  console.log(colorScale.domain())
-  console.log(xScale.domain())
-
   return {
     xScale,
     yScale,
@@ -193,7 +188,7 @@ function setupScales({
 function renderYAxis({
   chartCore,
   xScale,
-  xDomain,
+  // xDomain,
   yScale,
   formatDate,
   yAxisDateParser,
