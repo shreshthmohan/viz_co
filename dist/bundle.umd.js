@@ -5340,8 +5340,8 @@ g.circles circle.circle.circle-hovered {
     const colorScale = d3__namespace
       .scaleQuantize()
       .range(colorRange || colorRangeDefault)
-      .domain(colorDomain || colorDomainFromData);
-    // .nice()
+      .domain(colorDomain || colorDomainFromData)
+      .nice();
 
     return {
       xScale,

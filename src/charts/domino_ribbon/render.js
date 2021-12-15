@@ -174,7 +174,7 @@ function setupScales({
     .scaleQuantize()
     .range(colorRange || colorRangeDefault)
     .domain(colorDomain || colorDomainFromData)
-  // .nice()
+    .nice()
 
   return {
     xScale,
