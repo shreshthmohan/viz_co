@@ -1,4 +1,4 @@
-/* global window */
+/* global */
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
@@ -41,17 +41,9 @@ export function renderChart({
     xAxisTickFontSize = '12px',
     xAxisColor = 'black',
     xAxisTickValues = null,
-    xAxisTickSizeOffset = 0,
+    xAxisTickOffset = 0,
     xAxisLineThickness = 1,
     xAxisTickFormatter = '',
-
-    sizeLegendLabelCustom,
-
-    sizeLegendValues = [1, 5, 10, 20],
-    sizeLegendGapInSymbols = 25,
-    sizeLegendMoveSymbolsDownBy = 15,
-
-    xDomainCustom,
 
     glyphSize = 5,
     connectorSize = 5,
@@ -129,7 +121,7 @@ export function renderChart({
     xAxisColor,
     xAxisTickValues,
     xAxisOffset,
-    xAxisTickSizeOffset,
+    xAxisTickOffset,
     xAxisLineThickness,
     xAxisTickFormatter,
   })
@@ -217,7 +209,7 @@ function setupScales({
     .domain(xDomain)
     .range([0, coreChartWidth])
     .nice()
-  // debugger
+
   const colorScale = d3
     .scaleOrdinal()
     .domain([beforeLegendLabel, afterLegendLabel])
@@ -234,7 +226,7 @@ function renderXAxis({
   xAxisLabelOffset,
   xAxisLabel,
   xAxisPosition,
-  xAxisTickSizeOffset,
+  xAxisTickOffset,
   xAXisLabelFontSize,
   xAxisTickFontSize,
   xAxisColor,
@@ -243,20 +235,19 @@ function renderXAxis({
   xAxisLineThickness,
   xAxisTickFormatter,
 }) {
-  let xAxis, tickSize, axisOffset, labelOffset, tickOffset
+  let xAxis, axisOffset, labelOffset, tickOffset
   if (xAxisPosition === 'top') {
     xAxis = d3.axisTop(xScale)
-    tickSize = -coreChartHeight
     axisOffset = -xAxisOffset
     labelOffset = xAxisLabelOffset
-    tickOffset = -xAxisTickSizeOffset
+    tickOffset = -xAxisTickOffset
   } else {
     xAxis = d3.axisBottom(xScale)
-    tickSize = coreChartHeight
-    axisOffset = xAxisOffset
+    axisOffset = coreChartHeight + xAxisOffset
     labelOffset = -xAxisLabelOffset
-    tickOffset = xAxisTickSizeOffset
+    tickOffset = xAxisTickOffset
   }
+  const tickSize = -coreChartHeight - xAxisTickOffset
 
   const xAxisGroup = chartCore
     .append('g')
@@ -300,25 +291,9 @@ function renderXAxis({
     .attr('transform', `translate(${coreChartWidth / 2}, ${-labelOffset})`)
     .text(xAxisLabel)
     .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
     .attr('font-size', xAXisLabelFontSize)
     .attr('fill', xAxisColor)
-
-  // d3.select(ctx)
-  //   .append('g')
-  //   .attr('class', 'x-axis')
-  //   .style('font-size', xAxisTicksFontSize)
-  //   .attr('transform', `translate(0, ${xAxisOffset})`)
-  //   .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
-  //   .call(g => {
-  //     g.selectAll('.domain').attr('stroke', '#333')
-  //     g.selectAll('.tick line').attr('stroke', '#333')
-  //     g.selectAll('.tick text').attr('fill', '#333')
-  //     g.selectAll('.tick line').attr('stroke-opacity', '0.2')
-  //     g.select('.domain').remove()
-  //     if (i % 2 !== 0 && alternatingTickTextXAxis) {
-  //       g.selectAll('.tick text').remove()
-  //     }
-  //   })
 }
 
 function renderBullets({

@@ -35,17 +35,17 @@ const options = {
   afterLegendLabel: 'After',
 
   /* Axes */
-  xAxisPosition: 'top',
+  xAxisPosition: 'bottom',
   xAxisOffset: 20,
   xAxisLineThickness: 1,
   xAxisLabel: 'Emotion Score',
   xAXisLabelFontSize: '14px',
-  xAxisLabelOffset: 50,
+  xAxisLabelOffset: 60,
   xAxisCustomDomain: [-0.8, 0.8],
   // xAxisTickValues: [-1, -0.8, -0.5, 0, 0.5, 0.8, 1],
   xAxisTickFontSize: '14px',
   xAxisColor: 'red',
-  xAxisTickSizeOffset: 20,
+  xAxisTickOffset: 20,
   xAxisTickFormatter: '.2f',
 
   searchInputClassNames:
