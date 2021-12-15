@@ -49,6 +49,8 @@ export function renderChart({
     xAxisTickRotation = 0,
     xAxisTickAnchor = 'middle',
     xAxisTickBaseline = 'middle',
+    xAxisTickValueXOffset = 0,
+    xAxisTickValueYOffset = 0,
 
     glyphSize = 5,
     connectorSize = 5,
@@ -134,6 +136,8 @@ export function renderChart({
     xAxisTickRotation,
     xAxisTickAnchor,
     xAxisTickBaseline,
+    xAxisTickValueXOffset,
+    xAxisTickValueYOffset,
   })
 
   renderBullets({
@@ -252,6 +256,8 @@ function renderXAxis({
   xAxisTickRotation,
   xAxisTickAnchor,
   xAxisTickBaseline,
+  xAxisTickValueXOffset,
+  xAxisTickValueYOffset,
 }) {
   let xAxis, axisOffset, labelOffset, tickOffset
   if (xAxisPosition === 'top') {
@@ -299,14 +305,17 @@ function renderXAxis({
         .attr('stroke-opacity', 0.2)
         .attr('transform', `translate(0, ${tickOffset / 2})`)
       g.selectAll('.tick text')
+        .attr('transform', `translate(0, ${tickOffset})`)
         .attr('font-size', xAxisTickFontSize)
         .attr('fill', xAxisColor)
         .attr('transform', function () {
           const { x, y, width, height } = this.getBBox()
-          return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
+          return `rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
         })
         .attr('text-anchor', xAxisTickAnchor)
         .attr('dominant-baseline', xAxisTickBaseline)
+        .attr('dx', `${xAxisTickValueXOffset}em`)
+        .attr('dy', `${xAxisTickValueYOffset}em`)
     })
 
   xAxisGroup

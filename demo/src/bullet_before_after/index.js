@@ -50,6 +50,8 @@ const options = {
   xAxisTickFormatter: '.2f',
   xAxisTickRotation: 0,
   xAxisTickAnchor: 'middle',
+  xAxisTickValueXOffset: 0,
+  xAxisTickValueYOffset: 0,
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
