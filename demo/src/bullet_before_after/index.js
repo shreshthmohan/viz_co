@@ -46,6 +46,7 @@ const options = {
   xAxisTickFontSize: '14px',
   xAxisColor: 'red',
   xAxisTickSizeOffset: 20,
+  xAxisTickFormatter: '.2f',
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',

@@ -7880,6 +7880,7 @@ g.circles circle.circle.circle-hovered {
       xAxisTickValues = null,
       xAxisTickSizeOffset = 0,
       xAxisLineThickness = 1,
+      xAxisTickFormatter = '',
 
       sizeLegendLabelCustom,
 
@@ -7967,6 +7968,7 @@ g.circles circle.circle.circle-hovered {
       xAxisOffset,
       xAxisTickSizeOffset,
       xAxisLineThickness,
+      xAxisTickFormatter,
     });
 
     renderBullets({
@@ -8076,6 +8078,7 @@ g.circles circle.circle.circle-hovered {
     xAxisTickValues,
     xAxisOffset,
     xAxisLineThickness,
+    xAxisTickFormatter,
   }) {
     let xAxis, tickSize, axisOffset, labelOffset, tickOffset;
     if (xAxisPosition === 'top') {
@@ -8106,7 +8109,13 @@ g.circles circle.circle.circle-hovered {
           });
 
     xAxisGroup
-      .call(xAxis.tickSize(tickSize).tickSizeOuter(10).tickValues(tickValues))
+      .call(
+        xAxis
+          .tickSize(tickSize)
+          .tickSizeOuter(10)
+          .tickValues(tickValues)
+          .tickFormat(val => formatNumber(val, xAxisTickFormatter)),
+      )
       .call(g =>
         g
           .select('.domain')

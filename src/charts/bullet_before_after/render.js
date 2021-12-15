@@ -10,6 +10,7 @@ import {
 
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { swatches } from '../../utils/helpers/colorLegend'
+import { formatNumber } from '../../utils/helpers/formatters'
 
 export function renderChart({
   data,
@@ -42,6 +43,7 @@ export function renderChart({
     xAxisTickValues = null,
     xAxisTickSizeOffset = 0,
     xAxisLineThickness = 1,
+    xAxisTickFormatter = '',
 
     sizeLegendLabelCustom,
 
@@ -129,6 +131,7 @@ export function renderChart({
     xAxisOffset,
     xAxisTickSizeOffset,
     xAxisLineThickness,
+    xAxisTickFormatter,
   })
 
   renderBullets({
@@ -238,6 +241,7 @@ function renderXAxis({
   xAxisTickValues,
   xAxisOffset,
   xAxisLineThickness,
+  xAxisTickFormatter,
 }) {
   let xAxis, tickSize, axisOffset, labelOffset, tickOffset
   if (xAxisPosition === 'top') {
@@ -268,7 +272,13 @@ function renderXAxis({
         })
 
   xAxisGroup
-    .call(xAxis.tickSize(tickSize).tickSizeOuter(10).tickValues(tickValues))
+    .call(
+      xAxis
+        .tickSize(tickSize)
+        .tickSizeOuter(10)
+        .tickValues(tickValues)
+        .tickFormat(val => formatNumber(val, xAxisTickFormatter)),
+    )
     .call(g =>
       g
         .select('.domain')
