@@ -1124,6 +1124,14 @@
     return { valid: false, message: 'Should be a valid number' }
   };
 
+  const checkPositiveInteger = val => {
+    const valid = Number.isInteger(val) && val > 0;
+    if (valid) {
+      return { valid: true }
+    }
+    return { valid: false, message: 'Should be a positive integer' }
+  };
+
   const checkBoolean = val => {
     const valid = typeof val === 'boolean';
     if (valid) {
@@ -1280,7 +1288,7 @@
 
   // export function that
 
-  const dimensionTypes$b = {
+  const dimensionTypes$c = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1289,7 +1297,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$b = {
+  const optionTypes$c = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1342,7 +1350,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$b, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$c, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -1352,7 +1360,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$b, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$c, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1825,13 +1833,13 @@
     });
   }
 
-  const dimensionTypes$a = {
+  const dimensionTypes$b = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$a = {
+  const optionTypes$b = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -1853,7 +1861,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$a, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$b, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -1863,7 +1871,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$a, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$b, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -2730,14 +2738,14 @@
     'schemeOranges',
   ];
 
-  const dimensionTypes$9 = {
+  const dimensionTypes$a = {
     sizeField: [shouldBeNumber],
     xField: [shouldBeNumber],
     nameField: [shouldNotBeBlank], // also search field
     segmentField: [shouldNotBeBlank],
   };
 
-  const optionTypes$9 = {
+  const optionTypes$a = {
     aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
     aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
 
@@ -2788,7 +2796,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$9, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$a, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -2797,7 +2805,7 @@
         columns,
         dimensions,
       });
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$9, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$a, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3279,14 +3287,14 @@
     });
   }
 
-  const dimensionTypes$8 = {
+  const dimensionTypes$9 = {
     xField: [shouldNotBeBlank],
     yField: [shouldNotBeBlank],
     colorField: [shouldBeNumber],
     dominoField: [shouldNotBeBlank],
   };
 
-  const optionTypes$8 = {
+  const optionTypes$9 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3326,7 +3334,7 @@
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$9, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3336,7 +3344,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$8, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$9, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3948,14 +3956,14 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$7 = {
+  const dimensionTypes$8 = {
     xField: [shouldNotBeBlank],
     yField: [shouldBeNumber],
     seriesField: [shouldNotBeBlank],
     colorField: [shouldNotBeBlank],
   };
 
-  const optionTypes$7 = {
+  const optionTypes$8 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -3983,7 +3991,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$7, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -3993,7 +4001,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$7, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$8, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -4394,7 +4402,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$6 = {
+  const dimensionTypes$7 = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
     xField: [shouldNotBeBlank],
@@ -4403,7 +4411,7 @@ g.circles circle.circle.circle-hovered {
     // yFieldsDimensionTypes will be added dynamically
   };
 
-  const optionTypes$6 = {
+  const optionTypes$7 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -4425,7 +4433,7 @@ g.circles circle.circle.circle-hovered {
     // yFieldLabels: to be added dynamically
   };
 
-  function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {
+  function buildDimensionAndTypes$1({ dimensions, dimensionTypes, optionTypes }) {
     const yFieldsDimensionTypes = {};
     const yFieldDimensions = {};
     const yFields = dimensions.yFields;
@@ -4464,10 +4472,10 @@ g.circles circle.circle.circle-hovered {
       const { columns } = data;
 
       const { flatDimensions, dimensionTypesWYFields, optionTypesWYFields } =
-        buildDimensionAndTypes({
+        buildDimensionAndTypes$1({
           dimensions,
-          dimensionTypes: dimensionTypes$6,
-          optionTypes: optionTypes$6,
+          dimensionTypes: dimensionTypes$7,
+          optionTypes: optionTypes$7,
         });
 
       const optionsValidationResult = optionValidation({
@@ -5090,7 +5098,7 @@ g.circles circle.circle.circle-hovered {
       .text(yAxisLabel);
   }
 
-  const dimensionTypes$5 = {
+  const dimensionTypes$6 = {
     sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
     xField: [shouldNotBeBlank, shouldBeNumber],
     yField: [shouldNotBeBlank, shouldBeNumber],
@@ -5099,7 +5107,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [], // can be empty (if not provided, first color from scheme will be picked)
   };
 
-  const optionTypes$5 = {
+  const optionTypes$6 = {
     aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5130,7 +5138,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$6, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -5139,7 +5147,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$6, dimensions });
 
       const allValidations = [
         dimensionValidation,
@@ -5944,7 +5952,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$4 = {
+  const dimensionTypes$5 = {
     xField: [shouldBeNumber],
     yField: [shouldNotBeBlank],
     dominoField: [shouldNotBeBlank],
@@ -5952,7 +5960,7 @@ g.circles circle.circle.circle-hovered {
     colorField: [shouldBeNumber],
   };
 
-  const optionTypes$4 = {
+  const optionTypes$5 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -5995,7 +6003,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
 
     d3__namespace.csv(dataPath).then(data => {
       const { columns } = data;
@@ -6005,7 +6013,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$5, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -6256,12 +6264,12 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  const dimensionTypes$3 = {
+  const dimensionTypes$4 = {
     valueField: [shouldBeNumber],
     fipsField: [shouldBeUnique, shouldNotBeBlank],
   };
 
-  const optionTypes$3 = {
+  const optionTypes$4 = {
     marginTop: checkNumber,
     marginRight: checkNumber,
     marginBottom: checkNumber,
@@ -6281,7 +6289,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -6291,7 +6299,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$4, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -6524,12 +6532,12 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  const dimensionTypes$2 = {
+  const dimensionTypes$3 = {
     valueField: [shouldBeNumber],
     stateAbbrField: [shouldNotBeBlank],
   };
 
-  const optionTypes$2 = {
+  const optionTypes$3 = {
     marginTop: checkNumber,
     marginRight: checkNumber,
     marginBottom: checkNumber,
@@ -6549,7 +6557,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -6559,7 +6567,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$3, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -7170,13 +7178,13 @@ g.circles circle.circle.circle-hovered {
 
   // export function that
 
-  const dimensionTypes$1 = {
+  const dimensionTypes$2 = {
     sourceField: [shouldNotBeBlank], // Categorical
     targetField: [shouldNotBeBlank], // Categorical
     valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
   };
 
-  const optionTypes$1 = {
+  const optionTypes$2 = {
     aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -7208,7 +7216,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -7218,7 +7226,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$2, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -7773,7 +7781,7 @@ g.circles circle.circle.circle-hovered {
     return { leftBarsContainer, rightBarsContainer }
   }
 
-  const dimensionTypes = {
+  const dimensionTypes$1 = {
     yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
 
     // barLeftLabelField: 'Democratic Label', // Categorical
@@ -7783,7 +7791,7 @@ g.circles circle.circle.circle-hovered {
     barRightValueField: [shouldBeNumber], // Numeric
   };
 
-  const optionTypes = {
+  const optionTypes$1 = {
     aspectRatio: checkNumberBetween([0.1, Number.POSITIVE_INFINITY]),
 
     marginTop: checkNumber,
@@ -7811,7 +7819,7 @@ g.circles circle.circle.circle-hovered {
     dimensions,
     chartContainerSelector,
   }) {
-    const optionsValidationResult = optionValidation({ optionTypes, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
 
     d3__namespace.csv(dataPath).then(data => {
       // Run validations
@@ -7821,7 +7829,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$1, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -8013,6 +8021,53 @@ g.circles circle.circle.circle-hovered {
     );
   }
 
+  const dimensionTypes = { xField: [shouldNotBeBlank] };
+
+  const optionTypes = {
+    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    barOpacity: checkNumberBetween([0, 1]),
+
+    colors: checkColorArray,
+
+    showOnlyEveryNthValue: checkPositiveInteger,
+  };
+
+  function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {
+    const yFieldsDimensionTypes = {};
+    const yFieldDimensions = {};
+    const yFields = dimensions.yFields;
+
+    yFields.forEach((yf, i) => {
+      yFieldsDimensionTypes[`__yField${i}__`] = [shouldBeNumber];
+      yFieldDimensions[`__yField${i}__`] = yf;
+    });
+
+    // after spreading out yFields; needed since yFields is an array unlike other dimensions
+    const flatDimensions = { ...dimensions, ...yFieldDimensions };
+
+    const dimensionTypesWYFields = {
+      ...dimensionTypes,
+      // order: bottom to top; first value's rectangle will be on the bottom
+      // the last value's rectangle will be on the top
+      ...yFieldsDimensionTypes,
+    };
+
+    const optionTypesWYFields = {
+      ...optionTypes,
+      colors: checkColorArray(yFields.length),
+    };
+
+    return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
+  }
+
   function validateAndRender({
     dataPath,
     options,
@@ -8020,8 +8075,53 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    d3__namespace.csv(dataPath).then(data => {
-      renderChart({ data, options, dimensions, chartContainerSelector });
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
+      const { columns } = data;
+
+      const { flatDimensions, dimensionTypesWYFields, optionTypesWYFields } =
+        buildDimensionAndTypes({
+          dimensions,
+          dimensionTypes,
+          optionTypes,
+        });
+
+      const optionsValidationResult = optionValidation({
+        optionTypes: optionTypesWYFields,
+        options,
+      });
+
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions: flatDimensions,
+      });
+
+      const dataValidations = validateData({
+        data,
+        dimensionTypes: dimensionTypesWYFields,
+        dimensions: flatDimensions,
+      });
+
+      // When new validations are added simply add the result to this array
+      // When building a new validator the output should be of format:
+      // {valid: boolean, message: string}
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
+
+      combinedValidation.valid
+        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   }
 
