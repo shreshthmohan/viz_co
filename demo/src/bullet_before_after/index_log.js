@@ -1,13 +1,13 @@
 /* global viz */
 
 // eslint-disable-next-line no-unused-vars
-const dataPath = 'data.csv'
+const dataPath = 'data_log.csv'
 
 // eslint-disable-next-line no-unused-vars
 const dimensions = {
-  beforeField: 'before',
-  afterField: 'after',
-  topicField: 'topic',
+  beforeField: 'gdp_pc_start',
+  afterField: 'gdp_pc_end',
+  topicField: 'country',
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -35,21 +35,22 @@ const options = {
   afterLegendLabel: 'After',
 
   /* Axes */
-  xScaleType: 'linear', // linear or log
+  xScaleType: 'log', // linear or log
   xAxisPosition: 'bottom',
   xAxisOffset: 20,
   xAxisLineThickness: 1,
   xAxisLabel: 'Emotion Score',
   xAXisLabelFontSize: '14px',
   xAxisLabelOffset: 60,
-  xAxisCustomDomain: [-0.8, 0.8],
+  xAxisCustomDomain: [1, 200000],
   // xAxisTickValues: [-1, -0.8, -0.5, 0, 0.5, 0.8, 1],
   xAxisTickFontSize: '14px',
   xAxisColor: 'red',
-  xAxisTickOffset: 20,
-  xAxisTickFormatter: '.2f',
-  xAxisTickRotation: 0,
-  xAxisTickAnchor: 'middle',
+  xAxisTickOffset: 10,
+  xAxisTickFormatter: '.1s',
+  xAxisTickRotation: -90,
+  xAxisTickAnchor: 'end',
+  xAxisTickBaseline: 'middle',
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',

@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 import _ from 'lodash-es'
 
 import {
-  initializeTooltip,
+  // initializeTooltip,
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 
@@ -26,12 +26,14 @@ export function renderChart({
 
     beforeFieldColor = '#43CAD7',
     afterFieldColor = '#1570A6',
-    linkColor = 'farFromReference',
+    // linkColor = 'farFromReference',
     /* Legends */
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
 
     /* Axes */
+    xScaleType = 'linear', // linear or log
+    xScaleLogBase = 10, // applicable only if log scale
     xAxisPosition = 'top',
     xAxisOffset = 0,
     xAxisLabel = '',
@@ -44,6 +46,9 @@ export function renderChart({
     xAxisTickOffset = 0,
     xAxisLineThickness = 1,
     xAxisTickFormatter = '',
+    xAxisTickRotation = 0,
+    xAxisTickAnchor = 'middle',
+    xAxisTickBaseline = 'middle',
 
     glyphSize = 5,
     connectorSize = 5,
@@ -83,7 +88,7 @@ export function renderChart({
     bgColor,
   })
 
-  const tooltipDiv = initializeTooltip()
+  // const tooltipDiv = initializeTooltip()
 
   const { yScale, xScale, colorScale } = setupScales({
     coreChartHeight,
@@ -99,6 +104,8 @@ export function renderChart({
     topicField,
     data,
     xAxisCustomDomain,
+    xScaleType,
+    xScaleLogBase,
   })
 
   renderLegends({ widgetsRight, colorScale })
@@ -124,6 +131,9 @@ export function renderChart({
     xAxisTickOffset,
     xAxisLineThickness,
     xAxisTickFormatter,
+    xAxisTickRotation,
+    xAxisTickAnchor,
+    xAxisTickBaseline,
   })
 
   renderBullets({
@@ -187,6 +197,8 @@ function setupScales({
   topicField,
   data,
   xAxisCustomDomain,
+  xScaleType,
+  xScaleLogBase,
 }) {
   const yDomain = _.map(data, topicField)
   const xDomainDefault = d3.extent(
@@ -204,11 +216,12 @@ function setupScales({
     .paddingInner(yPaddingInner)
     .paddingOuter(yPaddingOuter)
 
-  const xScale = d3
-    .scaleLinear()
-    .domain(xDomain)
-    .range([0, coreChartWidth])
-    .nice()
+  const xScale =
+    xScaleType === 'log'
+      ? d3.scaleLog().base(xScaleLogBase || 10)
+      : d3.scaleLinear()
+
+  xScale.domain(xDomain).range([0, coreChartWidth]).nice()
 
   const colorScale = d3
     .scaleOrdinal()
@@ -234,6 +247,9 @@ function renderXAxis({
   xAxisOffset,
   xAxisLineThickness,
   xAxisTickFormatter,
+  xAxisTickRotation,
+  xAxisTickAnchor,
+  xAxisTickBaseline,
 }) {
   let xAxis, axisOffset, labelOffset, tickOffset
   if (xAxisPosition === 'top') {
@@ -281,9 +297,14 @@ function renderXAxis({
         .attr('stroke-opacity', 0.2)
         .attr('transform', `translate(0, ${tickOffset / 2})`)
       g.selectAll('.tick text')
-        .attr('transform', `translate(0, ${tickOffset})`)
         .attr('font-size', xAxisTickFontSize)
         .attr('fill', xAxisColor)
+        .attr('transform', function () {
+          const { x, y, width, height } = this.getBBox()
+          return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
+        })
+        .attr('text-anchor', xAxisTickAnchor)
+        .attr('dominant-baseline', xAxisTickBaseline)
     })
 
   xAxisGroup
