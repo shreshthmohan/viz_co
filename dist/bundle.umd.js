@@ -8058,7 +8058,9 @@ g.circles circle.circle.circle-hovered {
         ? d3__namespace.scaleLog().base(xScaleLogBase || 10)
         : d3__namespace.scaleLinear();
 
-    xScale.domain(xDomain).range([0, coreChartWidth]).nice();
+    xScale.domain(xDomain).range([0, coreChartWidth]);
+
+    if (!xAxisCustomDomain) xScale.nice();
 
     const colorScale = d3__namespace
       .scaleOrdinal()
@@ -8100,7 +8102,7 @@ g.circles circle.circle.circle-hovered {
       labelOffset = -xAxisLabelOffset;
       tickOffset = xAxisTickOffset;
     }
-    const tickSize = -coreChartHeight - xAxisTickOffset;
+    const tickSize = -coreChartHeight - xAxisTickOffset - xAxisOffset;
 
     const xAxisGroup = chartCore
       .append('g')
