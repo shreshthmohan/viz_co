@@ -63,14 +63,14 @@ const optionTypes = {
 
   // xAxisTitle: checkString,
   // xFieldType: checkString,
-  xAxisTickValues: checkNumericArray, // comment this for automatic tick values
+  xAxisTickValues: checkNumericArray(), // comment this for automatic tick values
   xScaleType: checkOneOf(['log', 'linear']), // linear or log
   xScaleLogBase: checkNumber, // can be any number greater than 0: TODO?
 
   // yAxisTitle: checkString,
   // yFieldType: checkString,
 
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   sizeLegendMoveSizeObjectDownBy: checkNumber,
   // sizeLegendTitle: checkString,
 

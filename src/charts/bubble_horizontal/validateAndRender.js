@@ -45,18 +45,18 @@ const optionTypes = {
   collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
 
   /* xField */
-  xDomainCustom: checkNumericArray,
+  xDomainCustom: checkNumericArray(2),
   // xAxisLabel = xField,
   // xValuePrefix = '',
   // xValueFormatter = '',
   // xValueSuffix = '',
 
   /* sizeField */
-  sizeRange: checkNumericArray,
+  sizeRange: checkNumericArray(2),
   // sizeValuePrefix = '',
   // sizeValueFormatter = '',
   // sizeValueSuffix = '',
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   // sizeLegendTitle = sizeField,
   sizeLegendGapInCircles: checkNumber,
 

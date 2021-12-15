@@ -38,7 +38,7 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  xDomain: checkNumericArray,
+  xDomain: checkNumericArray(2),
   // xAxisLabel: checkString,
   xAxisLabelOffset: checkNumber,
   // xAxisValueFormatter:  checkString, //'',
@@ -47,14 +47,14 @@ const optionTypes = {
   // yAxisDateFormatter: checkString, // "Q%q'%y", // Date formatter options: https://github.com/d3/d3-time-format
 
   sizeScaleType: checkOneOf(['log', 'linear']), // default is scaleLinear if not provided. Can be changed to scaleLog
-  sizeRange: checkNumericArray,
+  sizeRange: checkNumericArray(2),
   // sizeLegendLabel: checkString,
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   sizeLegendGapInSymbols: checkNumber,
   sizeLegendMoveSymbolsDownBy: checkNumber,
   // sizeLegendValueFormatter:  checkString, // '',
 
-  colorDomain: checkNumericArray,
+  colorDomain: checkNumericArray(2),
   // colorLegendValueFormatter: checkString, // ,'.2s',
   // colorLegendLabel: checkString,
   colorRange: checkColorArray(),

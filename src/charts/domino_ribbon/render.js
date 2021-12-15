@@ -162,6 +162,8 @@ function setupScales({
     data.map(d => Number.parseFloat(d[colorField])),
   )
 
+  console.log({ colorDomainFromData })
+
   const chooseColors = [0, 2, 3, 6]
 
   const colorRangeDefault = d3.schemeSpectral[9]
@@ -174,7 +176,10 @@ function setupScales({
     .scaleQuantize()
     .range(colorRange || colorRangeDefault)
     .domain(colorDomain || colorDomainFromData)
-    .nice()
+  // .nice()
+
+  console.log(colorScale.domain())
+  console.log(xScale.domain())
 
   return {
     xScale,
@@ -197,7 +202,7 @@ function renderYAxis({
   chartCore
     .append('g')
     .attr('class', 'y-axis-right')
-    .attr('transform', `translate(${xScale(xDomain[1]) + 20}, 0)`)
+    .attr('transform', `translate(${xScale(xScale.domain()[1]) + 20}, 0)`)
     .call(
       d3
         .axisRight(yScale)
