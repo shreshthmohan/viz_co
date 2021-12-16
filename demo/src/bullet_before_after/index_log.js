@@ -12,7 +12,7 @@ const dimensions = {
 
 // eslint-disable-next-line no-unused-vars
 const options = {
-  aspectRatio: 1.5,
+  aspectRatio: 0.75,
   marginTop: 10,
   marginRight: 10,
   marginBottom: 10,
@@ -30,19 +30,23 @@ const options = {
   activeOpacity: 1,
   inactiveOpacity: 0.2,
 
-  defaultState: ['China', 'India'],
+  defaultState: ['China', 'India', 'Kuwait'],
 
   /* Legends */
   beforeLegendLabel: 'Before',
   afterLegendLabel: 'After',
+  topicLabelFontSize: '12px',
+  topicLabelTextColor: '#000',
+  topicLabelXOffset: 5,
+  topicLabelYOffset: -1,
 
   /* Axes */
   xScaleType: 'log', // linear or log
-  xAxisPosition: 'bottom',
+  xAxisPosition: 'top',
   xAxisOffset: 20,
   xAxisLineThickness: 1,
   xAxisLabel: 'Emotion Score',
-  xAXisLabelFontSize: '14px',
+  xAXisLabelFontSize: '8px',
   xAxisLabelOffset: 60,
   xAxisCustomDomain: [400, 200000],
   // xAxisCustomDomain: null,
@@ -52,10 +56,10 @@ const options = {
   xAxisTickOffset: 10,
   xAxisTickFormatter: '.1s',
   xAxisTickRotation: -90,
-  xAxisTickAnchor: 'end',
+  xAxisTickAnchor: 'start',
   xAxisTickBaseline: 'middle',
-  xAxisTickValueXOffset: -0.5,
-  xAxisTickValueYOffset: 0.5,
+  xAxisTickValueXOffset: 0,
+  xAxisTickValueYOffset: -0.4,
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',

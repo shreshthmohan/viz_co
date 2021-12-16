@@ -31,6 +31,10 @@ export function renderChart({
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
 
+    topicLabelFontSize = '12px',
+    topicLabelTextColor = '#000',
+    topicLabelYOffset = 0,
+
     defaultState = [],
 
     /* Axes */
@@ -60,7 +64,7 @@ export function renderChart({
     inactiveOpacity = 0.3,
 
     // Labels
-    xLabelOffset = 10,
+    topicLabelXOffset = 5,
 
     // Opinionated (currently cannot be changed from options)
     yPaddingInner = 0.6,
@@ -160,9 +164,12 @@ export function renderChart({
     beforeFieldColor,
     xScale,
     yScale,
-    xLabelOffset,
+    topicLabelXOffset,
     line,
     defaultStateAll,
+    topicLabelFontSize,
+    topicLabelTextColor,
+    topicLabelYOffset,
   })
 
   const handleSearch = searchEventHandler(topicValues)
@@ -354,12 +361,11 @@ function renderXAxis({
         .attr('stroke-opacity', 0.2)
         .attr('transform', `translate(0, ${tickOffset / 2})`)
       g.selectAll('.tick text')
-        .attr('transform', `translate(0, ${tickOffset})`)
-        .attr('font-size', xAxisTickFontSize)
+        .style('font-size', xAxisTickFontSize)
         .attr('fill', xAxisColor)
         .attr('transform', function () {
           const { x, y, width, height } = this.getBBox()
-          return `rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
+          return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
         })
         .attr('text-anchor', xAxisTickAnchor)
         .attr('dominant-baseline', xAxisTickBaseline)
@@ -373,7 +379,7 @@ function renderXAxis({
     .text(xAxisLabel)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
-    .attr('font-size', xAXisLabelFontSize)
+    .style('font-size', xAXisLabelFontSize)
     .attr('fill', xAxisColor)
 }
 
@@ -390,9 +396,12 @@ function renderBullets({
   beforeFieldColor,
   xScale,
   yScale,
-  xLabelOffset,
+  topicLabelXOffset,
   line,
   defaultStateAll,
+  topicLabelFontSize,
+  topicLabelTextColor,
+  topicLabelYOffset,
 }) {
   const yGroups = chartCore
     .append('g')
@@ -455,9 +464,20 @@ function renderBullets({
   yGroupsEnter
     .append('text')
     .text(d => d[topicField])
-    .attr('x', d => glyphSize + xLabelOffset + xScale(d[afterField]))
-    .attr('y', d => yScale(d[topicField]))
-    .attr('fill', afterFieldColor)
+    .attr('x', d => {
+      return xScale(d[afterField]) >= xScale(d[beforeField])
+        ? xScale(d[afterField]) + glyphSize + topicLabelXOffset
+        : xScale(d[afterField]) - glyphSize - topicLabelXOffset
+    })
+    .attr(
+      'y',
+      d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
+    )
+    .attr('fill', topicLabelTextColor)
+    .style('font-size', topicLabelFontSize)
+    .attr('text-anchor', d =>
+      xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
+    )
     .attr('dominant-baseline', 'middle')
 }
 

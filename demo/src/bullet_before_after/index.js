@@ -24,11 +24,13 @@ const options = {
   afterFieldColor: 'green',
   // linkColor:
 
+  defaultState: ['China', 'India'],
+
   /* Glyphs */
   glyphSize: 5,
   connectorSize: 2,
-  activeOpacity: 0.6,
-  inactiveOpacity: 0.2,
+  activeOpacity: 0.8,
+  inactiveOpacity: 0.4,
 
   /* Legends */
   beforeLegendLabel: 'Before',

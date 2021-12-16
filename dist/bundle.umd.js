@@ -7868,6 +7868,10 @@ g.circles circle.circle.circle-hovered {
       beforeLegendLabel = beforeField,
       afterLegendLabel = afterField,
 
+      topicLabelFontSize = '12px',
+      topicLabelTextColor = '#000',
+      topicLabelYOffset = 0,
+
       defaultState = [],
 
       /* Axes */
@@ -7897,7 +7901,7 @@ g.circles circle.circle.circle-hovered {
       inactiveOpacity = 0.3,
 
       // Labels
-      xLabelOffset = 10,
+      topicLabelXOffset = 5,
 
       // Opinionated (currently cannot be changed from options)
       yPaddingInner = 0.6,
@@ -7997,9 +8001,12 @@ g.circles circle.circle.circle-hovered {
       beforeFieldColor,
       xScale,
       yScale,
-      xLabelOffset,
+      topicLabelXOffset,
       line,
       defaultStateAll,
+      topicLabelFontSize,
+      topicLabelTextColor,
+      topicLabelYOffset,
     });
 
     const handleSearch = searchEventHandler(topicValues);
@@ -8191,12 +8198,11 @@ g.circles circle.circle.circle-hovered {
           .attr('stroke-opacity', 0.2)
           .attr('transform', `translate(0, ${tickOffset / 2})`);
         g.selectAll('.tick text')
-          .attr('transform', `translate(0, ${tickOffset})`)
-          .attr('font-size', xAxisTickFontSize)
+          .style('font-size', xAxisTickFontSize)
           .attr('fill', xAxisColor)
           .attr('transform', function () {
             const { x, y, width, height } = this.getBBox();
-            return `rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
+            return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
           })
           .attr('text-anchor', xAxisTickAnchor)
           .attr('dominant-baseline', xAxisTickBaseline)
@@ -8210,7 +8216,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel)
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
-      .attr('font-size', xAXisLabelFontSize)
+      .style('font-size', xAXisLabelFontSize)
       .attr('fill', xAxisColor);
   }
 
@@ -8227,9 +8233,12 @@ g.circles circle.circle.circle-hovered {
     beforeFieldColor,
     xScale,
     yScale,
-    xLabelOffset,
+    topicLabelXOffset,
     line,
     defaultStateAll,
+    topicLabelFontSize,
+    topicLabelTextColor,
+    topicLabelYOffset,
   }) {
     const yGroups = chartCore
       .append('g')
@@ -8292,9 +8301,20 @@ g.circles circle.circle.circle-hovered {
     yGroupsEnter
       .append('text')
       .text(d => d[topicField])
-      .attr('x', d => glyphSize + xLabelOffset + xScale(d[afterField]))
-      .attr('y', d => yScale(d[topicField]))
-      .attr('fill', afterFieldColor)
+      .attr('x', d => {
+        return xScale(d[afterField]) >= xScale(d[beforeField])
+          ? xScale(d[afterField]) + glyphSize + topicLabelXOffset
+          : xScale(d[afterField]) - glyphSize - topicLabelXOffset
+      })
+      .attr(
+        'y',
+        d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
+      )
+      .attr('fill', topicLabelTextColor)
+      .style('font-size', topicLabelFontSize)
+      .attr('text-anchor', d =>
+        xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
+      )
       .attr('dominant-baseline', 'middle');
   }
 
