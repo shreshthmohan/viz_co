@@ -27,7 +27,7 @@ const options = {
   /* Glyphs */
   glyphSize: 5,
   connectorSize: 2,
-  activeOpacity: 0.6,
+  activeOpacity: 1,
   inactiveOpacity: 0.2,
 
   defaultState: ['China', 'India'],

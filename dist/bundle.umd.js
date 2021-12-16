@@ -8045,11 +8045,29 @@ g.circles circle.circle.circle-hovered {
     d3__namespace.select('body')
       .append('style')
       .html(
-        `g.topics g.topic {
-        opacity: ${inactiveOpacity};
+        `
+      g.topics g.topic{
+        cursor: pointer;
+      }
+      g.topics g.topic{
+        fill-opacity: ${inactiveOpacity};
       }
       g.topics g.topic.topic-active {
-        opacity: ${activeOpacity};
+        fill-opacity: ${activeOpacity};
+      }
+      g.topics.searching g.topic.topic-matched circle{
+        stroke: #333;
+        stroke-width: 3;
+      }
+      g.topics.searching g.topic.topic-matched text{
+        fill-opacity: ${activeOpacity};
+      }
+      g.topics g.topic.topic-hovered circle{
+        stroke: #333;
+        stroke-width: 3;
+      }
+      g.topics g.topic.topic-hovered text{
+        fill-opacity: ${activeOpacity};
       }
       `,
       );
@@ -8232,26 +8250,30 @@ g.circles circle.circle.circle-hovered {
       )
       .attr('id', d => `${d[topicField]}`)
       .on('mouseover', (e, d) => {
-        // d3.select('.topics').classed('g-interaction', true)
-        // d3.select(e.target.parentNode).classed('g-hover', true)
+        d3__namespace.select(e.target.parentNode).classed('topic-hovered', true);
       })
       .on('mouseout', (e, d) => {
-        // d3.select('.topics').classed('g-interaction', false)
-        // d3.select(e.target.parentNode).classed('g-hover', false)
+        d3__namespace.select(e.target.parentNode).classed('topic-hovered', false);
+      })
+      .on('click', (e, d) => {
+        const parentTopic = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentTopic.classed('topic-active');
+        parentTopic.classed('topic-active', !clickedState);
       });
 
-    yGroupsEnter
-      .append('path')
-      .attr('d', d => {
-        const d_ = [
-          { x: Number(d[beforeField]), y: d[topicField] },
-          { x: Number(d[afterField]), y: d[topicField] },
-        ];
-        return line(d_)
-      })
-      .attr('fill', 'none')
-      .attr('stroke-width', connectorSize)
-      .attr('stroke', afterFieldColor);
+    // yGroupsEnter
+    //   .append('path')
+    //   .attr('class', 'connector')
+    //   .attr('d', d => {
+    //     const d_ = [
+    //       { x: Number(d[beforeField]), y: d[topicField] },
+    //       { x: Number(d[afterField]), y: d[topicField] },
+    //     ]
+    //     return line(d_)
+    //   })
+    //   .attr('fill', 'none')
+    //   .attr('stroke-width', connectorSize)
+    //   .attr('stroke', afterFieldColor)
 
     yGroupsEnter
       .append('circle')
@@ -8281,20 +8303,20 @@ g.circles circle.circle.circle-hovered {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText(val);
+        const topicName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
+          d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', true);
         } else {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+          d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', false);
         }
-        d3__namespace.select('.maces').classed('searching', true);
+        d3__namespace.select('.topics').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
-        const maceName = toClassText(val);
-        d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+        const topicName = toClassText(val);
+        d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', false);
       });
-      d3__namespace.select('.maces').classed('searching', false);
+      d3__namespace.select('.topics').classed('searching', false);
     }
   };
 
