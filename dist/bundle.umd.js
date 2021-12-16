@@ -8078,23 +8078,35 @@ g.circles circle.circle.circle-hovered {
       }
       g.topics g.topic{
         fill-opacity: ${inactiveOpacity};
+        stroke-opacity: ${inactiveOpacity};
       }
       g.topics g.topic.topic-active {
         fill-opacity: ${activeOpacity};
+        stroke-opacity: ${activeOpacity};
       }
       g.topics.searching g.topic.topic-matched circle{
         stroke: #333;
         stroke-width: 3;
+        stroke-opacity: ${activeOpacity};
       }
       g.topics.searching g.topic.topic-matched text{
         fill-opacity: ${activeOpacity};
       }
+      g.topics.searching g.topic.topic-matched path{
+        stroke: #333;
+        stroke-opacity: ${activeOpacity};
+      }
       g.topics g.topic.topic-hovered circle{
         stroke: #333;
         stroke-width: 3;
+        stroke-opacity: ${activeOpacity};
       }
       g.topics g.topic.topic-hovered text{
         fill-opacity: ${activeOpacity};
+      }
+      g.topics g.topic.topic-hovered path{
+        stroke: #333;
+        stroke-opacity: ${activeOpacity};
       }
       `,
       );
