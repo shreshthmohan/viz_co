@@ -30,6 +30,8 @@ const optionTypes = {
 
   bgColor: checkColor,
 
+  nullDataColor: checkColor,
+
   // interpolateScheme = d3.interpolateBlues,
   // colorLegendTitle = valueField,
 

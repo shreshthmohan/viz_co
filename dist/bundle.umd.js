@@ -6050,10 +6050,8 @@ g.circles circle.circle.circle-hovered {
 
       interpolateScheme = d3__namespace.interpolateBlues,
       colorLegendTitle = valueField,
-      missingDataColor = 'gray',
       nullDataColor = 'gray',
-      missingDataMessage = 'Data Missing',
-      nullDataMessage = 'Data Not Available',
+      nullDataMessage = 'Data not available',
 
       searchButtonClassNames,
     },
@@ -6116,7 +6114,7 @@ g.circles circle.circle.circle-hovered {
         const found = dataParsed.find(
           el => Number.parseInt(el[fipsField], 10) === Number.parseInt(d.id, 10),
         );
-        const fillColor = found ? colorScale(found[valueField]) : missingDataColor;
+        const fillColor = found ? colorScale(found[valueField]) : nullDataColor;
         return fillColor ? fillColor : nullDataColor
       })
       .on('mouseover', function (e, d) {
@@ -6131,18 +6129,16 @@ g.circles circle.circle.circle-hovered {
         );
 
         const countyInfo = d.properties;
-        if (found && found[valueField]) {
+        if (found && !isNaN(found[valueField])) {
           tooltipDiv.html(
             `${countyInfo.name}, ${countyInfo.state_name}
             <br/>
             ${valueField}: ${valueFormatter(found[valueField])}`,
           );
-        } else if (found && !found[valueField]) {
-          tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`);
         } else {
           tooltipDiv.html(
             `${countyInfo.name}, ${countyInfo.state_name}
-            <br/> ${missingDataMessage}
+            <br/> ${nullDataMessage}
             `,
           );
         }
@@ -6272,6 +6268,8 @@ g.circles circle.circle.circle-hovered {
     // interpolateScheme = d3.interpolateBlues,
     // colorLegendTitle = valueField,
 
+    nullDataColor: checkColor,
+
     // searchButtonClassNames,
   };
 
@@ -6333,9 +6331,7 @@ g.circles circle.circle.circle-hovered {
 
       interpolateScheme = d3__namespace.interpolateBlues,
       colorLegendTitle = valueField,
-      missingDataColor = 'gray',
       nullDataColor = 'gray',
-      missingDataMessage = 'Data Missing',
       nullDataMessage = 'Data Not Available',
 
       searchButtonClassNames = '',
@@ -6402,22 +6398,22 @@ g.circles circle.circle.circle-hovered {
         const stateData = dataObj[stateAbbr];
         const fillColor = stateData
           ? colorScale(stateData[valueField])
-          : missingDataColor;
+          : nullDataColor;
         return fillColor ? fillColor : nullDataColor
       })
       .on('mouseover', function (e, d) {
         d3__namespace.select(this).classed('hovered', true).raise();
         tooltipDiv.transition().duration(200).style('opacity', 1);
         const stateData = dataObj[d.properties.abbr];
-        if (stateData && stateData[valueField]) {
+        if (stateData && !isNaN(stateData[valueField])) {
           tooltipDiv.html(`${d.properties.name}
           <br />
           ${valueField}: ${valueFormatter(stateData[valueField])}
           `);
-        } else if (stateData && !stateData[valueField]) {
-          tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`);
+          // } else if (stateData && !stateData[valueField]) {
+          //   tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
         } else {
-          tooltipDiv.html(`${d.properties.name} <br/>${missingDataMessage}`);
+          tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`);
         }
 
         d3__namespace.select(this).classed('hovered', true).raise();
@@ -6536,6 +6532,8 @@ g.circles circle.circle.circle-hovered {
     marginLeft: checkNumber,
 
     bgColor: checkColor,
+
+    nullDataColor: checkColor,
 
     // interpolateScheme = d3.interpolateBlues,
     // colorLegendTitle = valueField,
