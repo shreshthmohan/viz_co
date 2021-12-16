@@ -4981,7 +4981,7 @@ g.circles circle.circle.circle-hovered {
     }));
 
     const dataAt = loc => {
-      return data.filter(d => d[timeField] === loc)
+      return dataParsed.filter(d => d[timeField] === loc)
     };
     const timeDomain = ___default["default"].uniq(___default["default"].map(data, timeField)).sort();
     const timeDomainLength = timeDomain.length;
