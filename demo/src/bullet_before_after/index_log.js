@@ -32,6 +32,13 @@ const options = {
 
   defaultState: ['China', 'India', 'Kuwait'],
 
+  connectorColorStrategy: 'farFromReference', //['farFromReference', 'closeToReference', 'customColor']
+  connectorColorCustom: 'blue',
+  referenceLineColor: 'blue',
+  referenceLineWidth: 2,
+  referenceLineOpacity: 0.8,
+  referenceValue: 10000,
+
   /* Legends */
   beforeLegendLabel: 'Before',
   afterLegendLabel: 'After',

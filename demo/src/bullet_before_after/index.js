@@ -1,5 +1,7 @@
 /* global viz */
 
+const { schemeOranges } = require('d3-scale-chromatic')
+
 // eslint-disable-next-line no-unused-vars
 const dataPath = 'data.csv'
 
@@ -22,8 +24,10 @@ const options = {
   /* Series Colors */
   beforeFieldColor: 'red',
   afterFieldColor: 'green',
-  // linkColor:
-
+  connectorColorStrategy: 'farFromReference', //['farFromReference', 'closeToReference', 'customColor']
+  // connectorColorCustom: 'blue',
+  referenceValue: 0.2,
+  referenceLineColor: 'yellow',
   defaultState: ['China', 'India'],
 
   /* Glyphs */

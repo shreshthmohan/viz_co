@@ -26,7 +26,12 @@ export function renderChart({
 
     beforeFieldColor = '#43CAD7',
     afterFieldColor = '#1570A6',
-    // linkColor = 'farFromReference',
+    connectorColorStrategy = 'farFromReference',
+    connectorColorCustom = null,
+    referenceValue = null,
+    referenceLineColor = '#333',
+    referenceLineWidth = 2,
+    referenceLineOpacity = 1,
     /* Legends */
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
@@ -151,6 +156,18 @@ export function renderChart({
     xAxisTickValueYOffset,
   })
 
+  renderReferenceLine({
+    chartCore,
+    referenceValue,
+    xScale,
+    yScale,
+    xAxisOffset,
+    line,
+    referenceLineColor,
+    referenceLineWidth,
+    referenceLineOpacity,
+  })
+
   renderBullets({
     chartCore,
     data,
@@ -170,6 +187,9 @@ export function renderChart({
     topicLabelFontSize,
     topicLabelTextColor,
     topicLabelYOffset,
+    connectorColorCustom,
+    referenceValue,
+    connectorColorStrategy,
   })
 
   const handleSearch = searchEventHandler(topicValues)
@@ -383,6 +403,47 @@ function renderXAxis({
     .attr('fill', xAxisColor)
 }
 
+function renderReferenceLine({
+  chartCore,
+  referenceValue,
+  xScale,
+  yScale,
+  referenceLineColor,
+  referenceLineWidth,
+  referenceLineOpacity,
+  xAxisOffset,
+  xAxisTickOffset,
+  line,
+}) {
+  chartCore
+    .append('path')
+    .attr('class', 'reference')
+    .attr('d', () => {
+      const yDomain = yScale.domain()
+      const { x, y, width, height } = d3.select('.domain').node().getBBox()
+      d3.select('.x-axis').classed('topic-active', false)
+      const d_ = [
+        {
+          x: xScale(Number(referenceValue)),
+          // y: yScale(yDomain[0]) - xAxisOffset - xAxisTickOffset,
+          y: y - height,
+        },
+        {
+          x: xScale(Number(referenceValue)),
+          y: yScale(yDomain[yDomain.length - 1]) + 5 * yScale.bandwidth(),
+        },
+      ]
+      return d3
+        .line()
+        .x(d => d.x)
+        .y(d => d.y)(d_)
+    })
+    .attr('stroke-width', referenceLineWidth)
+    .attr('opacity', referenceLineOpacity)
+    .attr('stroke', referenceLineColor)
+    .attr('stroke-dasharray', '5,5')
+}
+
 function renderBullets({
   chartCore,
   data,
@@ -402,6 +463,9 @@ function renderBullets({
   topicLabelFontSize,
   topicLabelTextColor,
   topicLabelYOffset,
+  connectorColorCustom,
+  connectorColorStrategy,
+  referenceValue,
 }) {
   const yGroups = chartCore
     .append('g')
@@ -433,19 +497,31 @@ function renderBullets({
       parentTopic.classed('topic-active', !clickedState)
     })
 
-  // yGroupsEnter
-  //   .append('path')
-  //   .attr('class', 'connector')
-  //   .attr('d', d => {
-  //     const d_ = [
-  //       { x: Number(d[beforeField]), y: d[topicField] },
-  //       { x: Number(d[afterField]), y: d[topicField] },
-  //     ]
-  //     return line(d_)
-  //   })
-  //   .attr('fill', 'none')
-  //   .attr('stroke-width', connectorSize)
-  //   .attr('stroke', afterFieldColor)
+  yGroupsEnter
+    .append('path')
+    .attr('class', 'connector')
+    .attr('d', d => {
+      const d_ = [
+        { x: Number(d[beforeField]), y: d[topicField] },
+        { x: Number(d[afterField]), y: d[topicField] },
+      ]
+      return line(d_)
+    })
+    .attr('stroke-width', connectorSize)
+    .attr('stroke', d => {
+      const afterDelta = Math.abs(referenceValue - d[afterField])
+      const beforeDelta = Math.abs(referenceValue - d[beforeField])
+      const beforeAfterDelta = beforeDelta - afterDelta
+      let color
+      if (connectorColorStrategy === 'farFromReference') {
+        color = beforeAfterDelta < 0 ? afterFieldColor : beforeFieldColor
+      } else if (connectorColorStrategy === 'closeToReference') {
+        color = beforeAfterDelta < 0 ? beforeFieldColor : afterFieldColor
+      } else {
+        color = connectorColorCustom
+      }
+      return color
+    })
 
   yGroupsEnter
     .append('circle')
