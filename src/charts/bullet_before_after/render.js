@@ -31,6 +31,8 @@ export function renderChart({
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
 
+    defaultState = [],
+
     /* Axes */
     xScaleType = 'linear', // linear or log
     xScaleLogBase = 10, // applicable only if log scale
@@ -64,12 +66,15 @@ export function renderChart({
     yPaddingInner = 0.6,
     yPaddingOuter = 1,
 
+    goToInitialStateButtonClassNames = '',
     searchInputClassNames = '',
+    clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
   },
   dimensions: { beforeField, afterField, topicField },
   chartContainerSelector,
 }) {
-  applyInteractionStyles({ inactiveOpacity })
+  applyInteractionStyles({ inactiveOpacity, activeOpacity })
 
   const coreChartWidth = 1000
   const {
@@ -91,6 +96,8 @@ export function renderChart({
   })
 
   // const tooltipDiv = initializeTooltip()
+  const topicValues = _(data).map(topicField).uniq().value()
+  const defaultStateAll = defaultState === 'All' ? topicValues : defaultState
 
   const { yScale, xScale, colorScale } = setupScales({
     coreChartHeight,
@@ -155,16 +162,37 @@ export function renderChart({
     yScale,
     xLabelOffset,
     line,
+    defaultStateAll,
   })
 
-  const topicValues = _(data).map(topicField).uniq().value()
-
   const handleSearch = searchEventHandler(topicValues)
-  setupSearch({
+  const search = setupSearch({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
     topicField,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  })
+
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  })
+
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
   })
 
   // For responsiveness
@@ -176,12 +204,15 @@ export function renderChart({
   })
 }
 
-function applyInteractionStyles({ inactiveOpacity }) {
+function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
   d3.select('body')
     .append('style')
     .html(
-      `.g-interaction .topic:not(.g-match, .g-hover) {
+      `g.topics g.topic {
         opacity: ${inactiveOpacity};
+      }
+      g.topics g.topic.topic-active {
+        opacity: ${activeOpacity};
       }
       `,
     )
@@ -343,6 +374,7 @@ function renderBullets({
   yScale,
   xLabelOffset,
   line,
+  defaultStateAll,
 }) {
   const yGroups = chartCore
     .append('g')
@@ -354,16 +386,21 @@ function renderBullets({
   const yGroupsEnter = yGroups
     .enter()
     .append('g')
-    .attr('class', 'topic')
+    .attr(
+      'class',
+      d =>
+        `topic 
+        topic-${toClassText(d[topicField])}
+        ${defaultStateAll.includes(d[topicField]) ? 'topic-active' : ''}`,
+    )
     .attr('id', d => `${d[topicField]}`)
-    .attr('opacity', activeOpacity)
     .on('mouseover', (e, d) => {
-      d3.select('.topics').classed('g-interaction', true)
-      d3.select(e.target.parentNode).classed('g-hover', true)
+      // d3.select('.topics').classed('g-interaction', true)
+      // d3.select(e.target.parentNode).classed('g-hover', true)
     })
     .on('mouseout', (e, d) => {
-      d3.select('.topics').classed('g-interaction', false)
-      d3.select(e.target.parentNode).classed('g-hover', false)
+      // d3.select('.topics').classed('g-interaction', false)
+      // d3.select(e.target.parentNode).classed('g-hover', false)
     })
 
   yGroupsEnter
@@ -451,4 +488,62 @@ function renderLegends({ widgetsRight, colorScale }) {
       customClass: '',
     }),
   )
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', false)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', true)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', false)
+    _.forEach(defaultStateAll, val => {
+      d3.select(`.topic-${toClassText(val)}`).classed('topic-active', true)
+    })
+    search.node().value = ''
+    handleSearch('')
+  })
 }

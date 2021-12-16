@@ -732,7 +732,7 @@
     return search
   }
 
-  function setupInitialStateButton$2({
+  function setupInitialStateButton$3({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -754,7 +754,7 @@
     });
   }
 
-  function setupClearAllButton$3({
+  function setupClearAllButton$4({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -967,14 +967,14 @@
       nameField,
     });
 
-    setupInitialStateButton$2({
+    setupInitialStateButton$3({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$3({
+    setupClearAllButton$4({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -3734,7 +3734,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$1({
+  function setupInitialStateButton$2({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -3756,7 +3756,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3774,7 +3774,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$1({
+  function setupShowAllButton$2({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3918,7 +3918,7 @@ g.circles circle.circle.circle-hovered {
       seriesField,
     });
 
-    setupInitialStateButton$1({
+    setupInitialStateButton$2({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -3926,14 +3926,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$1({
+    setupShowAllButton$2({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -5713,7 +5713,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton({
+  function setupInitialStateButton$1({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -5734,7 +5734,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$1({
+  function setupClearAllButton$2({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -5902,14 +5902,14 @@ g.circles circle.circle.circle-hovered {
       dominoField,
     });
 
-    setupInitialStateButton({
+    setupInitialStateButton$1({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$1({
+    setupClearAllButton$2({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -6694,7 +6694,7 @@ g.circles circle.circle.circle-hovered {
       sourceField,
     });
 
-    setupClearAllButton({
+    setupClearAllButton$1({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -6702,7 +6702,7 @@ g.circles circle.circle.circle-hovered {
       index,
     });
 
-    setupShowAllButton({
+    setupShowAllButton$1({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -7120,7 +7120,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupClearAllButton({
+  function setupClearAllButton$1({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -7139,7 +7139,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton({
+  function setupShowAllButton$1({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -7868,6 +7868,8 @@ g.circles circle.circle.circle-hovered {
       beforeLegendLabel = beforeField,
       afterLegendLabel = afterField,
 
+      defaultState = [],
+
       /* Axes */
       xScaleType = 'linear', // linear or log
       xScaleLogBase = 10, // applicable only if log scale
@@ -7901,12 +7903,15 @@ g.circles circle.circle.circle-hovered {
       yPaddingInner = 0.6,
       yPaddingOuter = 1,
 
+      goToInitialStateButtonClassNames = '',
       searchInputClassNames = '',
+      clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
     },
     dimensions: { beforeField, afterField, topicField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ inactiveOpacity });
+    applyInteractionStyles({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -7928,6 +7933,8 @@ g.circles circle.circle.circle-hovered {
     });
 
     // const tooltipDiv = initializeTooltip()
+    const topicValues = ___default["default"](data).map(topicField).uniq().value();
+    const defaultStateAll = defaultState === 'All' ? topicValues : defaultState;
 
     const { yScale, xScale, colorScale } = setupScales({
       coreChartHeight,
@@ -7992,16 +7999,37 @@ g.circles circle.circle.circle-hovered {
       yScale,
       xLabelOffset,
       line,
+      defaultStateAll,
     });
 
-    const topicValues = ___default["default"](data).map(topicField).uniq().value();
-
     const handleSearch = searchEventHandler(topicValues);
-    setupSearch({
+    const search = setupSearch({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       topicField,
+    });
+
+    setupInitialStateButton({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+    });
+
+    setupClearAllButton({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
     });
 
     // For responsiveness
@@ -8013,12 +8041,15 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles({ inactiveOpacity }) {
+  function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body')
       .append('style')
       .html(
-        `.g-interaction .topic:not(.g-match, .g-hover) {
+        `g.topics g.topic {
         opacity: ${inactiveOpacity};
+      }
+      g.topics g.topic.topic-active {
+        opacity: ${activeOpacity};
       }
       `,
       );
@@ -8180,6 +8211,7 @@ g.circles circle.circle.circle-hovered {
     yScale,
     xLabelOffset,
     line,
+    defaultStateAll,
   }) {
     const yGroups = chartCore
       .append('g')
@@ -8191,16 +8223,21 @@ g.circles circle.circle.circle-hovered {
     const yGroupsEnter = yGroups
       .enter()
       .append('g')
-      .attr('class', 'topic')
+      .attr(
+        'class',
+        d =>
+          `topic 
+        topic-${toClassText(d[topicField])}
+        ${defaultStateAll.includes(d[topicField]) ? 'topic-active' : ''}`,
+      )
       .attr('id', d => `${d[topicField]}`)
-      .attr('opacity', activeOpacity)
       .on('mouseover', (e, d) => {
-        d3__namespace.select('.topics').classed('g-interaction', true);
-        d3__namespace.select(e.target.parentNode).classed('g-hover', true);
+        // d3.select('.topics').classed('g-interaction', true)
+        // d3.select(e.target.parentNode).classed('g-hover', true)
       })
       .on('mouseout', (e, d) => {
-        d3__namespace.select('.topics').classed('g-interaction', false);
-        d3__namespace.select(e.target.parentNode).classed('g-hover', false);
+        // d3.select('.topics').classed('g-interaction', false)
+        // d3.select(e.target.parentNode).classed('g-hover', false)
       });
 
     yGroupsEnter
@@ -8288,6 +8325,64 @@ g.circles circle.circle.circle-hovered {
         customClass: '',
       }),
     );
+  }
+
+  function setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      d3__namespace.selectAll('.topic').classed('topic-active', false);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      d3__namespace.selectAll('.topic').classed('topic-active', true);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      d3__namespace.selectAll('.topic').classed('topic-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        d3__namespace.select(`.topic-${toClassText(val)}`).classed('topic-active', true);
+      });
+      search.node().value = '';
+      handleSearch('');
+    });
   }
 
   // export function that
