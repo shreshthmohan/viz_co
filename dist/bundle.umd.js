@@ -7998,11 +7998,13 @@ g.circles circle.circle.circle-hovered {
       referenceValue,
       xScale,
       yScale,
-      xAxisOffset,
-      line,
       referenceLineColor,
       referenceLineWidth,
       referenceLineOpacity,
+      xAxisOffset,
+      xAxisTickOffset,
+      line,
+      xAxisPosition,
     });
 
     renderBullets({
@@ -8263,25 +8265,32 @@ g.circles circle.circle.circle-hovered {
     xAxisOffset,
     xAxisTickOffset,
     line,
+    xAxisPosition,
   }) {
     chartCore
       .append('path')
       .attr('class', 'reference')
       .attr('d', () => {
         const yDomain = yScale.domain();
-        const { x, y, width, height } = d3__namespace.select('.domain').node().getBBox();
-        d3__namespace.select('.x-axis').classed('topic-active', false);
+        // const { x, y, width, height } = d3.select('.domain').node().getBBox()
+        const x0 = xScale(Number(referenceValue));
+        let y0, y1;
+        if (xAxisPosition === 'top') {
+          y0 = yScale(yDomain[0]) - xAxisOffset - xAxisTickOffset;
+          y1 = yScale(yDomain[yDomain.length - 1]) + 2 * yScale.bandwidth();
+        } else {
+          y0 =
+            yScale(yDomain[yDomain.length - 1]) +
+            yScale.bandwidth() +
+            xAxisOffset +
+            xAxisTickOffset;
+          y1 = yScale(yDomain[0]) - 2 * yScale.bandwidth();
+        }
         const d_ = [
-          {
-            x: xScale(Number(referenceValue)),
-            // y: yScale(yDomain[0]) - xAxisOffset - xAxisTickOffset,
-            y: y - height,
-          },
-          {
-            x: xScale(Number(referenceValue)),
-            y: yScale(yDomain[yDomain.length - 1]) + 5 * yScale.bandwidth(),
-          },
+          { x: x0, y: y0 },
+          { x: x0, y: y1 },
         ];
+
         return d3__namespace
           .line()
           .x(d => d.x)

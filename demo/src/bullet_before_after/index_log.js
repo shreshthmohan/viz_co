@@ -53,7 +53,7 @@ const options = {
   xAxisOffset: 20,
   xAxisLineThickness: 1,
   xAxisLabel: 'Emotion Score',
-  xAXisLabelFontSize: '8px',
+  xAXisLabelFontSize: '12px',
   xAxisLabelOffset: 60,
   xAxisCustomDomain: [400, 200000],
   // xAxisCustomDomain: null,
