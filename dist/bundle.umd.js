@@ -691,25 +691,25 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$4 = referenceList => qstr => {
+  const searchEventHandler$4 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
         const maceName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
+          svg.select(`.mace-${maceName}`).classed('mace-matched', true);
         } else {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+          svg.select(`.mace-${maceName}`).classed('mace-matched', false);
         }
-        d3__namespace.select('.maces').classed('searching', true);
+        svg.select('.maces').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
         const maceName = toClassText(val);
-        d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+        svg.select(`.mace-${maceName}`).classed('mace-matched', false);
       });
-      d3__namespace.select('.maces').classed('searching', false);
+      svg.select('.maces').classed('searching', false);
     }
   };
 
@@ -718,6 +718,7 @@
     widgetsLeft,
     searchInputClassNames,
     nameField,
+    svg,
   }) {
     const search = widgetsLeft
       .append('input')
@@ -727,7 +728,7 @@
     search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -965,6 +966,7 @@
       widgetsLeft,
       searchInputClassNames,
       nameField,
+      svg,
     });
 
     setupInitialStateButton$2({
