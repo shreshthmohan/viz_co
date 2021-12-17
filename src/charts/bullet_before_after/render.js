@@ -1,10 +1,10 @@
-/* global */
+/* global window*/
 
 import * as d3 from 'd3'
 import _ from 'lodash-es'
 
 import {
-  // initializeTooltip,
+  initializeTooltip,
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 
@@ -104,7 +104,7 @@ export function renderChart({
     bgColor,
   })
 
-  // const tooltipDiv = initializeTooltip()
+  const tooltipDiv = initializeTooltip()
   const topicValues = _(data).map(topicField).uniq().value()
   const defaultStateAll = defaultState === 'All' ? topicValues : defaultState
 
@@ -192,6 +192,7 @@ export function renderChart({
     connectorColorCustom,
     referenceValue,
     connectorColorStrategy,
+    tooltipDiv,
   })
 
   const handleSearch = searchEventHandler(topicValues)
@@ -487,6 +488,7 @@ function renderBullets({
   connectorColorCustom,
   connectorColorStrategy,
   referenceValue,
+  tooltipDiv,
 }) {
   const yGroups = chartCore
     .append('g')
@@ -508,9 +510,27 @@ function renderBullets({
     .attr('id', d => `${d[topicField]}`)
     .on('mouseover', (e, d) => {
       d3.select(e.target.parentNode).classed('topic-hovered', true)
+      tooltipDiv.transition().duration(200).style('opacity', 1)
+
+      tooltipDiv.html(
+        `${d[topicField]}
+        <br/>
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${d[beforeField]}
+        <br />
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${d[afterField]}
+        `,
+      )
+      tooltipDiv
+        .style('left', `${e.clientX}px`)
+        .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
     .on('mouseout', (e, d) => {
       d3.select(e.target.parentNode).classed('topic-hovered', false)
+      tooltipDiv
+        .style('left', '-300px')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
     })
     .on('click', (e, d) => {
       const parentTopic = d3.select(e.target.parentNode)

@@ -7847,7 +7847,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  /* global */
+  /* global window*/
 
   function renderChart({
     data,
@@ -7941,7 +7941,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    // const tooltipDiv = initializeTooltip()
+    const tooltipDiv = initializeTooltip$1();
     const topicValues = ___default["default"](data).map(topicField).uniq().value();
     const defaultStateAll = defaultState === 'All' ? topicValues : defaultState;
 
@@ -8029,6 +8029,7 @@ g.circles circle.circle.circle-hovered {
       connectorColorCustom,
       referenceValue,
       connectorColorStrategy,
+      tooltipDiv,
     });
 
     const handleSearch = searchEventHandler(topicValues);
@@ -8324,6 +8325,7 @@ g.circles circle.circle.circle-hovered {
     connectorColorCustom,
     connectorColorStrategy,
     referenceValue,
+    tooltipDiv,
   }) {
     const yGroups = chartCore
       .append('g')
@@ -8345,9 +8347,27 @@ g.circles circle.circle.circle-hovered {
       .attr('id', d => `${d[topicField]}`)
       .on('mouseover', (e, d) => {
         d3__namespace.select(e.target.parentNode).classed('topic-hovered', true);
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+
+        tooltipDiv.html(
+          `${d[topicField]}
+        <br/>
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${d[beforeField]}
+        <br />
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${d[afterField]}
+        `,
+        );
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
       .on('mouseout', (e, d) => {
         d3__namespace.select(e.target.parentNode).classed('topic-hovered', false);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
       })
       .on('click', (e, d) => {
         const parentTopic = d3__namespace.select(e.target.parentNode);
