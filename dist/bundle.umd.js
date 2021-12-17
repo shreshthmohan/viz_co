@@ -1344,7 +1344,7 @@
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$b, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
@@ -1855,7 +1855,7 @@
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$a, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
 
       const dimensionValidation = validateColumnsWithDimensions({
@@ -2790,7 +2790,7 @@
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$9, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
 
       const dimensionValidation = validateColumnsWithDimensions({
@@ -3328,7 +3328,7 @@
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$8, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
 
       const dimensionValidation = validateColumnsWithDimensions({
@@ -3985,7 +3985,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$7, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
 
       const dimensionValidation = validateColumnsWithDimensions({
@@ -5132,7 +5132,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$5, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
         columns,
@@ -5997,7 +5997,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$4, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
 
       const dimensionValidation = validateColumnsWithDimensions({
@@ -6283,7 +6283,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$3, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
@@ -6551,7 +6551,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$2, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
@@ -7210,7 +7210,7 @@ g.circles circle.circle.circle-hovered {
   }) => {
     const optionsValidationResult = optionValidation({ optionTypes: optionTypes$1, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
@@ -7813,7 +7813,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const optionsValidationResult = optionValidation({ optionTypes, options });
 
-    d3__namespace.csv(dataPath).then(data => {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
       const { columns } = data;
       const dimensionValidation = validateColumnsWithDimensions({
