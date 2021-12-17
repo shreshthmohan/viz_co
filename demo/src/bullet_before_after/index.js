@@ -1,18 +1,13 @@
 /* global viz */
 
-const { schemeOranges } = require('d3-scale-chromatic')
-
-// eslint-disable-next-line no-unused-vars
 const dataPath = 'data.csv'
 
-// eslint-disable-next-line no-unused-vars
 const dimensions = {
   beforeField: 'before',
   afterField: 'after',
   topicField: 'topic',
 }
 
-// eslint-disable-next-line no-unused-vars
 const options = {
   aspectRatio: 1.5,
   marginTop: 10,
