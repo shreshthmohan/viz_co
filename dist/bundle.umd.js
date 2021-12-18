@@ -1084,14 +1084,16 @@
   const optionValidation = ({ optionTypes, options }) => {
     const optionValidations = [];
     ___default["default"].each(optionTypes, (fn, key) => {
-      const result = fn(options[key]);
       // Ignore options key if undefined,
       // because all options have a default value inside the chart
-      if (!result.valid && typeof options[key] !== 'undefined') {
-        optionValidations.push({
-          keyValue: `${key}: ${options[key]}`,
-          message: result.message,
-        });
+      if (typeof options[key] !== 'undefined') {
+        const result = fn(options[key]);
+        if (!result.valid) {
+          optionValidations.push({
+            keyValue: `${key}: ${options[key]}`,
+            message: result.message,
+          });
+        }
       }
     });
 
@@ -1186,21 +1188,29 @@
     return combinedResult
   };
 
-  // TODO: add length feature as in checkColorArray
-  const checkNumericArray = val => {
-    const valid =
-      ___default["default"].isArray(val) &&
-      ___default["default"].reduce(
-        val,
-        (isNumber, val_) => {
-          return isNumber && !Number.isNaN(Number(val_))
-        },
-        true,
-      );
-    if (valid) {
-      return { valid: true }
+  const checkNumericArray = length => arr => {
+    const numberValidationResult = arr.map(el => checkNumber(el));
+    const lengthValidationResult = { valid: true, message: '' };
+    if (___default["default"].isArray(arr)) {
+      if (length && arr.length < length) {
+        lengthValidationResult.valid = false;
+        lengthValidationResult.message = `Should be an array with at least ${length} numbers`;
+      }
+
+      const checkAllResults = [...numberValidationResult, lengthValidationResult];
+      const combinedResult = { valid: true, message: '' };
+
+      checkAllResults.forEach(result => {
+        if (!result.valid) {
+          combinedResult.message += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${result.message}`;
+          combinedResult.valid = false;
+        }
+      });
+
+      return combinedResult
     }
-    return { valid: false, message: 'Should be a valid array of numbers' }
+
+    return { valid: false, message: 'Should be an array of numbers' }
   };
 
   const checkStringArray = length => arr => {
@@ -1314,14 +1324,14 @@
 
     // xAxisTitle: checkString,
     // xFieldType: checkString,
-    xAxisTickValues: checkNumericArray, // comment this for automatic tick values
+    xAxisTickValues: checkNumericArray(), // comment this for automatic tick values
     xScaleType: checkOneOf(['log', 'linear']), // linear or log
     xScaleLogBase: checkNumber, // can be any number greater than 0: TODO?
 
     // yAxisTitle: checkString,
     // yFieldType: checkString,
 
-    sizeLegendValues: checkNumericArray,
+    sizeLegendValues: checkNumericArray(),
     sizeLegendMoveSizeObjectDownBy: checkNumber,
     // sizeLegendTitle: checkString,
 
@@ -2755,18 +2765,18 @@
     collisionDistance: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
 
     /* xField */
-    xDomainCustom: checkNumericArray,
+    xDomainCustom: checkNumericArray(2),
     // xAxisLabel = xField,
     // xValuePrefix = '',
     // xValueFormatter = '',
     // xValueSuffix = '',
 
     /* sizeField */
-    sizeRange: checkNumericArray,
+    sizeRange: checkNumericArray(2),
     // sizeValuePrefix = '',
     // sizeValueFormatter = '',
     // sizeValueSuffix = '',
-    sizeLegendValues: checkNumericArray,
+    sizeLegendValues: checkNumericArray(),
     // sizeLegendTitle = sizeField,
     sizeLegendGapInCircles: checkNumber,
 
@@ -5109,9 +5119,9 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    sizeRange: checkNumericArray,
-    xDomainCustom: checkNumericArray,
-    yDomainCustom: checkNumericArray,
+    sizeRange: checkNumericArray(2),
+    xDomainCustom: checkNumericArray(2),
+    yDomainCustom: checkNumericArray(2),
 
     inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
     numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
@@ -5345,7 +5355,7 @@ g.circles circle.circle.circle-hovered {
   function renderYAxis$1({
     chartCore,
     xScale,
-    xDomain,
+    // xDomain,
     yScale,
     formatDate,
     yAxisDateParser,
@@ -5354,7 +5364,7 @@ g.circles circle.circle.circle-hovered {
     chartCore
       .append('g')
       .attr('class', 'y-axis-right')
-      .attr('transform', `translate(${xScale(xDomain[1]) + 20}, 0)`)
+      .attr('transform', `translate(${xScale(xScale.domain()[1]) + 20}, 0)`)
       .call(
         d3__namespace
           .axisRight(yScale)
@@ -5962,7 +5972,7 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    xDomain: checkNumericArray,
+    xDomain: checkNumericArray(2),
     // xAxisLabel: checkString,
     xAxisLabelOffset: checkNumber,
     // xAxisValueFormatter:  checkString, //'',
@@ -5971,14 +5981,14 @@ g.circles circle.circle.circle-hovered {
     // yAxisDateFormatter: checkString, // "Q%q'%y", // Date formatter options: https://github.com/d3/d3-time-format
 
     sizeScaleType: checkOneOf(['log', 'linear']), // default is scaleLinear if not provided. Can be changed to scaleLog
-    sizeRange: checkNumericArray,
+    sizeRange: checkNumericArray(2),
     // sizeLegendLabel: checkString,
-    sizeLegendValues: checkNumericArray,
+    sizeLegendValues: checkNumericArray(),
     sizeLegendGapInSymbols: checkNumber,
     sizeLegendMoveSymbolsDownBy: checkNumber,
     // sizeLegendValueFormatter:  checkString, // '',
 
-    colorDomain: checkNumericArray,
+    colorDomain: checkNumericArray(2),
     // colorLegendValueFormatter: checkString, // ,'.2s',
     // colorLegendLabel: checkString,
     colorRange: checkColorArray(),

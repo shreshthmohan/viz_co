@@ -41,9 +41,9 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  sizeRange: checkNumericArray,
-  xDomainCustom: checkNumericArray,
-  yDomainCustom: checkNumericArray,
+  sizeRange: checkNumericArray(2),
+  xDomainCustom: checkNumericArray(2),
+  yDomainCustom: checkNumericArray(2),
 
   inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
   numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
