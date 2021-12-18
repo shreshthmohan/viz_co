@@ -315,7 +315,7 @@ export function renderChart({
         .attr('stroke', colorScheme[2])
     })
     .on('mouseover', (e, d) => {
-      // d3.select(this).classed('hovered', true)
+      d3.select(this).classed('hovered', true)
       d3.select(e.target.nextSibling).classed('hover-group-active', true)
 
       tooltipDiv.transition().duration(200).style('opacity', 1)
@@ -351,6 +351,11 @@ export function renderChart({
         .transition()
         .duration(500)
         .style('opacity', 0)
+    })
+    .on('click', (e, d) => {
+      const tMace = d3.select(e.target)
+      const clickedState = tMace.classed('tmace-active')
+      tMace.classed('tmace-active', !clickedState)
     })
 
   const nameValues = dataParsed.map(d => d[nameField])
