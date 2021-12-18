@@ -344,7 +344,7 @@ export function renderChart({
         .style('left', `${e.clientX}px`)
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
-    .on('mouseout', (e, d) => {
+    .on('mouseout', e => {
       d3.select(e.target.nextSibling).classed('hover-group-active', false)
       tooltipDiv
         .style('left', '-300px')
@@ -352,7 +352,7 @@ export function renderChart({
         .duration(500)
         .style('opacity', 0)
     })
-    .on('click', (e, d) => {
+    .on('click', e => {
       const tMace = d3.select(e.target)
       const clickedState = tMace.classed('tmace-active')
       tMace.classed('tmace-active', !clickedState)

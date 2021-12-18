@@ -83,8 +83,8 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  activeOpacity: checkNumberBetween(0, 1),
-  inactiveOpacity: checkNumberBetween(0, 1),
+  activeOpacity: checkNumberBetween([0, 1]),
+  inactiveOpacity: checkNumberBetween([0, 1]),
   defaultState: checkDefaultState,
 
   colorScheme: checkColorArray(3),

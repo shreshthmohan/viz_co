@@ -7645,7 +7645,7 @@ g.circles circle.circle.circle-hovered {
           .style('left', `${e.clientX}px`)
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
-      .on('mouseout', (e, d) => {
+      .on('mouseout', e => {
         d3__namespace.select(e.target.nextSibling).classed('hover-group-active', false);
         tooltipDiv
           .style('left', '-300px')
@@ -7653,7 +7653,7 @@ g.circles circle.circle.circle-hovered {
           .duration(500)
           .style('opacity', 0);
       })
-      .on('click', (e, d) => {
+      .on('click', e => {
         const tMace = d3__namespace.select(e.target);
         const clickedState = tMace.classed('tmace-active');
         tMace.classed('tmace-active', !clickedState);
@@ -8018,8 +8018,8 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    activeOpacity: checkNumberBetween(0),
-    inactiveOpacity: checkNumberBetween(0),
+    activeOpacity: checkNumberBetween([0, 1]),
+    inactiveOpacity: checkNumberBetween([0, 1]),
     defaultState: checkDefaultState,
 
     colorScheme: checkColorArray(3),
