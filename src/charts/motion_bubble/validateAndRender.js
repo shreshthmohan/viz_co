@@ -31,7 +31,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -45,7 +45,7 @@ const optionTypes = {
   yDomainCustom: checkNumericArray,
 
   inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-  numberOfColors: checkNumberBetween([3, 9]), // minumum: 3, maximum: 9
+  numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
 
   // xAxisLabel: xField,
   // yAxisLabel: yField,

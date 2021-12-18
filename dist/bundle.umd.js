@@ -1132,9 +1132,9 @@
     return { valid: false, message: 'Should be true or false' }
   };
 
-  const checkNumberBetween = refArr => val => {
-    const min = Math.min(...refArr);
-    const max = Math.max(...refArr);
+  const checkNumberBetween = (a, b) => val => {
+    const min = Math.min(a, b);
+    const max = Math.max(a, b);
     const message = `Should be a number between ${min} and ${max}`;
     const checkNumberResult = checkNumber(val);
     if (!checkNumberResult.valid) {
@@ -1303,7 +1303,7 @@
       'max-w-screen-2xl',
       'max-w-full',
     ]),
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -1332,8 +1332,8 @@
 
     defaultState: checkDefaultState,
 
-    activeOpacity: checkNumberBetween([0, 1]),
-    inactiveOpacity: checkNumberBetween([0, 1]),
+    activeOpacity: checkNumberBetween(0, 1),
+    inactiveOpacity: checkNumberBetween(0, 1),
   };
 
   const validateAndRender$c = ({
@@ -1832,7 +1832,7 @@
   };
 
   const optionTypes$b = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -2738,8 +2738,8 @@
   };
 
   const optionTypes$a = {
-    aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
-    aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+    aspectRatioCombined: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
+    aspectRatioSplit: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -2750,9 +2750,9 @@
 
     customColorScheme: checkColorArray,
     inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-    numberOfColors: checkNumberBetween([3, 9]),
+    numberOfColors: checkNumberBetween(3, 9),
 
-    collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
+    collisionDistance: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
 
     /* xField */
     xDomainCustom: checkNumericArray,
@@ -3287,7 +3287,7 @@
   };
 
   const optionTypes$9 = {
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -3298,12 +3298,12 @@
 
     /* Dimensions */
     /* xField */
-    xPaddingOuter: checkNumberBetween([0, 1]),
+    xPaddingOuter: checkNumberBetween(0, 1),
     // xAxisLabel: checkString,
 
     /* yField */
-    yPaddingInner: checkNumberBetween([0, 1]),
-    yPaddingOuter: checkNumberBetween([0, 1]),
+    yPaddingInner: checkNumberBetween(0, 1),
+    yPaddingOuter: checkNumberBetween(0, 1),
     ySortOrder: checkOneOf(['asc', 'desc']),
 
     /* colorField */
@@ -3313,7 +3313,7 @@
     colorDominoNormal: checkColor,
 
     /* dominoField */
-    dominoSize: checkNumberBetween([0, 1]),
+    dominoSize: checkNumberBetween(0, 1),
 
     /* Legends */
     // normalLegendLabel: checkString,
@@ -3956,7 +3956,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$8 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -3973,8 +3973,8 @@ g.circles circle.circle.circle-hovered {
 
     defaultState: checkDefaultState,
 
-    activeOpacity: checkNumberBetween([0, 1]),
-    inactiveOpacity: checkNumberBetween([0, 1]),
+    activeOpacity: checkNumberBetween(0, 1),
+    inactiveOpacity: checkNumberBetween(0, 1),
   };
 
   const validateAndRender$8 = ({
@@ -4404,7 +4404,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$7 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -4416,9 +4416,9 @@ g.circles circle.circle.circle-hovered {
     descending: checkBoolean,
     // colorLegendTitle: checkString,
 
-    stackHeight: checkNumberBetween([0, 1]),
+    stackHeight: checkNumberBetween(0, 1),
 
-    xGridGap: checkNumberBetween([0, 1]),
+    xGridGap: checkNumberBetween(0, 1),
 
     // uniqueFieldTimeParser: checkString,
     // uniqueFieldTimeFormatter: checkString,
@@ -5100,7 +5100,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$6 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -5114,7 +5114,7 @@ g.circles circle.circle.circle-hovered {
     yDomainCustom: checkNumericArray,
 
     inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-    numberOfColors: checkNumberBetween([3, 9]), // minumum: 3, maximum: 9
+    numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
 
     // xAxisLabel: xField,
     // yAxisLabel: yField,
@@ -5953,7 +5953,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$5 = {
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -5966,7 +5966,7 @@ g.circles circle.circle.circle-hovered {
     // xAxisLabel: checkString,
     xAxisLabelOffset: checkNumber,
     // xAxisValueFormatter:  checkString, //'',
-    dominoHeight: checkNumberBetween([0, 1]),
+    dominoHeight: checkNumberBetween(0, 1),
     // yAxisDateParser: checkString, // '%Y-Q%q',
     // yAxisDateFormatter: checkString, // "Q%q'%y", // Date formatter options: https://github.com/d3/d3-time-format
 
@@ -5985,8 +5985,8 @@ g.circles circle.circle.circle-hovered {
 
     initialState: checkDefaultState,
 
-    activeOpacity: checkNumberBetween([0, 1]),
-    inactiveOpacity: checkNumberBetween([0, 1]),
+    activeOpacity: checkNumberBetween(0, 1),
+    inactiveOpacity: checkNumberBetween(0, 1),
   };
 
   const validateAndRender$5 = ({
@@ -7177,7 +7177,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$2 = {
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -7191,8 +7191,8 @@ g.circles circle.circle.circle-hovered {
     colorScheme: checkColorArray,
     arcLabelFontSize: checkFontSizeString,
 
-    activeOpacity: checkNumberBetween([0, 1]),
-    inactiveOpacity: checkNumberBetween([0, 1]),
+    activeOpacity: checkNumberBetween(0, 1),
+    inactiveOpacity: checkNumberBetween(0, 1),
     clickInteraction: checkBoolean,
 
     // searchInputClassNames: checkString,
@@ -7995,7 +7995,7 @@ g.circles circle.circle.circle-hovered {
   }
 
   const optionTypes$1 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     // directionStartLabel: 'start point',
     // directionEndLabel: 'end point',
@@ -8018,8 +8018,8 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    activeOpacity: checkNumberBetween([0, 1]),
-    inactiveOpacity: checkNumberBetween([0, 1]),
+    activeOpacity: checkNumberBetween(0, 1),
+    inactiveOpacity: checkNumberBetween(0, 1),
     defaultState: checkDefaultState,
 
     colorScheme: checkColorArray(3),
@@ -8610,7 +8610,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes = {
-    aspectRatio: checkNumberBetween([0.1, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -8628,7 +8628,7 @@ g.circles circle.circle.circle-hovered {
     // /* Chart Specific */
     colorScheme: checkColorArray(2),
     barValueMidPoint: checkNumber,
-    barOpacity: checkNumberBetween([0, 1]),
+    barOpacity: checkNumberBetween(0, 1),
   };
 
   function validateAndRender({

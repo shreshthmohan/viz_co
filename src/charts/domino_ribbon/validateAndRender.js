@@ -29,7 +29,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -42,7 +42,7 @@ const optionTypes = {
   // xAxisLabel: checkString,
   xAxisLabelOffset: checkNumber,
   // xAxisValueFormatter:  checkString, //'',
-  dominoHeight: checkNumberBetween([0, 1]),
+  dominoHeight: checkNumberBetween(0, 1),
   // yAxisDateParser: checkString, // '%Y-Q%q',
   // yAxisDateFormatter: checkString, // "Q%q'%y", // Date formatter options: https://github.com/d3/d3-time-format
 
@@ -61,8 +61,8 @@ const optionTypes = {
 
   initialState: checkDefaultState,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
