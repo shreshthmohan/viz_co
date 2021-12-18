@@ -16,6 +16,7 @@ import {
 } from '../../utils/validation/validations'
 
 import { renderChart } from './render'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   valueField: [shouldBeNumber],
@@ -44,7 +45,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({

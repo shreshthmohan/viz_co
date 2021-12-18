@@ -12,6 +12,7 @@ import {
   checkOneOf,
   optionValidation,
 } from '../../utils/validation/optionValidations'
+import { fileExtension } from '../../utils/helpers/general'
 
 import { d3ColorSchemeOptions } from '../../utils/constants'
 
@@ -63,7 +64,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({
       columns,

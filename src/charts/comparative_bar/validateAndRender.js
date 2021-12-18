@@ -19,6 +19,7 @@ import {
   showErrors,
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
@@ -60,7 +61,7 @@ export function validateAndRender({
 }) {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({
