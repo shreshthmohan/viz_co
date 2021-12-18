@@ -54,6 +54,11 @@ export {
 } from './charts/chord/index'
 
 export {
+  renderChart as renderTriangle,
+  validateAndRender as validateAndRenderTriangle,
+} from './charts/triangle/index'
+
+export {
   renderChart as renderComparativeBar,
   validateAndRender as validateAndRenderComparativeBar,
 } from './charts/comparative_bar/index'
