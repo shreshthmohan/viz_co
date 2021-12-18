@@ -23,9 +23,9 @@ const options = {
   marginBottom: 0,
   marginLeft: 0,
 
-  valuePrefix: '',
-  valuePostfix: '%',
-  valueFormat: '.0f',
+  // valuePrefix: '',
+  // valuePostfix: '%',
+  valueFormat: '.0%',
 
   bgColor: '#f7f7f7',
 

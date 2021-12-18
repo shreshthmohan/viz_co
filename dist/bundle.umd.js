@@ -6761,7 +6761,6 @@ g.circles circle.circle.circle-hovered {
   function renderChart({
     data,
     options: {
-      cPoint,
       aspectRatio = 2 / Math.sqrt(3),
 
       directionStartLabel = 'start point',
@@ -6830,31 +6829,33 @@ g.circles circle.circle.circle-hovered {
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
 
-      elParsed[startField[0]] = Number.parseFloat(el[startField[0]]);
-      elParsed[startField[1]] = Number.parseFloat(el[startField[1]]);
-      elParsed[startField[2]] = Number.parseFloat(el[startField[2]]);
-      elParsed[endField[0]] = Number.parseFloat(el[endField[0]]);
-      elParsed[endField[1]] = Number.parseFloat(el[endField[1]]);
-      elParsed[endField[2]] = Number.parseFloat(el[endField[2]]);
+      elParsed[`__orig${startField[0]}__`] = Number.parseFloat(el[startField[0]]);
+      elParsed[`__orig${startField[1]}__`] = Number.parseFloat(el[startField[1]]);
+      elParsed[`__orig${startField[2]}__`] = Number.parseFloat(el[startField[2]]);
+      elParsed[`__orig${endField[0]}__`] = Number.parseFloat(el[endField[0]]);
+      elParsed[`__orig${endField[1]}__`] = Number.parseFloat(el[endField[1]]);
+      elParsed[`__orig${endField[2]}__`] = Number.parseFloat(el[endField[2]]);
 
       elParsed['__startFieldTotal__'] =
-        elParsed[startField[0]] +
-        elParsed[startField[1]] +
-        elParsed[startField[2]];
+        elParsed[`__orig${startField[0]}__`] +
+        elParsed[`__orig${startField[1]}__`] +
+        elParsed[`__orig${startField[2]}__`];
       elParsed['__endFieldTotal__'] =
-        elParsed[endField[0]] + elParsed[endField[1]] + elParsed[endField[2]];
+        elParsed[`__orig${endField[0]}__`] +
+        elParsed[`__orig${endField[1]}__`] +
+        elParsed[`__orig${endField[2]}__`];
 
-      elParsed[`__norm${startField[0]}__`] =
+      elParsed[startField[0]] =
         elParsed[startField[0]] / elParsed['__startFieldTotal__'];
-      elParsed[`__norm${startField[1]}__`] =
+      elParsed[startField[1]] =
         elParsed[startField[1]] / elParsed['__startFieldTotal__'];
-      elParsed[`__norm${startField[2]}__`] =
+      elParsed[startField[2]] =
         elParsed[startField[2]] / elParsed['__startFieldTotal__'];
-      elParsed[`__norm${endField[0]}__`] =
+      elParsed[endField[0]] =
         elParsed[endField[0]] / elParsed['__endFieldTotal__'];
-      elParsed[`__norm${endField[1]}__`] =
+      elParsed[endField[1]] =
         elParsed[endField[1]] / elParsed['__endFieldTotal__'];
-      elParsed[`__norm${endField[2]}__`] =
+      elParsed[endField[2]] =
         elParsed[endField[2]] / elParsed['__endFieldTotal__'];
 
       return elParsed
@@ -6862,33 +6863,33 @@ g.circles circle.circle.circle-hovered {
 
     // TODO: add note about hardcoded domain
     const triangleSide = (coreChartHeight * 2) / Math.sqrt(3);
-    const xScale = d3__namespace.scaleLinear().range([0, triangleSide]).domain([0, 100]);
+    const xScale = d3__namespace.scaleLinear().range([0, triangleSide]).domain([0, 1]);
 
     const deToxy = ({ d, e }) => {
-      return [xScale(d + e / 2), ((xScale(100) - xScale(e)) * Math.sqrt(3)) / 2]
+      return [xScale(d + e / 2), ((xScale(1) - xScale(e)) * Math.sqrt(3)) / 2]
     };
 
     const projectionsOnSides = ({ d, e, f }) => {
-      const bottomPrejection = [xScale(d), (Math.sqrt(3) * xScale(100)) / 2];
+      const bottomPrejection = [xScale(d), (Math.sqrt(3) * xScale(1)) / 2];
       const rightPrejection = [
-        xScale(100) - Math.cos(Math.PI / 3) * xScale(e),
-        Math.sin(Math.PI / 3) * xScale(100 - e),
+        xScale(1) - Math.cos(Math.PI / 3) * xScale(e),
+        Math.sin(Math.PI / 3) * xScale(1 - e),
       ];
       const leftPrejection = [
-        Math.cos(Math.PI / 3) * xScale(100 - f),
+        Math.cos(Math.PI / 3) * xScale(1 - f),
         Math.sin(Math.PI / 3) * xScale(f),
       ];
       return [bottomPrejection, rightPrejection, leftPrejection]
     };
 
-    const centroid = { d: 100 / 3, e: 100 / 3, f: 100 / 3 };
-    const bottomCenter = { d: 50, e: 0, f: 50 };
-    const leftCenter = { d: 0, e: 50, f: 50 };
-    const rightCenter = { d: 50, e: 50, f: 0 };
+    const centroid = { d: 1 / 3, e: 1 / 3, f: 1 / 3 };
+    const bottomCenter = { d: 1 / 2, e: 0, f: 1 / 2 };
+    const leftCenter = { d: 0, e: 1 / 2, f: 1 / 2 };
+    const rightCenter = { d: 1 / 2, e: 1 / 2, f: 0 };
 
-    const bottomRight = { d: 100, e: 0, f: 0 };
-    const top = { d: 0, e: 100, f: 0 };
-    const bottomLeft = { d: 0, e: 0, f: 100 };
+    const bottomRight = { d: 1, e: 0, f: 0 };
+    const top = { d: 0, e: 1, f: 0 };
+    const bottomLeft = { d: 0, e: 0, f: 1 };
 
     // There are three tridants in this coordinate system
     // like there are 4 quadrants in the cartesian coordinate system
@@ -6924,79 +6925,6 @@ g.circles circle.circle.circle-hovered {
       .attr('d', d3__namespace.line())
       .attr('fill', (d, i) => colorScheme[i])
       .attr('opacity', 0.1);
-
-    // const [bottomPrejection, rightPrejection, leftPrejection] =
-    //   projectionsOnSides(cPoint)
-
-    // const hoverGroup = chartCore.append('g').attr('class', 'hover-group')
-
-    // const hoverBottom = hoverGroup
-    //   .append('g')
-    //   .selectAll('.bottom-projection')
-    //   .data(dataParsed)
-
-    // hoverBottom
-    //   .append('circle')
-    //   .attr('cx', d => {
-    //     const [bp, rp, lp] = projectionsOnSides({
-    //       d: d[endField[0]],
-    //       e: d[endField[1]],
-    //       f: d[endField[2]],
-    //     })
-    //     return bp[0]
-    //   })
-    //   .attr('cy', d => {
-    //     const [bp, rp, lp] = projectionsOnSides({
-    //       d: d[endField[0]],
-    //       e: d[endField[1]],
-    //       f: d[endField[2]],
-    //     })
-    //     return bp[1]
-    //   })
-    //   .attr('r', 5)
-    //   .attr('fill', colorScheme[0])
-
-    // hoverBottom
-    //   .append('line')
-    //   .attr('path', d => {
-    //     const startPoint = deToxy({ d: d[endField[0]], e: d[endField[1]] })
-    //     const [bp, rp, lp] = projectionsOnSides({
-    //       d: d[endField[0]],
-    //       e: d[endField[1]],
-    //       f: d[endField[2]],
-    //     })
-    //     const lineData = [
-    //       { x: startPoint[0], y: startPoint[1] },
-    //       { x: bp[0], y: bp[1] },
-    //     ]
-    //     return d3
-    //       .line()
-    //       .x(d => d.x)
-    //       .y(d => d.y)(lineData)
-    //   })
-    //   .attr('stroke', colorScheme[0])
-
-    // chartCore
-    //   .append('g')
-    //   .attr('class', 'hover-test')
-    //   .selectAll('circle')
-    //   .data(dataParsed)
-    //   .join('circle')
-    //   .attr('cx', d => rightPrejection[0])
-    //   .attr('cy', d => rightPrejection[1])
-    //   .attr('r', 5)
-    //   .attr('fill', colorScheme[1])
-
-    // chartCore
-    //   .append('g')
-    //   .attr('class', 'hover-test')
-    //   .selectAll('circle')
-    //   .data(dataParsed)
-    //   .join('circle')
-    //   .attr('cx', d => leftPrejection[0])
-    //   .attr('cy', d => leftPrejection[1])
-    //   .attr('r', 5)
-    //   .attr('fill', colorScheme[2])
 
     chartCore
       .append('g')
@@ -7216,7 +7144,10 @@ g.circles circle.circle.circle-hovered {
 
     bottomAxis
       .append('text')
-      .attr('transform', `translate(${deToxy({ d: 50, e: 0, f: 50 })[0]}, ${30})`)
+      .attr(
+        'transform',
+        `translate(${deToxy({ d: 1 / 2, e: 0, f: 1 / 2 })[0]}, ${30})`,
+      )
       .text('bottom axis')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
