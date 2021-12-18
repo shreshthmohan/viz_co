@@ -4,8 +4,8 @@
 // This chart is meant to show shares of three different (say parties) as a percentage
 // That's why it should add up to 100
 const dimensions = {
-  startField: ['d1', 'e1', 'f1'],
-  endField: ['d2', 'e2', 'f2'],
+  startField: ['b1', 'l1', 'r1'],
+  endField: ['b2', 'l2', 'r2'],
   nameField: 'name',
 }
 
@@ -29,13 +29,23 @@ const options = {
 
   bgColor: '#f7f7f7',
 
-  // colorScheme: ['red', 'orange', 'blue'],
-  colorScheme: ['#ee4e34', '#f1a03f', '#3077aa'],
+  activeOpacity: 0.8,
+  inactiveOpacity: 0.2,
+  defaultState: ['Mohave', 'Lincoln', 'San Jose', 'Santa Clara'],
+
+  colorScheme: ['red', 'orange', 'blue'],
+  // colorScheme: ['#ee4e34', '#f1a03f', '#3077aa'],
   // should be the same length and order as dimensions and colorScheme
-  fieldLabels: ['dee', 'eee', 'eff'],
+  fieldLabels: ['bottom', 'right', 'left'],
 
   searchInputClassNames:
     'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
+  goToInitialStateButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+  clearAllButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+  showAllButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 
 const dataPath = 'data.csv'

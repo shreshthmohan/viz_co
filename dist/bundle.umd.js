@@ -215,7 +215,7 @@
 
   /* global window */
 
-  function applyInteractionStyles$5({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$6({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
@@ -690,7 +690,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$4 = referenceList => qstr => {
+  const searchEventHandler$5 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -712,7 +712,7 @@
     }
   };
 
-  function setupSearch$5({
+  function setupSearch$6({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -731,7 +731,7 @@
     return search
   }
 
-  function setupInitialStateButton$2({
+  function setupInitialStateButton$3({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -753,7 +753,7 @@
     });
   }
 
-  function setupClearAllButton$3({
+  function setupClearAllButton$4({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -829,7 +829,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$5({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$6({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -958,22 +958,22 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$4(nameValues);
-    const search = setupSearch$5({
+    const handleSearch = searchEventHandler$5(nameValues);
+    const search = setupSearch$6({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       nameField,
     });
 
-    setupInitialStateButton$2({
+    setupInitialStateButton$3({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$3({
+    setupClearAllButton$4({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -2824,7 +2824,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$4() {
+  function applyInteractionStyles$5() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -3059,7 +3059,7 @@
       });
   }
 
-  const searchEventHandler$3 = referenceList => qstr => {
+  const searchEventHandler$4 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -3131,7 +3131,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$4({
+  function setupSearch$5({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3185,7 +3185,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$4();
+    applyInteractionStyles$5();
 
     const coreChartWidth = 1000;
     const {
@@ -3250,8 +3250,8 @@
     renderXAxis$3({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$3(dominoValues);
-    setupSearch$4({
+    const handleSearch = searchEventHandler$4(dominoValues);
+    setupSearch$5({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3363,7 +3363,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$3({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$4({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
 g.serieses .series {
   fill-opacity: ${inactiveOpacity};
@@ -3693,7 +3693,7 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$2 = referenceList => qstr => {
+  const searchEventHandler$3 = referenceList => qstr => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
@@ -3714,7 +3714,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$3({
+  function setupSearch$4({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3733,7 +3733,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$1({
+  function setupInitialStateButton$2({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -3755,7 +3755,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3773,7 +3773,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$1({
+  function setupShowAllButton$2({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3830,7 +3830,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$3({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3909,15 +3909,15 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     });
 
-    const handleSearch = searchEventHandler$2(categoryDomain);
-    const search = setupSearch$3({
+    const handleSearch = searchEventHandler$3(categoryDomain);
+    const search = setupSearch$4({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       seriesField,
     });
 
-    setupInitialStateButton$1({
+    setupInitialStateButton$2({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -3925,14 +3925,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$1({
+    setupShowAllButton$2({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -4611,7 +4611,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$2({ inactiveOpacity });
+    applyInteractionStyles$3({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -4715,7 +4715,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$2({
+    setupSearch$3({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -4917,7 +4917,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$2({
+  function setupSearch$3({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -4960,7 +4960,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$2({ inactiveOpacity }) {
+  function applyInteractionStyles$3({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     opacity: ${inactiveOpacity};
@@ -5162,7 +5162,7 @@ g.circles circle.circle.circle-hovered {
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$1({ inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$2({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
@@ -5590,7 +5590,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$1 = referenceList => qstr => {
+  const searchEventHandler$2 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -5694,7 +5694,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
-  function setupSearch$1({
+  function setupSearch$2({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -5712,7 +5712,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton({
+  function setupInitialStateButton$1({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -5733,7 +5733,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$1({
+  function setupClearAllButton$2({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -5802,7 +5802,7 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$1({ inactiveOpacity, activeOpacity });
+    applyInteractionStyles$2({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -5893,22 +5893,22 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    const handleSearch = searchEventHandler$1(allDominoFieldValues);
-    const search = setupSearch$1({
+    const handleSearch = searchEventHandler$2(allDominoFieldValues);
+    const search = setupSearch$2({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       dominoField,
     });
 
-    setupInitialStateButton({
+    setupInitialStateButton$1({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$1({
+    setupClearAllButton$2({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -6067,7 +6067,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { sourceField, targetField, valueField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$1({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -6131,15 +6131,15 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const handleSearch = searchEventHandler(names, index);
-    const search = setupSearch({
+    const handleSearch = searchEventHandler$1(names, index);
+    const search = setupSearch$1({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       sourceField,
     });
 
-    setupClearAllButton({
+    setupClearAllButton$1({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -6147,7 +6147,7 @@ g.circles circle.circle.circle-hovered {
       index,
     });
 
-    setupShowAllButton({
+    setupShowAllButton$1({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -6170,7 +6170,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$1({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   path.ribbon {
     fill-opacity: ${inactiveOpacity}
@@ -6512,7 +6512,7 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  const searchEventHandler = (referenceList, index) => qstr => {
+  const searchEventHandler$1 = (referenceList, index) => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       const matchedIndexes = [];
@@ -6546,7 +6546,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch({
+  function setupSearch$1({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -6565,7 +6565,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupClearAllButton({
+  function setupClearAllButton$1({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -6584,7 +6584,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton({
+  function setupShowAllButton$1({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -6761,6 +6761,7 @@ g.circles circle.circle.circle-hovered {
   function renderChart({
     data,
     options: {
+      cPoint,
       aspectRatio = 2 / Math.sqrt(3),
 
       directionStartLabel = 'start point',
@@ -6786,7 +6787,15 @@ g.circles circle.circle.circle-hovered {
 
       colorScheme = ['red', 'orange', 'blue'],
       fieldLabels,
+
+      activeOpacity = 0.8,
+      inactiveOpacity = 0.2,
+      defaultState = [],
+
       searchInputClassNames = '',
+      goToInitialStateButtonClassNames = '',
+      clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
     },
     dimensions: { startField, endField, nameField },
 
@@ -6795,16 +6804,7 @@ g.circles circle.circle.circle-hovered {
     const valueFormatter = val =>
       `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`;
 
-    d3__namespace.select('body').append('style').html(`
-  .tmaces.searching .tmace.tmace-matched {
-    stroke: #333;
-    stroke-width: 1;
-  }
-  .tmace:hover {
-    stroke: #333;
-    stroke-width: 1;
-  }
-  `);
+    applyInteractionStyles({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 600;
     const {
@@ -6837,6 +6837,26 @@ g.circles circle.circle.circle-hovered {
       elParsed[endField[1]] = Number.parseFloat(el[endField[1]]);
       elParsed[endField[2]] = Number.parseFloat(el[endField[2]]);
 
+      elParsed['__startFieldTotal__'] =
+        elParsed[startField[0]] +
+        elParsed[startField[1]] +
+        elParsed[startField[2]];
+      elParsed['__endFieldTotal__'] =
+        elParsed[endField[0]] + elParsed[endField[1]] + elParsed[endField[2]];
+
+      elParsed[`__norm${startField[0]}__`] =
+        elParsed[startField[0]] / elParsed['__startFieldTotal__'];
+      elParsed[`__norm${startField[1]}__`] =
+        elParsed[startField[1]] / elParsed['__startFieldTotal__'];
+      elParsed[`__norm${startField[2]}__`] =
+        elParsed[startField[2]] / elParsed['__startFieldTotal__'];
+      elParsed[`__norm${endField[0]}__`] =
+        elParsed[endField[0]] / elParsed['__endFieldTotal__'];
+      elParsed[`__norm${endField[1]}__`] =
+        elParsed[endField[1]] / elParsed['__endFieldTotal__'];
+      elParsed[`__norm${endField[2]}__`] =
+        elParsed[endField[2]] / elParsed['__endFieldTotal__'];
+
       return elParsed
     });
 
@@ -6846,6 +6866,19 @@ g.circles circle.circle.circle-hovered {
 
     const deToxy = ({ d, e }) => {
       return [xScale(d + e / 2), ((xScale(100) - xScale(e)) * Math.sqrt(3)) / 2]
+    };
+
+    const projectionsOnSides = ({ d, e, f }) => {
+      const bottomPrejection = [xScale(d), (Math.sqrt(3) * xScale(100)) / 2];
+      const rightPrejection = [
+        xScale(100) - Math.cos(Math.PI / 3) * xScale(e),
+        Math.sin(Math.PI / 3) * xScale(100 - e),
+      ];
+      const leftPrejection = [
+        Math.cos(Math.PI / 3) * xScale(100 - f),
+        Math.sin(Math.PI / 3) * xScale(f),
+      ];
+      return [bottomPrejection, rightPrejection, leftPrejection]
     };
 
     const centroid = { d: 100 / 3, e: 100 / 3, f: 100 / 3 };
@@ -6878,6 +6911,8 @@ g.circles circle.circle.circle-hovered {
       deToxy(bottomCenter),
     ];
 
+    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
+
     const tridants = [rightTridant, topTridant, leftTridant];
     chartCore
       .append('g')
@@ -6890,14 +6925,98 @@ g.circles circle.circle.circle-hovered {
       .attr('fill', (d, i) => colorScheme[i])
       .attr('opacity', 0.1);
 
+    // const [bottomPrejection, rightPrejection, leftPrejection] =
+    //   projectionsOnSides(cPoint)
+
+    // const hoverGroup = chartCore.append('g').attr('class', 'hover-group')
+
+    // const hoverBottom = hoverGroup
+    //   .append('g')
+    //   .selectAll('.bottom-projection')
+    //   .data(dataParsed)
+
+    // hoverBottom
+    //   .append('circle')
+    //   .attr('cx', d => {
+    //     const [bp, rp, lp] = projectionsOnSides({
+    //       d: d[endField[0]],
+    //       e: d[endField[1]],
+    //       f: d[endField[2]],
+    //     })
+    //     return bp[0]
+    //   })
+    //   .attr('cy', d => {
+    //     const [bp, rp, lp] = projectionsOnSides({
+    //       d: d[endField[0]],
+    //       e: d[endField[1]],
+    //       f: d[endField[2]],
+    //     })
+    //     return bp[1]
+    //   })
+    //   .attr('r', 5)
+    //   .attr('fill', colorScheme[0])
+
+    // hoverBottom
+    //   .append('line')
+    //   .attr('path', d => {
+    //     const startPoint = deToxy({ d: d[endField[0]], e: d[endField[1]] })
+    //     const [bp, rp, lp] = projectionsOnSides({
+    //       d: d[endField[0]],
+    //       e: d[endField[1]],
+    //       f: d[endField[2]],
+    //     })
+    //     const lineData = [
+    //       { x: startPoint[0], y: startPoint[1] },
+    //       { x: bp[0], y: bp[1] },
+    //     ]
+    //     return d3
+    //       .line()
+    //       .x(d => d.x)
+    //       .y(d => d.y)(lineData)
+    //   })
+    //   .attr('stroke', colorScheme[0])
+
+    // chartCore
+    //   .append('g')
+    //   .attr('class', 'hover-test')
+    //   .selectAll('circle')
+    //   .data(dataParsed)
+    //   .join('circle')
+    //   .attr('cx', d => rightPrejection[0])
+    //   .attr('cy', d => rightPrejection[1])
+    //   .attr('r', 5)
+    //   .attr('fill', colorScheme[1])
+
+    // chartCore
+    //   .append('g')
+    //   .attr('class', 'hover-test')
+    //   .selectAll('circle')
+    //   .data(dataParsed)
+    //   .join('circle')
+    //   .attr('cx', d => leftPrejection[0])
+    //   .attr('cy', d => leftPrejection[1])
+    //   .attr('r', 5)
+    //   .attr('fill', colorScheme[2])
+
     chartCore
       .append('g')
       .attr('class', 'tmaces')
-      .selectAll('path')
+      .selectAll('g')
+      // .selectAll('path')
       .data(dataParsed)
-      .join('path')
-      .attr('class', d => `tmace tmace-${toClassText(d[nameField])}`)
+      .join('g')
+      .attr('class', d => `tmace-g-${toClassText(d[nameField])}`)
+      // .join('path')
+      .append('path')
+      .attr(
+        'class',
+        d =>
+          `tmace tmace-${toClassText(d[nameField])} ${
+          defaultStateAll.includes(d[nameField]) ? 'tmace-active' : ''
+        }`,
+      )
       .attr('d', d => {
+        // debugger
         const [x1, y1] = deToxy({ d: d[startField[0]], e: d[startField[1]] });
         const [x2, y2] = deToxy({ d: d[endField[0]], e: d[endField[1]] });
         const macePoints = maceShape({
@@ -6934,8 +7053,89 @@ g.circles circle.circle.circle-hovered {
             return 'gray'
         }
       })
+      .each(function (d) {
+        const hoverGroup = d3__namespace
+          .select(this.parentNode)
+          .append('g')
+          .attr('class', 'hover-group');
+
+        const [bp, rp, lp] = projectionsOnSides({
+          d: d[endField[0]],
+          e: d[endField[1]],
+          f: d[endField[2]],
+        });
+        const startPoint = deToxy({ d: d[endField[0]], e: d[endField[1]] });
+
+        hoverGroup
+          .append('circle')
+          .attr('class', 'hover-circle')
+          .attr('cx', bp[0])
+          .attr('cy', bp[1])
+          .attr('r', 5)
+          .attr('fill', colorScheme[0]);
+
+        hoverGroup
+          .append('path')
+          .attr('class', 'hover-line')
+          .attr('d', () => {
+            return d3__namespace
+              .line()
+              .x(d => d.x)
+              .y(d => d.y)([
+              { x: startPoint[0], y: startPoint[1] },
+              { x: bp[0], y: bp[1] },
+            ])
+          })
+          .attr('stroke', colorScheme[0]);
+
+        hoverGroup
+          .append('circle')
+          .attr('class', 'hover-circle')
+          .attr('cx', rp[0])
+          .attr('cy', rp[1])
+          .attr('r', 5)
+          .attr('fill', colorScheme[1]);
+
+        hoverGroup
+          .append('path')
+          .attr('class', 'hover-line')
+          .attr('d', () => {
+            return d3__namespace
+              .line()
+              .x(d => d.x)
+              .y(d => d.y)([
+              { x: startPoint[0], y: startPoint[1] },
+              { x: rp[0], y: rp[1] },
+            ])
+          })
+          .attr('stroke', colorScheme[1]);
+
+        hoverGroup
+          .append('circle')
+          .attr('class', 'hover-circle')
+          .attr('cx', lp[0])
+          .attr('cy', lp[1])
+          .attr('r', 5)
+          .attr('fill', colorScheme[2]);
+
+        hoverGroup
+          .append('path')
+          .attr('class', 'hover-line')
+          .attr('d', () => {
+            return d3__namespace
+              .line()
+              .x(d => d.x)
+              .y(d => d.y)([
+              { x: startPoint[0], y: startPoint[1] },
+              { x: lp[0], y: lp[1] },
+            ])
+          })
+          .attr('stroke', colorScheme[2]);
+      })
       .on('mouseover', (e, d) => {
         // d3.select(this).classed('hovered', true)
+        d3__namespace.select(e.target.nextSibling).classed('hover-group-active', true);
+
         tooltipDiv.transition().duration(200).style('opacity', 1);
 
         tooltipDiv.html(`${d[nameField]}
@@ -6953,7 +7153,8 @@ g.circles circle.circle.circle-hovered {
           .style('left', `${e.clientX}px`)
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
-      .on('mouseout', () => {
+      .on('mouseout', (e, d) => {
+        d3__namespace.select(e.target.nextSibling).classed('hover-group-active', false);
         tooltipDiv
           .style('left', '-300px')
           .transition()
@@ -6961,45 +7162,44 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
-    // .attr('opacity', 0.8)
     const nameValues = dataParsed.map(d => d[nameField]);
-
-    const searchEventHandler = qstr => {
-      if (qstr) {
-        const lqstr = qstr.toLowerCase();
-        nameValues.forEach(val => {
-          const tmaceName = toClassText(val);
-          if (val.toLowerCase().includes(lqstr)) {
-            d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', true);
-          } else {
-            d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
-          }
-          d3__namespace.select('.tmaces').classed('searching', true);
-        });
-      } else {
-        nameValues.forEach(val => {
-          const tmaceName = toClassText(val);
-          d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
-        });
-        d3__namespace.select('.tmaces').classed('searching', false);
-      }
-    };
-
-    const search = widgetsLeft
-      .append('input')
-      .attr('type', 'text')
-      .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
-    search.attr('placeholder', `Find by ${nameField}`);
-    search.on('keyup', e => {
-      const qstr = e.target.value;
-      searchEventHandler(qstr);
+    const handleSearch = searchEventHandler(nameValues);
+    const search = setupSearch({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      nameField,
     });
+
     const axes = chartCore.append('g').attr('class', 'axes');
 
-    axes
+    setupInitialStateButton({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+    });
+
+    setupClearAllButton({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+    });
+
+    const bottomAxis = axes
       .append('g')
-      .attr('transform', `translate(0, ${coreChartHeight})`)
+      .attr('transform', `translate(0, ${coreChartHeight})`);
+
+    bottomAxis
       .call(d3__namespace.axisBottom(xScale).ticks(4).tickFormat(valueFormatter))
       .call(g => {
         g.selectAll('.tick text')
@@ -7013,6 +7213,15 @@ g.circles circle.circle.circle-hovered {
         g.selectAll('.tick:last-of-type line').remove();
         g.select('.domain').remove();
       });
+
+    bottomAxis
+      .append('text')
+      .attr('transform', `translate(${deToxy({ d: 50, e: 0, f: 50 })[0]}, ${30})`)
+      .text('bottom axis')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .style('font-size', '12px')
+      .attr('fill', colorScheme[0]);
 
     axes
       .append('g')
@@ -7094,6 +7303,135 @@ g.circles circle.circle.circle-hovered {
       }
     });
     return maxDim
+  }
+
+  function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+    d3__namespace.select('body').append('style').html(`  
+    .tmaces .tmace {
+      fill-opacity: ${inactiveOpacity};
+    }
+    .tmaces .tmace.tmace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.tmaces.searching .tmace.tmace-matched {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    .tmace:hover {
+      stroke: #333;
+      stroke-width: 1;
+    }
+    g.hover-group {
+      opacity: 0
+    }
+    g.hover-group.hover-group-active {
+      opacity: 0.5
+    }
+    .hover-line {
+      stroke-dasharray: 5 5
+    }
+    .hover-circle {
+      r: 3
+    }
+  `);
+  }
+
+  function setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      d3__namespace.selectAll('.tmace').classed('tmace-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        d3__namespace.select(`.tmace-${toClassText(val)}`).classed('tmace-active', true);
+      });
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      d3__namespace.selectAll('.tmace').classed('tmace-active', false);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      d3__namespace.selectAll('.tmace').classed('tmace-active', true);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  const searchEventHandler = referenceList => qstr => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      referenceList.forEach(val => {
+        const tmaceName = toClassText(val);
+        if (val.toLowerCase().includes(lqstr)) {
+          d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', true);
+        } else {
+          d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
+        }
+        d3__namespace.select('.tmaces').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const tmaceName = toClassText(val);
+        d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
+      });
+      d3__namespace.select('.tmaces').classed('searching', false);
+    }
+  };
+
+  function setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    nameField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('placeholder', `Find by ${nameField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr);
+    });
+    return search
   }
 
   // { startField, endField, nameField }

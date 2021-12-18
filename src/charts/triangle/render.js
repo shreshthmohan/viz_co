@@ -1,6 +1,7 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import {
   initializeTooltip,
   setupChartArea,
@@ -14,6 +15,7 @@ import { renderMaceColorLegend } from './maceColorLegend'
 export function renderChart({
   data,
   options: {
+    cPoint,
     aspectRatio = 2 / Math.sqrt(3),
 
     directionStartLabel = 'start point',
@@ -39,7 +41,15 @@ export function renderChart({
 
     colorScheme = ['red', 'orange', 'blue'],
     fieldLabels,
+
+    activeOpacity = 0.8,
+    inactiveOpacity = 0.2,
+    defaultState = [],
+
     searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
   },
   dimensions: { startField, endField, nameField },
 
@@ -48,16 +58,7 @@ export function renderChart({
   const valueFormatter = val =>
     `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`
 
-  d3.select('body').append('style').html(`
-  .tmaces.searching .tmace.tmace-matched {
-    stroke: #333;
-    stroke-width: 1;
-  }
-  .tmace:hover {
-    stroke: #333;
-    stroke-width: 1;
-  }
-  `)
+  applyInteractionStyles({ activeOpacity, inactiveOpacity })
 
   const coreChartWidth = 600
   const {
@@ -90,6 +91,26 @@ export function renderChart({
     elParsed[endField[1]] = Number.parseFloat(el[endField[1]])
     elParsed[endField[2]] = Number.parseFloat(el[endField[2]])
 
+    elParsed['__startFieldTotal__'] =
+      elParsed[startField[0]] +
+      elParsed[startField[1]] +
+      elParsed[startField[2]]
+    elParsed['__endFieldTotal__'] =
+      elParsed[endField[0]] + elParsed[endField[1]] + elParsed[endField[2]]
+
+    elParsed[`__norm${startField[0]}__`] =
+      elParsed[startField[0]] / elParsed['__startFieldTotal__']
+    elParsed[`__norm${startField[1]}__`] =
+      elParsed[startField[1]] / elParsed['__startFieldTotal__']
+    elParsed[`__norm${startField[2]}__`] =
+      elParsed[startField[2]] / elParsed['__startFieldTotal__']
+    elParsed[`__norm${endField[0]}__`] =
+      elParsed[endField[0]] / elParsed['__endFieldTotal__']
+    elParsed[`__norm${endField[1]}__`] =
+      elParsed[endField[1]] / elParsed['__endFieldTotal__']
+    elParsed[`__norm${endField[2]}__`] =
+      elParsed[endField[2]] / elParsed['__endFieldTotal__']
+
     return elParsed
   })
 
@@ -99,6 +120,23 @@ export function renderChart({
 
   const deToxy = ({ d, e }) => {
     return [xScale(d + e / 2), ((xScale(100) - xScale(e)) * Math.sqrt(3)) / 2]
+  }
+
+  const defToxy = ({ d, e, f }) => {
+    return [xScale(d + e / 2), ((xScale(100) - xScale(e)) * Math.sqrt(3)) / 2]
+  }
+
+  const projectionsOnSides = ({ d, e, f }) => {
+    const bottomPrejection = [xScale(d), (Math.sqrt(3) * xScale(100)) / 2]
+    const rightPrejection = [
+      xScale(100) - Math.cos(Math.PI / 3) * xScale(e),
+      Math.sin(Math.PI / 3) * xScale(100 - e),
+    ]
+    const leftPrejection = [
+      Math.cos(Math.PI / 3) * xScale(100 - f),
+      Math.sin(Math.PI / 3) * xScale(f),
+    ]
+    return [bottomPrejection, rightPrejection, leftPrejection]
   }
 
   const centroid = { d: 100 / 3, e: 100 / 3, f: 100 / 3 }
@@ -131,6 +169,8 @@ export function renderChart({
     deToxy(bottomCenter),
   ]
 
+  const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
+
   const tridants = [rightTridant, topTridant, leftTridant]
   chartCore
     .append('g')
@@ -143,14 +183,98 @@ export function renderChart({
     .attr('fill', (d, i) => colorScheme[i])
     .attr('opacity', 0.1)
 
+  // const [bottomPrejection, rightPrejection, leftPrejection] =
+  //   projectionsOnSides(cPoint)
+
+  // const hoverGroup = chartCore.append('g').attr('class', 'hover-group')
+
+  // const hoverBottom = hoverGroup
+  //   .append('g')
+  //   .selectAll('.bottom-projection')
+  //   .data(dataParsed)
+
+  // hoverBottom
+  //   .append('circle')
+  //   .attr('cx', d => {
+  //     const [bp, rp, lp] = projectionsOnSides({
+  //       d: d[endField[0]],
+  //       e: d[endField[1]],
+  //       f: d[endField[2]],
+  //     })
+  //     return bp[0]
+  //   })
+  //   .attr('cy', d => {
+  //     const [bp, rp, lp] = projectionsOnSides({
+  //       d: d[endField[0]],
+  //       e: d[endField[1]],
+  //       f: d[endField[2]],
+  //     })
+  //     return bp[1]
+  //   })
+  //   .attr('r', 5)
+  //   .attr('fill', colorScheme[0])
+
+  // hoverBottom
+  //   .append('line')
+  //   .attr('path', d => {
+  //     const startPoint = deToxy({ d: d[endField[0]], e: d[endField[1]] })
+  //     const [bp, rp, lp] = projectionsOnSides({
+  //       d: d[endField[0]],
+  //       e: d[endField[1]],
+  //       f: d[endField[2]],
+  //     })
+  //     const lineData = [
+  //       { x: startPoint[0], y: startPoint[1] },
+  //       { x: bp[0], y: bp[1] },
+  //     ]
+  //     return d3
+  //       .line()
+  //       .x(d => d.x)
+  //       .y(d => d.y)(lineData)
+  //   })
+  //   .attr('stroke', colorScheme[0])
+
+  // chartCore
+  //   .append('g')
+  //   .attr('class', 'hover-test')
+  //   .selectAll('circle')
+  //   .data(dataParsed)
+  //   .join('circle')
+  //   .attr('cx', d => rightPrejection[0])
+  //   .attr('cy', d => rightPrejection[1])
+  //   .attr('r', 5)
+  //   .attr('fill', colorScheme[1])
+
+  // chartCore
+  //   .append('g')
+  //   .attr('class', 'hover-test')
+  //   .selectAll('circle')
+  //   .data(dataParsed)
+  //   .join('circle')
+  //   .attr('cx', d => leftPrejection[0])
+  //   .attr('cy', d => leftPrejection[1])
+  //   .attr('r', 5)
+  //   .attr('fill', colorScheme[2])
+
   chartCore
     .append('g')
     .attr('class', 'tmaces')
-    .selectAll('path')
+    .selectAll('g')
+    // .selectAll('path')
     .data(dataParsed)
-    .join('path')
-    .attr('class', d => `tmace tmace-${toClassText(d[nameField])}`)
+    .join('g')
+    .attr('class', d => `tmace-g-${toClassText(d[nameField])}`)
+    // .join('path')
+    .append('path')
+    .attr(
+      'class',
+      d =>
+        `tmace tmace-${toClassText(d[nameField])} ${
+          defaultStateAll.includes(d[nameField]) ? 'tmace-active' : ''
+        }`,
+    )
     .attr('d', d => {
+      // debugger
       const [x1, y1] = deToxy({ d: d[startField[0]], e: d[startField[1]] })
       const [x2, y2] = deToxy({ d: d[endField[0]], e: d[endField[1]] })
       const macePoints = maceShape({
@@ -187,8 +311,89 @@ export function renderChart({
           return 'gray'
       }
     })
+    .each(function (d) {
+      const hoverGroup = d3
+        .select(this.parentNode)
+        .append('g')
+        .attr('class', 'hover-group')
+
+      const [bp, rp, lp] = projectionsOnSides({
+        d: d[endField[0]],
+        e: d[endField[1]],
+        f: d[endField[2]],
+      })
+      const startPoint = deToxy({ d: d[endField[0]], e: d[endField[1]] })
+
+      hoverGroup
+        .append('circle')
+        .attr('class', 'hover-circle')
+        .attr('cx', bp[0])
+        .attr('cy', bp[1])
+        .attr('r', 5)
+        .attr('fill', colorScheme[0])
+
+      hoverGroup
+        .append('path')
+        .attr('class', 'hover-line')
+        .attr('d', () => {
+          return d3
+            .line()
+            .x(d => d.x)
+            .y(d => d.y)([
+            { x: startPoint[0], y: startPoint[1] },
+            { x: bp[0], y: bp[1] },
+          ])
+        })
+        .attr('stroke', colorScheme[0])
+
+      hoverGroup
+        .append('circle')
+        .attr('class', 'hover-circle')
+        .attr('cx', rp[0])
+        .attr('cy', rp[1])
+        .attr('r', 5)
+        .attr('fill', colorScheme[1])
+
+      hoverGroup
+        .append('path')
+        .attr('class', 'hover-line')
+        .attr('d', () => {
+          return d3
+            .line()
+            .x(d => d.x)
+            .y(d => d.y)([
+            { x: startPoint[0], y: startPoint[1] },
+            { x: rp[0], y: rp[1] },
+          ])
+        })
+        .attr('stroke', colorScheme[1])
+
+      hoverGroup
+        .append('circle')
+        .attr('class', 'hover-circle')
+        .attr('cx', lp[0])
+        .attr('cy', lp[1])
+        .attr('r', 5)
+        .attr('fill', colorScheme[2])
+
+      hoverGroup
+        .append('path')
+        .attr('class', 'hover-line')
+        .attr('d', () => {
+          return d3
+            .line()
+            .x(d => d.x)
+            .y(d => d.y)([
+            { x: startPoint[0], y: startPoint[1] },
+            { x: lp[0], y: lp[1] },
+          ])
+        })
+        .attr('stroke', colorScheme[2])
+    })
     .on('mouseover', (e, d) => {
       // d3.select(this).classed('hovered', true)
+      d3.select(e.target.nextSibling).classed('hover-group-active', true)
+
       tooltipDiv.transition().duration(200).style('opacity', 1)
 
       tooltipDiv.html(`${d[nameField]}
@@ -206,7 +411,8 @@ export function renderChart({
         .style('left', `${e.clientX}px`)
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
-    .on('mouseout', () => {
+    .on('mouseout', (e, d) => {
+      d3.select(e.target.nextSibling).classed('hover-group-active', false)
       tooltipDiv
         .style('left', '-300px')
         .transition()
@@ -214,45 +420,44 @@ export function renderChart({
         .style('opacity', 0)
     })
 
-  // .attr('opacity', 0.8)
   const nameValues = dataParsed.map(d => d[nameField])
-
-  const searchEventHandler = qstr => {
-    if (qstr) {
-      const lqstr = qstr.toLowerCase()
-      nameValues.forEach(val => {
-        const tmaceName = toClassText(val)
-        if (val.toLowerCase().includes(lqstr)) {
-          d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', true)
-        } else {
-          d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
-        }
-        d3.select('.tmaces').classed('searching', true)
-      })
-    } else {
-      nameValues.forEach(val => {
-        const tmaceName = toClassText(val)
-        d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
-      })
-      d3.select('.tmaces').classed('searching', false)
-    }
-  }
-
-  const search = widgetsLeft
-    .append('input')
-    .attr('type', 'text')
-    .attr('class', searchInputClassNames)
-  // TODO: refactor hidden, won't be needed if we add this node
-  search.attr('placeholder', `Find by ${nameField}`)
-  search.on('keyup', e => {
-    const qstr = e.target.value
-    searchEventHandler(qstr)
+  const handleSearch = searchEventHandler(nameValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    nameField,
   })
+
   const axes = chartCore.append('g').attr('class', 'axes')
 
-  axes
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  })
+
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  })
+
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+  })
+
+  const bottomAxis = axes
     .append('g')
     .attr('transform', `translate(0, ${coreChartHeight})`)
+
+  bottomAxis
     .call(d3.axisBottom(xScale).ticks(4).tickFormat(valueFormatter))
     .call(g => {
       g.selectAll('.tick text')
@@ -266,6 +471,15 @@ export function renderChart({
       g.selectAll('.tick:last-of-type line').remove()
       g.select('.domain').remove()
     })
+
+  bottomAxis
+    .append('text')
+    .attr('transform', `translate(${deToxy({ d: 50, e: 0, f: 50 })[0]}, ${30})`)
+    .text('bottom axis')
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .style('font-size', '12px')
+    .attr('fill', colorScheme[0])
 
   axes
     .append('g')
@@ -347,4 +561,133 @@ function greater(t) {
     }
   })
   return maxDim
+}
+
+function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+  d3.select('body').append('style').html(`  
+    .tmaces .tmace {
+      fill-opacity: ${inactiveOpacity};
+    }
+    .tmaces .tmace.tmace-active {
+      fill-opacity: ${activeOpacity};
+    }
+    g.tmaces.searching .tmace.tmace-matched {
+      stroke: #333;
+      stroke-width: 3;
+    }
+    .tmace:hover {
+      stroke: #333;
+      stroke-width: 1;
+    }
+    g.hover-group {
+      opacity: 0
+    }
+    g.hover-group.hover-group-active {
+      opacity: 0.5
+    }
+    .hover-line {
+      stroke-dasharray: 5 5
+    }
+    .hover-circle {
+      r: 3
+    }
+  `)
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    d3.selectAll('.tmace').classed('tmace-active', false)
+    _.forEach(defaultStateAll, val => {
+      d3.select(`.tmace-${toClassText(val)}`).classed('tmace-active', true)
+    })
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    d3.selectAll('.tmace').classed('tmace-active', false)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    d3.selectAll('.tmace').classed('tmace-active', true)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+const searchEventHandler = referenceList => qstr => {
+  if (qstr) {
+    const lqstr = qstr.toLowerCase()
+    referenceList.forEach(val => {
+      const tmaceName = toClassText(val)
+      if (val.toLowerCase().includes(lqstr)) {
+        d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', true)
+      } else {
+        d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
+      }
+      d3.select('.tmaces').classed('searching', true)
+    })
+  } else {
+    referenceList.forEach(val => {
+      const tmaceName = toClassText(val)
+      d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
+    })
+    d3.select('.tmaces').classed('searching', false)
+  }
+}
+
+function setupSearch({
+  handleSearch,
+  widgetsLeft,
+  searchInputClassNames,
+  nameField,
+}) {
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+  // TODO: refactor hidden, won't be needed if we add this node
+  search.attr('placeholder', `Find by ${nameField}`)
+  search.on('keyup', e => {
+    const qstr = e.target.value
+    handleSearch(qstr)
+  })
+  return search
 }
