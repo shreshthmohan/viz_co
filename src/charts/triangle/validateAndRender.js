@@ -7,6 +7,7 @@ import {
 import {
   checkColor,
   checkColorArray,
+  checkDefaultState,
   checkNumber,
   checkNumberBetween,
   checkStringArray,
@@ -81,6 +82,10 @@ const optionTypes = {
   // valueFormat: '',
 
   bgColor: checkColor,
+
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
+  defaultState: checkDefaultState,
 
   colorScheme: checkColorArray(3),
   fieldLabels: checkStringArray(3),
