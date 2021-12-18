@@ -28,8 +28,8 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
-  aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+  aspectRatioCombined: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
+  aspectRatioSplit: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -40,9 +40,9 @@ const optionTypes = {
 
   customColorScheme: checkColorArray,
   inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-  numberOfColors: checkNumberBetween([3, 9]),
+  numberOfColors: checkNumberBetween(3, 9),
 
-  collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
+  collisionDistance: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
 
   /* xField */
   xDomainCustom: checkNumericArray,

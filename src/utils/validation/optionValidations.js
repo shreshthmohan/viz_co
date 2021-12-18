@@ -52,9 +52,9 @@ export const checkBoolean = val => {
   return { valid: false, message: 'Should be true or false' }
 }
 
-export const checkNumberBetween = refArr => val => {
-  const min = Math.min(...refArr)
-  const max = Math.max(...refArr)
+export const checkNumberBetween = (a, b) => val => {
+  const min = Math.min(a, b)
+  const max = Math.max(a, b)
   const message = `Should be a number between ${min} and ${max}`
   const checkNumberResult = checkNumber(val)
   if (!checkNumberResult.valid) {

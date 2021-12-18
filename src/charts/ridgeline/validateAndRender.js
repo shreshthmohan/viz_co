@@ -27,7 +27,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -44,8 +44,8 @@ const optionTypes = {
 
   defaultState: checkDefaultState,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({

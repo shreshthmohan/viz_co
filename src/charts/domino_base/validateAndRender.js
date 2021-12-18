@@ -25,7 +25,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -36,12 +36,12 @@ const optionTypes = {
 
   /* Dimensions */
   /* xField */
-  xPaddingOuter: checkNumberBetween([0, 1]),
+  xPaddingOuter: checkNumberBetween(0, 1),
   // xAxisLabel: checkString,
 
   /* yField */
-  yPaddingInner: checkNumberBetween([0, 1]),
-  yPaddingOuter: checkNumberBetween([0, 1]),
+  yPaddingInner: checkNumberBetween(0, 1),
+  yPaddingOuter: checkNumberBetween(0, 1),
   ySortOrder: checkOneOf(['asc', 'desc']),
 
   /* colorField */
@@ -51,7 +51,7 @@ const optionTypes = {
   colorDominoNormal: checkColor,
 
   /* dominoField */
-  dominoSize: checkNumberBetween([0, 1]),
+  dominoSize: checkNumberBetween(0, 1),
 
   /* Legends */
   // normalLegendLabel: checkString,

@@ -60,7 +60,7 @@ function buildDimensionAndTypes({
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   // directionStartLabel: 'start point',
   // directionEndLabel: 'end point',
@@ -83,8 +83,8 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
   defaultState: checkDefaultState,
 
   colorScheme: checkColorArray(3),
