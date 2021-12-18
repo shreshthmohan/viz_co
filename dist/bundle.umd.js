@@ -7153,22 +7153,21 @@ g.circles circle.circle.circle-hovered {
 
     bottomAxis
       .append('text')
-      .attr(
-        'transform',
-        `translate(${deToxy({ d: 1 / 2, e: 0, f: 1 / 2 })[0]}, ${30})`,
-      )
+      .attr('transform', `translate(${deToxy(bottomCenter)[0]}, ${30})`)
       .text('bottom axis')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('font-size', '12px')
       .attr('fill', colorScheme[0]);
 
-    axes
+    const rightAxis = axes
       .append('g')
       .attr(
         'transform',
         `translate(${triangleSide}, ${coreChartHeight}) rotate(-120)`,
-      )
+      );
+
+    rightAxis
       .call(d3__namespace.axisBottom(xScale).ticks(4).tickFormat(valueFormatter))
       .call(g => {
         g.selectAll('.tick text')
@@ -7184,9 +7183,20 @@ g.circles circle.circle.circle-hovered {
         g.selectAll('.tick:last-of-type line').remove();
       });
 
-    axes
+    rightAxis
+      .append('text')
+      .attr('transform', `translate(${triangleSide / 2}, ${50}) rotate(180)`)
+      .text('right axis')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .style('font-size', '12px')
+      .attr('fill', colorScheme[1]);
+
+    const leftAxis = axes
       .append('g')
-      .attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`)
+      .attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`);
+
+    leftAxis
       .call(d3__namespace.axisLeft(xScale).ticks(4).tickFormat(valueFormatter))
       .call(g => {
         g.selectAll('.tick text')
@@ -7201,6 +7211,17 @@ g.circles circle.circle.circle-hovered {
         g.selectAll('.tick:first-of-type line').remove();
         g.selectAll('.tick:last-of-type line').remove();
       });
+
+    leftAxis
+      .append('text')
+      .attr('transform', `translate(${-50},${triangleSide / 2}) rotate(-90)`)
+      .text('left axis')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .style('font-size', '12px')
+      .attr('fill', colorScheme[2]);
+
+    // leftAxis.attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`)
 
     renderDirectionLegend({
       selection: widgetsRight.append('svg'),

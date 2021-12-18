@@ -20,7 +20,7 @@ const options = {
 
   marginTop: 0,
   marginRight: 0,
-  marginBottom: 0,
+  marginBottom: 20,
   marginLeft: 0,
 
   // valuePrefix: '',
