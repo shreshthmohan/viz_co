@@ -325,13 +325,22 @@ export function renderChart({
       tooltipDiv.transition().duration(200).style('opacity', 1)
 
       tooltipDiv.html(`${d[nameField]}
-      <br/> ${fieldLabels[0]}: ${valueFormatter(
+      <br/>
+      <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${
+        colorScheme[0]
+      }"></div> ${fieldLabels[0]}: ${valueFormatter(
         d[startField[0]],
       )} → ${valueFormatter(d[endField[0]])}
-      <br/> ${fieldLabels[1]}: ${valueFormatter(
+      <br/> 
+      <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${
+        colorScheme[1]
+      }"></div> ${fieldLabels[1]}: ${valueFormatter(
         d[startField[1]],
       )} → ${valueFormatter(d[endField[1]])}
-      <br/> ${fieldLabels[2]}: ${valueFormatter(
+      <br/>
+      <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${
+        colorScheme[2]
+      }"></div> ${fieldLabels[2]}: ${valueFormatter(
         d[startField[2]],
       )} → ${valueFormatter(d[endField[2]])}
       `)
