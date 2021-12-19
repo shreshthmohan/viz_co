@@ -68,6 +68,10 @@ export function renderChart({
     activeOpacity = 1,
     inactiveOpacity = 0.3,
 
+    valuePrefix = '',
+    valuePostfix = '',
+    valueFormatter = '',
+
     // Labels
     topicLabelXOffset = 5,
 
@@ -83,6 +87,9 @@ export function renderChart({
   dimensions: { beforeField, afterField, topicField },
   chartContainerSelector,
 }) {
+  const valFormatter = val =>
+    `${valuePrefix}${formatNumber(val, valueFormatter)}${valuePostfix}`
+
   applyInteractionStyles({ inactiveOpacity, activeOpacity })
 
   const coreChartWidth = 1000
@@ -193,6 +200,7 @@ export function renderChart({
     referenceValue,
     connectorColorStrategy,
     tooltipDiv,
+    valFormatter,
   })
 
   const handleSearch = searchEventHandler(topicValues)
@@ -489,6 +497,7 @@ function renderBullets({
   connectorColorStrategy,
   referenceValue,
   tooltipDiv,
+  valFormatter,
 }) {
   const yGroups = chartCore
     .append('g')
@@ -515,9 +524,13 @@ function renderBullets({
       tooltipDiv.html(
         `${d[topicField]}
         <br/>
-        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${d[beforeField]}
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${valFormatter(
+          d[beforeField],
+        )}
         <br />
-        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${d[afterField]}
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${valFormatter(
+          d[afterField],
+        )}
         `,
       )
       tooltipDiv

@@ -7905,6 +7905,10 @@ g.circles circle.circle.circle-hovered {
       activeOpacity = 1,
       inactiveOpacity = 0.3,
 
+      valuePrefix = '',
+      valuePostfix = '',
+      valueFormatter = '',
+
       // Labels
       topicLabelXOffset = 5,
 
@@ -7920,6 +7924,9 @@ g.circles circle.circle.circle-hovered {
     dimensions: { beforeField, afterField, topicField },
     chartContainerSelector,
   }) {
+    const valFormatter = val =>
+      `${valuePrefix}${formatNumber(val, valueFormatter)}${valuePostfix}`;
+
     applyInteractionStyles({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
@@ -8030,6 +8037,7 @@ g.circles circle.circle.circle-hovered {
       referenceValue,
       connectorColorStrategy,
       tooltipDiv,
+      valFormatter,
     });
 
     const handleSearch = searchEventHandler(topicValues);
@@ -8326,6 +8334,7 @@ g.circles circle.circle.circle-hovered {
     connectorColorStrategy,
     referenceValue,
     tooltipDiv,
+    valFormatter,
   }) {
     const yGroups = chartCore
       .append('g')
@@ -8352,9 +8361,13 @@ g.circles circle.circle.circle-hovered {
         tooltipDiv.html(
           `${d[topicField]}
         <br/>
-        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${d[beforeField]}
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${beforeFieldColor}"></div> ${beforeField}: ${valFormatter(
+          d[beforeField],
+        )}
         <br />
-        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${d[afterField]}
+        <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${afterFieldColor}"></div> ${afterField}: ${valFormatter(
+          d[afterField],
+        )}
         `,
         );
         tooltipDiv
