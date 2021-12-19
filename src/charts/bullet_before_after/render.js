@@ -26,8 +26,12 @@ export function renderChart({
 
     beforeFieldColor = '#43CAD7',
     afterFieldColor = '#1570A6',
+
+    glyphSize = 5,
+    connectorSize = 5,
     connectorColorStrategy = 'farFromReference',
     connectorColorCustom,
+
     referenceValue = 0,
     referenceLineColor = '#fff',
     referenceLineWidth = 2,
@@ -63,8 +67,6 @@ export function renderChart({
     xAxisTickValueXOffset = 0,
     xAxisTickValueYOffset = 0,
 
-    glyphSize = 5,
-    connectorSize = 5,
     activeOpacity = 1,
     inactiveOpacity = 0.3,
 

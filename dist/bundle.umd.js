@@ -7863,8 +7863,12 @@ g.circles circle.circle.circle-hovered {
 
       beforeFieldColor = '#43CAD7',
       afterFieldColor = '#1570A6',
+
+      glyphSize = 5,
+      connectorSize = 5,
       connectorColorStrategy = 'farFromReference',
       connectorColorCustom,
+
       referenceValue = 0,
       referenceLineColor = '#fff',
       referenceLineWidth = 2,
@@ -7900,8 +7904,6 @@ g.circles circle.circle.circle-hovered {
       xAxisTickValueXOffset = 0,
       xAxisTickValueYOffset = 0,
 
-      glyphSize = 5,
-      connectorSize = 5,
       activeOpacity = 1,
       inactiveOpacity = 0.3,
 
@@ -8583,14 +8585,58 @@ g.circles circle.circle.circle-hovered {
     glyphSize: checkNumber,
     connectorSize: checkNumber,
 
+    connectorColorStrategy: checkOneOf([
+      'farFromReference',
+      'closeToReference',
+      'customColor',
+    ]),
+    connectorColorCustom: checkColor,
+
+    referenceValue: checkNumber,
+    referenceLineColor: checkColor,
+    referenceLineWidth: checkNumber,
+    referenceLineOpacity: checkNumberBetween(0),
+
     /* Legends */
     // beforeLegendLabel: checkString,
     // afterLegendLabel: checkString,
 
+    // valuePrefix: checkString,
+    // valuePostfix: checkString,
+    // valueFormatter: checkString,
+
+    topicLabelFontSize: checkFontSizeString,
+    topicLabelTextColor: checkColor,
+    topicLabelYOffset: checkNumber,
+
+    defaultState: checkDefaultState,
+
     /* Axes */
     // xAxisTitle: checkString,
+    xScaleType: checkOneOf(['log', 'linear']), // linear or log
+    xScaleLogBase: checkNumber, // applicable only if log scale
+    xAxisPosition: checkOneOf(['top', 'bottom']),
+    xAxisOffset: checkNumber,
+    // xAxisLabel: checkString,
+    xAXisLabelFontSize: checkFontSizeString,
     xAxisLabelOffset: checkNumber,
-    xDomainCustom: checkNumericArray,
+    xAxisCustomDomain: checkNumericArray,
+    xAxisTickFontSize: checkFontSizeString,
+    xAxisColor: checkColor,
+    xAxisTickValues: checkNumericArray,
+    xAxisTickOffset: checkNumber,
+    xAxisLineThickness: checkNumber,
+    // xAxisTickFormatter: checkString,
+    xAxisTickRotation: checkNumber,
+    // xAxisTickAnchor: checkString,
+    // xAxisTickBaseline: checkString,
+    xAxisTickValueXOffset: checkNumber,
+    xAxisTickValueYOffset: checkNumber,
+
+    // searchInputClassNames: checkString,
+    // goToInitialStateButtonClassNames: checkString,
+    // clearAllButtonClassNames: checkString,
+    // showAllButtonClassNames: checkString,
 
     activeOpacity: checkNumberBetween([0, 1]),
     inactiveOpacity: checkNumberBetween([0, 1]),
