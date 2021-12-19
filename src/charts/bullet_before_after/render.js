@@ -52,10 +52,10 @@ export function renderChart({
     xAxisPosition = 'top',
     xAxisOffset = 0,
     xAxisLabel = '',
-    xAXisLabelFontSize = '12px',
+    xAXisLabelFontSize = 12,
     xAxisLabelOffset = 30,
     xAxisCustomDomain,
-    xAxisTickFontSize = '12px',
+    xAxisTickFontSize = 12,
     xAxisColor = 'black',
     xAxisTickValues = null,
     xAxisTickOffset = 0,
@@ -406,7 +406,7 @@ function renderXAxis({
         .attr('stroke-opacity', 0.2)
         .attr('transform', `translate(0, ${tickOffset / 2})`)
       g.selectAll('.tick text')
-        .style('font-size', xAxisTickFontSize)
+        .style('font-size', `${xAxisTickFontSize}px`)
         .attr('fill', xAxisColor)
         .attr('transform', function () {
           const { x, y, width, height } = this.getBBox()
@@ -424,7 +424,7 @@ function renderXAxis({
     .text(xAxisLabel)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
-    .style('font-size', xAXisLabelFontSize)
+    .style('font-size', `${xAXisLabelFontSize}px`)
     .attr('fill', xAxisColor)
 }
 
@@ -438,7 +438,6 @@ function renderReferenceLine({
   referenceLineOpacity,
   xAxisOffset,
   xAxisTickOffset,
-  line,
   xAxisPosition,
 }) {
   chartCore
@@ -480,7 +479,6 @@ function renderBullets({
   chartCore,
   data,
   topicField,
-  activeOpacity,
   beforeField,
   afterField,
   connectorSize,
@@ -539,7 +537,7 @@ function renderBullets({
         .style('left', `${e.clientX}px`)
         .style('top', `${e.clientY + 20 + window.scrollY}px`)
     })
-    .on('mouseout', (e, d) => {
+    .on('mouseout', e => {
       d3.select(e.target.parentNode).classed('topic-hovered', false)
       tooltipDiv
         .style('left', '-300px')
@@ -547,7 +545,7 @@ function renderBullets({
         .duration(500)
         .style('opacity', 0)
     })
-    .on('click', (e, d) => {
+    .on('click', e => {
       const parentTopic = d3.select(e.target.parentNode)
       const clickedState = parentTopic.classed('topic-active')
       parentTopic.classed('topic-active', !clickedState)

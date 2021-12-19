@@ -7889,10 +7889,10 @@ g.circles circle.circle.circle-hovered {
       xAxisPosition = 'top',
       xAxisOffset = 0,
       xAxisLabel = '',
-      xAXisLabelFontSize = '12px',
+      xAXisLabelFontSize = 12,
       xAxisLabelOffset = 30,
       xAxisCustomDomain,
-      xAxisTickFontSize = '12px',
+      xAxisTickFontSize = 12,
       xAxisColor = 'black',
       xAxisTickValues = null,
       xAxisTickOffset = 0,
@@ -8243,7 +8243,7 @@ g.circles circle.circle.circle-hovered {
           .attr('stroke-opacity', 0.2)
           .attr('transform', `translate(0, ${tickOffset / 2})`);
         g.selectAll('.tick text')
-          .style('font-size', xAxisTickFontSize)
+          .style('font-size', `${xAxisTickFontSize}px`)
           .attr('fill', xAxisColor)
           .attr('transform', function () {
             const { x, y, width, height } = this.getBBox();
@@ -8261,7 +8261,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel)
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
-      .style('font-size', xAXisLabelFontSize)
+      .style('font-size', `${xAXisLabelFontSize}px`)
       .attr('fill', xAxisColor);
   }
 
@@ -8275,7 +8275,6 @@ g.circles circle.circle.circle-hovered {
     referenceLineOpacity,
     xAxisOffset,
     xAxisTickOffset,
-    line,
     xAxisPosition,
   }) {
     chartCore
@@ -8317,7 +8316,6 @@ g.circles circle.circle.circle-hovered {
     chartCore,
     data,
     topicField,
-    activeOpacity,
     beforeField,
     afterField,
     connectorSize,
@@ -8376,7 +8374,7 @@ g.circles circle.circle.circle-hovered {
           .style('left', `${e.clientX}px`)
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
       })
-      .on('mouseout', (e, d) => {
+      .on('mouseout', e => {
         d3__namespace.select(e.target.parentNode).classed('topic-hovered', false);
         tooltipDiv
           .style('left', '-300px')
@@ -8384,7 +8382,7 @@ g.circles circle.circle.circle-hovered {
           .duration(500)
           .style('opacity', 0);
       })
-      .on('click', (e, d) => {
+      .on('click', e => {
         const parentTopic = d3__namespace.select(e.target.parentNode);
         const clickedState = parentTopic.classed('topic-active');
         parentTopic.classed('topic-active', !clickedState);
@@ -8595,7 +8593,7 @@ g.circles circle.circle.circle-hovered {
     referenceValue: checkNumber,
     referenceLineColor: checkColor,
     referenceLineWidth: checkNumber,
-    referenceLineOpacity: checkNumberBetween(0),
+    referenceLineOpacity: checkNumberBetween([0, 1]),
 
     /* Legends */
     // beforeLegendLabel: checkString,
@@ -8618,10 +8616,10 @@ g.circles circle.circle.circle-hovered {
     xAxisPosition: checkOneOf(['top', 'bottom']),
     xAxisOffset: checkNumber,
     // xAxisLabel: checkString,
-    xAXisLabelFontSize: checkFontSizeString,
+    xAXisLabelFontSize: checkNumber,
     xAxisLabelOffset: checkNumber,
     xAxisCustomDomain: checkNumericArray,
-    xAxisTickFontSize: checkFontSizeString,
+    xAxisTickFontSize: checkNumber,
     xAxisColor: checkColor,
     xAxisTickValues: checkNumericArray,
     xAxisTickOffset: checkNumber,

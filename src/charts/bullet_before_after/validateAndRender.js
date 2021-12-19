@@ -21,7 +21,6 @@ import {
   checkOneOf,
   checkFontSizeString,
   checkDefaultState,
-  checkStringArray,
 } from '../../utils/validation/optionValidations'
 
 import {
@@ -65,7 +64,7 @@ const optionTypes = {
   referenceValue: checkNumber,
   referenceLineColor: checkColor,
   referenceLineWidth: checkNumber,
-  referenceLineOpacity: checkNumberBetween(0, 1),
+  referenceLineOpacity: checkNumberBetween([0, 1]),
 
   /* Legends */
   // beforeLegendLabel: checkString,
@@ -88,10 +87,10 @@ const optionTypes = {
   xAxisPosition: checkOneOf(['top', 'bottom']),
   xAxisOffset: checkNumber,
   // xAxisLabel: checkString,
-  xAXisLabelFontSize: checkFontSizeString,
+  xAXisLabelFontSize: checkNumber,
   xAxisLabelOffset: checkNumber,
   xAxisCustomDomain: checkNumericArray,
-  xAxisTickFontSize: checkFontSizeString,
+  xAxisTickFontSize: checkNumber,
   xAxisColor: checkColor,
   xAxisTickValues: checkNumericArray,
   xAxisTickOffset: checkNumber,
