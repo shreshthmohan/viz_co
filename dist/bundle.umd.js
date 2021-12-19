@@ -7870,6 +7870,8 @@ g.circles circle.circle.circle-hovered {
       bgColor = 'transparent',
 
       barOpacity = 0.5,
+      barThickness = 0.8,
+      outerPadding = 0.2,
 
       colors = d3__namespace.schemeSpectral[9],
 
@@ -7914,7 +7916,8 @@ g.circles circle.circle.circle-hovered {
       .scaleBand()
       .range([0, coreChartWidth])
       .domain(xDomain)
-      .paddingInner(0.2);
+      .paddingInner(1 - barThickness)
+      .paddingOuter(outerPadding);
 
     const yMax = d3__namespace.max(allYValues);
 

@@ -23,6 +23,8 @@ export function renderChart({
     bgColor = 'transparent',
 
     barOpacity = 0.5,
+    barThickness = 0.8,
+    outerPadding = 0.2,
 
     colors = d3.schemeSpectral[9],
 
@@ -67,7 +69,8 @@ export function renderChart({
     .scaleBand()
     .range([0, coreChartWidth])
     .domain(xDomain)
-    .paddingInner(0.2)
+    .paddingInner(1 - barThickness)
+    .paddingOuter(outerPadding)
 
   const yMax = d3.max(allYValues)
 
