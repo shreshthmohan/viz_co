@@ -37,7 +37,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -64,7 +64,7 @@ const optionTypes = {
   referenceValue: checkNumber,
   referenceLineColor: checkColor,
   referenceLineWidth: checkNumber,
-  referenceLineOpacity: checkNumberBetween([0, 1]),
+  referenceLineOpacity: checkNumberBetween(0, 1),
 
   /* Legends */
   // beforeLegendLabel: checkString,
@@ -89,10 +89,10 @@ const optionTypes = {
   // xAxisLabel: checkString,
   xAXisLabelFontSize: checkNumber,
   xAxisLabelOffset: checkNumber,
-  xAxisCustomDomain: checkNumericArray,
+  xAxisCustomDomain: checkNumericArray(),
   xAxisTickFontSize: checkNumber,
   xAxisColor: checkColor,
-  xAxisTickValues: checkNumericArray,
+  xAxisTickValues: checkNumericArray(),
   xAxisTickOffset: checkNumber,
   xAxisLineThickness: checkNumber,
   // xAxisTickFormatter: checkString,
@@ -107,8 +107,8 @@ const optionTypes = {
   // clearAllButtonClassNames: checkString,
   // showAllButtonClassNames: checkString,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
