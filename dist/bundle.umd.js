@@ -452,7 +452,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis$5({
+  function renderXAxis$6({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -480,7 +480,7 @@
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
   }
 
-  function renderYAxis$4({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  function renderYAxis$5({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -922,7 +922,7 @@
       directionEndLabel,
     });
 
-    renderXAxis$5({
+    renderXAxis$6({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -932,7 +932,7 @@
     });
 
     // y-axis
-    renderYAxis$4({ chartCore, coreChartWidth, yScale, yAxisTitle });
+    renderYAxis$5({ chartCore, coreChartWidth, yScale, yAxisTitle });
 
     renderMaces({
       chartCore,
@@ -2987,7 +2987,7 @@
     }
   }
 
-  function renderYAxis$3({ chartCore, yScale }) {
+  function renderYAxis$4({ chartCore, yScale }) {
     chartCore
       .append('g')
       .attr('class', 'y-axis-left')
@@ -2995,7 +2995,7 @@
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth }) {
+  function renderXAxis$5({ chartCore, xAxisLabel, coreChartWidth }) {
     chartCore
       .append('text')
       .text(xAxisLabel)
@@ -3240,7 +3240,7 @@
       colorStrategy,
     });
 
-    renderYAxis$3({ chartCore, yScale });
+    renderYAxis$4({ chartCore, yScale });
 
     renderDominos({
       dataParsed,
@@ -3256,7 +3256,7 @@
       tooltipDiv,
     });
 
-    renderXAxis$4({ chartCore, xAxisLabel, coreChartWidth });
+    renderXAxis$5({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
     const handleSearch = searchEventHandler$3(dominoValues);
@@ -3538,7 +3538,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScale, categoryScale, categoryDomain, fillColorScale }
   }
 
-  function renderXAxis$3({
+  function renderXAxis$4({
     chartCore,
     coreChartHeight,
     xScale,
@@ -3887,7 +3887,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultStateAll = defaultState === 'All' ? categoryDomain : defaultState;
 
-    renderXAxis$3({
+    renderXAxis$4({
       chartCore,
       coreChartHeight,
       xScale,
@@ -4732,7 +4732,7 @@ g.circles circle.circle.circle-hovered {
       sizeField,
     });
 
-    renderXAxis$2({
+    renderXAxis$3({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -4740,7 +4740,7 @@ g.circles circle.circle.circle-hovered {
       xAxisLabel,
     });
 
-    renderYAxis$2({
+    renderYAxis$3({
       chartCore,
       coreChartWidth,
       coreChartHeight,
@@ -5033,7 +5033,7 @@ g.circles circle.circle.circle-hovered {
     return { sizeScale, xScale, yScale, colorScale }
   }
 
-  function renderXAxis$2({
+  function renderXAxis$3({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -5065,7 +5065,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel);
   }
 
-  function renderYAxis$2({
+  function renderYAxis$3({
     chartCore,
     coreChartWidth,
     coreChartHeight,
@@ -5350,7 +5350,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function renderYAxis$1({
+  function renderYAxis$2({
     chartCore,
     xScale,
     xDomain,
@@ -5374,7 +5374,7 @@ g.circles circle.circle.circle-hovered {
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$1({
+  function renderXAxis$2({
     chartCore,
     xAxisLabel,
     coreChartWidth,
@@ -5858,7 +5858,7 @@ g.circles circle.circle.circle-hovered {
       sizeRange,
     });
 
-    renderXAxis$1({
+    renderXAxis$2({
       chartCore,
       xAxisLabel,
       coreChartWidth,
@@ -5871,7 +5871,7 @@ g.circles circle.circle.circle-hovered {
       xAxisValueFormatter,
     });
 
-    renderYAxis$1({
+    renderYAxis$2({
       chartCore,
       xScale,
       xDomain,
@@ -7348,9 +7348,9 @@ g.circles circle.circle.circle-hovered {
       barRightLabelField,
     });
 
-    renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize });
+    renderXAxis$1({ leftBarsContainer, xScaleLeft, axesTickSize });
 
-    renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize });
+    renderYAxis$1({ rightBarsContainer, xScaleRight, axesTickSize });
 
     renderLegends({
       chartCore,
@@ -7545,7 +7545,7 @@ g.circles circle.circle.circle-hovered {
       .attr('style', 'font-weight: bold;');
   }
 
-  function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+  function renderXAxis$1({ leftBarsContainer, xScaleLeft, axesTickSize }) {
     leftBarsContainer
       .append('g')
       .call(d3__namespace.axisTop(xScaleLeft).tickSize(axesTickSize))
@@ -7556,7 +7556,7 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  function renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize }) {
+  function renderYAxis$1({ rightBarsContainer, xScaleRight, axesTickSize }) {
     rightBarsContainer
       .append('g')
       .call(d3__namespace.axisTop(xScaleRight).tickSize(axesTickSize))
@@ -7876,6 +7876,30 @@ g.circles circle.circle.circle-hovered {
       colors = d3__namespace.schemeSpectral[9],
 
       showOnlyEveryNthValue = 1,
+      // X-Axis
+      xAxisPosition = 'bottom',
+      xAxisOffset = 0,
+      xAxisLabel = '',
+      xAXisLabelFontSize = 12,
+      xAxisLabelOffset = 30,
+      xAxisCustomDomain,
+      xAxisTickFontSize = 12,
+      xAxisColor = 'black',
+      xAxisTickValues = null,
+      xAxisTickOffset = 0,
+      xAxisLineThickness = 1,
+      xAxisTickFormatter = '',
+      xAxisTickRotation = 0,
+      xAxisTickAnchor = 'middle',
+      xAxisTickBaseline = 'middle',
+      xAxisTickValueXOffset,
+      xAxisTickValueYOffset,
+
+      yAxisPosition = 'left',
+      yAxisLabelOffset = 50,
+      yAxisColor = 'black',
+      yAxisLabel = '',
+      yAxisTickRotation = 0,
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -7911,6 +7935,8 @@ g.circles circle.circle.circle-hovered {
       return elParsed
     });
 
+    // debugger
+
     const xDomain = dataParsed.map(d => d[xField]);
     const xScale = d3__namespace
       .scaleBand()
@@ -7937,7 +7963,7 @@ g.circles circle.circle.circle-hovered {
         .attr('x', d => xScale(d[xField]))
         .attr('y', d => yScale(d[yf]))
         .attr('class', d => `rect-${toClassText(d[xField])}`)
-        .attr('height', d => yScale(0) - yScale(d[yf]))
+        .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
         .attr('width', xScale.bandwidth())
         .attr('fill', colorsRgba[i]);
       // .attr('stroke', '#333')
@@ -7981,32 +8007,53 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
-    const xAxis = d3__namespace.axisBottom(xScale).tickValues(
-      xScale.domain().filter(function (d, i) {
-        return !(i % showOnlyEveryNthValue)
-      }),
-    );
+    // const xAxis = d3.axisTop(xScale).tickValues(
+    //   xScale.domain().filter(function (d, i) {
+    //     return !(i % showOnlyEveryNthValue)
+    //   }),
+    // )
 
-    chartCore
-      .append('g')
-      .attr('transform', `translate(0, ${coreChartHeight})`)
-      .call(xAxis);
+    // chartCore.append('g').attr('transform', `translate(0, ${0})`).call(xAxis)
 
-    const yAxis = d3__namespace.axisLeft(yScale);
+    renderXAxis({
+      chartCore,
+      xScale,
+      coreChartHeight,
+      coreChartWidth,
+      xAxisLabelOffset,
+      xAxisLabel,
+      xAxisPosition,
+      xAxisTickOffset,
+      xAXisLabelFontSize,
+      xAxisTickFontSize,
+      xAxisColor,
+      xAxisTickValues,
+      xAxisOffset,
+      xAxisLineThickness,
+      xAxisTickFormatter,
+      xAxisTickRotation,
+      xAxisTickAnchor,
+      xAxisTickBaseline,
+      xAxisTickValueXOffset,
+      xAxisTickValueYOffset,
+      showOnlyEveryNthValue,
+    });
+
+    renderYAxis({
+      yAxisPosition,
+      yScale,
+      showOnlyEveryNthValue,
+      chartCore,
+      coreChartWidth,
+      yAxisLabelOffset,
+      yAxisLabel,
+      yAxisColor,
+      coreChartHeight,
+      yAxisTickRotation,
+    });
 
     const yAxisGrid = d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth);
-
-    chartCore.append('g').call(yAxis).lower();
-
-    chartCore
-      .append('g')
-      .call(yAxisGrid)
-      .call(g => {
-        g.selectAll('.tick line').attr('opacity', 0.3);
-        g.selectAll('.tick text').remove();
-      })
-      .call(g => g.select('.domain').remove())
-      .lower();
+    renderYGrid({ chartCore, yAxisGrid });
 
     preventOverflow({
       allComponents,
@@ -8022,6 +8069,186 @@ g.circles circle.circle.circle-hovered {
         customClass: '',
       }),
     );
+  }
+
+  function renderYAxis({
+    yAxisPosition,
+    yScale,
+    chartCore,
+    coreChartWidth,
+    coreChartHeight,
+    yAxisLabelOffset,
+    yAxisLabel,
+    yAxisColor,
+  }) {
+    let yAxis, axisOffset, labelOffset;
+    if (yAxisPosition === 'right') {
+      yAxis = d3__namespace.axisRight(yScale);
+      axisOffset = coreChartWidth;
+      labelOffset = yAxisLabelOffset;
+    } else {
+      yAxis = d3__namespace.axisLeft(yScale);
+      axisOffset = 0;
+      labelOffset = -yAxisLabelOffset;
+    }
+
+    const yAxisGroup = chartCore
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(${axisOffset},0)`)
+      .call(yAxis);
+
+    yAxisGroup
+      .append('text')
+      // .attr('text-anchor', 'middle')
+      // .attr('dominant-baseline', 'middle')
+      // .style('font-size', `${xAXisLabelFontSize}px`)
+      .attr('fill', yAxisColor)
+      .attr(
+        'transform',
+        `translate(${labelOffset}, ${coreChartHeight / 2}) rotate(-90)`,
+      )
+      .text(yAxisLabel);
+  }
+
+  function renderYGrid({ chartCore, yAxisGrid }) {
+    chartCore
+      .append('g')
+      .call(yAxisGrid)
+      .call(g => {
+        g.selectAll('.tick line').attr('opacity', 0.3);
+        g.selectAll('.tick text').remove();
+      })
+      .call(g => g.select('.domain').remove())
+      .lower();
+  }
+
+  function renderXAxis({
+    xAxisPosition,
+    xScale,
+    coreChartHeight,
+    showOnlyEveryNthValue,
+    chartCore,
+    coreChartWidth,
+    xAxisLabelOffset,
+    xAxisLabel,
+    xAxisTickOffset,
+    xAXisLabelFontSize,
+    xAxisTickFontSize,
+    xAxisColor,
+    xAxisTickValues,
+    xAxisOffset,
+    xAxisLineThickness,
+    xAxisTickFormatter,
+    xAxisTickRotation,
+    xAxisTickAnchor,
+    xAxisTickBaseline,
+    xAxisTickValueXOffset,
+    xAxisTickValueYOffset,
+  }) {
+    let xAxis, axisOffset, labelOffset;
+    if (xAxisPosition === 'top') {
+      xAxis = d3__namespace.axisTop(xScale);
+      axisOffset = 0;
+      labelOffset = -xAxisLabelOffset;
+    } else {
+      xAxis = d3__namespace.axisBottom(xScale);
+      axisOffset = coreChartHeight;
+      labelOffset = xAxisLabelOffset;
+    }
+
+    xAxis.tickValues(
+      xScale.domain().filter(function (d, i) {
+        return !(i % showOnlyEveryNthValue)
+      }),
+    );
+
+    const xAxisGroup = chartCore
+      .append('g')
+      .attr('class', 'x-axis')
+      .attr('transform', `translate(0, ${axisOffset})`)
+      .call(xAxis)
+      .call(g => {
+        const tickGroup = g.selectAll('.tick text');
+        tickGroup
+          .attr('y', 0)
+          .attr('dy', '0em')
+          .attr('transform', `rotate(${xAxisTickRotation})`)
+          .attr('dx', '1em')
+          .attr('text-anchor', 'start')
+          .attr('dominant-baseline', 'middle');
+      });
+
+    xAxisGroup
+      .append('text')
+      // .attr('text-anchor', 'middle')
+      // .attr('dominant-baseline', 'middle')
+      // .style('font-size', `${xAXisLabelFontSize}px`)
+      .attr('fill', xAxisColor)
+      .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
+      .text(xAxisLabel);
+    // let xAxis, axisOffset, labelOffset, tickOffset
+    // if (xAxisPosition === 'top') {
+    //   xAxis = d3.axisTop(xScale)
+    //   axisOffset = -xAxisOffset
+    //   labelOffset = xAxisLabelOffset
+    //   tickOffset = -xAxisTickOffset
+    // } else {
+    //   xAxis = d3.axisBottom(xScale)
+    //   axisOffset = coreChartHeight + xAxisOffset
+    //   labelOffset = -xAxisLabelOffset
+    //   tickOffset = xAxisTickOffset
+    // }
+    // const tickSize = -coreChartHeight - xAxisTickOffset - xAxisOffset
+
+    // const xAxisGroup = chartCore
+    //   .append('g')
+    //   .attr('class', 'x-axis')
+    //   .attr('transform', `translate(0, ${axisOffset})`)
+
+    // const xDomain = xScale.domain()
+    // const tickValues =
+    //   xAxisTickValues === null
+    //     ? null
+    //     : _.filter(xAxisTickValues, val => {
+    //         return val >= xDomain[0] && val <= xDomain[1]
+    //       })
+
+    // xAxisGroup
+    //   .call(
+    //     xAxis
+    //       .tickSize(tickSize)
+    //       .tickSizeOuter(10)
+    //       .tickValues(tickValues)
+    //       .tickFormat(val => formatNumber(val, xAxisTickFormatter)),
+    //   )
+    //   .call(g =>
+    //     g
+    //       .select('.domain')
+    //       .attr('stroke', xAxisColor)
+    //       .attr('stroke-width', xAxisLineThickness),
+    //   )
+    //   .call(g => {
+    //     g.selectAll('.tick line')
+    //       .attr('stroke-opacity', 0.2)
+    //       .attr('transform', `translate(0, ${tickOffset / 2})`)
+
+    //     const tickGroup = g.selectAll('.tick text')
+    //     tickGroup
+    //       .style('font-size', `${xAxisTickFontSize}px`)
+    //       .attr('fill', xAxisColor)
+    //       .attr('transform', function () {
+    //         const { x, y, width, height } = this.getBBox()
+    //         return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
+    //       })
+    //       .attr('text-anchor', xAxisTickAnchor)
+    //       .attr('dominant-baseline', xAxisTickBaseline)
+
+    //     if (xAxisTickValueXOffset)
+    //       tickGroup.attr('dx', `${xAxisTickValueXOffset}em`)
+    //     if (xAxisTickValueYOffset)
+    //       tickGroup.attr('dy', `${xAxisTickValueYOffset}em`)
+    //   })
   }
 
   const dimensionTypes = { xField: [shouldNotBeBlank] };

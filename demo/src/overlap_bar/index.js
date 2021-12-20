@@ -21,6 +21,15 @@ const options = {
   barOpacity: 0.5,
   colors: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
 
+  xAxisPosition: 'bottom',
+  xAxisLabel: 'Hello',
+  xAxisLabelOffset: 50,
+  xAxisTickRotation: 90,
+
+  yAxisPosition: 'left',
+  yAxisLabel: 'Hello',
+  yAxisLabelOffset: 50,
+
   // to tackle too many x tick labels
   // remove this to show all values
   showOnlyEveryNthValue: 1,
