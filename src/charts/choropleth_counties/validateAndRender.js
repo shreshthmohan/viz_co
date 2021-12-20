@@ -34,6 +34,8 @@ const optionTypes = {
   // interpolateScheme = d3.interpolateBlues,
   // colorLegendTitle = valueField,
 
+  nullDataColor: checkColor,
+
   // searchButtonClassNames,
 }
 
