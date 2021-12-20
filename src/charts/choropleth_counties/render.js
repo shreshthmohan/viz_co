@@ -26,6 +26,8 @@ export function renderChart({
     colorLegendTitle = valueField,
     nullDataColor = 'gray',
     nullDataMessage = 'Data not available',
+    missingDataColor = 'gray',
+    missingDataMessage = 'Data missing',
 
     searchButtonClassNames,
   },
@@ -88,7 +90,7 @@ export function renderChart({
       const found = dataParsed.find(
         el => Number.parseInt(el[fipsField], 10) === Number.parseInt(d.id, 10),
       )
-      const fillColor = found ? colorScale(found[valueField]) : nullDataColor
+      const fillColor = found ? colorScale(found[valueField]) : missingDataColor
       return fillColor ? fillColor : nullDataColor
     })
     .on('mouseover', function (e, d) {
@@ -109,10 +111,12 @@ export function renderChart({
             <br/>
             ${valueField}: ${valueFormatter(found[valueField])}`,
         )
+      } else if (found && !found[valueField]) {
+        tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
       } else {
         tooltipDiv.html(
           `${countyInfo.name}, ${countyInfo.state_name}
-            <br/> ${nullDataMessage}
+            <br/> ${missingDataMessage}
             `,
         )
       }

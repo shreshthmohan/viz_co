@@ -24,6 +24,8 @@ export function renderChart({
     colorLegendTitle = valueField,
     nullDataColor = 'gray',
     nullDataMessage = 'Data Not Available',
+    missingDataColor = 'gray',
+    missingDataMessage = 'Data Missing',
 
     searchButtonClassNames = '',
   },
@@ -89,7 +91,7 @@ export function renderChart({
       const stateData = dataObj[stateAbbr]
       const fillColor = stateData
         ? colorScale(stateData[valueField])
-        : nullDataColor
+        : missingDataColor
       return fillColor ? fillColor : nullDataColor
     })
     .on('mouseover', function (e, d) {
@@ -101,10 +103,10 @@ export function renderChart({
           <br />
           ${valueField}: ${valueFormatter(stateData[valueField])}
           `)
-        // } else if (stateData && !stateData[valueField]) {
-        //   tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
-      } else {
+      } else if (stateData && !stateData[valueField]) {
         tooltipDiv.html(`${d.properties.name} <br/>${nullDataMessage}`)
+      } else {
+        tooltipDiv.html(`${d.properties.name} <br/>${missingDataMessage}`)
       }
 
       d3.select(this).classed('hovered', true).raise()

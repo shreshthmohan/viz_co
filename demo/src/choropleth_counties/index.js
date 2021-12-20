@@ -19,6 +19,8 @@ const options = {
   interpolateScheme: d3.interpolateGreens,
   nullDataColor: 'gray',
   nullDataMessage: 'Data Not Available',
+  missingDataColor: 'gray',
+  missingDataMessage: 'Data Missing',
 
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs
