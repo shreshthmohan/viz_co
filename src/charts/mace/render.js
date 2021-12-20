@@ -536,6 +536,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -543,9 +544,9 @@ function setupInitialStateButton({
     .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.classed('hidden', false)
   goToInitialState.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
+    svg.selectAll('.mace').classed('mace-active', false)
     _.forEach(defaultStateAll, val => {
-      d3.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
+      svg.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
     })
     search.node().value = ''
     handleSearch('')
@@ -557,6 +558,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -564,7 +566,7 @@ function setupClearAllButton({
     .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
+    svg.selectAll('.mace').classed('mace-active', false)
     search.node().value = ''
     handleSearch('')
   })
@@ -773,12 +775,14 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
   setupClearAllButton({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   // For responsiveness

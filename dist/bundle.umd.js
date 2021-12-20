@@ -744,6 +744,7 @@
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
@@ -751,9 +752,9 @@
       .attr('class', goToInitialStateButtonClassNames);
     goToInitialState.classed('hidden', false);
     goToInitialState.on('click', () => {
-      d3__namespace.selectAll('.mace').classed('mace-active', false);
+      svg.selectAll('.mace').classed('mace-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
+        svg.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -765,6 +766,7 @@
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
@@ -772,7 +774,7 @@
       .attr('class', clearAllButtonClassNames);
     clearAll.classed('hidden', false);
     clearAll.on('click', () => {
-      d3__namespace.selectAll('.mace').classed('mace-active', false);
+      svg.selectAll('.mace').classed('mace-active', false);
       search.node().value = '';
       handleSearch('');
     });
@@ -981,12 +983,14 @@
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
     setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     // For responsiveness
