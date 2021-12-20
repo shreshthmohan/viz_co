@@ -1,30 +1,34 @@
 import * as d3 from 'd3'
+
+import { renderChart } from './render'
+
 import {
   shouldBeNumber,
+  shouldBeUnique,
   shouldNotBeBlank,
   validateData,
 } from '../../utils/validation/dataValidations'
 import {
   checkNumber,
-  checkOneOf,
-  checkColor,
   checkNumberBetween,
-  optionValidation,
-  checkDefaultState,
+  checkColor,
   checkColorArray,
+  optionValidation,
 } from '../../utils/validation/optionValidations'
 import {
   showErrors,
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
-import { renderChart } from './render'
 import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
-  xField: [shouldNotBeBlank],
-  yField: [shouldBeNumber],
-  seriesField: [shouldNotBeBlank],
-  colorField: [shouldNotBeBlank],
+  yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
+
+  // barLeftLabelField: 'Democratic Label', // Categorical
+  barLeftValueField: [shouldBeNumber], // Numeric
+
+  // barRightLabelField: 'Republican Label', // Categorical
+  barRightValueField: [shouldBeNumber], // Numeric
 }
 
 const optionTypes = {
@@ -37,29 +41,29 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  seriesLabelPosition: checkOneOf(['left', 'right']),
+  // /* Dimensions */
+  // /* xField */
+  // leftXAxisLabel: checkString,
+  // rightXAxisLabel: checkString,
+  // xAxisLabel: checkString,
 
-  overlap: checkNumber,
-
-  colorRange: checkColorArray(),
-
-  defaultState: checkDefaultState,
-
-  activeOpacity: checkNumberBetween(0, 1),
-  inactiveOpacity: checkNumberBetween(0, 1),
+  // /* Chart Specific */
+  colorScheme: checkColorArray(2),
+  barValueMidPoint: checkNumber,
+  barOpacity: checkNumberBetween(0, 1),
 }
 
-export const validateAndRender = ({
+export function validateAndRender({
   dataPath,
   options,
   dimensions,
   chartContainerSelector,
-}) => {
+}) {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
   d3[fileExtension(dataPath)](dataPath).then(data => {
+    // Run validations
     const { columns } = data
-
     const dimensionValidation = validateColumnsWithDimensions({
       columns,
       dimensions,

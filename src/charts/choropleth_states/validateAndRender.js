@@ -5,31 +5,25 @@ import {
   validateData,
 } from '../../utils/validation/dataValidations'
 import {
-  checkNumber,
-  checkOneOf,
   checkColor,
-  checkNumberBetween,
+  checkNumber,
   optionValidation,
-  checkDefaultState,
-  checkColorArray,
 } from '../../utils/validation/optionValidations'
+
 import {
   showErrors,
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
-import { renderChart } from './render'
 import { fileExtension } from '../../utils/helpers/general'
 
+import { renderChart } from './render'
+
 const dimensionTypes = {
-  xField: [shouldNotBeBlank],
-  yField: [shouldBeNumber],
-  seriesField: [shouldNotBeBlank],
-  colorField: [shouldNotBeBlank],
+  valueField: [shouldBeNumber],
+  stateAbbrField: [shouldNotBeBlank],
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
-
   marginTop: checkNumber,
   marginRight: checkNumber,
   marginBottom: checkNumber,
@@ -37,16 +31,12 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  seriesLabelPosition: checkOneOf(['left', 'right']),
+  nullDataColor: checkColor,
 
-  overlap: checkNumber,
+  // interpolateScheme = d3.interpolateBlues,
+  // colorLegendTitle = valueField,
 
-  colorRange: checkColorArray(),
-
-  defaultState: checkDefaultState,
-
-  activeOpacity: checkNumberBetween(0, 1),
-  inactiveOpacity: checkNumberBetween(0, 1),
+  // searchButtonClassNames = '',
 }
 
 export const validateAndRender = ({
@@ -58,8 +48,8 @@ export const validateAndRender = ({
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
   d3[fileExtension(dataPath)](dataPath).then(data => {
+    // Run validations
     const { columns } = data
-
     const dimensionValidation = validateColumnsWithDimensions({
       columns,
       dimensions,

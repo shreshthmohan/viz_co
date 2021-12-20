@@ -1,34 +1,43 @@
+// export function that
+// accepts data path, dimensions and options, target node(s)
+// validates data, dimensions and options
+// call render function
+
 import * as d3 from 'd3'
+
 import {
-  shouldBeNumber,
   shouldNotBeBlank,
+  shouldBeZeroOrPositiveNumber,
   validateData,
 } from '../../utils/validation/dataValidations'
+
 import {
-  checkNumber,
   checkOneOf,
-  checkColor,
+  checkNumber,
   checkNumberBetween,
-  optionValidation,
-  checkDefaultState,
+  checkColor,
+  checkBoolean,
+  checkFontSizeString,
   checkColorArray,
+  optionValidation,
 } from '../../utils/validation/optionValidations'
+
 import {
-  showErrors,
   validateColumnsWithDimensions,
+  showErrors,
 } from '../../utils/validation/validations'
-import { renderChart } from './render'
 import { fileExtension } from '../../utils/helpers/general'
 
+import { renderChart } from './render'
+
 const dimensionTypes = {
-  xField: [shouldNotBeBlank],
-  yField: [shouldBeNumber],
-  seriesField: [shouldNotBeBlank],
-  colorField: [shouldNotBeBlank],
+  sourceField: [shouldNotBeBlank], // Categorical
+  targetField: [shouldNotBeBlank], // Categorical
+  valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
+  aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -37,16 +46,20 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  seriesLabelPosition: checkOneOf(['left', 'right']),
+  chordType: checkOneOf(['directed', 'undirected']),
 
-  overlap: checkNumber,
-
-  colorRange: checkColorArray(),
-
-  defaultState: checkDefaultState,
+  colorScheme: checkColorArray,
+  arcLabelFontSize: checkFontSizeString,
 
   activeOpacity: checkNumberBetween(0, 1),
   inactiveOpacity: checkNumberBetween(0, 1),
+  clickInteraction: checkBoolean,
+
+  // searchInputClassNames: checkString,
+  // clearAllButtonClassNames: checkString,
+  // showAllButtonClassNames: checkString,
+
+  startingState: checkOneOf(['showAll', 'clearAll']),
 }
 
 export const validateAndRender = ({
@@ -58,8 +71,8 @@ export const validateAndRender = ({
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
   d3[fileExtension(dataPath)](dataPath).then(data => {
+    // Run validations
     const { columns } = data
-
     const dimensionValidation = validateColumnsWithDimensions({
       columns,
       dimensions,
@@ -88,5 +101,8 @@ export const validateAndRender = ({
     combinedValidation.valid
       ? renderChart({ data, dimensions, options, chartContainerSelector })
       : showErrors(chartContainerSelector, combinedValidation.messages)
+
+    // eslint-disable-next-line no-console
+    // console.log({ combinedValidation })
   })
 }

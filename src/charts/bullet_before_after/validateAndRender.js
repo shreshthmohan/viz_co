@@ -13,46 +13,30 @@ import {
 } from '../../utils/validation/dataValidations'
 
 import {
-  checkOneOf,
   checkNumber,
   checkNumberBetween,
   checkColor,
   checkNumericArray,
-  checkDefaultState,
   optionValidation,
+  checkOneOf,
+  checkFontSizeString,
+  checkDefaultState,
 } from '../../utils/validation/optionValidations'
 
 import {
   validateColumnsWithDimensions,
   showErrors,
 } from '../../utils/validation/validations'
-import { fileExtension } from '../../utils/helpers/general'
 
 import { renderChart } from './render'
 
 const dimensionTypes = {
-  xFieldStart: [shouldBeNumber],
-  xFieldEnd: [shouldBeNumber],
-  yFieldStart: [shouldBeNumber],
-  yFieldEnd: [shouldBeNumber],
-  sizeField: [shouldBeNumber],
-  nameField: [shouldNotBeBlank, shouldBeUnique],
+  beforeField: [shouldBeNumber],
+  afterField: [shouldBeNumber],
+  topicField: [shouldNotBeBlank, shouldBeUnique],
 }
 
 const optionTypes = {
-  /* Headers */
-  // heading: checkString,
-  // subheading: checkString,
-
-  /* Chart Area */
-  containerWidth: checkOneOf([
-    'max-w-screen-sm',
-    'max-w-screen-md',
-    'max-w-screen-lg',
-    'max-w-screen-xl',
-    'max-w-screen-2xl',
-    'max-w-full',
-  ]),
   aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
@@ -62,25 +46,66 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  // xAxisTitle: checkString,
-  // xFieldType: checkString,
-  xAxisTickValues: checkNumericArray(), // comment this for automatic tick values
-  xScaleType: checkOneOf(['log', 'linear']), // linear or log
-  xScaleLogBase: checkNumber, // can be any number greater than 0: TODO?
+  /* Series Colors */
+  beforeFieldColor: checkColor,
+  afterFieldColor: checkColor,
 
-  // yAxisTitle: checkString,
-  // yFieldType: checkString,
+  /* Glyphs */
+  glyphSize: checkNumber,
+  connectorSize: checkNumber,
 
-  sizeLegendValues: checkNumericArray(),
-  sizeLegendMoveSizeObjectDownBy: checkNumber,
-  // sizeLegendTitle: checkString,
+  connectorColorStrategy: checkOneOf([
+    'farFromReference',
+    'closeToReference',
+    'customColor',
+  ]),
+  connectorColorCustom: checkColor,
 
-  oppositeDirectionColor: checkColor,
-  sameDirectionColor: checkColor,
-  // directionStartLabel: checkString,
-  // directionEndLabel: checkString,
+  referenceValue: checkNumber,
+  referenceLineColor: checkColor,
+  referenceLineWidth: checkNumber,
+  referenceLineOpacity: checkNumberBetween(0, 1),
+
+  /* Legends */
+  // beforeLegendLabel: checkString,
+  // afterLegendLabel: checkString,
+
+  // valuePrefix: checkString,
+  // valuePostfix: checkString,
+  // valueFormatter: checkString,
+
+  topicLabelFontSize: checkFontSizeString,
+  topicLabelTextColor: checkColor,
+  topicLabelYOffset: checkNumber,
 
   defaultState: checkDefaultState,
+
+  /* Axes */
+  // xAxisTitle: checkString,
+  xScaleType: checkOneOf(['log', 'linear']), // linear or log
+  xScaleLogBase: checkNumber, // applicable only if log scale
+  xAxisPosition: checkOneOf(['top', 'bottom']),
+  xAxisOffset: checkNumber,
+  // xAxisLabel: checkString,
+  xAXisLabelFontSize: checkNumber,
+  xAxisLabelOffset: checkNumber,
+  xAxisCustomDomain: checkNumericArray(),
+  xAxisTickFontSize: checkNumber,
+  xAxisColor: checkColor,
+  xAxisTickValues: checkNumericArray(),
+  xAxisTickOffset: checkNumber,
+  xAxisLineThickness: checkNumber,
+  // xAxisTickFormatter: checkString,
+  xAxisTickRotation: checkNumber,
+  // xAxisTickAnchor: checkString,
+  // xAxisTickBaseline: checkString,
+  xAxisTickValueXOffset: checkNumber,
+  xAxisTickValueYOffset: checkNumber,
+
+  // searchInputClassNames: checkString,
+  // goToInitialStateButtonClassNames: checkString,
+  // clearAllButtonClassNames: checkString,
+  // showAllButtonClassNames: checkString,
 
   activeOpacity: checkNumberBetween(0, 1),
   inactiveOpacity: checkNumberBetween(0, 1),
@@ -94,7 +119,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3[fileExtension(dataPath)](dataPath).then(data => {
+  d3.csv(dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({
