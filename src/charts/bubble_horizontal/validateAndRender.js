@@ -19,6 +19,7 @@ import {
   showErrors,
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   sizeField: [shouldBeNumber],
@@ -28,8 +29,8 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatioCombined: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
-  aspectRatioSplit: checkNumberBetween([0.01, Number.MAX_SAFE_INTEGER]),
+  aspectRatioCombined: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
+  aspectRatioSplit: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -40,23 +41,23 @@ const optionTypes = {
 
   customColorScheme: checkColorArray,
   inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-  numberOfColors: checkNumberBetween([3, 9]),
+  numberOfColors: checkNumberBetween(3, 9),
 
-  collisionDistance: checkNumberBetween([0, Number.MAX_SAFE_INTEGER]),
+  collisionDistance: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
 
   /* xField */
-  xDomainCustom: checkNumericArray,
+  xDomainCustom: checkNumericArray(2),
   // xAxisLabel = xField,
   // xValuePrefix = '',
   // xValueFormatter = '',
   // xValueSuffix = '',
 
   /* sizeField */
-  sizeRange: checkNumericArray,
+  sizeRange: checkNumericArray(2),
   // sizeValuePrefix = '',
   // sizeValueFormatter = '',
   // sizeValueSuffix = '',
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   // sizeLegendTitle = sizeField,
   sizeLegendGapInCircles: checkNumber,
 
@@ -80,7 +81,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     const { columns } = data
 
     const dimensionValidation = validateColumnsWithDimensions({

@@ -418,7 +418,7 @@ function parseData({ data, xField, yField, sizeField, timeField }) {
   }))
 
   const dataAt = loc => {
-    return data.filter(d => d[timeField] === loc)
+    return dataParsed.filter(d => d[timeField] === loc)
   }
   const timeDomain = _.uniq(_.map(data, timeField)).sort()
   const timeDomainLength = timeDomain.length
