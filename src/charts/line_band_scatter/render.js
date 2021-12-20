@@ -203,6 +203,23 @@ export function renderChart({
         .attr('cy', d => yScale(d[yf.circle]))
         .attr('r', scatterCircleRadius)
         .attr('fill', yColors[i].circle)
+        .on('mouseover', function (e, d) {
+          tooltipDiv.transition().duration(200).style('opacity', 1)
+          tooltipDiv.html(`${xField}: ${formatDate(d[xField])}
+            <br/> ${yf.circle}: ${yValueFormatter(d[yf.circle])}
+            `)
+
+          tooltipDiv
+            .style('left', `${e.clientX}px`)
+            .style('top', `${e.clientY + 20 + window.scrollY}px`)
+        })
+        .on('mouseout', function (e, d) {
+          tooltipDiv
+            .style('left', '-300px')
+            .transition()
+            .duration(500)
+            .style('opacity', 0)
+        })
     }
   })
   yFields.forEach((yf, i) => {
@@ -243,7 +260,9 @@ export function renderChart({
             <br/> ${yf.band[0]}: ${yValueFormatter(bandMinValue)}
             <br/> ${yf.band[1]}: ${yValueFormatter(bandMaxValue)}`)
           } else {
-            tooltipDiv.html(`<span style="font-weight: bold">${d[xField]}</span>
+            tooltipDiv.html(`<span style="font-weight: bold">${formatDate(
+              d[xField],
+            )}</span>
             <br/> ${yf.line}: ${yValueFormatter(lineValue)}`)
           }
 
