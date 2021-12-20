@@ -509,6 +509,7 @@
     widgetsRight,
     sameDirectionColor,
     oppositeDirectionColor,
+    svg,
   }) {
     const colorLegend = widgetsRight.append('svg');
     const colorLegendMain = colorLegend
@@ -526,7 +527,9 @@
       .on('click', e => {
         const parentLegend = d3__namespace.select(e.target.parentNode);
         const legendState = parentLegend.classed('mace-active');
-        d3__namespace.selectAll('.mace-same').classed('mace-active', !legendState);
+        svg.selectAll('.mace-same').classed('mace-active', !legendState);
+        // Need this extra class toggle as legend is outside the main chart svg
+        parentLegend.classed('mace-active', !legendState);
       });
     colorLegendSame
       .append('circle')
@@ -555,7 +558,9 @@
       .on('click', e => {
         const parentLegend = d3__namespace.select(e.target.parentNode);
         const legendState = parentLegend.classed('mace-active');
-        d3__namespace.selectAll('.mace-opposite').classed('mace-active', !legendState);
+        svg.selectAll('.mace-opposite').classed('mace-active', !legendState);
+        // Need this extra class toggle as legend is outside the main chart svg
+        parentLegend.classed('mace-active', !legendState);
       });
     colorLegendOpposite
       .append('circle')
@@ -911,6 +916,7 @@
       widgetsRight,
       sameDirectionColor,
       oppositeDirectionColor,
+      svg,
     });
 
     renderDirectionLegend({
