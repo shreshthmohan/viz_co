@@ -7894,7 +7894,7 @@ g.circles circle.circle.circle-hovered {
       xAxisCustomDomain,
       xAxisTickFontSize = 12,
       xAxisColor = 'black',
-      xAxisTickValues = null,
+      xAxisTickValues,
       xAxisTickOffset = 0,
       xAxisLineThickness = 1,
       xAxisTickFormatter = '',
@@ -8218,11 +8218,8 @@ g.circles circle.circle.circle-hovered {
 
     const xDomain = xScale.domain();
     const tickValues =
-      xAxisTickValues === null
-        ? null
-        : ___default["default"].filter(xAxisTickValues, val => {
-            return val >= xDomain[0] && val <= xDomain[1]
-          });
+      xAxisTickValues &&
+      ___default["default"].filter(xAxisTickValues, val => val >= xDomain[0] && val <= xDomain[1]);
 
     xAxisGroup
       .call(

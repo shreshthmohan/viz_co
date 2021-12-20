@@ -57,7 +57,7 @@ export function renderChart({
     xAxisCustomDomain,
     xAxisTickFontSize = 12,
     xAxisColor = 'black',
-    xAxisTickValues = null,
+    xAxisTickValues,
     xAxisTickOffset = 0,
     xAxisLineThickness = 1,
     xAxisTickFormatter = '',
@@ -381,11 +381,8 @@ function renderXAxis({
 
   const xDomain = xScale.domain()
   const tickValues =
-    xAxisTickValues === null
-      ? null
-      : _.filter(xAxisTickValues, val => {
-          return val >= xDomain[0] && val <= xDomain[1]
-        })
+    xAxisTickValues &&
+    _.filter(xAxisTickValues, val => val >= xDomain[0] && val <= xDomain[1])
 
   xAxisGroup
     .call(
