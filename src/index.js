@@ -24,6 +24,11 @@ export {
 } from './charts/ridgeline/index'
 
 export {
+  renderChart as renderLineBandScatter,
+  validateAndRender as validateAndRenderLineBandScatter,
+} from './charts/line_band_scatter/index'
+
+export {
   renderChart as renderCalendar,
   validateAndRender as validateAndRenderCalendar,
 } from './charts/calendar/index'
@@ -39,6 +44,36 @@ export {
 } from './charts/domino_ribbon/index'
 
 export {
+  renderChart as renderChoroplethCounties,
+  validateAndRender as validateAndRenderChoroplethCounties,
+} from './charts/choropleth_counties'
+
+export {
+  renderChart as renderChoroplethStates,
+  validateAndRender as validateAndRenderChoroplethStates,
+} from './charts/choropleth_states'
+
+export {
   renderChart as renderChord,
   validateAndRender as validateAndRenderChord,
 } from './charts/chord/index'
+
+export {
+  renderChart as renderTriangle,
+  validateAndRender as validateAndRenderTriangle,
+} from './charts/triangle/index'
+
+export {
+  renderChart as renderComparativeBar,
+  validateAndRender as validateAndRenderComparativeBar,
+} from './charts/comparative_bar/index'
+
+export {
+  renderChart as renderStackedBar,
+  validateAndRender as validateAndRenderStackedBar,
+} from './charts/stacked_bar/index'
+
+export {
+  renderChart as renderBulletBeforeAfter,
+  validateAndRender as validateAndRenderBulletBeforeAfter,
+} from './charts/bullet_before_after/index'
