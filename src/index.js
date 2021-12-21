@@ -69,6 +69,11 @@ export {
 } from './charts/comparative_bar/index'
 
 export {
+  renderChart as renderStackedBar,
+  validateAndRender as validateAndRenderStackedBar,
+} from './charts/stacked_bar/index'
+
+export {
   renderChart as renderBulletBeforeAfter,
   validateAndRender as validateAndRenderBulletBeforeAfter,
 } from './charts/bullet_before_after/index'
