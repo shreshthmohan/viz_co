@@ -47,6 +47,19 @@ export const shouldBeNumber = ({ data, dimensions, dim }) => {
   return { valid: false, message: invalidRows }
 }
 
+export const shouldBeZeroOrPositiveNumber = ({ data, dimensions, dim }) => {
+  const invalidRows = _.filter(data, (row, i) => {
+    // eslint-disable-next-line no-param-reassign
+    row.rowNumber = i + 1
+    const value = Number(row[dimensions[dim]])
+    return Number.isNaN(value) || value < 0
+  })
+
+  if (_.isEmpty(invalidRows)) return { valid: true, message: '' }
+
+  return { valid: false, message: invalidRows }
+}
+
 export const shouldBeUnique = ({ data, dimensions, dim }) => {
   // return true if valid number, false if not a valid number
   const duplicates = _(data)
