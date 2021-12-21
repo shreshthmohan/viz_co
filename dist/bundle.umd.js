@@ -7867,6 +7867,7 @@ g.circles circle.circle.circle-hovered {
 
       yGridPaddingInner = 0.1,
       showYGridLabels = false,
+      yGridLabelFontSize = 12,
 
       yAxisLocation = 'left',
       yAxisOffset = 10,
@@ -8099,7 +8100,7 @@ g.circles circle.circle.circle-hovered {
             .attr('font-weight', 'bold')
             .classed('capitalize', true)
             .attr('dominant-baseline', 'text-after-edge')
-            .attr('font-size', 14);
+            .attr('font-size', yGridLabelFontSize);
         });
 
     widgetsRight
@@ -8161,6 +8162,7 @@ g.circles circle.circle.circle-hovered {
       /* yField */
       yDomainCustom: checkNumericArray, // [0, 100],
       yGridPaddingInner: checkNumberBetween([0, 1]),
+      yGridLabelFontSize: checkNumber,
       showYGridLabels: checkBoolean, // default: false
       yAxisLocation: checkOneOf(['left', 'right']), // default: left
       // yValueFormatter: '.0%',

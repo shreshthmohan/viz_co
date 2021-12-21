@@ -28,6 +28,7 @@ const options = {
   /* yField */
   yDomainCustom: [0, 100],
   yGridPaddingInner: 0.15,
+  yGridLabelFontSize: 12,
   showYGridLabels: true, // default: false
   yAxisLocation: 'right', // default: left
   // yValueFormatter: '.0%',

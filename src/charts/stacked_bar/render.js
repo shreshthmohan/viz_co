@@ -27,6 +27,7 @@ export function renderChart({
 
     yGridPaddingInner = 0.1,
     showYGridLabels = false,
+    yGridLabelFontSize = 12,
 
     yAxisLocation = 'left',
     yAxisOffset = 10,
@@ -259,7 +260,7 @@ export function renderChart({
           .attr('font-weight', 'bold')
           .classed('capitalize', true)
           .attr('dominant-baseline', 'text-after-edge')
-          .attr('font-size', 14)
+          .attr('font-size', yGridLabelFontSize)
       })
 
   widgetsRight
