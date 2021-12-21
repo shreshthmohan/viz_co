@@ -780,7 +780,7 @@
     });
   }
 
-  function renderChart$f({
+  function renderChart$g({
     data,
     options: {
       aspectRatio = 2,
@@ -1358,7 +1358,7 @@
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender$f = ({
+  const validateAndRender$g = ({
     dataPath,
     options,
     dimensions,
@@ -1395,7 +1395,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$f({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$g({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1425,7 +1425,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$e({
+  function renderChart$f({
     data,
     options: {
       aspectRatio = 2,
@@ -1869,7 +1869,7 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$e = ({
+  const validateAndRender$f = ({
     dataPath,
     options,
     dimensions,
@@ -1906,7 +1906,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$e({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$f({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2194,7 +2194,7 @@
 
   /* global window, console */
 
-  function renderChart$d({
+  function renderChart$e({
     data,
     dimensions: {
       sizeField,
@@ -2804,7 +2804,7 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$d = ({
+  const validateAndRender$e = ({
     dataPath,
     options,
     dimensions,
@@ -2840,7 +2840,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$d({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$e({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3173,7 +3173,7 @@
     return search
   }
 
-  function renderChart$c({
+  function renderChart$d({
     data,
     options: {
       aspectRatio = 2,
@@ -3342,7 +3342,7 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$c = ({
+  const validateAndRender$d = ({
     dataPath,
     options,
     dimensions,
@@ -3379,7 +3379,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$c({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$d({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -3814,7 +3814,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$b({
+  function renderChart$c({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3999,7 +3999,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender$b = ({
+  const validateAndRender$c = ({
     dataPath,
     options,
     dimensions,
@@ -4036,7 +4036,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$b({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$c({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4117,7 +4117,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$a({
+  function renderChart$b({
     data,
     dataScatter = [],
     dimensions: { xField, yFields },
@@ -4578,7 +4578,7 @@ g.circles circle.circle.circle-hovered {
     highlightRangeColors: checkColorArray(),
   };
 
-  const validateAndRender$a = ({
+  const validateAndRender$b = ({
     dataPaths,
     options,
     dimensions,
@@ -4656,7 +4656,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$a({
+        ? renderChart$b({
             data,
             dataScatter,
             dimensions,
@@ -4931,7 +4931,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$9({
+  function renderChart$a({
     data,
     options: {
       aspectRatio = 0.8,
@@ -5102,7 +5102,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$9 = ({
+  const validateAndRender$a = ({
     dataPath,
     options,
     dimensions,
@@ -5153,7 +5153,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$a({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -5223,7 +5223,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$8({
+  function renderChart$9({
     data,
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
@@ -5772,7 +5772,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames: '',
   };
 
-  const validateAndRender$8 = ({
+  const validateAndRender$9 = ({
     dataPath,
     options,
     dimensions,
@@ -5804,7 +5804,7 @@ g.circles circle.circle.circle-hovered {
         }
       });
       combinedValidation.valid
-        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$9({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6399,7 +6399,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$7({
+  function renderChart$8({
     data,
     options: {
       aspectRatio = 0.8,
@@ -6637,7 +6637,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender$7 = ({
+  const validateAndRender$8 = ({
     dataPath,
     options,
     dimensions,
@@ -6674,7 +6674,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$8({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -6683,7 +6683,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$6({
+  function renderChart$7({
     data,
     dimensions: { valueField, fipsField },
     options: {
@@ -6925,7 +6925,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames,
   };
 
-  const validateAndRender$6 = ({
+  const validateAndRender$7 = ({
     dataPath,
     options,
     dimensions,
@@ -6962,13 +6962,13 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$7({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* global window */
-  function renderChart$5({
+  function renderChart$6({
     data,
     dimensions: { valueField, stateAbbrField },
     options: {
@@ -7195,7 +7195,7 @@ g.circles circle.circle.circle-hovered {
     // searchButtonClassNames = '',
   };
 
-  const validateAndRender$5 = ({
+  const validateAndRender$6 = ({
     dataPath,
     options,
     dimensions,
@@ -7232,7 +7232,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$6({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -7240,7 +7240,7 @@ g.circles circle.circle.circle-hovered {
   /* global window */
 
   let currentState = 'global';
-  function renderChart$4({
+  function renderChart$5({
     data,
     options: {
       aspectRatio = 1,
@@ -7854,7 +7854,7 @@ g.circles circle.circle.circle-hovered {
     startingState: checkOneOf(['showAll', 'clearAll']),
   };
 
-  const validateAndRender$4 = ({
+  const validateAndRender$5 = ({
     dataPath,
     options,
     dimensions,
@@ -7891,7 +7891,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$5({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -7965,7 +7965,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$3({
+  function renderChart$4({
     data,
     options: {
       aspectRatio = 2 / Math.sqrt(3),
@@ -8679,7 +8679,7 @@ g.circles circle.circle.circle-hovered {
     // searchInputClassNames: '',
   };
 
-  function validateAndRender$3({
+  function validateAndRender$4({
     dataPath,
     options,
     dimensions,
@@ -8720,14 +8720,14 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$4({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   }
 
   /* global window */
 
-  function renderChart$2({
+  function renderChart$3({
     data,
     options: {
       aspectRatio = 0.7,
@@ -9283,7 +9283,7 @@ g.circles circle.circle.circle-hovered {
     barOpacity: checkNumberBetween(0, 1),
   };
 
-  function validateAndRender$2({
+  function validateAndRender$3({
     dataPath,
     options,
     dimensions,
@@ -9320,14 +9320,14 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$3({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   }
 
   /* global window */
 
-  function renderChart$1({
+  function renderChart$2({
     data,
     options: {
       aspectRatio = 2,
@@ -9592,7 +9592,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function validateAndRender$1({
+  function validateAndRender$2({
     dataPath,
     options,
     dimensions,
@@ -9680,14 +9680,14 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$2({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   }
 
   /* global window*/
 
-  function renderChart({
+  function renderChart$1({
     data,
     options: {
       aspectRatio = 2,
@@ -10475,7 +10475,7 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender = ({
+  const validateAndRender$1 = ({
     dataPath,
     options,
     dimensions,
@@ -10512,7 +10512,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$1({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -10520,38 +10520,166 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  exports.renderBubbleHorizontal = renderChart$d;
-  exports.renderBulletBeforeAfter = renderChart;
-  exports.renderCalendar = renderChart$9;
-  exports.renderChord = renderChart$4;
-  exports.renderChoroplethCounties = renderChart$6;
-  exports.renderChoroplethStates = renderChart$5;
-  exports.renderComparativeBar = renderChart$2;
-  exports.renderDominoBase = renderChart$c;
-  exports.renderDominoRibbon = renderChart$7;
-  exports.renderLineBandScatter = renderChart$a;
-  exports.renderMace = renderChart$f;
-  exports.renderMotionBubble = renderChart$8;
-  exports.renderRidgeline = renderChart$b;
-  exports.renderSankey = renderChart$e;
-  exports.renderStackedBar = renderChart$1;
-  exports.renderTriangle = renderChart$3;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$d;
-  exports.validateAndRenderBulletBeforeAfter = validateAndRender;
-  exports.validateAndRenderCalendar = validateAndRender$9;
-  exports.validateAndRenderChord = validateAndRender$4;
-  exports.validateAndRenderChoroplethCounties = validateAndRender$6;
-  exports.validateAndRenderChoroplethStates = validateAndRender$5;
-  exports.validateAndRenderComparativeBar = validateAndRender$2;
-  exports.validateAndRenderDominoBase = validateAndRender$c;
-  exports.validateAndRenderDominoRibbon = validateAndRender$7;
-  exports.validateAndRenderLineBandScatter = validateAndRender$a;
-  exports.validateAndRenderMace = validateAndRender$f;
-  exports.validateAndRenderMotionBubble = validateAndRender$8;
-  exports.validateAndRenderRidgeline = validateAndRender$b;
-  exports.validateAndRenderSankey = validateAndRender$e;
-  exports.validateAndRenderStackedBar = validateAndRender$1;
-  exports.validateAndRenderTriangle = validateAndRender$3;
+  function renderChart({
+    data,
+    options: {
+      aspectRatio = 1,
+
+      marginBottom = 0,
+      marginLeft = 0,
+      marginRight = 0,
+      marginTop = 0,
+
+      bgColor = 'transparent',
+
+      sizeRange = [2, 20],
+
+      customColorScheme,
+      inbuiltScheme = 'schemeOrRd',
+      numberOfColors = 5,
+      collisionDistance = 0.5,
+    },
+    dimensions: { sizeField, yField, nameField, segmentField },
+    chartContainerSelector,
+  }) {
+    const coreChartWidth = 1000;
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+      setupChartArea$3({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const parsedData = data.map(d => ({
+      ...d,
+      [sizeField]: Number.parseFloat(d[sizeField]),
+      [yField]: Number.parseFloat(d[yField]),
+    }));
+
+    [...new Set(parsedData.map(c => c[segmentField]))];
+    const maxSizeValue = Math.max(...parsedData.map(c => c[sizeField]));
+
+    const yDomain = d3__namespace.extent(parsedData.map(d => d[yField]));
+
+    const sizeScale = d3__namespace.scaleSqrt().range(sizeRange).domain([0, maxSizeValue]);
+
+    const yRange = 500;
+    const yScale = d3__namespace
+      .scaleLinear()
+      .domain(yDomain)
+      .range([coreChartHeight / 2 - yRange / 2, coreChartHeight / 2 + yRange / 2]);
+    // console.log(yScale.range())
+
+    const bubbles = chartCore.append('g').attr('class', 'bubbles');
+
+    const yColorScale = d3__namespace
+      .scaleQuantize()
+      .domain(yDomain)
+      .range(customColorScheme || d3__namespace[inbuiltScheme][numberOfColors])
+      .nice();
+    function ticked() {
+      const u = bubbles.selectAll('circle').data(parsedData);
+      u
+        .enter()
+        .append('circle')
+        .attr('r', d => sizeScale(d[sizeField]))
+        .style('fill', function (d) {
+          return yColorScale(d[yField])
+        })
+        // .attr('stroke', function (d) {
+        //   return d3.rgb(xColorScale(d[xField])).darker(0.5)
+        // })
+        .merge(u)
+        .attr('cx', function (d) {
+          return d.x
+        })
+        .attr('cy', function (d) {
+          return d.y
+        });
+
+      u.exit().remove();
+    }
+
+    // console.log(coreChartHeight / 2, coreChartWidth / 2)
+
+    // bubbles.attr('transform', `translate(${coreChartWidth / 2}, ${coreChartHeight})`)
+    d3__namespace.forceSimulation(parsedData)
+      .force('y', d3__namespace.forceY(d => yScale(d[yField])).strength(0.1))
+      // .force('x', d3.forceX().strength(0.1))
+      .force(
+        'collision',
+        d3__namespace
+          .forceCollide(function (d) {
+            return sizeScale(d[sizeField]) + collisionDistance
+          })
+          .strength(0.5),
+      )
+      .force('center', d3__namespace.forceCenter(coreChartWidth / 2, coreChartHeight / 2))
+      .force(
+        'radial',
+        d3__namespace
+          .forceRadial(400, coreChartWidth / 2, coreChartHeight / 2)
+          .strength(-0.03),
+      )
+      // .force(
+      //   'radial1',
+      //   d3.forceRadial(10, coreChartWidth / 2, coreChartHeight / 2),
+      // )
+      .force('manyBody', d3__namespace.forceManyBody().distanceMax(100).strength(-15))
+      .alphaDecay(0.001)
+      .on('tick', ticked);
+  }
+
+  function validateAndRender({
+    dataPath,
+    dimensions,
+    options,
+    chartContainerSelector,
+  }) {
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
+      renderChart({ data, dimensions, options, chartContainerSelector });
+    });
+  }
+
+  exports.renderBubbleHorizontal = renderChart$e;
+  exports.renderBulletBeforeAfter = renderChart$1;
+  exports.renderCalendar = renderChart$a;
+  exports.renderChord = renderChart$5;
+  exports.renderChoroplethCounties = renderChart$7;
+  exports.renderChoroplethStates = renderChart$6;
+  exports.renderComparativeBar = renderChart$3;
+  exports.renderDominoBase = renderChart$d;
+  exports.renderDominoRibbon = renderChart$8;
+  exports.renderLineBandScatter = renderChart$b;
+  exports.renderMace = renderChart$g;
+  exports.renderMotionBubble = renderChart$9;
+  exports.renderPackedBubble = renderChart;
+  exports.renderRidgeline = renderChart$c;
+  exports.renderSankey = renderChart$f;
+  exports.renderStackedBar = renderChart$2;
+  exports.renderTriangle = renderChart$4;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$e;
+  exports.validateAndRenderBulletBeforeAfter = validateAndRender$1;
+  exports.validateAndRenderCalendar = validateAndRender$a;
+  exports.validateAndRenderChord = validateAndRender$5;
+  exports.validateAndRenderChoroplethCounties = validateAndRender$7;
+  exports.validateAndRenderChoroplethStates = validateAndRender$6;
+  exports.validateAndRenderComparativeBar = validateAndRender$3;
+  exports.validateAndRenderDominoBase = validateAndRender$d;
+  exports.validateAndRenderDominoRibbon = validateAndRender$8;
+  exports.validateAndRenderLineBandScatter = validateAndRender$b;
+  exports.validateAndRenderMace = validateAndRender$g;
+  exports.validateAndRenderMotionBubble = validateAndRender$9;
+  exports.validateAndRenderPackedBubble = validateAndRender;
+  exports.validateAndRenderRidgeline = validateAndRender$c;
+  exports.validateAndRenderSankey = validateAndRender$f;
+  exports.validateAndRenderStackedBar = validateAndRender$2;
+  exports.validateAndRenderTriangle = validateAndRender$4;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
