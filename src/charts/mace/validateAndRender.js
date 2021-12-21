@@ -26,6 +26,7 @@ import {
   validateColumnsWithDimensions,
   showErrors,
 } from '../../utils/validation/validations'
+import { fileExtension } from '../../utils/helpers/general'
 
 import { renderChart } from './render'
 
@@ -52,7 +53,7 @@ const optionTypes = {
     'max-w-screen-2xl',
     'max-w-full',
   ]),
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -63,14 +64,14 @@ const optionTypes = {
 
   // xAxisTitle: checkString,
   // xFieldType: checkString,
-  xAxisTickValues: checkNumericArray, // comment this for automatic tick values
+  xAxisTickValues: checkNumericArray(), // comment this for automatic tick values
   xScaleType: checkOneOf(['log', 'linear']), // linear or log
   xScaleLogBase: checkNumber, // can be any number greater than 0: TODO?
 
   // yAxisTitle: checkString,
   // yFieldType: checkString,
 
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   sizeLegendMoveSizeObjectDownBy: checkNumber,
   // sizeLegendTitle: checkString,
 
@@ -81,8 +82,8 @@ const optionTypes = {
 
   defaultState: checkDefaultState,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
@@ -93,7 +94,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({

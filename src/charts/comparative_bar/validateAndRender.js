@@ -19,6 +19,7 @@ import {
   showErrors,
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
@@ -31,7 +32,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.1, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -49,7 +50,7 @@ const optionTypes = {
   // /* Chart Specific */
   colorScheme: checkColorArray(2),
   barValueMidPoint: checkNumber,
-  barOpacity: checkNumberBetween([0, 1]),
+  barOpacity: checkNumberBetween(0, 1),
 }
 
 export function validateAndRender({
@@ -60,7 +61,7 @@ export function validateAndRender({
 }) {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({

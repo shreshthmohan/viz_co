@@ -19,6 +19,7 @@ import {
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
 import { renderChart } from './render'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   xField: [shouldBeNumber],
@@ -29,7 +30,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -38,31 +39,31 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  xDomain: checkNumericArray,
+  xDomain: checkNumericArray(2),
   // xAxisLabel: checkString,
   xAxisLabelOffset: checkNumber,
   // xAxisValueFormatter:  checkString, //'',
-  dominoHeight: checkNumberBetween([0, 1]),
+  dominoHeight: checkNumberBetween(0, 1),
   // yAxisDateParser: checkString, // '%Y-Q%q',
   // yAxisDateFormatter: checkString, // "Q%q'%y", // Date formatter options: https://github.com/d3/d3-time-format
 
   sizeScaleType: checkOneOf(['log', 'linear']), // default is scaleLinear if not provided. Can be changed to scaleLog
-  sizeRange: checkNumericArray,
+  sizeRange: checkNumericArray(2),
   // sizeLegendLabel: checkString,
-  sizeLegendValues: checkNumericArray,
+  sizeLegendValues: checkNumericArray(),
   sizeLegendGapInSymbols: checkNumber,
   sizeLegendMoveSymbolsDownBy: checkNumber,
   // sizeLegendValueFormatter:  checkString, // '',
 
-  colorDomain: checkNumericArray,
+  colorDomain: checkNumericArray(2),
   // colorLegendValueFormatter: checkString, // ,'.2s',
   // colorLegendLabel: checkString,
   colorRange: checkColorArray(),
 
   initialState: checkDefaultState,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
@@ -73,7 +74,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     const { columns } = data
 
     const dimensionValidation = validateColumnsWithDimensions({
