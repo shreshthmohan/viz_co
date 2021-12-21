@@ -1,8 +1,13 @@
 import * as d3 from 'd3'
 import { setupChartArea } from '../../utils/helpers/commonChartHelpers'
+import { legend } from '../../utils/helpers/colorLegend'
+import { circleSizeLegend } from '../../utils/helpers/circleSizeLegend'
+import { formatNumber } from '../../utils/helpers/formatters'
+// import { preventOverflowThrottled } from '../../utils/helpers/general'
 
 export function renderChart({
   data,
+  dimensions: { sizeField, yField, nameField },
   options: {
     aspectRatio = 1,
 
@@ -21,10 +26,21 @@ export function renderChart({
     collisionDistance = 0.5,
 
     circleDiameter = 400,
+
+    colorLegendTitle = yField,
+
+    sizeValueFormat = '',
+    sizeValuePrefix = 'a',
+    sizeValuePostfix = 'b',
+    sizeLegendGapInCircles = 10,
+    sizeLegendTitle = sizeField,
+    sizeLegendValues = [100, 20000, 50000],
   },
-  dimensions: { sizeField, yField, nameField },
   chartContainerSelector,
 }) {
+  const sizeValueFormatter = val =>
+    `${sizeValuePrefix}${formatNumber(val, sizeValueFormat)}${sizeValuePostfix}`
+
   const coreChartWidth = 1000
   const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
     setupChartArea({
@@ -56,7 +72,6 @@ export function renderChart({
     .scaleLinear()
     .domain(yDomain)
     .range([coreChartHeight / 2 - yRange / 2, coreChartHeight / 2 + yRange / 2])
-  // console.log(yScale.range())
 
   const bubbles = chartCore.append('g').attr('class', 'bubbles')
 
@@ -74,10 +89,9 @@ export function renderChart({
       .style('fill', function (d) {
         return yColorScale(d[yField])
       })
-      .attr('stroke', 'gray')
-      // .attr('stroke', function (d) {
-      //   return d3.rgb(yColorScale(d[yField])).darker(0.5)
-      // })
+      .attr('stroke', function (d) {
+        return d3.rgb(yColorScale(d[yField])).darker(0.7)
+      })
       .merge(u)
       .attr('cx', function (d) {
         return d.x
@@ -87,10 +101,15 @@ export function renderChart({
       })
 
     u.exit().remove()
+    // preventOverflowThrottled({
+    //   allComponents,
+    //   svg,
+    //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+    // })
   }
 
   d3.forceSimulation(parsedData)
-    .force('y', d3.forceY(d => yScale(d[yField])).strength(0.2))
+    .force('y', d3.forceY(d => yScale(d[yField])).strength(0.5))
 
     .force(
       'collision',
@@ -111,4 +130,34 @@ export function renderChart({
     .force('manyBody', d3.forceManyBody().distanceMax(100).strength(-12))
     // .alphaDecay(0.01)
     .on('tick', ticked)
+
+  widgetsRight
+    .append('svg')
+    .attr('width', 260)
+    .attr('height', 45)
+    .append(() =>
+      legend({
+        color: yColorScale,
+        title: colorLegendTitle,
+        width: 260,
+      }),
+    )
+
+  const sizeLegend = widgetsRight.append('svg')
+
+  circleSizeLegend({
+    sizeLegendValues,
+    sizeScale,
+    containerSelection: sizeLegend,
+    moveSizeObjectDownBy: 10,
+    sizeLegendGapInCircles,
+    valueFormatter: sizeValueFormatter,
+    sizeLegendTitle,
+  })
+
+  // preventOverflow({
+  //   allComponents,
+  //   svg,
+  //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+  // })
 }

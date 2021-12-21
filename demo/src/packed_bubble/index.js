@@ -1,7 +1,7 @@
 /* global viz */
 
 const options = {
-  aspectRatio: 1.4,
+  aspectRatio: 1.6,
 
   marginTop: 0,
   marginRight: 0,
@@ -19,6 +19,15 @@ const options = {
   sizeRange: [5, 30],
 
   circleDiameter: 500,
+
+  sizeValueFormat: '$.3s',
+  sizeValuePrefix: '',
+  sizeValuePostfix: '',
+  sizeLegendGapInCircles: 35,
+  sizeLegendTitle: 'Size Legend Title',
+  sizeLegendValues: [100, 20000, 150000],
+
+  colorLegendTitle: 'Color Legend Title',
 }
 
 const dimensions = {

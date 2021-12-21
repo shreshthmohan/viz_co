@@ -10520,8 +10520,78 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
+  function circleSizeLegend({
+    sizeLegendValues,
+    sizeScale,
+    containerSelection,
+    sizeLegendGapInCircles = 5,
+    valueFormatter = a => a,
+    sizeLegendTitle,
+    moveSizeObjectDownBy = 5,
+  }) {
+    const sizeValues = sizeLegendValues.map(a => sizeScale(a));
+
+    let cumulativeSize = 0;
+    const cumulativeSizes = [];
+    sizeValues.forEach((sz, i) => {
+      if (i === 0) {
+        cumulativeSize += sz;
+      } else {
+        cumulativeSize += sizeValues[i - 1] + sizeValues[i];
+      }
+
+      cumulativeSizes.push(cumulativeSize);
+    });
+
+    const sizeLegendContainerGroup = containerSelection.append('g');
+
+    sizeLegendContainerGroup
+      .append('g')
+      .attr('class', 'g-size-container')
+      .attr('transform', `translate(0, ${moveSizeObjectDownBy})`)
+      .selectAll('.g-size-circle')
+      .data(sizeValues)
+      .enter()
+      .append('g')
+      .attr('class', 'g-size-circle')
+      .append('circle')
+      .attr('r', d => d)
+      .style('fill', '#bebebe')
+      .style('stroke-width', 1)
+      .style('stroke', 'gray')
+      .attr('cx', (d, i) => cumulativeSizes[i] + i * sizeLegendGapInCircles + 1)
+      .attr('cy', sizeValues[sizeValues.length - 1] + 1);
+
+    sizeLegendContainerGroup
+      .selectAll('.g-size-circle')
+      .append('text')
+      .attr('alignment-baseline', 'middle')
+      .attr('dy', sizeValues[sizeValues.length - 1] + 2)
+      .attr(
+        'dx',
+        (d, i) => d + cumulativeSizes[i] + (i + 0.1) * sizeLegendGapInCircles,
+      )
+      .style('font-size', 8)
+      .text((d, i) => valueFormatter(sizeLegendValues[i]));
+
+    sizeLegendContainerGroup
+      .append('text')
+      .attr('alignment-baseline', 'hanging')
+      .style('font-size', 10)
+      .style('font-weight', 600)
+      .text(sizeLegendTitle);
+
+    const legendBoundingBox = sizeLegendContainerGroup.node().getBBox();
+    containerSelection
+      .attr('height', legendBoundingBox.height)
+      .attr('width', legendBoundingBox.width);
+  }
+
+  // import { preventOverflowThrottled } from '../../utils/helpers/general'
+
   function renderChart({
     data,
+    dimensions: { sizeField, yField, nameField },
     options: {
       aspectRatio = 1,
 
@@ -10540,10 +10610,21 @@ g.circles circle.circle.circle-hovered {
       collisionDistance = 0.5,
 
       circleDiameter = 400,
+
+      colorLegendTitle = yField,
+
+      sizeValueFormat = '',
+      sizeValuePrefix = 'a',
+      sizeValuePostfix = 'b',
+      sizeLegendGapInCircles = 10,
+      sizeLegendTitle = sizeField,
+      sizeLegendValues = [100, 20000, 50000],
     },
-    dimensions: { sizeField, yField, nameField },
     chartContainerSelector,
   }) {
+    const sizeValueFormatter = val =>
+      `${sizeValuePrefix}${formatNumber(val, sizeValueFormat)}${sizeValuePostfix}`;
+
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
       setupChartArea$3({
@@ -10575,7 +10656,6 @@ g.circles circle.circle.circle-hovered {
       .scaleLinear()
       .domain(yDomain)
       .range([coreChartHeight / 2 - yRange / 2, coreChartHeight / 2 + yRange / 2]);
-    // console.log(yScale.range())
 
     const bubbles = chartCore.append('g').attr('class', 'bubbles');
 
@@ -10593,10 +10673,9 @@ g.circles circle.circle.circle-hovered {
         .style('fill', function (d) {
           return yColorScale(d[yField])
         })
-        .attr('stroke', 'gray')
-        // .attr('stroke', function (d) {
-        //   return d3.rgb(yColorScale(d[yField])).darker(0.5)
-        // })
+        .attr('stroke', function (d) {
+          return d3__namespace.rgb(yColorScale(d[yField])).darker(0.7)
+        })
         .merge(u)
         .attr('cx', function (d) {
           return d.x
@@ -10606,10 +10685,15 @@ g.circles circle.circle.circle-hovered {
         });
 
       u.exit().remove();
+      // preventOverflowThrottled({
+      //   allComponents,
+      //   svg,
+      //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+      // })
     }
 
     d3__namespace.forceSimulation(parsedData)
-      .force('y', d3__namespace.forceY(d => yScale(d[yField])).strength(0.2))
+      .force('y', d3__namespace.forceY(d => yScale(d[yField])).strength(0.5))
 
       .force(
         'collision',
@@ -10630,6 +10714,36 @@ g.circles circle.circle.circle-hovered {
       .force('manyBody', d3__namespace.forceManyBody().distanceMax(100).strength(-12))
       // .alphaDecay(0.01)
       .on('tick', ticked);
+
+    widgetsRight
+      .append('svg')
+      .attr('width', 260)
+      .attr('height', 45)
+      .append(() =>
+        legend({
+          color: yColorScale,
+          title: colorLegendTitle,
+          width: 260,
+        }),
+      );
+
+    const sizeLegend = widgetsRight.append('svg');
+
+    circleSizeLegend({
+      sizeLegendValues,
+      sizeScale,
+      containerSelection: sizeLegend,
+      moveSizeObjectDownBy: 10,
+      sizeLegendGapInCircles,
+      valueFormatter: sizeValueFormatter,
+      sizeLegendTitle,
+    });
+
+    // preventOverflow({
+    //   allComponents,
+    //   svg,
+    //   margins: { marginLeft, marginRight, marginTop, marginBottom },
+    // })
   }
 
   function validateAndRender({
