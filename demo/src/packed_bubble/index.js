@@ -11,7 +11,7 @@ const options = {
   bgColor: '#fafafa',
 
   // customColorScheme: ['red', 'blue', 'green', 'black', 'gray'],
-  inbuiltScheme: 'schemeOrRd',
+  inbuiltScheme: 'schemeBuPu',
   numberOfColors: 5, // minumum: 3, maximum: 9
 
   collisionDistance: 0.5,
