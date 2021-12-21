@@ -6,38 +6,38 @@
 import * as d3 from 'd3'
 
 import {
+  shouldBeNumber,
   shouldNotBeBlank,
-  shouldBeZeroOrPositiveNumber,
+  shouldBeUnique,
   validateData,
 } from '../../utils/validation/dataValidations'
 
 import {
-  checkOneOf,
   checkNumber,
   checkNumberBetween,
   checkColor,
-  checkBoolean,
-  checkFontSizeString,
-  checkColorArray,
+  checkNumericArray,
   optionValidation,
+  checkOneOf,
+  checkFontSizeString,
+  checkDefaultState,
 } from '../../utils/validation/optionValidations'
 
 import {
   validateColumnsWithDimensions,
   showErrors,
 } from '../../utils/validation/validations'
-import { fileExtension } from '../../utils/helpers/general'
 
 import { renderChart } from './render'
 
 const dimensionTypes = {
-  sourceField: [shouldNotBeBlank], // Categorical
-  targetField: [shouldNotBeBlank], // Categorical
-  valueField: [shouldBeZeroOrPositiveNumber, shouldNotBeBlank], // Numeric, shouldBePositive?
+  beforeField: [shouldBeNumber],
+  afterField: [shouldBeNumber],
+  topicField: [shouldNotBeBlank, shouldBeUnique],
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -46,20 +46,69 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  chordType: checkOneOf(['directed', 'undirected']),
+  /* Series Colors */
+  beforeFieldColor: checkColor,
+  afterFieldColor: checkColor,
 
-  colorScheme: checkColorArray,
-  arcLabelFontSize: checkFontSizeString,
+  /* Glyphs */
+  glyphSize: checkNumber,
+  connectorSize: checkNumber,
 
-  activeOpacity: checkNumberBetween(0, 1),
-  inactiveOpacity: checkNumberBetween(0, 1),
-  clickInteraction: checkBoolean,
+  connectorColorStrategy: checkOneOf([
+    'farFromReference',
+    'closeToReference',
+    'customColor',
+  ]),
+  connectorColorCustom: checkColor,
+
+  referenceValue: checkNumber,
+  referenceLineColor: checkColor,
+  referenceLineWidth: checkNumber,
+  referenceLineOpacity: checkNumberBetween(0, 1),
+
+  /* Legends */
+  // beforeLegendLabel: checkString,
+  // afterLegendLabel: checkString,
+
+  // valuePrefix: checkString,
+  // valuePostfix: checkString,
+  // valueFormatter: checkString,
+
+  topicLabelFontSize: checkFontSizeString,
+  topicLabelTextColor: checkColor,
+  topicLabelYOffset: checkNumber,
+
+  defaultState: checkDefaultState,
+
+  /* Axes */
+  // xAxisTitle: checkString,
+  xScaleType: checkOneOf(['log', 'linear']), // linear or log
+  xScaleLogBase: checkNumber, // applicable only if log scale
+  xAxisPosition: checkOneOf(['top', 'bottom']),
+  xAxisOffset: checkNumber,
+  // xAxisLabel: checkString,
+  xAXisLabelFontSize: checkNumber,
+  xAxisLabelOffset: checkNumber,
+  xAxisCustomDomain: checkNumericArray(),
+  xAxisTickFontSize: checkNumber,
+  xAxisColor: checkColor,
+  xAxisTickValues: checkNumericArray(),
+  xAxisTickOffset: checkNumber,
+  xAxisLineThickness: checkNumber,
+  // xAxisTickFormatter: checkString,
+  xAxisTickRotation: checkNumber,
+  // xAxisTickAnchor: checkString,
+  // xAxisTickBaseline: checkString,
+  xAxisTickValueXOffset: checkNumber,
+  xAxisTickValueYOffset: checkNumber,
 
   // searchInputClassNames: checkString,
+  // goToInitialStateButtonClassNames: checkString,
   // clearAllButtonClassNames: checkString,
   // showAllButtonClassNames: checkString,
 
-  startingState: checkOneOf(['showAll', 'clearAll']),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
@@ -70,7 +119,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3[fileExtension(dataPath)](dataPath).then(data => {
+  d3.csv(dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({

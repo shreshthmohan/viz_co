@@ -18,6 +18,7 @@ import {
   validateColumnsWithDimensions,
 } from '../../utils/validation/validations'
 import { renderChart } from './render'
+import { fileExtension } from '../../utils/helpers/general'
 
 const dimensionTypes = {
   xField: [shouldNotBeBlank],
@@ -27,7 +28,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -44,8 +45,8 @@ const optionTypes = {
 
   defaultState: checkDefaultState,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
 }
 
 export const validateAndRender = ({
@@ -56,7 +57,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     const { columns } = data
 
     const dimensionValidation = validateColumnsWithDimensions({

@@ -12,6 +12,7 @@ import {
   checkOneOf,
   optionValidation,
 } from '../../utils/validation/optionValidations'
+import { fileExtension } from '../../utils/helpers/general'
 
 import { d3ColorSchemeOptions } from '../../utils/constants'
 
@@ -31,7 +32,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -40,12 +41,12 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  sizeRange: checkNumericArray,
-  xDomainCustom: checkNumericArray,
-  yDomainCustom: checkNumericArray,
+  sizeRange: checkNumericArray(2),
+  xDomainCustom: checkNumericArray(2),
+  yDomainCustom: checkNumericArray(2),
 
   inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-  numberOfColors: checkNumberBetween([3, 9]), // minumum: 3, maximum: 9
+  numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
 
   // xAxisLabel: xField,
   // yAxisLabel: yField,
@@ -63,7 +64,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({
       columns,

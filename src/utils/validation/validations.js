@@ -26,7 +26,7 @@ export function validateColumnsWithDimensions({ columns, dimensions }) {
     }
   })
   if (!result.valid) {
-    result.message = `These dimensions/columns are missing in the data: ${result.missingFields.join(
+    result.message = `These dimensions/columns are missing in the data file: ${result.missingFields.join(
       ', ',
     )}`
   }
