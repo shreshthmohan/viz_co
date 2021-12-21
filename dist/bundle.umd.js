@@ -9502,7 +9502,7 @@ g.circles circle.circle.circle-hovered {
   const dimensionTypes$1 = { xField: [shouldNotBeBlank] };
 
   const optionTypes$1 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -9511,7 +9511,7 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    barOpacity: checkNumberBetween([0, 1]),
+    barOpacity: checkNumberBetween(0, 1),
 
     colors: checkColorArray,
 

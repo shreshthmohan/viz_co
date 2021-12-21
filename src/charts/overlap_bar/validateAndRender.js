@@ -23,7 +23,7 @@ import { renderChart } from './render'
 const dimensionTypes = { xField: [shouldNotBeBlank] }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -32,7 +32,7 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  barOpacity: checkNumberBetween([0, 1]),
+  barOpacity: checkNumberBetween(0, 1),
 
   colors: checkColorArray,
 
