@@ -4556,7 +4556,7 @@ g.circles circle.circle.circle-hovered {
   // 3. options.highlightRanges doesn't have a validation yet
 
   const optionTypes$9 = {
-    aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -9621,7 +9621,7 @@ g.circles circle.circle.circle-hovered {
       // subheading: checkString,
 
       /* Chart Area */
-      aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+      aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
 
       marginTop: checkNumber,
       marginRight: checkNumber,
@@ -9639,7 +9639,7 @@ g.circles circle.circle.circle-hovered {
 
       /* yField */
       yDomainCustom: checkNumericArray, // [0, 100],
-      yGridPaddingInner: checkNumberBetween([0, 1]),
+      yGridPaddingInner: checkNumberBetween(0, 1),
       yGridLabelFontSize: checkNumber,
       showYGridLabels: checkBoolean, // default: false
       yAxisLocation: checkOneOf(['left', 'right']), // default: left

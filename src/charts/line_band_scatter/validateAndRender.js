@@ -25,7 +25,7 @@ import {
 // 3. options.highlightRanges doesn't have a validation yet
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0.01, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,

@@ -50,7 +50,7 @@ export function validateAndRender({
     // subheading: checkString,
 
     /* Chart Area */
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -68,7 +68,7 @@ export function validateAndRender({
 
     /* yField */
     yDomainCustom: checkNumericArray, // [0, 100],
-    yGridPaddingInner: checkNumberBetween([0, 1]),
+    yGridPaddingInner: checkNumberBetween(0, 1),
     yGridLabelFontSize: checkNumber,
     showYGridLabels: checkBoolean, // default: false
     yAxisLocation: checkOneOf(['left', 'right']), // default: left
