@@ -1,7 +1,7 @@
 /* global viz */
 
 const options = {
-  aspectRatio: 1,
+  aspectRatio: 1.4,
 
   marginTop: 0,
   marginRight: 0,
@@ -14,7 +14,11 @@ const options = {
   inbuiltScheme: 'schemeOrRd',
   numberOfColors: 5, // minumum: 3, maximum: 9
 
-  collisionDistance: -2,
+  collisionDistance: 0.5,
+
+  sizeRange: [5, 30],
+
+  circleDiameter: 500,
 }
 
 const dimensions = {

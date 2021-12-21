@@ -19,8 +19,10 @@ export function renderChart({
     inbuiltScheme = 'schemeOrRd',
     numberOfColors = 5,
     collisionDistance = 0.5,
+
+    circleDiameter = 400,
   },
-  dimensions: { sizeField, yField, nameField, segmentField },
+  dimensions: { sizeField, yField, nameField },
   chartContainerSelector,
 }) {
   const coreChartWidth = 1000
@@ -42,14 +44,14 @@ export function renderChart({
     [yField]: Number.parseFloat(d[yField]),
   }))
 
-  const segments = [...new Set(parsedData.map(c => c[segmentField]))]
   const maxSizeValue = Math.max(...parsedData.map(c => c[sizeField]))
 
   const yDomain = d3.extent(parsedData.map(d => d[yField]))
 
   const sizeScale = d3.scaleSqrt().range(sizeRange).domain([0, maxSizeValue])
 
-  const yRange = 500
+  const yRange = circleDiameter
+
   const yScale = d3
     .scaleLinear()
     .domain(yDomain)
@@ -64,18 +66,17 @@ export function renderChart({
     .range(customColorScheme || d3[inbuiltScheme][numberOfColors])
     .nice()
 
-  let allBubbles
   function ticked() {
     const u = bubbles.selectAll('circle').data(parsedData)
-    allBubbles = u
-      .enter()
+    u.enter()
       .append('circle')
       .attr('r', d => sizeScale(d[sizeField]))
       .style('fill', function (d) {
         return yColorScale(d[yField])
       })
+      .attr('stroke', 'gray')
       // .attr('stroke', function (d) {
-      //   return d3.rgb(xColorScale(d[xField])).darker(0.5)
+      //   return d3.rgb(yColorScale(d[yField])).darker(0.5)
       // })
       .merge(u)
       .attr('cx', function (d) {
@@ -88,32 +89,26 @@ export function renderChart({
     u.exit().remove()
   }
 
-  // console.log(coreChartHeight / 2, coreChartWidth / 2)
-
-  // bubbles.attr('transform', `translate(${coreChartWidth / 2}, ${coreChartHeight})`)
   d3.forceSimulation(parsedData)
-    .force('y', d3.forceY(d => yScale(d[yField])).strength(0.1))
-    // .force('x', d3.forceX().strength(0.1))
+    .force('y', d3.forceY(d => yScale(d[yField])).strength(0.2))
+
     .force(
       'collision',
       d3
         .forceCollide(function (d) {
           return sizeScale(d[sizeField]) + collisionDistance
         })
-        .strength(0.5),
+        .strength(0.8),
     )
     .force('center', d3.forceCenter(coreChartWidth / 2, coreChartHeight / 2))
     .force(
       'radial',
       d3
-        .forceRadial(400, coreChartWidth / 2, coreChartHeight / 2)
-        .strength(-0.03),
+        .forceRadial(70, coreChartWidth / 2, coreChartHeight / 2)
+        .strength(0.15),
     )
-    // .force(
-    //   'radial1',
-    //   d3.forceRadial(10, coreChartWidth / 2, coreChartHeight / 2),
-    // )
-    .force('manyBody', d3.forceManyBody().distanceMax(100).strength(-15))
-    .alphaDecay(0.001)
+
+    .force('manyBody', d3.forceManyBody().distanceMax(100).strength(-12))
+    // .alphaDecay(0.01)
     .on('tick', ticked)
 }
