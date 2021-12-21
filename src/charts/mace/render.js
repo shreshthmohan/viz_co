@@ -301,6 +301,7 @@ function renderColorLegend({
   widgetsRight,
   sameDirectionColor,
   oppositeDirectionColor,
+  svg,
 }) {
   const colorLegend = widgetsRight.append('svg')
   const colorLegendMain = colorLegend
@@ -318,7 +319,9 @@ function renderColorLegend({
     .on('click', e => {
       const parentLegend = d3.select(e.target.parentNode)
       const legendState = parentLegend.classed('mace-active')
-      d3.selectAll('.mace-same').classed('mace-active', !legendState)
+      svg.selectAll('.mace-same').classed('mace-active', !legendState)
+      // Need this extra class toggle as legend is outside the main chart svg
+      parentLegend.classed('mace-active', !legendState)
     })
   colorLegendSame
     .append('circle')
@@ -347,7 +350,9 @@ function renderColorLegend({
     .on('click', e => {
       const parentLegend = d3.select(e.target.parentNode)
       const legendState = parentLegend.classed('mace-active')
-      d3.selectAll('.mace-opposite').classed('mace-active', !legendState)
+      svg.selectAll('.mace-opposite').classed('mace-active', !legendState)
+      // Need this extra class toggle as legend is outside the main chart svg
+      parentLegend.classed('mace-active', !legendState)
     })
   colorLegendOpposite
     .append('circle')
@@ -483,25 +488,25 @@ function renderMaces({
         .style('opacity', 0)
     })
 }
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       // d3.selectAll('.mace').classed('mace-active', false)
       const maceName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.mace-${maceName}`).classed('mace-matched', true)
+        svg.select(`.mace-${maceName}`).classed('mace-matched', true)
       } else {
-        d3.select(`.mace-${maceName}`).classed('mace-matched', false)
+        svg.select(`.mace-${maceName}`).classed('mace-matched', false)
       }
-      d3.select('.maces').classed('searching', true)
+      svg.select('.maces').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
       const maceName = toClassText(val)
-      d3.select(`.mace-${maceName}`).classed('mace-matched', false)
+      svg.select(`.mace-${maceName}`).classed('mace-matched', false)
     })
-    d3.select('.maces').classed('searching', false)
+    svg.select('.maces').classed('searching', false)
   }
 }
 
@@ -510,6 +515,7 @@ function setupSearch({
   widgetsLeft,
   searchInputClassNames,
   nameField,
+  svg,
 }) {
   const search = widgetsLeft
     .append('input')
@@ -519,7 +525,7 @@ function setupSearch({
   search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
@@ -530,6 +536,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -537,9 +544,9 @@ function setupInitialStateButton({
     .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.classed('hidden', false)
   goToInitialState.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
+    svg.selectAll('.mace').classed('mace-active', false)
     _.forEach(defaultStateAll, val => {
-      d3.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
+      svg.select(`.mace-${toClassText(val)}`).classed('mace-active', true)
     })
     search.node().value = ''
     handleSearch('')
@@ -551,6 +558,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -558,7 +566,7 @@ function setupClearAllButton({
     .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
-    d3.selectAll('.mace').classed('mace-active', false)
+    svg.selectAll('.mace').classed('mace-active', false)
     search.node().value = ''
     handleSearch('')
   })
@@ -702,6 +710,7 @@ export function renderChart({
     widgetsRight,
     sameDirectionColor,
     oppositeDirectionColor,
+    svg,
   })
 
   renderDirectionLegend({
@@ -757,6 +766,7 @@ export function renderChart({
     widgetsLeft,
     searchInputClassNames,
     nameField,
+    svg,
   })
 
   setupInitialStateButton({
@@ -765,12 +775,14 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
   setupClearAllButton({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   // For responsiveness

@@ -24,10 +24,10 @@ export function renderChart({
 
     interpolateScheme = d3.interpolateBlues,
     colorLegendTitle = valueField,
-    missingDataColor = 'gray',
     nullDataColor = 'gray',
-    missingDataMessage = 'Data Missing',
-    nullDataMessage = 'Data Not Available',
+    nullDataMessage = 'Data not available',
+    missingDataColor = 'gray',
+    missingDataMessage = 'Data missing',
 
     searchButtonClassNames,
   },
@@ -105,7 +105,7 @@ export function renderChart({
       )
 
       const countyInfo = d.properties
-      if (found && found[valueField]) {
+      if (found && !isNaN(found[valueField])) {
         tooltipDiv.html(
           `${countyInfo.name}, ${countyInfo.state_name}
             <br/>
