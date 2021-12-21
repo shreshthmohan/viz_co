@@ -67,7 +67,7 @@ export function validateAndRender({
     // xValueTimeFormatter: '%e %b %Y', // 17 Aug 1997
 
     /* yField */
-    yDomainCustom: checkNumericArray, // [0, 100],
+    yDomainCustom: checkNumericArray(), // [0, 100],
     yGridPaddingInner: checkNumberBetween(0, 1),
     yGridLabelFontSize: checkNumber,
     showYGridLabels: checkBoolean, // default: false
