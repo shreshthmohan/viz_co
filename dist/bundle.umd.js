@@ -509,6 +509,7 @@
     widgetsRight,
     sameDirectionColor,
     oppositeDirectionColor,
+    svg,
   }) {
     const colorLegend = widgetsRight.append('svg');
     const colorLegendMain = colorLegend
@@ -526,7 +527,9 @@
       .on('click', e => {
         const parentLegend = d3__namespace.select(e.target.parentNode);
         const legendState = parentLegend.classed('mace-active');
-        d3__namespace.selectAll('.mace-same').classed('mace-active', !legendState);
+        svg.selectAll('.mace-same').classed('mace-active', !legendState);
+        // Need this extra class toggle as legend is outside the main chart svg
+        parentLegend.classed('mace-active', !legendState);
       });
     colorLegendSame
       .append('circle')
@@ -555,7 +558,9 @@
       .on('click', e => {
         const parentLegend = d3__namespace.select(e.target.parentNode);
         const legendState = parentLegend.classed('mace-active');
-        d3__namespace.selectAll('.mace-opposite').classed('mace-active', !legendState);
+        svg.selectAll('.mace-opposite').classed('mace-active', !legendState);
+        // Need this extra class toggle as legend is outside the main chart svg
+        parentLegend.classed('mace-active', !legendState);
       });
     colorLegendOpposite
       .append('circle')
@@ -691,25 +696,25 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$6 = referenceList => qstr => {
+  const searchEventHandler$6 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
         const maceName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', true);
+          svg.select(`.mace-${maceName}`).classed('mace-matched', true);
         } else {
-          d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+          svg.select(`.mace-${maceName}`).classed('mace-matched', false);
         }
-        d3__namespace.select('.maces').classed('searching', true);
+        svg.select('.maces').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
         const maceName = toClassText(val);
-        d3__namespace.select(`.mace-${maceName}`).classed('mace-matched', false);
+        svg.select(`.mace-${maceName}`).classed('mace-matched', false);
       });
-      d3__namespace.select('.maces').classed('searching', false);
+      svg.select('.maces').classed('searching', false);
     }
   };
 
@@ -718,6 +723,7 @@
     widgetsLeft,
     searchInputClassNames,
     nameField,
+    svg,
   }) {
     const search = widgetsLeft
       .append('input')
@@ -727,7 +733,7 @@
     search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -738,6 +744,7 @@
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
@@ -745,9 +752,9 @@
       .attr('class', goToInitialStateButtonClassNames);
     goToInitialState.classed('hidden', false);
     goToInitialState.on('click', () => {
-      d3__namespace.selectAll('.mace').classed('mace-active', false);
+      svg.selectAll('.mace').classed('mace-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
+        svg.select(`.mace-${toClassText(val)}`).classed('mace-active', true);
       });
       search.node().value = '';
       handleSearch('');
@@ -759,6 +766,7 @@
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
@@ -766,7 +774,7 @@
       .attr('class', clearAllButtonClassNames);
     clearAll.classed('hidden', false);
     clearAll.on('click', () => {
-      d3__namespace.selectAll('.mace').classed('mace-active', false);
+      svg.selectAll('.mace').classed('mace-active', false);
       search.node().value = '';
       handleSearch('');
     });
@@ -910,6 +918,7 @@
       widgetsRight,
       sameDirectionColor,
       oppositeDirectionColor,
+      svg,
     });
 
     renderDirectionLegend({
@@ -965,6 +974,7 @@
       widgetsLeft,
       searchInputClassNames,
       nameField,
+      svg,
     });
 
     setupInitialStateButton$4({
@@ -973,12 +983,14 @@
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
     setupClearAllButton$5({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     // For responsiveness
