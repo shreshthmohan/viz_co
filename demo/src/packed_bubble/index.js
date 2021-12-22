@@ -18,7 +18,14 @@ const options = {
 
   sizeRange: [5, 30],
 
-  circleDiameter: 500,
+  // force simulation options (to fine tune the shape of the cluster)
+  // mmight need to adjust sizeRange for a better tuning
+  circleDiameter: 500, // controls yRange
+  yForceStrength: 0.5,
+  collisionForceStrength: 0.8,
+  radialForceCircleDiameter: 140,
+  radialForceStrength: 0.15,
+  manyBodyForceStrength: -12, // positive means attraction
 
   sizeValueFormat: '$.3s',
   sizeValuePrefix: '',

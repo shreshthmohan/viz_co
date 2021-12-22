@@ -30,8 +30,6 @@ export function renderChart({
     numberOfColors = 5,
     collisionDistance = 0.5,
 
-    circleDiameter = 400,
-
     colorLegendTitle = yField,
 
     sizeValueFormat = '',
@@ -46,6 +44,15 @@ export function renderChart({
     yValuePostfix = '',
 
     searchInputClassNames = '',
+
+    // force simulation options
+    circleDiameter = 400, // controls yRange
+    yForceStrength = 0.5,
+    collisionForceStrength = 0.8,
+    radialForceCircleDiameter = 140,
+    raidalForceCircleRadius = radialForceCircleDiameter / 2,
+    radialForceStrength = 0.15,
+    manyBodyForceStrength = -12, // positive means attraction
   },
   chartContainerSelector,
 }) {
@@ -168,28 +175,31 @@ export function renderChart({
     //   margins: { marginLeft, marginRight, marginTop, marginBottom },
     // })
   }
-
   d3.forceSimulation(parsedData)
-    .force('y', d3.forceY(d => yScale(d[yField])).strength(0.5))
-
+    .force('y', d3.forceY(d => yScale(d[yField])).strength(yForceStrength))
     .force(
       'collision',
       d3
         .forceCollide(function (d) {
           return sizeScale(d[sizeField]) + collisionDistance
         })
-        .strength(0.8),
+        .strength(collisionForceStrength),
     )
     .force('center', d3.forceCenter(coreChartWidth / 2, coreChartHeight / 2))
     .force(
       'radial',
       d3
-        .forceRadial(70, coreChartWidth / 2, coreChartHeight / 2)
-        .strength(0.15),
+        .forceRadial(
+          raidalForceCircleRadius,
+          coreChartWidth / 2,
+          coreChartHeight / 2,
+        )
+        .strength(radialForceStrength),
     )
-
-    .force('manyBody', d3.forceManyBody().distanceMax(100).strength(-12))
-    // .alphaDecay(0.01)
+    .force(
+      'manyBody',
+      d3.forceManyBody().distanceMax(100).strength(manyBodyForceStrength),
+    )
     .on('tick', ticked)
 
   widgetsRight
@@ -201,6 +211,7 @@ export function renderChart({
         color: yColorScale,
         title: colorLegendTitle,
         width: 260,
+        tickFormat: yValueFormatter,
       }),
     )
 
