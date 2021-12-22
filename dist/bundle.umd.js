@@ -10587,6 +10587,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
+  /* global window */
   // import { preventOverflowThrottled } from '../../utils/helpers/general'
 
   function renderChart({
@@ -10614,29 +10615,57 @@ g.circles circle.circle.circle-hovered {
       colorLegendTitle = yField,
 
       sizeValueFormat = '',
-      sizeValuePrefix = 'a',
-      sizeValuePostfix = 'b',
+      sizeValuePrefix = '',
+      sizeValuePostfix = '',
       sizeLegendGapInCircles = 10,
       sizeLegendTitle = sizeField,
       sizeLegendValues = [100, 20000, 50000],
+
+      yValueFormat = '',
+      yValuePrefix = '',
+      yValuePostfix = '',
+
+      searchInputClassNames = '',
     },
     chartContainerSelector,
   }) {
+    d3__namespace.select('body').append('style').html(`
+    .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+    circle.hovered {
+      stroke-width: 2;
+      stroke: #333;
+    }
+  `);
+
+    const tooltipDiv = initializeTooltip$1();
+
     const sizeValueFormatter = val =>
       `${sizeValuePrefix}${formatNumber(val, sizeValueFormat)}${sizeValuePostfix}`;
 
+    const yValueFormatter = val =>
+      `${yValuePrefix}${formatNumber(val, yValueFormat)}${yValuePostfix}`;
+
     const coreChartWidth = 1000;
-    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$3({
-        chartContainerSelector,
-        coreChartWidth,
-        aspectRatio,
-        marginTop,
-        marginBottom,
-        marginLeft,
-        marginRight,
-        bgColor,
-      });
+    const {
+      // svg,
+      coreChartHeight,
+      // allComponents,
+      chartCore,
+      widgetsRight,
+      widgetsLeft,
+    } = setupChartArea$3({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
 
     const parsedData = data.map(d => ({
       ...d,
@@ -10665,9 +10694,11 @@ g.circles circle.circle.circle-hovered {
       .range(customColorScheme || d3__namespace[inbuiltScheme][numberOfColors])
       .nice();
 
+    let allBubbles;
     function ticked() {
       const u = bubbles.selectAll('circle').data(parsedData);
-      u.enter()
+      allBubbles = u
+        .enter()
         .append('circle')
         .attr('r', d => sizeScale(d[sizeField]))
         .style('fill', function (d) {
@@ -10682,6 +10713,32 @@ g.circles circle.circle.circle-hovered {
         })
         .attr('cy', function (d) {
           return d.y
+        })
+        .on('mouseover', function (e, d) {
+          tooltipDiv.transition().duration(200).style('opacity', 1);
+          tooltipDiv.html(
+            `<div>${d[nameField]}</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${yField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${yValueFormatter(
+             d[yField],
+           )}</div>
+         </div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${sizeField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${sizeValueFormatter(
+             d[sizeField],
+           )}</div>
+         </div>`,
+          );
+          tooltipDiv
+            .style('left', `${e.clientX}px`)
+            .style('top', `${e.clientY + window.scrollY + 30}px`);
+          d3__namespace.select(this).classed('hovered', true);
+        })
+        .on('mouseout', function () {
+          tooltipDiv.transition().duration(500).style('opacity', 0);
+          d3__namespace.select(this).classed('hovered', false);
         });
 
       u.exit().remove();
@@ -10737,6 +10794,27 @@ g.circles circle.circle.circle-hovered {
       sizeLegendGapInCircles,
       valueFormatter: sizeValueFormatter,
       sizeLegendTitle,
+    });
+
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames)
+      .attr('placeholder', `Find by ${nameField}`);
+
+    function searchBy(term) {
+      if (term) {
+        d3__namespace.select('.bubbles').classed('g-searching', true);
+        allBubbles.classed('c-match', d =>
+          d[nameField].toLowerCase().includes(term.toLowerCase()),
+        );
+      } else {
+        d3__namespace.select('.bubbles').classed('g-searching', false);
+      }
+    }
+
+    search.on('keyup', e => {
+      searchBy(e.target.value.trim());
     });
 
     // preventOverflow({

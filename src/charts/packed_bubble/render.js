@@ -1,5 +1,10 @@
+/* global window */
+
 import * as d3 from 'd3'
-import { setupChartArea } from '../../utils/helpers/commonChartHelpers'
+import {
+  initializeTooltip,
+  setupChartArea,
+} from '../../utils/helpers/commonChartHelpers'
 import { legend } from '../../utils/helpers/colorLegend'
 import { circleSizeLegend } from '../../utils/helpers/circleSizeLegend'
 import { formatNumber } from '../../utils/helpers/formatters'
@@ -30,29 +35,57 @@ export function renderChart({
     colorLegendTitle = yField,
 
     sizeValueFormat = '',
-    sizeValuePrefix = 'a',
-    sizeValuePostfix = 'b',
+    sizeValuePrefix = '',
+    sizeValuePostfix = '',
     sizeLegendGapInCircles = 10,
     sizeLegendTitle = sizeField,
     sizeLegendValues = [100, 20000, 50000],
+
+    yValueFormat = '',
+    yValuePrefix = '',
+    yValuePostfix = '',
+
+    searchInputClassNames = '',
   },
   chartContainerSelector,
 }) {
+  d3.select('body').append('style').html(`
+    .g-searching circle.c-match {
+      stroke-width: 2;
+      stroke: #333;
+    }
+    circle.hovered {
+      stroke-width: 2;
+      stroke: #333;
+    }
+  `)
+
+  const tooltipDiv = initializeTooltip()
+
   const sizeValueFormatter = val =>
     `${sizeValuePrefix}${formatNumber(val, sizeValueFormat)}${sizeValuePostfix}`
 
+  const yValueFormatter = val =>
+    `${yValuePrefix}${formatNumber(val, yValueFormat)}${yValuePostfix}`
+
   const coreChartWidth = 1000
-  const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-    setupChartArea({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    })
+  const {
+    // svg,
+    coreChartHeight,
+    // allComponents,
+    chartCore,
+    widgetsRight,
+    widgetsLeft,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
 
   const parsedData = data.map(d => ({
     ...d,
@@ -81,9 +114,11 @@ export function renderChart({
     .range(customColorScheme || d3[inbuiltScheme][numberOfColors])
     .nice()
 
+  let allBubbles
   function ticked() {
     const u = bubbles.selectAll('circle').data(parsedData)
-    u.enter()
+    allBubbles = u
+      .enter()
       .append('circle')
       .attr('r', d => sizeScale(d[sizeField]))
       .style('fill', function (d) {
@@ -98,6 +133,32 @@ export function renderChart({
       })
       .attr('cy', function (d) {
         return d.y
+      })
+      .on('mouseover', function (e, d) {
+        tooltipDiv.transition().duration(200).style('opacity', 1)
+        tooltipDiv.html(
+          `<div>${d[nameField]}</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${yField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${yValueFormatter(
+             d[yField],
+           )}</div>
+         </div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${sizeField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${sizeValueFormatter(
+             d[sizeField],
+           )}</div>
+         </div>`,
+        )
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + window.scrollY + 30}px`)
+        d3.select(this).classed('hovered', true)
+      })
+      .on('mouseout', function () {
+        tooltipDiv.transition().duration(500).style('opacity', 0)
+        d3.select(this).classed('hovered', false)
       })
 
     u.exit().remove()
@@ -153,6 +214,27 @@ export function renderChart({
     sizeLegendGapInCircles,
     valueFormatter: sizeValueFormatter,
     sizeLegendTitle,
+  })
+
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+    .attr('placeholder', `Find by ${nameField}`)
+
+  function searchBy(term) {
+    if (term) {
+      d3.select('.bubbles').classed('g-searching', true)
+      allBubbles.classed('c-match', d =>
+        d[nameField].toLowerCase().includes(term.toLowerCase()),
+      )
+    } else {
+      d3.select('.bubbles').classed('g-searching', false)
+    }
+  }
+
+  search.on('keyup', e => {
+    searchBy(e.target.value.trim())
   })
 
   // preventOverflow({
