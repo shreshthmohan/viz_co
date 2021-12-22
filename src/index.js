@@ -77,3 +77,8 @@ export {
   renderChart as renderBulletBeforeAfter,
   validateAndRender as validateAndRenderBulletBeforeAfter,
 } from './charts/bullet_before_after/index'
+
+export {
+  renderChart as renderParallelConnections,
+  validateAndRender as validateAndRenderParallelConnections,
+} from './charts/parallel_connections/index'
