@@ -6739,7 +6739,7 @@ g.circles circle.circle.circle-hovered {
 
       bgColor = 'transparent',
 
-      alternatingTickTextXAxis = true,
+      alternatingTickLabelsXAxis = true,
 
       xAxisLabel = xField,
       yAxisLabel = yField,
@@ -6754,12 +6754,13 @@ g.circles circle.circle.circle-hovered {
       yAxisTickSizeOffset = 30,
       yAxisTicksFontSize = '12px',
       yAxisPosition = 'left',
+      yAxisGridLines = false,
+      yAxisLabelHorizontalOffset = 10,
 
       xAxisTicksFontSize = '12px',
       xAxisPosition = 'bottom',
       xAxisTickSizeOffset = 10,
-
-      curveType = null,
+      xAxisGridLines = false,
     },
     chartContainerSelector,
   }) {
@@ -6806,19 +6807,11 @@ g.circles circle.circle.circle-hovered {
       seriesValues,
     });
 
-    const area = () => {
-      const area_ = d3__namespace
-        .area()
-        .x(d => xScale(d[xField]))
-        .y1(d => yScale(d[yField]))
-        .y0(() => yScale(d3__namespace.min(yDomain)));
-
-      if (curveType) {
-        area_.curve(curveType);
-      }
-
-      return area_
-    };
+    const area = d3__namespace
+      .area()
+      .x(d => xScale(d[xField]))
+      .y1(d => yScale(d[yField]))
+      .y0(() => yScale(d3__namespace.min(yDomain)));
 
     chartCore
       .selectAll('g.grid-row')
@@ -6835,10 +6828,11 @@ g.circles circle.circle.circle-hovered {
           i,
           xScale,
           yGridScale,
-          alternatingTickTextXAxis,
+          alternatingTickLabelsXAxis,
           xAxisTicksFontSize,
           xAxisPosition,
           xAxisTickSizeOffset,
+          xAxisGridLines,
         });
 
         renderYAxis$1({
@@ -6848,6 +6842,7 @@ g.circles circle.circle.circle-hovered {
           coreChartWidth,
           yAxisTickSizeOffset,
           yAxisTicksFontSize,
+          yAxisGridLines,
         });
 
         // Group label
@@ -6865,7 +6860,7 @@ g.circles circle.circle.circle-hovered {
           .join('path')
           .attr('class', 'series')
           .attr('d', s =>
-            area()(
+            area(
               dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
             ),
           )
@@ -6873,20 +6868,6 @@ g.circles circle.circle.circle-hovered {
           .attr('opacity', areaOpacity);
       })
       .each(function (d) {
-        // d3.select(this)
-        //   .selectAll('path.series')
-        //   .data(seriesValues)
-        //   .join('path')
-        //   .attr('class', 'series')
-        //   .attr('d', s =>
-        //     area()(
-        //       dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
-        //     ),
-        //   )
-        //   .attr('fill', s => colorScale(s))
-        //   .attr('opacity', areaOpacity)
-
-        // TODO: vertical line (dotted)
         const filteredLines = verticalLines.filter(c => c.group === d);
 
         d3__namespace.select(this)
@@ -6912,9 +6893,8 @@ g.circles circle.circle.circle-hovered {
           .attr('cy', dp => yScale(dp[yField]))
           .attr('r', 5)
           .attr('fill', dp => colorScale(dp[seriesField]))
-          // .attr('fill', 'transparent')
-          // .attr('stroke', dp => colorScale(dp[seriesField]))
-          // .attr('stroke-width', 2)
+          .attr('stroke', '#333')
+          .attr('stroke-width', 1)
           .attr('opacity', 0)
           .attr(
             'class',
@@ -7007,11 +6987,12 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'y-axis-label')
       .attr(
         'transform',
-        `translate(${coreChartWidth + yAxisTickSizeOffset + 15}, ${0})`,
+        `translate(${
+        coreChartWidth + yAxisTickSizeOffset + yAxisLabelHorizontalOffset
+      }, -20)`,
       )
       .append('text')
       .text(yAxisLabel)
-      .attr('dominant-baseline', 'hanging')
       .attr('text-anchor', 'end')
       .style('font-weight', 'bold');
 
@@ -7100,10 +7081,11 @@ g.circles circle.circle.circle-hovered {
     i,
     xScale,
     yGridScale,
-    alternatingTickTextXAxis,
+    alternatingTickLabelsXAxis,
     xAxisTicksFontSize,
     xAxisPosition,
     xAxisTickSizeOffset,
+    xAxisGridLines,
   }) {
     let xAxis, xAxisOffset;
     if (xAxisPosition === 'top') {
@@ -7119,14 +7101,18 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'x-axis')
       .style('font-size', xAxisTicksFontSize)
       .attr('transform', `translate(0, ${xAxisOffset})`)
-      .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
+      .call(
+        xAxisGridLines
+          ? xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset)
+          : xAxis,
+      )
       .call(g => {
         g.selectAll('.domain').attr('stroke', '#333');
         g.selectAll('.tick line').attr('stroke', '#333');
         g.selectAll('.tick text').attr('fill', '#333');
         g.selectAll('.tick line').attr('stroke-opacity', '0.2');
         g.select('.domain').remove();
-        if (i % 2 !== 0 && alternatingTickTextXAxis) {
+        if (i % 2 !== 0 && alternatingTickLabelsXAxis) {
           g.selectAll('.tick text').remove();
         }
       });
@@ -7139,6 +7125,7 @@ g.circles circle.circle.circle-hovered {
     coreChartWidth,
     yAxisTickSizeOffset,
     yAxisTicksFontSize,
+    yAxisGridLines,
   }) {
     let yAxis, yAxisOffset;
     if (yAxisPosition === 'right') {
@@ -7154,12 +7141,14 @@ g.circles circle.circle.circle-hovered {
       .attr('class', 'y-axis')
       .style('font-size', yAxisTicksFontSize)
       .attr('transform', `translate(${yAxisOffset}, 0)`)
-      .call(yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset))
+      .call(
+        yAxisGridLines
+          ? yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset)
+          : yAxis,
+      )
       .call(g => {
         g.selectAll('.tick line').attr('stroke-opacity', '0.2');
         g.selectAll('.tick text').attr('fill', '#333');
-        // .style('dominant-baseline', 'text-after-edge')
-        // .attr('dy', -1)
         g.select('.domain').remove();
       });
   }
@@ -7172,7 +7161,7 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$6 = {
-    aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
     marginRight: checkNumber,
@@ -7191,7 +7180,7 @@ g.circles circle.circle.circle-hovered {
 
     colorScheme: checkColorArray(),
 
-    areaOpacity: checkNumberBetween([0, 1]),
+    areaOpacity: checkNumberBetween(0, 1),
 
     yAxisTickSizeOffset: checkNumber,
   };

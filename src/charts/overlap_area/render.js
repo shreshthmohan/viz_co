@@ -25,7 +25,7 @@ export function renderChart({
 
     bgColor = 'transparent',
 
-    alternatingTickTextXAxis = true,
+    alternatingTickLabelsXAxis = true,
 
     xAxisLabel = xField,
     yAxisLabel = yField,
@@ -40,12 +40,13 @@ export function renderChart({
     yAxisTickSizeOffset = 30,
     yAxisTicksFontSize = '12px',
     yAxisPosition = 'left',
+    yAxisGridLines = false,
+    yAxisLabelHorizontalOffset = 10,
 
     xAxisTicksFontSize = '12px',
     xAxisPosition = 'bottom',
     xAxisTickSizeOffset = 10,
-
-    curveType = null,
+    xAxisGridLines = false,
   },
   chartContainerSelector,
 }) {
@@ -92,19 +93,11 @@ export function renderChart({
     seriesValues,
   })
 
-  const area = () => {
-    const area_ = d3
-      .area()
-      .x(d => xScale(d[xField]))
-      .y1(d => yScale(d[yField]))
-      .y0(() => yScale(d3.min(yDomain)))
-
-    if (curveType) {
-      area_.curve(curveType)
-    }
-
-    return area_
-  }
+  const area = d3
+    .area()
+    .x(d => xScale(d[xField]))
+    .y1(d => yScale(d[yField]))
+    .y0(() => yScale(d3.min(yDomain)))
 
   chartCore
     .selectAll('g.grid-row')
@@ -121,10 +114,11 @@ export function renderChart({
         i,
         xScale,
         yGridScale,
-        alternatingTickTextXAxis,
+        alternatingTickLabelsXAxis,
         xAxisTicksFontSize,
         xAxisPosition,
         xAxisTickSizeOffset,
+        xAxisGridLines,
       })
 
       renderYAxis({
@@ -134,6 +128,7 @@ export function renderChart({
         coreChartWidth,
         yAxisTickSizeOffset,
         yAxisTicksFontSize,
+        yAxisGridLines,
       })
 
       // Group label
@@ -151,7 +146,7 @@ export function renderChart({
         .join('path')
         .attr('class', 'series')
         .attr('d', s =>
-          area()(
+          area(
             dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
           ),
         )
@@ -159,20 +154,6 @@ export function renderChart({
         .attr('opacity', areaOpacity)
     })
     .each(function (d) {
-      // d3.select(this)
-      //   .selectAll('path.series')
-      //   .data(seriesValues)
-      //   .join('path')
-      //   .attr('class', 'series')
-      //   .attr('d', s =>
-      //     area()(
-      //       dataParsed.filter(c => c[groupField] === d && c[seriesField] === s),
-      //     ),
-      //   )
-      //   .attr('fill', s => colorScale(s))
-      //   .attr('opacity', areaOpacity)
-
-      // TODO: vertical line (dotted)
       const filteredLines = verticalLines.filter(c => c.group === d)
 
       d3.select(this)
@@ -198,9 +179,8 @@ export function renderChart({
         .attr('cy', dp => yScale(dp[yField]))
         .attr('r', 5)
         .attr('fill', dp => colorScale(dp[seriesField]))
-        // .attr('fill', 'transparent')
-        // .attr('stroke', dp => colorScale(dp[seriesField]))
-        // .attr('stroke-width', 2)
+        .attr('stroke', '#333')
+        .attr('stroke-width', 1)
         .attr('opacity', 0)
         .attr(
           'class',
@@ -293,11 +273,12 @@ export function renderChart({
     .attr('class', 'y-axis-label')
     .attr(
       'transform',
-      `translate(${coreChartWidth + yAxisTickSizeOffset + 15}, ${0})`,
+      `translate(${
+        coreChartWidth + yAxisTickSizeOffset + yAxisLabelHorizontalOffset
+      }, -20)`,
     )
     .append('text')
     .text(yAxisLabel)
-    .attr('dominant-baseline', 'hanging')
     .attr('text-anchor', 'end')
     .style('font-weight', 'bold')
 
@@ -386,10 +367,11 @@ function renderXAxis({
   i,
   xScale,
   yGridScale,
-  alternatingTickTextXAxis,
+  alternatingTickLabelsXAxis,
   xAxisTicksFontSize,
   xAxisPosition,
   xAxisTickSizeOffset,
+  xAxisGridLines,
 }) {
   let xAxis, xAxisOffset
   if (xAxisPosition === 'top') {
@@ -405,14 +387,18 @@ function renderXAxis({
     .attr('class', 'x-axis')
     .style('font-size', xAxisTicksFontSize)
     .attr('transform', `translate(0, ${xAxisOffset})`)
-    .call(xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset))
+    .call(
+      xAxisGridLines
+        ? xAxis.tickSize(-yGridScale.bandwidth() - xAxisTickSizeOffset)
+        : xAxis,
+    )
     .call(g => {
       g.selectAll('.domain').attr('stroke', '#333')
       g.selectAll('.tick line').attr('stroke', '#333')
       g.selectAll('.tick text').attr('fill', '#333')
       g.selectAll('.tick line').attr('stroke-opacity', '0.2')
       g.select('.domain').remove()
-      if (i % 2 !== 0 && alternatingTickTextXAxis) {
+      if (i % 2 !== 0 && alternatingTickLabelsXAxis) {
         g.selectAll('.tick text').remove()
       }
     })
@@ -425,6 +411,7 @@ function renderYAxis({
   coreChartWidth,
   yAxisTickSizeOffset,
   yAxisTicksFontSize,
+  yAxisGridLines,
 }) {
   let yAxis, yAxisOffset
   if (yAxisPosition === 'right') {
@@ -440,12 +427,14 @@ function renderYAxis({
     .attr('class', 'y-axis')
     .style('font-size', yAxisTicksFontSize)
     .attr('transform', `translate(${yAxisOffset}, 0)`)
-    .call(yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset))
+    .call(
+      yAxisGridLines
+        ? yAxis.tickSize(-coreChartWidth - yAxisTickSizeOffset)
+        : yAxis,
+    )
     .call(g => {
       g.selectAll('.tick line').attr('stroke-opacity', '0.2')
       g.selectAll('.tick text').attr('fill', '#333')
-      // .style('dominant-baseline', 'text-after-edge')
-      // .attr('dy', -1)
       g.select('.domain').remove()
     })
 }

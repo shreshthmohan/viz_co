@@ -26,13 +26,18 @@ const options = {
   yAxisTicksFontSize: '12px',
   yAxisPosition: 'right',
   yAxisTickSizeOffset: 10,
+  yAxisGridLines: true,
+  // yAxisLabel: 'custom y label',
+  yAxisLabelHorizontalOffset: 25,
 
   xAxisTicksFontSize: '12px',
   xAxisPosition: 'bottom',
-  xAxisTickSizeOffset: 10,
+  xAxisTickSizeOffset: 0,
+  xAxisGridLines: true,
+  // xAxisLabel: 'custom x label',
+  alternatingTickLabelsXAxis: true,
 
   areaOpacity: 0.6,
-  // curveType: d3.curveBasis, //https://github.com/d3/d3-shape
 
   verticalLines: [
     { x: '6', group: 'United Income', series: 'Pan' },
