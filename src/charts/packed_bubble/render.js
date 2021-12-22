@@ -53,6 +53,8 @@ export function renderChart({
     raidalForceCircleRadius = radialForceCircleDiameter / 2,
     radialForceStrength = 0.15,
     manyBodyForceStrength = -12, // positive means attraction
+
+    // TODO: make circleDiameter and radialForceCircleDiameter as a ratio of coreChartHeight (or Width?)
   },
   chartContainerSelector,
 }) {
