@@ -92,3 +92,8 @@ export {
   renderChart as renderParallelConnections,
   validateAndRender as validateAndRenderParallelConnections,
 } from './charts/parallel_connections/index'
+
+export {
+  renderChart as renderPackedBubble,
+  validateAndRender as validateAndRenderPackedBubble,
+} from './charts/packed_bubble/index'
