@@ -69,6 +69,11 @@ export {
 } from './charts/comparative_bar/index'
 
 export {
+  renderChart as renderOverlapBar,
+  validateAndRender as validateAndRenderOverlapBar,
+} from './charts/overlap_bar/index'
+
+export {
   renderChart as renderStackedBar,
   validateAndRender as validateAndRenderStackedBar,
 } from './charts/stacked_bar/index'
