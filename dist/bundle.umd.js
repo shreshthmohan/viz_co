@@ -11501,13 +11501,14 @@ g.circles circle.circle.circle-hovered {
 
   function renderChart$1({
     data,
+    dimensions: { xFieldStart, xFieldEnd, yField, connectionField },
     options: {
       aspectRatio = 2,
 
-      marginTop = 60,
-      marginRight = 90,
-      marginBottom = 20,
-      marginLeft = 50,
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
 
       bgColor = 'transparent',
 
@@ -11523,16 +11524,15 @@ g.circles circle.circle.circle-hovered {
 
       xAxisPosition = 'bottom',
       xAxisLabelOffset = 40,
-      xAxisTickRotation = 0,
-      xAXisLabelFontSize = 12,
+      xAxisLabelFontSize = 12,
       xAxisColor = '#333',
-      xAxisLabel = 'GDP per capita',
+      xAxisLabel = xFieldStart,
 
       yAxisPosition = 'right',
       yAxisLabelOffset = 50,
       yAXisLabelFontSize = 12,
       yAxisColor = '#333',
-      yAxisLabel = 'Change in GDP',
+      yAxisLabel = yField,
 
       inactiveOpacity = 0.2,
       searchOpacity = 0.8,
@@ -11543,7 +11543,6 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames = '',
       goToInitialStateButtonClassNames = '',
     },
-    dimensions: { xFieldStart, xFieldEnd, yFieldEnd, connectionField },
     chartContainerSelector,
   }) {
     applyInteractionStyles({
@@ -11573,7 +11572,7 @@ g.circles circle.circle.circle-hovered {
       data,
       xFieldStart,
       xFieldEnd,
-      yFieldEnd,
+      yField,
       connectionField,
       defaultState,
     });
@@ -11582,7 +11581,7 @@ g.circles circle.circle.circle-hovered {
       dataParsed,
       coreChartHeight,
       coreChartWidth,
-      yFieldEnd,
+      yField,
       xFieldStart,
       xFieldEnd,
     });
@@ -11595,8 +11594,7 @@ g.circles circle.circle.circle-hovered {
       xAxisValueFormatter,
       xAxisPosition,
       xAxisLabelOffset,
-      xAxisTickRotation,
-      xAXisLabelFontSize,
+      xAxisLabelFontSize,
       xAxisColor,
       xAxisLabel,
     });
@@ -11622,7 +11620,7 @@ g.circles circle.circle.circle-hovered {
       xFieldEnd,
       xScale,
       yScale,
-      yFieldEnd,
+      yField,
       tooltipDiv,
       connectionField,
       connectionLineWidth,
@@ -11713,7 +11711,7 @@ g.circles circle.circle.circle-hovered {
     data,
     xFieldStart,
     xFieldEnd,
-    yFieldEnd,
+    yField,
     connectionField,
     defaultState,
   }) {
@@ -11721,7 +11719,7 @@ g.circles circle.circle.circle-hovered {
       const elParsed = { ...el };
       elParsed[xFieldStart] = Number.parseFloat(el[xFieldStart]);
       elParsed[xFieldEnd] = Number.parseFloat(el[xFieldEnd]);
-      elParsed[yFieldEnd] = Number.parseFloat(el[yFieldEnd]);
+      elParsed[yField] = Number.parseFloat(el[yField]);
       return elParsed
     });
 
@@ -11736,7 +11734,7 @@ g.circles circle.circle.circle-hovered {
     dataParsed,
     coreChartHeight,
     coreChartWidth,
-    yFieldEnd,
+    yField,
     xFieldStart,
     xFieldEnd,
   }) {
@@ -11749,7 +11747,7 @@ g.circles circle.circle.circle-hovered {
       .range([0, coreChartWidth])
       .nice();
 
-    const yDomain = d3__namespace.extent([0, ...___default["default"].map(dataParsed, yFieldEnd)]);
+    const yDomain = d3__namespace.extent([0, ...___default["default"].map(dataParsed, yField)]);
     const yScale = d3__namespace
       .scaleLinear()
       .domain(yDomain)
@@ -11766,8 +11764,7 @@ g.circles circle.circle.circle-hovered {
     xAxisValueFormatter,
     xAxisPosition,
     xAxisLabelOffset,
-    xAxisTickRotation,
-    xAXisLabelFontSize,
+    xAxisLabelFontSize,
     xAxisColor,
     coreChartWidth,
     xAxisLabel,
@@ -11789,23 +11786,13 @@ g.circles circle.circle.circle-hovered {
       .append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${axisOffset})`)
-      .call(xAxis)
-      .call(g => {
-        const tickGroup = g.selectAll('.tick text');
-        tickGroup
-          .attr('y', 9)
-          .attr('dy', '0.71em')
-          .attr('transform', `rotate(${xAxisTickRotation})`)
-          .attr('dx', '0em')
-          .attr('text-anchor', 'middle')
-          .attr('dominant-baseline', 'middle');
-      });
+      .call(xAxis);
 
     xAxisGroup
       .append('text')
       // .attr('text-anchor', 'middle')
       // .attr('dominant-baseline', 'middle')
-      .style('font-size', `${xAXisLabelFontSize}px`)
+      .style('font-size', `${xAxisLabelFontSize}px`)
       .attr('fill', xAxisColor)
       .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
       .text(xAxisLabel);
@@ -11863,7 +11850,7 @@ g.circles circle.circle.circle-hovered {
     xFieldEnd,
     xScale,
     yScale,
-    yFieldEnd,
+    yField,
     tooltipDiv,
     connectionField,
     connectionLineWidth,
@@ -11920,7 +11907,7 @@ g.circles circle.circle.circle-hovered {
       .attr('d', d =>
         d3__namespace.line()([
           [xScale(d[xFieldStart]), yScale(0)],
-          [xScale(d[xFieldEnd]), yScale(d[yFieldEnd])],
+          [xScale(d[xFieldEnd]), yScale(d[yField])],
         ]),
       )
       .attr('stroke-width', connectionLineWidth);
@@ -11935,7 +11922,7 @@ g.circles circle.circle.circle-hovered {
     cGroup
       .append('circle')
       .attr('cx', d => xScale(d[xFieldEnd]))
-      .attr('cy', d => yScale(d[yFieldEnd]))
+      .attr('cy', d => yScale(d[yField]))
       .attr('r', connectionCircleRadius);
   }
 
@@ -12056,7 +12043,7 @@ g.circles circle.circle.circle-hovered {
   const dimensionTypes$1 = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
-    yFieldEnd: [shouldBeNumber],
+    yField: [shouldBeNumber],
     connectionField: [shouldNotBeBlank, shouldBeUnique],
   };
 

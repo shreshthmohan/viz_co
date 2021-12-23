@@ -12,13 +12,14 @@ import {
 
 export function renderChart({
   data,
+  dimensions: { xFieldStart, xFieldEnd, yField, connectionField },
   options: {
     aspectRatio = 2,
 
-    marginTop = 60,
-    marginRight = 90,
-    marginBottom = 20,
-    marginLeft = 50,
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
 
     bgColor = 'transparent',
 
@@ -34,16 +35,15 @@ export function renderChart({
 
     xAxisPosition = 'bottom',
     xAxisLabelOffset = 40,
-    xAxisTickRotation = 0,
-    xAXisLabelFontSize = 12,
+    xAxisLabelFontSize = 12,
     xAxisColor = '#333',
-    xAxisLabel = 'GDP per capita',
+    xAxisLabel = xFieldStart,
 
     yAxisPosition = 'right',
     yAxisLabelOffset = 50,
     yAXisLabelFontSize = 12,
     yAxisColor = '#333',
-    yAxisLabel = 'Change in GDP',
+    yAxisLabel = yField,
 
     inactiveOpacity = 0.2,
     searchOpacity = 0.8,
@@ -54,7 +54,6 @@ export function renderChart({
     clearAllButtonClassNames = '',
     goToInitialStateButtonClassNames = '',
   },
-  dimensions: { xFieldStart, xFieldEnd, yFieldEnd, connectionField },
   chartContainerSelector,
 }) {
   applyInteractionStyles({
@@ -84,7 +83,7 @@ export function renderChart({
     data,
     xFieldStart,
     xFieldEnd,
-    yFieldEnd,
+    yField,
     connectionField,
     defaultState,
   })
@@ -93,7 +92,7 @@ export function renderChart({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
-    yFieldEnd,
+    yField,
     xFieldStart,
     xFieldEnd,
   })
@@ -106,8 +105,7 @@ export function renderChart({
     xAxisValueFormatter,
     xAxisPosition,
     xAxisLabelOffset,
-    xAxisTickRotation,
-    xAXisLabelFontSize,
+    xAxisLabelFontSize,
     xAxisColor,
     xAxisLabel,
   })
@@ -133,7 +131,7 @@ export function renderChart({
     xFieldEnd,
     xScale,
     yScale,
-    yFieldEnd,
+    yField,
     tooltipDiv,
     connectionField,
     connectionLineWidth,
@@ -224,7 +222,7 @@ function parseData({
   data,
   xFieldStart,
   xFieldEnd,
-  yFieldEnd,
+  yField,
   connectionField,
   defaultState,
 }) {
@@ -232,7 +230,7 @@ function parseData({
     const elParsed = { ...el }
     elParsed[xFieldStart] = Number.parseFloat(el[xFieldStart])
     elParsed[xFieldEnd] = Number.parseFloat(el[xFieldEnd])
-    elParsed[yFieldEnd] = Number.parseFloat(el[yFieldEnd])
+    elParsed[yField] = Number.parseFloat(el[yField])
     return elParsed
   })
 
@@ -247,7 +245,7 @@ function setupScales({
   dataParsed,
   coreChartHeight,
   coreChartWidth,
-  yFieldEnd,
+  yField,
   xFieldStart,
   xFieldEnd,
 }) {
@@ -260,7 +258,7 @@ function setupScales({
     .range([0, coreChartWidth])
     .nice()
 
-  const yDomain = d3.extent([0, ..._.map(dataParsed, yFieldEnd)])
+  const yDomain = d3.extent([0, ..._.map(dataParsed, yField)])
   const yScale = d3
     .scaleLinear()
     .domain(yDomain)
@@ -277,8 +275,7 @@ function renderXAxis({
   xAxisValueFormatter,
   xAxisPosition,
   xAxisLabelOffset,
-  xAxisTickRotation,
-  xAXisLabelFontSize,
+  xAxisLabelFontSize,
   xAxisColor,
   coreChartWidth,
   xAxisLabel,
@@ -301,22 +298,12 @@ function renderXAxis({
     .attr('class', 'x-axis')
     .attr('transform', `translate(0, ${axisOffset})`)
     .call(xAxis)
-    .call(g => {
-      const tickGroup = g.selectAll('.tick text')
-      tickGroup
-        .attr('y', 9)
-        .attr('dy', '0.71em')
-        .attr('transform', `rotate(${xAxisTickRotation})`)
-        .attr('dx', '0em')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-    })
 
   xAxisGroup
     .append('text')
     // .attr('text-anchor', 'middle')
     // .attr('dominant-baseline', 'middle')
-    .style('font-size', `${xAXisLabelFontSize}px`)
+    .style('font-size', `${xAxisLabelFontSize}px`)
     .attr('fill', xAxisColor)
     .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
     .text(xAxisLabel)
@@ -374,7 +361,7 @@ function renderConnections({
   xFieldEnd,
   xScale,
   yScale,
-  yFieldEnd,
+  yField,
   tooltipDiv,
   connectionField,
   connectionLineWidth,
@@ -431,7 +418,7 @@ function renderConnections({
     .attr('d', d =>
       d3.line()([
         [xScale(d[xFieldStart]), yScale(0)],
-        [xScale(d[xFieldEnd]), yScale(d[yFieldEnd])],
+        [xScale(d[xFieldEnd]), yScale(d[yField])],
       ]),
     )
     .attr('stroke-width', connectionLineWidth)
@@ -446,7 +433,7 @@ function renderConnections({
   cGroup
     .append('circle')
     .attr('cx', d => xScale(d[xFieldEnd]))
-    .attr('cy', d => yScale(d[yFieldEnd]))
+    .attr('cy', d => yScale(d[yField]))
     .attr('r', connectionCircleRadius)
 }
 

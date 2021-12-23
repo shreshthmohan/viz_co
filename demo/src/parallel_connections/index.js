@@ -7,7 +7,7 @@ const dataPath = 'data.csv'
 const dimensions = {
   xFieldStart: 'gdp_start',
   xFieldEnd: 'gdp_end',
-  yFieldEnd: 'delta',
+  yField: 'delta',
   connectionField: 'country',
 }
 
@@ -33,8 +33,7 @@ const options = {
 
   xAxisPosition: 'bottom',
   xAxisLabelOffset: 40,
-  xAxisTickRotation: 0,
-  xAXisLabelFontSize: 12,
+  xAxisLabelFontSize: 12,
   xAxisColor: '#333',
   xAxisLabel: 'GDP per capita',
 

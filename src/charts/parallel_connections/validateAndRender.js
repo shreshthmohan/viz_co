@@ -32,7 +32,7 @@ import { renderChart } from './render'
 const dimensionTypes = {
   xFieldStart: [shouldBeNumber],
   xFieldEnd: [shouldBeNumber],
-  yFieldEnd: [shouldBeNumber],
+  yField: [shouldBeNumber],
   connectionField: [shouldNotBeBlank, shouldBeUnique],
 }
 
