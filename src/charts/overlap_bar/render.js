@@ -41,7 +41,7 @@ export function renderChart({
     yAxisLabelOffset = 50,
     yAxisColor = 'black',
     yAxisLabel = '',
-    yAXisLabelFontSize = '12px',
+    yAXisLabelFontSize = 12,
   },
   dimensions: { xField, yFields },
   chartContainerSelector,

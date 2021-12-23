@@ -9366,7 +9366,7 @@ g.circles circle.circle.circle-hovered {
       yAxisLabelOffset = 50,
       yAxisColor = 'black',
       yAxisLabel = '',
-      yAXisLabelFontSize = '12px',
+      yAXisLabelFontSize = 12,
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -9642,10 +9642,25 @@ g.circles circle.circle.circle-hovered {
     bgColor: checkColor,
 
     barOpacity: checkNumberBetween(0, 1),
+    barThickness: checkNumberBetween(0, 1),
+    outerPadding: checkNumberBetween(0, 1),
 
     colors: checkColorArray,
 
     showOnlyEveryNthValue: checkPositiveInteger,
+
+    // xAxisPosition: checkString,
+    // xAxisLabel: checkString,
+    // xAxisColor: checkString,
+    xAXisLabelFontSize: checkPositiveInteger,
+    xAxisLabelOffset: checkNumber,
+    xAxisTickRotation: checkNumber,
+
+    yAxisLabelOffset: checkNumber,
+    yAXisLabelFontSize: checkPositiveInteger,
+    // yAxisPosition: checkString,
+    // yAxisColor: checkString,
+    // yAxisLabel: checkString,
   };
 
   function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {
