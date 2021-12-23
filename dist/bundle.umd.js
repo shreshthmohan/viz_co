@@ -12082,6 +12082,19 @@ g.circles circle.circle.circle-hovered {
 
     defaultState: checkDefaultState,
 
+    // xAxisPosition: checkString,
+    // xAxisColor: checkString,
+    // xAxisLabel: checkString,
+    xAxisLabelOffset: checkNumber,
+    xAxisTickRotation: checkNumber,
+    xAXisLabelFontSize: checkPositiveInteger,
+
+    yAxisLabelOffset: checkNumber,
+    yAXisLabelFontSize: checkPositiveInteger,
+    // yAxisPosition: checkString,
+    // yAxisColor: checkString,
+    // yAxisLabel: checkString,
+
     inactiveOpacity: checkNumberBetween(0, 1),
     searchOpacity: checkNumberBetween(0, 1),
     activeOpacity: checkNumberBetween(0, 1),
