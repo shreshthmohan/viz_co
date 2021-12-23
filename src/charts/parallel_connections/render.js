@@ -32,6 +32,19 @@ export function renderChart({
 
     defaultState = [],
 
+    xAxisPosition = 'bottom',
+    xAxisLabelOffset = 40,
+    xAxisTickRotation = 0,
+    xAXisLabelFontSize = 12,
+    xAxisColor = '#333',
+    xAxisLabel = 'GDP per capita',
+
+    yAxisPosition = 'right',
+    yAxisLabelOffset = 50,
+    yAXisLabelFontSize = 12,
+    yAxisColor = '#333',
+    yAxisLabel = 'Change in GDP',
+
     inactiveOpacity = 0.2,
     searchOpacity = 0.8,
     activeOpacity = 1,
@@ -88,15 +101,28 @@ export function renderChart({
   renderXAxis({
     chartCore,
     coreChartHeight,
+    coreChartWidth,
     xScale,
     xAxisValueFormatter,
+    xAxisPosition,
+    xAxisLabelOffset,
+    xAxisTickRotation,
+    xAXisLabelFontSize,
+    xAxisColor,
+    xAxisLabel,
   })
 
   renderYAxis({
     chartCore,
+    coreChartHeight,
     coreChartWidth,
     yScale,
     yAxisValueFormatter,
+    yAxisPosition,
+    yAxisLabelOffset,
+    yAXisLabelFontSize,
+    yAxisColor,
+    yAxisLabel,
   })
 
   renderConnections({
@@ -156,6 +182,7 @@ export function renderChart({
     margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
 }
+
 function applyInteractionStyles({
   activeOpacity,
   inactiveOpacity,
@@ -247,20 +274,51 @@ function renderXAxis({
   coreChartHeight,
   xScale,
   xAxisValueFormatter,
+  xAxisPosition,
+  xAxisLabelOffset,
+  xAxisTickRotation,
+  xAXisLabelFontSize,
+  xAxisColor,
+  coreChartWidth,
+  xAxisLabel,
 }) {
-  const xAxis = chartCore
+  let xAxis, axisOffset, labelOffset
+  if (xAxisPosition === 'top') {
+    xAxis = d3.axisTop(xScale)
+    axisOffset = 0
+    labelOffset = -xAxisLabelOffset
+  } else {
+    xAxis = d3.axisBottom(xScale)
+    axisOffset = coreChartHeight
+    labelOffset = xAxisLabelOffset
+  }
+
+  xAxis.tickFormat(val => formatNumber(val, xAxisValueFormatter))
+
+  const xAxisGroup = chartCore
     .append('g')
     .attr('class', 'x-axis')
-    .attr('transform', `translate(0, ${coreChartHeight})`)
-  xAxis
-    .call(
-      d3
-        .axisBottom(xScale)
-        .ticks(5)
-        .tickFormat(val => formatNumber(val, xAxisValueFormatter)),
-    )
-    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
-  // .call(g => g.select('.domain').remove())
+    .attr('transform', `translate(0, ${axisOffset})`)
+    .call(xAxis)
+    .call(g => {
+      const tickGroup = g.selectAll('.tick text')
+      tickGroup
+        .attr('y', 9)
+        .attr('dy', '0.71em')
+        .attr('transform', `rotate(${xAxisTickRotation})`)
+        .attr('dx', '0em')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+    })
+
+  xAxisGroup
+    .append('text')
+    // .attr('text-anchor', 'middle')
+    // .attr('dominant-baseline', 'middle')
+    .style('font-size', `${xAXisLabelFontSize}px`)
+    .attr('fill', xAxisColor)
+    .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
+    .text(xAxisLabel)
 }
 
 function renderYAxis({
@@ -268,19 +326,43 @@ function renderYAxis({
   coreChartWidth,
   yScale,
   yAxisValueFormatter,
+  yAxisPosition,
+  yAxisLabelOffset,
+  yAXisLabelFontSize,
+  yAxisColor,
+  coreChartHeight,
+  yAxisLabel,
 }) {
-  const yAxis = chartCore
+  let yAxis, axisOffset, labelOffset
+  if (yAxisPosition === 'right') {
+    yAxis = d3.axisRight(yScale)
+    axisOffset = coreChartWidth
+    labelOffset = yAxisLabelOffset
+  } else {
+    yAxis = d3.axisLeft(yScale)
+    axisOffset = 0
+    labelOffset = -yAxisLabelOffset
+  }
+
+  yAxis.tickFormat(val => formatNumber(val, yAxisValueFormatter))
+
+  const yAxisGroup = chartCore
     .append('g')
-    .attr('class', 'y-axis')
-    .attr('transform', `translate(${coreChartWidth}, 0)`)
-  yAxis
-    .call(
-      d3
-        .axisRight(yScale)
-        .tickFormat(val => formatNumber(val, yAxisValueFormatter)),
+    .attr('class', 'x-axis')
+    .attr('transform', `translate(${axisOffset},0)`)
+    .call(yAxis)
+
+  yAxisGroup
+    .append('text')
+    // .attr('text-anchor', 'middle')
+    // .attr('dominant-baseline', 'middle')
+    .style('font-size', `${yAXisLabelFontSize}px`)
+    .attr('fill', yAxisColor)
+    .attr(
+      'transform',
+      `translate(${labelOffset}, ${coreChartHeight / 2}) rotate(-90)`,
     )
-    .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))
-  // .call(g => g.select('.domain').remove())
+    .text(yAxisLabel)
 }
 
 function renderConnections({

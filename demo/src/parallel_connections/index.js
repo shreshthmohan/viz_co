@@ -31,6 +31,19 @@ const options = {
   defaultState: ['IND', 'CHN'],
   // defaultState: 'All',
 
+  xAxisPosition: 'bottom',
+  xAxisLabelOffset: 40,
+  xAxisTickRotation: 0,
+  xAXisLabelFontSize: 12,
+  xAxisColor: '#333',
+  xAxisLabel: 'GDP per capita',
+
+  yAxisPosition: 'right',
+  yAxisLabelOffset: 50,
+  yAXisLabelFontSize: 12,
+  yAxisColor: '#333',
+  yAxisLabel: 'Change in GDP',
+
   inactiveOpacity: 0.2,
   searchOpacity: 0.8,
   activeOpacity: 1,
