@@ -8374,7 +8374,7 @@ g.circles circle.circle.circle-hovered {
     bottomAxis
       .append('text')
       .attr('transform', `translate(${deToxy(bottomCenter)[0]}, ${30})`)
-      .text('bottom axis')
+      .text(fieldLabels[0])
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('font-size', '12px')
@@ -8406,7 +8406,7 @@ g.circles circle.circle.circle-hovered {
     rightAxis
       .append('text')
       .attr('transform', `translate(${triangleSide / 2}, ${50}) rotate(180)`)
-      .text('right axis')
+      .text(fieldLabels[1])
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('font-size', '12px')
@@ -8435,7 +8435,7 @@ g.circles circle.circle.circle-hovered {
     leftAxis
       .append('text')
       .attr('transform', `translate(${-50},${triangleSide / 2}) rotate(-90)`)
-      .text('left axis')
+      .text(fieldLabels[2])
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('font-size', '12px')
@@ -10061,7 +10061,7 @@ g.circles circle.circle.circle-hovered {
       // xValueTimeFormatter: '%e %b %Y', // 17 Aug 1997
 
       /* yField */
-      yDomainCustom: checkNumericArray, // [0, 100],
+      yDomainCustom: checkNumericArray(), // [0, 100],
       yGridPaddingInner: checkNumberBetween(0, 1),
       yGridLabelFontSize: checkNumber,
       showYGridLabels: checkBoolean, // default: false
