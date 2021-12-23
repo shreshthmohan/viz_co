@@ -22,13 +22,15 @@ const options = {
   colors: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
 
   xAxisPosition: 'bottom',
-  xAxisLabel: 'Hello',
+  xAxisLabel: 'Year',
   xAxisLabelOffset: 50,
   xAxisTickRotation: 90,
+  xAXisLabelFontSize: 12,
 
   yAxisPosition: 'left',
-  yAxisLabel: 'Hello',
+  yAxisLabel: 'Runs',
   yAxisLabelOffset: 50,
+  yAXisLabelFontSize: 12,
 
   // to tackle too many x tick labels
   // remove this to show all values

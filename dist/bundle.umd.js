@@ -7876,30 +7876,19 @@ g.circles circle.circle.circle-hovered {
       colors = d3__namespace.schemeSpectral[9],
 
       showOnlyEveryNthValue = 1,
-      // X-Axis
+
       xAxisPosition = 'bottom',
-      xAxisOffset = 0,
       xAxisLabel = '',
       xAXisLabelFontSize = 12,
       xAxisLabelOffset = 30,
-      xAxisCustomDomain,
-      xAxisTickFontSize = 12,
       xAxisColor = 'black',
-      xAxisTickValues = null,
-      xAxisTickOffset = 0,
-      xAxisLineThickness = 1,
-      xAxisTickFormatter = '',
       xAxisTickRotation = 0,
-      xAxisTickAnchor = 'middle',
-      xAxisTickBaseline = 'middle',
-      xAxisTickValueXOffset,
-      xAxisTickValueYOffset,
 
       yAxisPosition = 'left',
       yAxisLabelOffset = 50,
       yAxisColor = 'black',
       yAxisLabel = '',
-      yAxisTickRotation = 0,
+      yAXisLabelFontSize = '12px',
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -7935,8 +7924,6 @@ g.circles circle.circle.circle-hovered {
       return elParsed
     });
 
-    // debugger
-
     const xDomain = dataParsed.map(d => d[xField]);
     const xScale = d3__namespace
       .scaleBand()
@@ -7953,7 +7940,11 @@ g.circles circle.circle.circle-hovered {
       return parsedColor
     });
 
-    const yScale = d3__namespace.scaleLinear().range([coreChartHeight, 0]).domain([0, yMax]);
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([coreChartHeight, 0])
+      .domain([0, yMax])
+      .nice();
     yFields.forEach((yf, i) => {
       chartCore
         .append('g')
@@ -7966,7 +7957,6 @@ g.circles circle.circle.circle-hovered {
         .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
         .attr('width', xScale.bandwidth())
         .attr('fill', colorsRgba[i]);
-      // .attr('stroke', '#333')
     });
 
     chartCore
@@ -8007,49 +7997,30 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
-    // const xAxis = d3.axisTop(xScale).tickValues(
-    //   xScale.domain().filter(function (d, i) {
-    //     return !(i % showOnlyEveryNthValue)
-    //   }),
-    // )
-
-    // chartCore.append('g').attr('transform', `translate(0, ${0})`).call(xAxis)
-
     renderXAxis({
-      chartCore,
+      xAxisPosition,
       xScale,
       coreChartHeight,
+      showOnlyEveryNthValue,
+      chartCore,
       coreChartWidth,
       xAxisLabelOffset,
       xAxisLabel,
-      xAxisPosition,
-      xAxisTickOffset,
-      xAXisLabelFontSize,
-      xAxisTickFontSize,
       xAxisColor,
-      xAxisTickValues,
-      xAxisOffset,
-      xAxisLineThickness,
-      xAxisTickFormatter,
       xAxisTickRotation,
-      xAxisTickAnchor,
-      xAxisTickBaseline,
-      xAxisTickValueXOffset,
-      xAxisTickValueYOffset,
-      showOnlyEveryNthValue,
+      xAXisLabelFontSize,
     });
 
     renderYAxis({
       yAxisPosition,
       yScale,
-      showOnlyEveryNthValue,
       chartCore,
       coreChartWidth,
+      coreChartHeight,
       yAxisLabelOffset,
       yAxisLabel,
       yAxisColor,
-      coreChartHeight,
-      yAxisTickRotation,
+      yAXisLabelFontSize,
     });
 
     const yAxisGrid = d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth);
@@ -8080,6 +8051,7 @@ g.circles circle.circle.circle-hovered {
     yAxisLabelOffset,
     yAxisLabel,
     yAxisColor,
+    yAXisLabelFontSize,
   }) {
     let yAxis, axisOffset, labelOffset;
     if (yAxisPosition === 'right') {
@@ -8102,7 +8074,7 @@ g.circles circle.circle.circle-hovered {
       .append('text')
       // .attr('text-anchor', 'middle')
       // .attr('dominant-baseline', 'middle')
-      // .style('font-size', `${xAXisLabelFontSize}px`)
+      .style('font-size', `${yAXisLabelFontSize}px`)
       .attr('fill', yAxisColor)
       .attr(
         'transform',
@@ -8132,19 +8104,9 @@ g.circles circle.circle.circle-hovered {
     coreChartWidth,
     xAxisLabelOffset,
     xAxisLabel,
-    xAxisTickOffset,
-    xAXisLabelFontSize,
-    xAxisTickFontSize,
     xAxisColor,
-    xAxisTickValues,
-    xAxisOffset,
-    xAxisLineThickness,
-    xAxisTickFormatter,
     xAxisTickRotation,
-    xAxisTickAnchor,
-    xAxisTickBaseline,
-    xAxisTickValueXOffset,
-    xAxisTickValueYOffset,
+    xAXisLabelFontSize,
   }) {
     let xAxis, axisOffset, labelOffset;
     if (xAxisPosition === 'top') {
@@ -8183,72 +8145,10 @@ g.circles circle.circle.circle-hovered {
       .append('text')
       // .attr('text-anchor', 'middle')
       // .attr('dominant-baseline', 'middle')
-      // .style('font-size', `${xAXisLabelFontSize}px`)
+      .style('font-size', `${xAXisLabelFontSize}px`)
       .attr('fill', xAxisColor)
       .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
       .text(xAxisLabel);
-    // let xAxis, axisOffset, labelOffset, tickOffset
-    // if (xAxisPosition === 'top') {
-    //   xAxis = d3.axisTop(xScale)
-    //   axisOffset = -xAxisOffset
-    //   labelOffset = xAxisLabelOffset
-    //   tickOffset = -xAxisTickOffset
-    // } else {
-    //   xAxis = d3.axisBottom(xScale)
-    //   axisOffset = coreChartHeight + xAxisOffset
-    //   labelOffset = -xAxisLabelOffset
-    //   tickOffset = xAxisTickOffset
-    // }
-    // const tickSize = -coreChartHeight - xAxisTickOffset - xAxisOffset
-
-    // const xAxisGroup = chartCore
-    //   .append('g')
-    //   .attr('class', 'x-axis')
-    //   .attr('transform', `translate(0, ${axisOffset})`)
-
-    // const xDomain = xScale.domain()
-    // const tickValues =
-    //   xAxisTickValues === null
-    //     ? null
-    //     : _.filter(xAxisTickValues, val => {
-    //         return val >= xDomain[0] && val <= xDomain[1]
-    //       })
-
-    // xAxisGroup
-    //   .call(
-    //     xAxis
-    //       .tickSize(tickSize)
-    //       .tickSizeOuter(10)
-    //       .tickValues(tickValues)
-    //       .tickFormat(val => formatNumber(val, xAxisTickFormatter)),
-    //   )
-    //   .call(g =>
-    //     g
-    //       .select('.domain')
-    //       .attr('stroke', xAxisColor)
-    //       .attr('stroke-width', xAxisLineThickness),
-    //   )
-    //   .call(g => {
-    //     g.selectAll('.tick line')
-    //       .attr('stroke-opacity', 0.2)
-    //       .attr('transform', `translate(0, ${tickOffset / 2})`)
-
-    //     const tickGroup = g.selectAll('.tick text')
-    //     tickGroup
-    //       .style('font-size', `${xAxisTickFontSize}px`)
-    //       .attr('fill', xAxisColor)
-    //       .attr('transform', function () {
-    //         const { x, y, width, height } = this.getBBox()
-    //         return `translate(0, ${tickOffset}), rotate(${xAxisTickRotation},${x + width / 2},${y + height / 2})`
-    //       })
-    //       .attr('text-anchor', xAxisTickAnchor)
-    //       .attr('dominant-baseline', xAxisTickBaseline)
-
-    //     if (xAxisTickValueXOffset)
-    //       tickGroup.attr('dx', `${xAxisTickValueXOffset}em`)
-    //     if (xAxisTickValueYOffset)
-    //       tickGroup.attr('dy', `${xAxisTickValueYOffset}em`)
-    //   })
   }
 
   const dimensionTypes = { xField: [shouldNotBeBlank] };
