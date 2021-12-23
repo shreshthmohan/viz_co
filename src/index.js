@@ -87,3 +87,8 @@ export {
   renderChart as renderBulletBeforeAfter,
   validateAndRender as validateAndRenderBulletBeforeAfter,
 } from './charts/bullet_before_after/index'
+
+export {
+  renderChart as renderPackedBubble,
+  validateAndRender as validateAndRenderPackedBubble,
+} from './charts/packed_bubble/index'
