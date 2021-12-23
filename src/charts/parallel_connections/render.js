@@ -160,8 +160,6 @@ function applyInteractionStyles({
   activeOpacity,
   inactiveOpacity,
   connectionColor,
-  hoverConnectionColor,
-  searchOpacity,
 }) {
   d3.select('body').append('style').html(`
   g.connections g.connection{
@@ -186,46 +184,10 @@ function applyInteractionStyles({
     stroke-width: 3;
     stroke-opacity: ${activeOpacity};
   }
-  `)
-}
-function applyInteractionStyles1({
-  activeOpacity,
-  inactiveOpacity,
-  connectionColor,
-  hoverConnectionColor,
-  searchOpacity,
-}) {
-  d3.select('body').append('style').html(`
-  g.topics g.topic{
-    fill-opacity: ${inactiveOpacity};
-    stroke-opacity: ${inactiveOpacity};
-  }
-  .connection {
-    stroke: ${connectionColor};
-    fill: ${connectionColor};
-    fill-opacity: ${activeOpacity};
-    stroke-opacity: ${activeOpacity};
-    stroke-width: 3;
-  }
-  g.connections.default .connection {
-    fill-opacity: ${inactiveOpacity};
-    stroke-opacity: ${inactiveOpacity};
-  }
-  g.connections.default .connection.connection-active {
-    fill-opacity: ${activeOpacity};
-    stroke-opacity: ${activeOpacity};
-  }
-  g.connections.searching .connection.connection-matched {
-    stroke: ${hoverConnectionColor};
-    fill: ${hoverConnectionColor};
-    fill-opacity: ${searchOpacity};
-    stroke-width: 4;
-  }
   g.connections g.connection.connection-hovered {
-    stroke: ${hoverConnectionColor};
-    fill: ${hoverConnectionColor};
+    stroke: #333;
+    stroke-width: 3;
     stroke-opacity: ${activeOpacity};
-    stroke-width: 4;
   }
   `)
 }
@@ -288,7 +250,7 @@ function renderXAxis({
 }) {
   const xAxis = chartCore
     .append('g')
-    .attr('class', 'text-xs x-axis-top')
+    .attr('class', 'x-axis')
     .attr('transform', `translate(0, ${coreChartHeight})`)
   xAxis
     .call(
@@ -309,13 +271,12 @@ function renderYAxis({
 }) {
   const yAxis = chartCore
     .append('g')
-    .attr('class', 'text-xs y-axis-right')
+    .attr('class', 'y-axis')
     .attr('transform', `translate(${coreChartWidth}, 0)`)
   yAxis
     .call(
       d3
         .axisRight(yScale)
-        .ticks(5)
         .tickFormat(val => formatNumber(val, yAxisValueFormatter)),
     )
     .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2))

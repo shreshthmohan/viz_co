@@ -10672,8 +10672,6 @@ g.circles circle.circle.circle-hovered {
     activeOpacity,
     inactiveOpacity,
     connectionColor,
-    hoverConnectionColor,
-    searchOpacity,
   }) {
     d3__namespace.select('body').append('style').html(`
   g.connections g.connection{
@@ -10694,6 +10692,11 @@ g.circles circle.circle.circle-hovered {
     stroke-width: 3;
   }
   g.connections.searching g.connection.connection-matched{
+    stroke: #333;
+    stroke-width: 3;
+    stroke-opacity: ${activeOpacity};
+  }
+  g.connections g.connection.connection-hovered {
     stroke: #333;
     stroke-width: 3;
     stroke-opacity: ${activeOpacity};
@@ -10759,7 +10762,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const xAxis = chartCore
       .append('g')
-      .attr('class', 'text-xs x-axis-top')
+      .attr('class', 'x-axis')
       .attr('transform', `translate(0, ${coreChartHeight})`);
     xAxis
       .call(
@@ -10780,13 +10783,12 @@ g.circles circle.circle.circle-hovered {
   }) {
     const yAxis = chartCore
       .append('g')
-      .attr('class', 'text-xs y-axis-right')
+      .attr('class', 'y-axis')
       .attr('transform', `translate(${coreChartWidth}, 0)`);
     yAxis
       .call(
         d3__namespace
           .axisRight(yScale)
-          .ticks(5)
           .tickFormat(val => formatNumber(val, yAxisValueFormatter)),
       )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.2));
