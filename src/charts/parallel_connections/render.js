@@ -37,6 +37,9 @@ export function renderChart({
     activeOpacity = 1,
 
     searchInputClassNames = '',
+    showAllButtonClassNames = '',
+    clearAllButtonClassNames = '',
+    goToInitialStateButtonClassNames = '',
   },
   dimensions: { xFieldStart, xFieldEnd, yFieldEnd, connectionField },
   chartContainerSelector,
@@ -112,11 +115,37 @@ export function renderChart({
   })
 
   const handleSearch = searchEventHandler(connectionValues)
-  setupSearch({
+  const search = setupSearch({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
     connectionField,
+    svg,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  })
+
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
+
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
   })
 
   // For responsiveness
@@ -127,7 +156,6 @@ export function renderChart({
     margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
 }
-
 function applyInteractionStyles({
   activeOpacity,
   inactiveOpacity,
@@ -136,6 +164,42 @@ function applyInteractionStyles({
   searchOpacity,
 }) {
   d3.select('body').append('style').html(`
+  g.connections g.connection{
+    cursor: pointer;
+  }
+  g.connections g.connection{
+    fill-opacity: ${inactiveOpacity};
+    stroke-opacity: ${inactiveOpacity};
+    stroke: ${connectionColor};
+    fill: ${connectionColor};
+    stroke-width: 3;
+  }
+  g.connections g.connection.connection-active {
+    fill-opacity: ${activeOpacity};
+    stroke-opacity: ${activeOpacity};
+    stroke: ${connectionColor};
+    fill: ${connectionColor};
+    stroke-width: 3;
+  }
+  g.connections.searching g.connection.connection-matched{
+    stroke: #333;
+    stroke-width: 3;
+    stroke-opacity: ${activeOpacity};
+  }
+  `)
+}
+function applyInteractionStyles1({
+  activeOpacity,
+  inactiveOpacity,
+  connectionColor,
+  hoverConnectionColor,
+  searchOpacity,
+}) {
+  d3.select('body').append('style').html(`
+  g.topics g.topic{
+    fill-opacity: ${inactiveOpacity};
+    stroke-opacity: ${inactiveOpacity};
+  }
   .connection {
     stroke: ${connectionColor};
     fill: ${connectionColor};
@@ -343,20 +407,26 @@ const searchEventHandler = referenceList => (qstr, svg) => {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       // d3.selectAll('.mace').classed('mace-active', false)
-      const maceName = toClassText(val)
+      const connectionName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        svg.select(`.mace-${maceName}`).classed('mace-matched', true)
+        svg
+          .select(`.connection-${connectionName}`)
+          .classed('connection-matched', true)
       } else {
-        svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+        svg
+          .select(`.connection-${connectionName}`)
+          .classed('connection-matched', false)
       }
-      svg.select('.maces').classed('searching', true)
+      svg.select('g.connections').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
-      const maceName = toClassText(val)
-      svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+      const connectionName = toClassText(val)
+      svg
+        .select(`.connection-${connectionName}`)
+        .classed('connection-matched', false)
     })
-    svg.select('.maces').classed('searching', false)
+    svg.select('.connection').classed('searching', false)
   }
 }
 
@@ -364,7 +434,7 @@ function setupSearch({
   handleSearch,
   widgetsLeft,
   searchInputClassNames,
-  nameField,
+  connectionField,
   svg,
 }) {
   const search = widgetsLeft
@@ -372,10 +442,74 @@ function setupSearch({
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
   // TODO: refactor hidden, won't be needed if we add this node
-  search.attr('placeholder', `Find by ${nameField}`)
+  search.attr('placeholder', `Find by ${connectionField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
     handleSearch(qstr, svg)
   })
   return search
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    d3.selectAll('.connection').classed('connection-active', false)
+    search.node().value = ''
+    handleSearch('', svg)
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    d3.selectAll('.connection').classed('connection-active', true)
+    search.node().value = ''
+    handleSearch('', svg)
+  })
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    d3.selectAll('.connection').classed('connection-active', false)
+    _.forEach(defaultStateAll, val => {
+      d3.select(`.connection-${toClassText(val)}`).classed(
+        'connection-active',
+        true,
+      )
+    })
+    search.node().value = ''
+    handleSearch('', svg)
+  })
 }

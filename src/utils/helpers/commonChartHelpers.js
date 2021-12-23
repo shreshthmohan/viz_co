@@ -21,7 +21,7 @@ export function setupChartArea({
     .append('div')
     .attr(
       'style',
-      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+      'display: flex; flex-wrap: wrap; justify-content: space-between; padding-bottom: 0.5rem;',
     )
   const widgetsLeft = widgets
     .append('div')

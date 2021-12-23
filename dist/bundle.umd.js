@@ -738,7 +738,7 @@
     return search
   }
 
-  function setupInitialStateButton$4({
+  function setupInitialStateButton$5({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -761,7 +761,7 @@
     });
   }
 
-  function setupClearAllButton$5({
+  function setupClearAllButton$6({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -977,7 +977,7 @@
       svg,
     });
 
-    setupInitialStateButton$4({
+    setupInitialStateButton$5({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -985,7 +985,7 @@
       handleSearch,
       svg,
     });
-    setupClearAllButton$5({
+    setupClearAllButton$6({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -3756,7 +3756,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$3({
+  function setupInitialStateButton$4({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -3778,7 +3778,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$4({
+  function setupClearAllButton$5({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3796,7 +3796,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$3({
+  function setupShowAllButton$4({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3940,7 +3940,7 @@ g.circles circle.circle.circle-hovered {
       seriesField,
     });
 
-    setupInitialStateButton$3({
+    setupInitialStateButton$4({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -3948,14 +3948,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$4({
+    setupClearAllButton$5({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$3({
+    setupShowAllButton$4({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -5179,7 +5179,7 @@ g.circles circle.circle.circle-hovered {
       .append('div')
       .attr(
         'style',
-        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+        'display: flex; flex-wrap: wrap; justify-content: space-between; padding-bottom: 0.5rem;',
       );
     const widgetsLeft = widgets
       .append('div')
@@ -6361,7 +6361,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$2({
+  function setupInitialStateButton$3({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -6382,7 +6382,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$3({
+  function setupClearAllButton$4({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -6550,14 +6550,14 @@ g.circles circle.circle.circle-hovered {
       dominoField,
     });
 
-    setupInitialStateButton$2({
+    setupInitialStateButton$3({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$3({
+    setupClearAllButton$4({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7346,7 +7346,7 @@ g.circles circle.circle.circle-hovered {
       sourceField,
     });
 
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7354,7 +7354,7 @@ g.circles circle.circle.circle-hovered {
       index,
     });
 
-    setupShowAllButton$2({
+    setupShowAllButton$3({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -7772,7 +7772,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -7791,7 +7791,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$2({
+  function setupShowAllButton$3({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -8322,7 +8322,7 @@ g.circles circle.circle.circle-hovered {
 
     const axes = chartCore.append('g').attr('class', 'axes');
 
-    setupInitialStateButton$1({
+    setupInitialStateButton$2({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -8330,14 +8330,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$1({
+    setupClearAllButton$2({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$1({
+    setupShowAllButton$2({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -8509,7 +8509,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function setupInitialStateButton$1({
+  function setupInitialStateButton$2({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -8531,7 +8531,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$1({
+  function setupClearAllButton$2({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -8549,7 +8549,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$1({
+  function setupShowAllButton$2({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -9888,7 +9888,7 @@ g.circles circle.circle.circle-hovered {
       topicField,
     });
 
-    setupInitialStateButton({
+    setupInitialStateButton$1({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -9896,14 +9896,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton({
+    setupClearAllButton$1({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton({
+    setupShowAllButton$1({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -10334,7 +10334,7 @@ g.circles circle.circle.circle-hovered {
     );
   }
 
-  function setupClearAllButton({
+  function setupClearAllButton$1({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -10352,7 +10352,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton({
+  function setupShowAllButton$1({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -10370,7 +10370,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupInitialStateButton({
+  function setupInitialStateButton$1({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -10549,6 +10549,9 @@ g.circles circle.circle.circle-hovered {
       activeOpacity = 1,
 
       searchInputClassNames = '',
+      showAllButtonClassNames = '',
+      clearAllButtonClassNames = '',
+      goToInitialStateButtonClassNames = '',
     },
     dimensions: { xFieldStart, xFieldEnd, yFieldEnd, connectionField },
     chartContainerSelector,
@@ -10624,11 +10627,37 @@ g.circles circle.circle.circle-hovered {
     });
 
     const handleSearch = searchEventHandler(connectionValues);
-    setupSearch({
+    const search = setupSearch({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       connectionField,
+      svg,
+    });
+
+    setupInitialStateButton({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    setupClearAllButton({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    setupShowAllButton({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
     });
 
     // For responsiveness
@@ -10639,7 +10668,6 @@ g.circles circle.circle.circle-hovered {
       margins: { marginLeft, marginRight, marginTop, marginBottom },
     });
   }
-
   function applyInteractionStyles({
     activeOpacity,
     inactiveOpacity,
@@ -10648,32 +10676,27 @@ g.circles circle.circle.circle-hovered {
     searchOpacity,
   }) {
     d3__namespace.select('body').append('style').html(`
-  .connection {
-    stroke: ${connectionColor};
-    fill: ${connectionColor};
-    fill-opacity: ${activeOpacity};
-    stroke-opacity: ${activeOpacity};
-    stroke-width: 3;
+  g.connections g.connection{
+    cursor: pointer;
   }
-  g.connections.default .connection {
+  g.connections g.connection{
     fill-opacity: ${inactiveOpacity};
     stroke-opacity: ${inactiveOpacity};
+    stroke: ${connectionColor};
+    fill: ${connectionColor};
+    stroke-width: 3;
   }
-  g.connections.default .connection.connection-active {
+  g.connections g.connection.connection-active {
     fill-opacity: ${activeOpacity};
     stroke-opacity: ${activeOpacity};
+    stroke: ${connectionColor};
+    fill: ${connectionColor};
+    stroke-width: 3;
   }
-  g.connections.searching .connection.connection-matched {
-    stroke: ${hoverConnectionColor};
-    fill: ${hoverConnectionColor};
-    fill-opacity: ${searchOpacity};
-    stroke-width: 4;
-  }
-  g.connections g.connection.connection-hovered {
-    stroke: ${hoverConnectionColor};
-    fill: ${hoverConnectionColor};
+  g.connections.searching g.connection.connection-matched{
+    stroke: #333;
+    stroke-width: 3;
     stroke-opacity: ${activeOpacity};
-    stroke-width: 4;
   }
   `);
   }
@@ -10855,20 +10878,26 @@ g.circles circle.circle.circle-hovered {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
-        const maceName = toClassText(val);
+        const connectionName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          svg.select(`.mace-${maceName}`).classed('mace-matched', true);
+          svg
+            .select(`.connection-${connectionName}`)
+            .classed('connection-matched', true);
         } else {
-          svg.select(`.mace-${maceName}`).classed('mace-matched', false);
+          svg
+            .select(`.connection-${connectionName}`)
+            .classed('connection-matched', false);
         }
-        svg.select('.maces').classed('searching', true);
+        svg.select('g.connections').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
-        const maceName = toClassText(val);
-        svg.select(`.mace-${maceName}`).classed('mace-matched', false);
+        const connectionName = toClassText(val);
+        svg
+          .select(`.connection-${connectionName}`)
+          .classed('connection-matched', false);
       });
-      svg.select('.maces').classed('searching', false);
+      svg.select('.connection').classed('searching', false);
     }
   };
 
@@ -10876,7 +10905,7 @@ g.circles circle.circle.circle-hovered {
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
-    nameField,
+    connectionField,
     svg,
   }) {
     const search = widgetsLeft
@@ -10884,12 +10913,76 @@ g.circles circle.circle.circle-hovered {
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
     // TODO: refactor hidden, won't be needed if we add this node
-    search.attr('placeholder', `Find by ${nameField}`);
+    search.attr('placeholder', `Find by ${connectionField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
       handleSearch(qstr, svg);
     });
     return search
+  }
+
+  function setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      d3__namespace.selectAll('.connection').classed('connection-active', false);
+      search.node().value = '';
+      handleSearch('', svg);
+    });
+  }
+
+  function setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      d3__namespace.selectAll('.connection').classed('connection-active', true);
+      search.node().value = '';
+      handleSearch('', svg);
+    });
+  }
+
+  function setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      d3__namespace.selectAll('.connection').classed('connection-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        d3__namespace.select(`.connection-${toClassText(val)}`).classed(
+          'connection-active',
+          true,
+        );
+      });
+      search.node().value = '';
+      handleSearch('', svg);
+    });
   }
 
   // export function that

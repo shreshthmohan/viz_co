@@ -28,11 +28,8 @@ const options = {
   connectionCircleRadius: 7,
   connectionLineWidth: 2,
 
-  // defaultState: [
-  //   'IND',
-  //   'CHN'
-  // ],
-  defaultState: 'All',
+  defaultState: ['IND', 'CHN'],
+  // defaultState: 'All',
 
   inactiveOpacity: 0.2,
   searchOpacity: 0.8,
@@ -44,6 +41,8 @@ const options = {
   goToInitialStateButtonClassNames:
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
   clearAllButtonClassNames:
+    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+  showAllButtonClassNames:
     'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
 }
 
