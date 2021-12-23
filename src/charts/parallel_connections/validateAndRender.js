@@ -13,13 +13,12 @@ import {
 } from '../../utils/validation/dataValidations'
 
 import {
-  checkOneOf,
   checkNumber,
   checkNumberBetween,
   checkColor,
-  checkNumericArray,
   checkDefaultState,
   optionValidation,
+  checkPositiveInteger,
 } from '../../utils/validation/optionValidations'
 
 import {
@@ -58,6 +57,19 @@ const optionTypes = {
   connectionLineWidth: checkNumber,
 
   defaultState: checkDefaultState,
+
+  // xAxisPosition: checkString,
+  // xAxisColor: checkString,
+  // xAxisLabel: checkString,
+  xAxisLabelOffset: checkNumber,
+  xAxisTickRotation: checkNumber,
+  xAXisLabelFontSize: checkPositiveInteger,
+
+  yAxisLabelOffset: checkNumber,
+  yAXisLabelFontSize: checkPositiveInteger,
+  // yAxisPosition: checkString,
+  // yAxisColor: checkString,
+  // yAxisLabel: checkString,
 
   inactiveOpacity: checkNumberBetween(0, 1),
   searchOpacity: checkNumberBetween(0, 1),
