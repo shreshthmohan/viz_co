@@ -1,0 +1,166 @@
+frustration_index,incidence,group,period
+0,0,Consumer Auto,Pre
+1,0.08,Consumer Auto,Pre
+2,0.22,Consumer Auto,Pre
+3,0.3,Consumer Auto,Pre
+4,0.2,Consumer Auto,Pre
+5,0.06,Consumer Auto,Pre
+6,0.14,Consumer Auto,Pre
+7,0,Consumer Auto,Pre
+8,0,Consumer Auto,Pre
+9,0,Consumer Auto,Pre
+10,0,Consumer Auto,Pre
+0,0,Consumer Auto,Pan
+1,0,Consumer Auto,Pan
+2,0,Consumer Auto,Pan
+3,0,Consumer Auto,Pan
+4,0.08,Consumer Auto,Pan
+5,0.18,Consumer Auto,Pan
+6,0.34,Consumer Auto,Pan
+7,0.18,Consumer Auto,Pan
+8,0.11,Consumer Auto,Pan
+9,0.11,Consumer Auto,Pan
+10,0,Consumer Auto,Pan
+0,0,Consumer Auto,Post
+1,0,Consumer Auto,Post
+2,0.06,Consumer Auto,Post
+3,0.24,Consumer Auto,Post
+4,0.28,Consumer Auto,Post
+5,0.19,Consumer Auto,Post
+6,0.12,Consumer Auto,Post
+7,0.12,Consumer Auto,Post
+8,0,Consumer Auto,Post
+9,0,Consumer Auto,Post
+10,0,Consumer Auto,Post
+0,0,Dealer,Pre
+1,0.12,Dealer,Pre
+2,0.21,Dealer,Pre
+3,0.33,Dealer,Pre
+4,0.18,Dealer,Pre
+5,0.1,Dealer,Pre
+6,0.08,Dealer,Pre
+7,0,Dealer,Pre
+8,0,Dealer,Pre
+9,0,Dealer,Pre
+10,0,Dealer,Pre
+0,0,Dealer,Pan
+1,0,Dealer,Pan
+2,0,Dealer,Pan
+3,0,Dealer,Pan
+4,0.07,Dealer,Pan
+5,0.2,Dealer,Pan
+6,0.34,Dealer,Pan
+7,0.2,Dealer,Pan
+8,0.08,Dealer,Pan
+9,0.1,Dealer,Pan
+10,0,Dealer,Pan
+0,0,Dealer,Post
+1,0,Dealer,Post
+2,0.08,Dealer,Post
+3,0.18,Dealer,Post
+4,0.33,Dealer,Post
+5,0.22,Dealer,Post
+6,0.1,Dealer,Post
+7,0.09,Dealer,Post
+8,0,Dealer,Post
+9,0,Dealer,Post
+10,0,Dealer,Post
+0,0,Refinance,Pre
+1,0.08,Refinance,Pre
+2,0.22,Refinance,Pre
+3,0.26,Refinance,Pre
+4,0.22,Refinance,Pre
+5,0.12,Refinance,Pre
+6,0.1,Refinance,Pre
+7,0,Refinance,Pre
+8,0,Refinance,Pre
+9,0,Refinance,Pre
+10,0,Refinance,Pre
+0,0,Refinance,Pan
+1,0,Refinance,Pan
+2,0,Refinance,Pan
+3,0,Refinance,Pan
+4,0.1,Refinance,Pan
+5,0.22,Refinance,Pan
+6,0.28,Refinance,Pan
+7,0.22,Refinance,Pan
+8,0.12,Refinance,Pan
+9,0.06,Refinance,Pan
+10,0,Refinance,Pan
+0,0,Refinance,Post
+1,0,Refinance,Post
+2,0.1,Refinance,Post
+3,0.2,Refinance,Post
+4,0.24,Refinance,Post
+5,0.22,Refinance,Post
+6,0.1,Refinance,Post
+7,0.12,Refinance,Post
+8,0,Refinance,Post
+9,0,Refinance,Post
+10,0,Refinance,Post
+0,0,Servicing,Pre
+1,0,Servicing,Pre
+2,0.12,Servicing,Pre
+3,0.16,Servicing,Pre
+4,0.32,Servicing,Pre
+5,0.23,Servicing,Pre
+6,0.1,Servicing,Pre
+7,0.06,Servicing,Pre
+8,0,Servicing,Pre
+9,0,Servicing,Pre
+10,0,Servicing,Pre
+0,0,Servicing,Pan
+1,0,Servicing,Pan
+2,0,Servicing,Pan
+3,0,Servicing,Pan
+4,0,Servicing,Pan
+5,0.08,Servicing,Pan
+6,0.1,Servicing,Pan
+7,0.16,Servicing,Pan
+8,0.36,Servicing,Pan
+9,0.18,Servicing,Pan
+10,0.12,Servicing,Pan
+0,0,Servicing,Post
+1,0,Servicing,Post
+2,0,Servicing,Post
+3,0,Servicing,Post
+4,0.1,Servicing,Post
+5,0.1,Servicing,Post
+6,0.18,Servicing,Post
+7,0.36,Servicing,Post
+8,0.16,Servicing,Post
+9,0.05,Servicing,Post
+10,0.04,Servicing,Post
+0,0,United Income,Pre
+1,0.09,United Income,Pre
+2,0.22,United Income,Pre
+3,0.24,United Income,Pre
+4,0.18,United Income,Pre
+5,0.14,United Income,Pre
+6,0.12,United Income,Pre
+7,0,United Income,Pre
+8,0,United Income,Pre
+9,0,United Income,Pre
+10,0,United Income,Pre
+0,0,United Income,Pan
+1,0,United Income,Pan
+2,0,United Income,Pan
+3,0,United Income,Pan
+4,0.08,United Income,Pan
+5,0.17,United Income,Pan
+6,0.32,United Income,Pan
+7,0.19,United Income,Pan
+8,0.12,United Income,Pan
+9,0.12,United Income,Pan
+10,0,United Income,Pan
+0,0,United Income,Post
+1,0,United Income,Post
+2,0.12,United Income,Post
+3,0.22,United Income,Post
+4,0.26,United Income,Post
+5,0.2,United Income,Post
+6,0.1,United Income,Post
+7,0.1,United Income,Post
+8,0,United Income,Post
+9,0,United Income,Post
+10,0,United Income,Post

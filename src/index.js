@@ -44,6 +44,11 @@ export {
 } from './charts/domino_ribbon/index'
 
 export {
+  renderChart as renderOverlapArea,
+  validateAndRender as validateAndRenderOverlapArea,
+} from './charts/overlap_area/index'
+
+export {
   renderChart as renderChoroplethCounties,
   validateAndRender as validateAndRenderChoroplethCounties,
 } from './charts/choropleth_counties'
@@ -67,6 +72,11 @@ export {
   renderChart as renderComparativeBar,
   validateAndRender as validateAndRenderComparativeBar,
 } from './charts/comparative_bar/index'
+
+export {
+  renderChart as renderOverlapBar,
+  validateAndRender as validateAndRenderOverlapBar,
+} from './charts/overlap_bar/index'
 
 export {
   renderChart as renderStackedBar,
