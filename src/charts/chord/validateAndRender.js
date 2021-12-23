@@ -26,6 +26,7 @@ import {
   validateColumnsWithDimensions,
   showErrors,
 } from '../../utils/validation/validations'
+import { fileExtension } from '../../utils/helpers/general'
 
 import { renderChart } from './render'
 
@@ -36,7 +37,7 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween([0, Number.POSITIVE_INFINITY]),
+  aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
 
   marginTop: checkNumber,
   marginRight: checkNumber,
@@ -50,8 +51,8 @@ const optionTypes = {
   colorScheme: checkColorArray,
   arcLabelFontSize: checkFontSizeString,
 
-  activeOpacity: checkNumberBetween([0, 1]),
-  inactiveOpacity: checkNumberBetween([0, 1]),
+  activeOpacity: checkNumberBetween(0, 1),
+  inactiveOpacity: checkNumberBetween(0, 1),
   clickInteraction: checkBoolean,
 
   // searchInputClassNames: checkString,
@@ -69,7 +70,7 @@ export const validateAndRender = ({
 }) => {
   const optionsValidationResult = optionValidation({ optionTypes, options })
 
-  d3.csv(dataPath).then(data => {
+  d3[fileExtension(dataPath)](dataPath).then(data => {
     // Run validations
     const { columns } = data
     const dimensionValidation = validateColumnsWithDimensions({
