@@ -28,7 +28,6 @@ export function renderChart({
     customColorScheme,
     inbuiltScheme = 'schemeOrRd',
     numberOfColors = 5,
-    collisionDistance = 0.5,
 
     colorLegendTitle = yField,
 
@@ -46,11 +45,11 @@ export function renderChart({
     searchInputClassNames = '',
 
     // force simulation options
+    collisionDistance = 0.5,
     circleDiameter = 400, // controls yRange
     yForceStrength = 0.5,
     collisionForceStrength = 0.8,
     radialForceCircleDiameter = 140,
-    raidalForceCircleRadius = radialForceCircleDiameter / 2,
     radialForceStrength = 0.15,
     manyBodyForceStrength = -12, // positive means attraction
 
@@ -177,6 +176,9 @@ export function renderChart({
     //   margins: { marginLeft, marginRight, marginTop, marginBottom },
     // })
   }
+
+  const raidalForceCircleRadius = radialForceCircleDiameter / 2
+
   d3.forceSimulation(parsedData)
     .force('y', d3.forceY(d => yScale(d[yField])).strength(yForceStrength))
     .force(

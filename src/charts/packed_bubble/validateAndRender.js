@@ -46,7 +46,12 @@ const optionTypes = {
 
   collisionDistance: checkNumber,
 
-  circleDiameter: checkNumberBetween(0.1, Number.MAX_SAFE_INTEGER),
+  circleDiameter: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+  yForceStrength: checkNumberBetween(0, Number.MAX_SAFE_INTEGER), // can't be negative
+  collisionForceStrength: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+  radialForceCircleDiameter: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+  radialForceStrength: checkNumber,
+  manyBodyForceStrength: checkNumber, // positive means attraction
 
   // colorLegendTitle = yField,
 

@@ -10608,7 +10608,6 @@ g.circles circle.circle.circle-hovered {
       customColorScheme,
       inbuiltScheme = 'schemeOrRd',
       numberOfColors = 5,
-      collisionDistance = 0.5,
 
       colorLegendTitle = yField,
 
@@ -10626,11 +10625,11 @@ g.circles circle.circle.circle-hovered {
       searchInputClassNames = '',
 
       // force simulation options
+      collisionDistance = 0.5,
       circleDiameter = 400, // controls yRange
       yForceStrength = 0.5,
       collisionForceStrength = 0.8,
       radialForceCircleDiameter = 140,
-      raidalForceCircleRadius = radialForceCircleDiameter / 2,
       radialForceStrength = 0.15,
       manyBodyForceStrength = -12, // positive means attraction
 
@@ -10757,6 +10756,9 @@ g.circles circle.circle.circle-hovered {
       //   margins: { marginLeft, marginRight, marginTop, marginBottom },
       // })
     }
+
+    const raidalForceCircleRadius = radialForceCircleDiameter / 2;
+
     d3__namespace.forceSimulation(parsedData)
       .force('y', d3__namespace.forceY(d => yScale(d[yField])).strength(yForceStrength))
       .force(
@@ -10861,7 +10863,12 @@ g.circles circle.circle.circle-hovered {
 
     collisionDistance: checkNumber,
 
-    circleDiameter: checkNumberBetween(0.1, Number.MAX_SAFE_INTEGER),
+    circleDiameter: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+    yForceStrength: checkNumberBetween(0, Number.MAX_SAFE_INTEGER), // can't be negative
+    collisionForceStrength: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+    radialForceCircleDiameter: checkNumberBetween(0, Number.MAX_SAFE_INTEGER),
+    radialForceStrength: checkNumber,
+    manyBodyForceStrength: checkNumber, // positive means attraction
 
     // colorLegendTitle = yField,
 
