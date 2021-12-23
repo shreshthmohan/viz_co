@@ -138,6 +138,7 @@ export function renderChart({
     connectionField,
     connectionLineWidth,
     connectionCircleRadius,
+    xAxisValueFormatter,
   })
 
   const handleSearch = searchEventHandler(connectionValues)
@@ -378,6 +379,7 @@ function renderConnections({
   connectionField,
   connectionLineWidth,
   connectionCircleRadius,
+  xAxisValueFormatter,
 }) {
   const cGroup = chartCore
     .append('g')
@@ -400,7 +402,10 @@ function renderConnections({
       tooltipDiv.transition().duration(200).style('opacity', 1)
 
       tooltipDiv.html(
-        `${d[connectionField]}
+        `${d[connectionField]}: ${formatNumber(
+          d[xFieldStart],
+          xAxisValueFormatter,
+        )} → ${formatNumber(d[xFieldEnd], xAxisValueFormatter)}
         `,
       )
       tooltipDiv

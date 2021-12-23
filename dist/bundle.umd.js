@@ -11627,6 +11627,7 @@ g.circles circle.circle.circle-hovered {
       connectionField,
       connectionLineWidth,
       connectionCircleRadius,
+      xAxisValueFormatter,
     });
 
     const handleSearch = searchEventHandler(connectionValues);
@@ -11867,6 +11868,7 @@ g.circles circle.circle.circle-hovered {
     connectionField,
     connectionLineWidth,
     connectionCircleRadius,
+    xAxisValueFormatter,
   }) {
     const cGroup = chartCore
       .append('g')
@@ -11889,7 +11891,10 @@ g.circles circle.circle.circle-hovered {
         tooltipDiv.transition().duration(200).style('opacity', 1);
 
         tooltipDiv.html(
-          `${d[connectionField]}
+          `${d[connectionField]}: ${formatNumber(
+          d[xFieldStart],
+          xAxisValueFormatter,
+        )} → ${formatNumber(d[xFieldEnd], xAxisValueFormatter)}
         `,
         );
         tooltipDiv
