@@ -12,8 +12,6 @@ const dimensions = {
 
 // eslint-disable-next-line no-unused-vars
 const options = {
-  aspectRatio: 1,
-
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,

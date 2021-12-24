@@ -7805,8 +7805,6 @@ g.circles circle.circle.circle-hovered {
   function renderChart$7({
     data,
     options: {
-      aspectRatio = 1,
-
       marginTop = 0,
       marginRight = 0,
       marginBottom = 0,
@@ -7836,6 +7834,8 @@ g.circles circle.circle.circle-hovered {
     dimensions: { sourceField, targetField, valueField },
     chartContainerSelector,
   }) {
+    const aspectRatio = 1;
+
     applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
@@ -8391,8 +8391,6 @@ g.circles circle.circle.circle-hovered {
   };
 
   const optionTypes$6 = {
-    aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
-
     marginTop: checkNumber,
     marginRight: checkNumber,
     marginBottom: checkNumber,
@@ -8530,8 +8528,6 @@ g.circles circle.circle.circle-hovered {
   function renderChart$6({
     data,
     options: {
-      aspectRatio = 2 / Math.sqrt(3),
-
       directionStartLabel = 'start point',
       directionEndLabel = 'end point',
 
@@ -8569,6 +8565,8 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
+    const aspectRatio = 2 / Math.sqrt(3);
+
     const valueFormatter = val =>
       `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`;
 
@@ -9209,8 +9207,6 @@ g.circles circle.circle.circle-hovered {
   }
 
   const optionTypes$5 = {
-    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
-
     // directionStartLabel: 'start point',
     // directionEndLabel: 'end point',
 

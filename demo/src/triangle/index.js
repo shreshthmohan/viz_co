@@ -10,8 +10,6 @@ const dimensions = {
 }
 
 const options = {
-  aspectRatio: 1,
-
   directionStartLabel: 'start point',
   directionEndLabel: 'end point',
 
