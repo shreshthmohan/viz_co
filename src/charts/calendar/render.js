@@ -48,6 +48,9 @@ export function renderChart({
   .cldr-color-legend.filtering-legend rect:not(.active) {
     opacity: 0.2;
   } 
+  rect.rect-hovered {
+    stroke: #333;
+  }
   `)
 
   const coreChartWidth = 1000
