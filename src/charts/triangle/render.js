@@ -15,8 +15,6 @@ import { renderMaceColorLegend } from './maceColorLegend'
 export function renderChart({
   data,
   options: {
-    aspectRatio = 2 / Math.sqrt(3),
-
     directionStartLabel = 'start point',
     directionEndLabel = 'end point',
 
@@ -54,6 +52,8 @@ export function renderChart({
 
   chartContainerSelector,
 }) {
+  const aspectRatio = 2 / Math.sqrt(3)
+
   const valueFormatter = val =>
     `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`
 
