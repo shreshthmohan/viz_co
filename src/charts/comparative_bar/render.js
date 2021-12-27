@@ -1,12 +1,13 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import {
   initializeTooltip,
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 
-import { preventOverflow } from '../../utils/helpers/general'
+import { preventOverflow, toClassText } from '../../utils/helpers/general'
 
 export function renderChart({
   data,
@@ -29,6 +30,16 @@ export function renderChart({
     leftXAxisLabel = barLeftValueField,
     rightXAxisLabel = barRightValueField,
     xAxisLabel = '',
+
+    defaultState = [],
+
+    inactiveOpacity = 0.2,
+    activeOpacity = 1,
+
+    goToInitialStateButtonClassNames = '',
+    searchInputClassNames = '',
+    clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
   },
   dimensions: {
     yField,
@@ -39,29 +50,37 @@ export function renderChart({
   },
   chartContainerSelector,
 }) {
-  applyInteractionStyles({ bgColor })
+  applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity })
 
   const tooltipDiv = initializeTooltip()
 
   const coreChartWidth = 1200
 
-  const { svg, coreChartHeight, allComponents, chartCore } = setupChartArea({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  })
+  const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
+    setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    })
 
-  const { yDomain, maxOverall, xStartActual } = parseData({
+  const {
+    yDomain,
+    maxOverall,
+    xStartActual,
+    dimensionValues,
+    defaultStateAll,
+  } = parseData({
     data,
     yField,
     barRightValueField,
     barLeftValueField,
     barValueMidPoint,
+    defaultState,
   })
 
   const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales({
@@ -97,6 +116,7 @@ export function renderChart({
     barRightValueField,
     xScaleRight,
     barRightLabelField,
+    defaultStateAll,
   })
 
   renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize })
@@ -117,6 +137,39 @@ export function renderChart({
     xAxisLabel,
   })
 
+  const handleSearch = searchEventHandler(dimensionValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    yField,
+    svg,
+    chartContainerSelector,
+    dimensionValues,
+  })
+
+  // setupInitialStateButton({
+  //   widgetsLeft,
+  //   goToInitialStateButtonClassNames,
+  //   defaultStateAll,
+  //   search,
+  //   handleSearch,
+  // })
+
+  // setupClearAllButton({
+  //   widgetsLeft,
+  //   clearAllButtonClassNames,
+  //   search,
+  //   handleSearch,
+  // })
+
+  // setupShowAllButton({
+  //   widgetsLeft,
+  //   showAllButtonClassNames,
+  //   search,
+  //   handleSearch,
+  // })
+
   // For responsiveness
   // adjust svg to prevent overflows
   preventOverflow({
@@ -126,10 +179,15 @@ export function renderChart({
   })
 }
 
-function applyInteractionStyles({ bgColor }) {
+function applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity }) {
   d3.select('body').append('style').html(`
   g.bar {
     stroke: ${bgColor};
+    fill-opacity: ${inactiveOpacity};
+  }
+  g.bar.bar-active {
+    stroke: ${bgColor};
+    fill-opacity: ${activeOpacity};
   }
   g.bar.bar-hovered {
     stroke: #333;
@@ -144,6 +202,7 @@ function parseData({
   barRightValueField,
   barLeftValueField,
   barValueMidPoint,
+  defaultState,
 }) {
   const yDomain = data.map(el => el[yField])
   const maxRight = d3.max(
@@ -164,7 +223,11 @@ function parseData({
 
   const xStartActual = d3.min([barValueMidPoint, minOverall])
 
-  return { yDomain, maxOverall, xStartActual }
+  const dimensionValues = _(data).map(yField).uniq().value()
+  const defaultStateAll =
+    defaultState === 'All' ? dimensionValues : defaultState
+
+  return { yDomain, maxOverall, xStartActual, dimensionValues, defaultStateAll }
 }
 
 function setupScales({
@@ -361,6 +424,7 @@ function renderBars({
   barRightValueField,
   xScaleRight,
   barRightLabelField,
+  defaultStateAll,
 }) {
   const leftBarsContainer = chartCore.append('g').attr('class', 'left-bars')
 
@@ -368,7 +432,14 @@ function renderBars({
     .selectAll('g')
     .data(data)
     .join('g')
-    .attr('class', 'bar')
+    .attr(
+      'class',
+      d =>
+        `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+    )
     .on('mouseover', function (e, d) {
       d3.select(this).classed('bar-hovered', true)
 
@@ -444,7 +515,14 @@ function renderBars({
     .selectAll('g')
     .data(data)
     .join('g')
-    .attr('class', 'bar')
+    .attr(
+      'class',
+      d =>
+        `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+    )
     .on('mouseover', function (e, d) {
       d3.select(this).classed('bar-hovered', true)
 
@@ -530,4 +608,126 @@ function renderBars({
     .attr('font-weight', 'bold')
 
   return { leftBarsContainer, rightBarsContainer }
+}
+
+const searchEventHandler = referenceList => (qstr, svg) => {
+  if (qstr) {
+    const lqstr = qstr.toLowerCase()
+    referenceList.forEach(val => {
+      // d3.selectAll('.mace').classed('mace-active', false)
+      const maceName = toClassText(val)
+      if (val.toLowerCase().includes(lqstr)) {
+        svg.select(`.mace-${maceName}`).classed('mace-matched', true)
+      } else {
+        svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+      }
+      svg.select('.maces').classed('searching', true)
+    })
+  } else {
+    referenceList.forEach(val => {
+      const maceName = toClassText(val)
+      svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+    })
+    svg.select('.maces').classed('searching', false)
+  }
+}
+
+function setupSearch({
+  handleSearch,
+  widgetsLeft,
+  searchInputClassNames,
+  yField,
+  svg,
+  chartContainerSelector,
+  dimensionValues,
+}) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(dimensionValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
+  search.attr('placeholder', `Find by ${yField}`)
+  search.on('keyup', e => {
+    const qstr = e.target.value
+    handleSearch(qstr, svg)
+  })
+  return search
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', false)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', true)
+    search.node().value = ''
+    handleSearch('')
+  })
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    d3.selectAll('.topic').classed('topic-active', false)
+    _.forEach(defaultStateAll, val => {
+      d3.select(`.topic-${toClassText(val)}`).classed('topic-active', true)
+    })
+    search.node().value = ''
+    handleSearch('')
+  })
 }
