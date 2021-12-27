@@ -198,6 +198,7 @@ export function swatches({
   marginLeft = 0,
   uid,
   customClass = '',
+  circle = false,
 }) {
   const id = uid
   //DOM.uid().id;
@@ -225,6 +226,7 @@ export function swatches({
         .${id}-swatch {
           width: ${+swatchWidth}px;
           height: ${+swatchHeight}px;
+          ${circle ? 'border-radius: 50%;' : ''}
           margin: 0 0.5em 0 0;
         }
       </style>
@@ -258,6 +260,7 @@ export function swatches({
         content: "";
         width: ${+swatchWidth}px;
         height: ${+swatchHeight}px;
+        ${circle ? 'border-radius: 50%;' : ''}
         margin-right: 0.5em;
         background: var(--color);
       }

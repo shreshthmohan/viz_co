@@ -11,6 +11,8 @@ import {
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { swatches } from '../../utils/helpers/colorLegend'
 import { formatNumber } from '../../utils/helpers/formatters'
+import { dashedLegend } from '../overlap_area/dashedLegend'
+import { lineBandLegend } from '../line_band_scatter/lineBandLegend'
 
 export function renderChart({
   data,
@@ -134,6 +136,30 @@ export function renderChart({
     xScaleType,
     xScaleLogBase,
   })
+
+  const verticalDashedLineLabels = [{ series: 'ref', label: 'Reference' }]
+  const dashedLegendColor = d3
+    .scaleOrdinal()
+    .range([referenceLineColor])
+    .domain(['ref'])
+
+  // TODO: lineBandWithColors is to be replaced by connection color
+  // SM: I don't quite understand what is to be shown in the legend
+  const lineBandsWithColors = [
+    { type: 'line', line: { label: 'line label', color: 'red' } },
+  ]
+  widgetsRight
+    .append('div')
+    .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }))
+
+  widgetsRight.append('div').html(
+    dashedLegend({
+      labels: verticalDashedLineLabels,
+      color: dashedLegendColor,
+      swatchWidth: referenceLineWidth,
+      lineOpacity: referenceLineOpacity,
+    }),
+  )
 
   renderLegends({ widgetsRight, colorScale })
 
@@ -650,11 +676,12 @@ function setupSearch({
 }
 
 function renderLegends({ widgetsRight, colorScale }) {
-  widgetsRight.html(
+  widgetsRight.append('div').html(
     swatches({
       color: colorScale,
       uid: 'rs',
       customClass: '',
+      circle: true,
     }),
   )
 }

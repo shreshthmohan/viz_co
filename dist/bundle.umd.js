@@ -2145,6 +2145,7 @@
     marginLeft = 0,
     uid,
     customClass = '',
+    circle = false,
   }) {
     const id = uid;
     //DOM.uid().id;
@@ -2172,6 +2173,7 @@
         .${id}-swatch {
           width: ${+swatchWidth}px;
           height: ${+swatchHeight}px;
+          ${circle ? 'border-radius: 50%;' : ''}
           margin: 0 0.5em 0 0;
         }
       </style>
@@ -2205,6 +2207,7 @@
         content: "";
         width: ${+swatchWidth}px;
         height: ${+swatchHeight}px;
+        ${circle ? 'border-radius: 50%;' : ''}
         margin-right: 0.5em;
         background: var(--color);
       }
@@ -6729,6 +6732,7 @@ g.circles circle.circle.circle-hovered {
     marginLeft = 0,
     uid,
     customClass = '',
+    lineOpacity = 1,
   }) {
     const id = `dl-${uid}`;
     const mu = `
@@ -6749,6 +6753,7 @@ g.circles circle.circle.circle-hovered {
         height: ${+swatchHeight}px;
         border: ${Math.floor(+swatchWidth)}px dashed var(--color);
         margin-right: 0.5em;
+        opacity: ${lineOpacity};
       }
     </style>
       ${labels
@@ -11041,6 +11046,30 @@ g.circles circle.circle.circle-hovered {
       xScaleLogBase,
     });
 
+    const verticalDashedLineLabels = [{ series: 'ref', label: 'Reference' }];
+    const dashedLegendColor = d3__namespace
+      .scaleOrdinal()
+      .range([referenceLineColor])
+      .domain(['ref']);
+
+    // TODO: lineBandWithColors is to be replaced by connection color
+    // SM: I don't quite understand what is to be shown in the legend
+    const lineBandsWithColors = [
+      { type: 'line', line: { label: 'line label', color: 'red' } },
+    ];
+    widgetsRight
+      .append('div')
+      .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
+
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: verticalDashedLineLabels,
+        color: dashedLegendColor,
+        swatchWidth: referenceLineWidth,
+        lineOpacity: referenceLineOpacity,
+      }),
+    );
+
     renderLegends({ widgetsRight, colorScale });
 
     const line = d3__namespace
@@ -11556,11 +11585,12 @@ g.circles circle.circle.circle-hovered {
   }
 
   function renderLegends({ widgetsRight, colorScale }) {
-    widgetsRight.html(
+    widgetsRight.append('div').html(
       swatches({
         color: colorScale,
         uid: 'rs',
         customClass: '',
+        circle: true,
       }),
     );
   }
