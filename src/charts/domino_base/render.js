@@ -12,6 +12,9 @@ function applyInteractionStyles() {
   g.dominos.searching g rect.domino-matched {
     stroke: #333;
   }
+  .searching rect:not(.domino-matched) {
+    opacity: 0.2;
+  }
   `)
 }
 
@@ -245,17 +248,14 @@ const searchEventHandler = referenceList => qstr => {
     referenceList.forEach(val => {
       const dominoName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.domino-${dominoName}`).classed('domino-matched', true)
+        d3.selectAll(`.domino-${dominoName}`).classed('domino-matched', true)
       } else {
-        d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
+        d3.selectAll(`.domino-${dominoName}`).classed('domino-matched', false)
       }
       d3.select('.dominos').classed('searching', true)
     })
   } else {
-    referenceList.forEach(val => {
-      const dominoName = toClassText(val)
-      d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
-    })
+    d3.selectAll('.domino').classed('domino-matched', false)
     d3.select('.dominos').classed('searching', false)
   }
 }

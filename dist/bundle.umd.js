@@ -2890,6 +2890,9 @@
   g.dominos.searching g rect.domino-matched {
     stroke: #333;
   }
+  .searching rect:not(.domino-matched) {
+    opacity: 0.2;
+  }
   `);
   }
 
@@ -3123,17 +3126,14 @@
       referenceList.forEach(val => {
         const dominoName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
+          d3__namespace.selectAll(`.domino-${dominoName}`).classed('domino-matched', true);
         } else {
-          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
+          d3__namespace.selectAll(`.domino-${dominoName}`).classed('domino-matched', false);
         }
         d3__namespace.select('.dominos').classed('searching', true);
       });
     } else {
-      referenceList.forEach(val => {
-        const dominoName = toClassText(val);
-        d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
-      });
+      d3__namespace.selectAll('.domino').classed('domino-matched', false);
       d3__namespace.select('.dominos').classed('searching', false);
     }
   };
