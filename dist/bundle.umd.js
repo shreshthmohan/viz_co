@@ -9494,6 +9494,7 @@ g.circles circle.circle.circle-hovered {
   g.bar {
     stroke: ${bgColor};
     fill-opacity: ${inactiveOpacity};
+    cursor: pointer;
   }
   g.bar.bar-active {
     stroke: ${bgColor};
@@ -9775,6 +9776,11 @@ g.circles circle.circle.circle-hovered {
           .transition()
           .duration(500)
           .style('opacity', 0);
+      })
+      .on('click', function (e) {
+        const parentBar = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentBar.classed('bar-active');
+        parentBar.classed('bar-active', !clickedState);
       });
 
     leftBars
@@ -9855,6 +9861,11 @@ g.circles circle.circle.circle-hovered {
           .transition()
           .duration(500)
           .style('opacity', 0);
+      })
+      .on('click', function (e) {
+        const parentBar = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentBar.classed('bar-active');
+        parentBar.classed('bar-active', !clickedState);
       });
 
     rightBars

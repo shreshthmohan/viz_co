@@ -185,6 +185,7 @@ function applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity }) {
   g.bar {
     stroke: ${bgColor};
     fill-opacity: ${inactiveOpacity};
+    cursor: pointer;
   }
   g.bar.bar-active {
     stroke: ${bgColor};
@@ -467,6 +468,11 @@ function renderBars({
         .duration(500)
         .style('opacity', 0)
     })
+    .on('click', function (e) {
+      const parentBar = d3.select(e.target.parentNode)
+      const clickedState = parentBar.classed('bar-active')
+      parentBar.classed('bar-active', !clickedState)
+    })
 
   leftBars
     .append('rect')
@@ -546,6 +552,11 @@ function renderBars({
         .transition()
         .duration(500)
         .style('opacity', 0)
+    })
+    .on('click', function (e) {
+      const parentBar = d3.select(e.target.parentNode)
+      const clickedState = parentBar.classed('bar-active')
+      parentBar.classed('bar-active', !clickedState)
     })
 
   rightBars
