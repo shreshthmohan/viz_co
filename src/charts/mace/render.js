@@ -10,6 +10,15 @@ import { pointsToRotationAngle, maceShape } from './helpers'
 
 export function renderChart({
   data,
+  dimensions: {
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+    nameField,
+  },
+
   options: {
     aspectRatio = 2,
 
@@ -23,8 +32,8 @@ export function renderChart({
     oppositeDirectionColor = '#ee4e34',
     sameDirectionColor = '#44a8c1',
 
-    yAxisTitle = 'y axis title',
-    xAxisTitle = 'x axis title',
+    yAxisTitle = `${yFieldStart} → ${yFieldEnd}`,
+    xAxisTitle = `${xFieldStart} → ${xFieldEnd}`,
 
     xValueFormatter = '',
     yValueFormatter = '',
@@ -36,7 +45,7 @@ export function renderChart({
     sizeLegendTitle = 'size legend title',
     sizeValueFormatter = '',
 
-    xAxisTickValues,
+    xAxisTickValues = [],
 
     xScaleType = 'linear', // linear or log
     xScaleLogBase = 10, // applicable only if log scale
@@ -56,17 +65,13 @@ export function renderChart({
     xFieldType = `${xFieldStart} → ${xFieldEnd}`,
     yFieldType = `${yFieldStart} → ${yFieldEnd}`,
   },
-  dimensions: {
-    xFieldStart,
-    xFieldEnd,
-    yFieldStart,
-    yFieldEnd,
-    sizeField,
-    nameField,
-  },
   chartContainerSelector,
 }) {
-  applyInteractionStyles({ activeOpacity, inactiveOpacity })
+  applyInteractionStyles({
+    chartContainerSelector,
+    activeOpacity,
+    inactiveOpacity,
+  })
 
   const coreChartWidth = 1000
   const {
@@ -114,6 +119,7 @@ export function renderChart({
       lineWidthRange,
       sameDirectionColor,
       oppositeDirectionColor,
+      xAxisTickValues,
     })
 
   const nameValues = _(data).map(nameField).uniq().value()
@@ -232,34 +238,38 @@ export function renderChart({
   })
 }
 
-function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+function applyInteractionStyles({
+  activeOpacity,
+  inactiveOpacity,
+  chartContainerSelector,
+}) {
   d3.select('body').append('style').html(`
-    .mace {
+    ${chartContainerSelector} .mace {
       cursor: pointer;
     }
-    g.maces .mace {
+    ${chartContainerSelector} g.maces .mace {
       fill-opacity: ${inactiveOpacity};
     }
     /* clicked and legend clicked states are common: controlled by .mace-active */
-    g.maces .mace.mace-active {
+    ${chartContainerSelector} g.maces .mace.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.maces.searching .mace.mace-matched {
+    ${chartContainerSelector} g.maces.searching .mace.mace-matched {
       stroke: #333;
       stroke-width: 3;
     }
     /* So that legend text is visible irrespective of state */
-    g.mace text {
+    ${chartContainerSelector} g.mace text {
       fill-opacity: 0.8;
     }
-    g.maces g.mace.mace-hovered {
+    ${chartContainerSelector} g.maces g.mace.mace-hovered {
       stroke: #333;
       stroke-width: 3;
     }
-    g.color-legend g.mace-active {
+    ${chartContainerSelector} g.color-legend g.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.color-legend g:not(.mace-active) {
+    ${chartContainerSelector} g.color-legend g:not(.mace-active) {
       fill-opacity: ${inactiveOpacity};
     }
   `)
@@ -366,6 +376,7 @@ function setupScales({
   lineWidthRange,
   sameDirectionColor,
   oppositeDirectionColor,
+  xAxisTickValues,
 }) {
   const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]))
   const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]))
@@ -378,7 +389,12 @@ function setupScales({
 
   const xDomainStart = dataParsed.map(el => Number.parseFloat(el[xFieldStart]))
   const xDomainEnd = dataParsed.map(el => Number.parseFloat(el[xFieldEnd]))
-  const xDomain = d3.extent([...xDomainStart, ...xDomainEnd])
+  const xDomain = d3.extent([
+    ...xDomainStart,
+    ...xDomainEnd,
+    ...xAxisTickValues,
+  ])
+
   const xScale =
     xScaleType === 'log'
       ? d3
@@ -386,8 +402,7 @@ function setupScales({
           .base(xScaleLogBase || 10)
           .range([0, coreChartWidth])
           .domain(xDomain)
-          .nice()
-      : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain).nice()
+      : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain)
 
   const sizeMax = d3.max(dataParsed.map(el => el[sizeField]))
 
@@ -484,7 +499,7 @@ function renderXAxis({
     .attr('class', 'x-axis-bottom')
     .attr('transform', `translate(0, ${coreChartHeight + 30})`)
   xAxis.call(
-    xAxisTickValues
+    xAxisTickValues.length
       ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
       : d3.axisBottom(xScale),
   )

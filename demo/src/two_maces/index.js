@@ -91,6 +91,13 @@ viz.validateAndRenderMace({
 viz.validateAndRenderMace({
   chartContainerSelector: '#chart-container-two',
   dataPath: dataPath_two,
-  options: options,
+  options: {
+    ...options,
+    oppositeDirectionColor: 'red',
+    sameDirectionColor: 'blue',
+
+    activeOpacity: 1,
+    inactiveOpacity: 0.6,
+  },
   dimensions: dimensions,
 })
