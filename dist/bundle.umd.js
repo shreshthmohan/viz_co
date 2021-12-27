@@ -760,7 +760,7 @@
     return search
   }
 
-  function setupInitialStateButton$5({
+  function setupInitialStateButton$6({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -783,7 +783,7 @@
     });
   }
 
-  function setupClearAllButton$6({
+  function setupClearAllButton$7({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -1001,7 +1001,7 @@
       chartContainerSelector,
     });
 
-    setupInitialStateButton$5({
+    setupInitialStateButton$6({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -1009,7 +1009,7 @@
       handleSearch,
       svg,
     });
-    setupClearAllButton$6({
+    setupClearAllButton$7({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -3791,7 +3791,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$4({
+  function setupInitialStateButton$5({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -3813,7 +3813,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$5({
+  function setupClearAllButton$6({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3831,7 +3831,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$4({
+  function setupShowAllButton$5({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3975,7 +3975,7 @@ g.circles circle.circle.circle-hovered {
       seriesField,
     });
 
-    setupInitialStateButton$4({
+    setupInitialStateButton$5({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -3983,14 +3983,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$5({
+    setupClearAllButton$6({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$4({
+    setupShowAllButton$5({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -6399,7 +6399,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$3({
+  function setupInitialStateButton$4({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -6420,7 +6420,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$4({
+  function setupClearAllButton$5({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -6588,14 +6588,14 @@ g.circles circle.circle.circle-hovered {
       dominoField,
     });
 
-    setupInitialStateButton$3({
+    setupInitialStateButton$4({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$4({
+    setupClearAllButton$5({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7938,7 +7938,7 @@ g.circles circle.circle.circle-hovered {
       sourceField,
     });
 
-    setupClearAllButton$3({
+    setupClearAllButton$4({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7946,7 +7946,7 @@ g.circles circle.circle.circle-hovered {
       index,
     });
 
-    setupShowAllButton$3({
+    setupShowAllButton$4({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -8364,7 +8364,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupClearAllButton$3({
+  function setupClearAllButton$4({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -8383,7 +8383,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$3({
+  function setupShowAllButton$4({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -8912,7 +8912,7 @@ g.circles circle.circle.circle-hovered {
 
     const axes = chartCore.append('g').attr('class', 'axes');
 
-    setupInitialStateButton$2({
+    setupInitialStateButton$3({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -8920,14 +8920,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$2({
+    setupShowAllButton$3({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -9102,7 +9102,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function setupInitialStateButton$2({
+  function setupInitialStateButton$3({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -9124,7 +9124,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -9142,7 +9142,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$2({
+  function setupShowAllButton$3({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -9447,7 +9447,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const handleSearch = searchEventHandler$2(dimensionValues);
-    setupSearch$2({
+    const search = setupSearch$2({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -9457,27 +9457,30 @@ g.circles circle.circle.circle-hovered {
       dimensionValues,
     });
 
-    // setupInitialStateButton({
-    //   widgetsLeft,
-    //   goToInitialStateButtonClassNames,
-    //   defaultStateAll,
-    //   search,
-    //   handleSearch,
-    // })
+    setupInitialStateButton$2({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
 
-    // setupClearAllButton({
-    //   widgetsLeft,
-    //   clearAllButtonClassNames,
-    //   search,
-    //   handleSearch,
-    // })
+    setupClearAllButton$2({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
 
-    // setupShowAllButton({
-    //   widgetsLeft,
-    //   showAllButtonClassNames,
-    //   search,
-    //   handleSearch,
-    // })
+    setupShowAllButton$2({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
 
     // For responsiveness
     // adjust svg to prevent overflows
@@ -9986,6 +9989,67 @@ g.circles circle.circle.circle-hovered {
       handleSearch(qstr, svg);
     });
     return search
+  }
+
+  function setupClearAllButton$2({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', false);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupShowAllButton$2({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', true);
+      search.node().value = '';
+      handleSearch('');
+    });
+  }
+
+  function setupInitialStateButton$2({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true);
+      });
+      search.node().value = '';
+      handleSearch('');
+    });
   }
 
   const dimensionTypes$4 = {

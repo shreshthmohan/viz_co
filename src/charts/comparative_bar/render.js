@@ -148,27 +148,30 @@ export function renderChart({
     dimensionValues,
   })
 
-  // setupInitialStateButton({
-  //   widgetsLeft,
-  //   goToInitialStateButtonClassNames,
-  //   defaultStateAll,
-  //   search,
-  //   handleSearch,
-  // })
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  })
 
-  // setupClearAllButton({
-  //   widgetsLeft,
-  //   clearAllButtonClassNames,
-  //   search,
-  //   handleSearch,
-  // })
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
 
-  // setupShowAllButton({
-  //   widgetsLeft,
-  //   showAllButtonClassNames,
-  //   search,
-  //   handleSearch,
-  // })
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
 
   // For responsiveness
   // adjust svg to prevent overflows
@@ -687,6 +690,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -694,7 +698,7 @@ function setupClearAllButton({
     .attr('class', clearAllButtonClassNames)
   clearAll.classed('hidden', false)
   clearAll.on('click', () => {
-    d3.selectAll('.topic').classed('topic-active', false)
+    svg.selectAll('.bar').classed('bar-active', false)
     search.node().value = ''
     handleSearch('')
   })
@@ -705,6 +709,7 @@ function setupShowAllButton({
   showAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const showAll = widgetsLeft
     .append('button')
@@ -712,7 +717,7 @@ function setupShowAllButton({
     .attr('class', showAllButtonClassNames)
   showAll.classed('hidden', false)
   showAll.on('click', () => {
-    d3.selectAll('.topic').classed('topic-active', true)
+    svg.selectAll('.bar').classed('bar-active', true)
     search.node().value = ''
     handleSearch('')
   })
@@ -724,6 +729,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -731,9 +737,9 @@ function setupInitialStateButton({
     .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.classed('hidden', false)
   goToInitialState.on('click', () => {
-    d3.selectAll('.topic').classed('topic-active', false)
+    svg.selectAll('.bar').classed('bar-active', false)
     _.forEach(defaultStateAll, val => {
-      d3.select(`.topic-${toClassText(val)}`).classed('topic-active', true)
+      svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true)
     })
     search.node().value = ''
     handleSearch('')
