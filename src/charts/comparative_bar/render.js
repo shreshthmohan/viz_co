@@ -14,19 +14,18 @@ export function renderChart({
   options: {
     aspectRatio = 0.7,
 
-    bgColor = 'transparent',
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
     marginLeft = 0,
 
+    bgColor = 'transparent',
+
     colorScheme = ['#3077aa', '#ed3833'],
-    barOpacity = 1,
 
     barValueMidPoint = 50,
 
-    axesTickSize = 10,
-
+    xAxisTickSize = 10,
     leftXAxisLabel = barLeftValueField,
     rightXAxisLabel = barRightValueField,
     xAxisLabel = '',
@@ -107,7 +106,6 @@ export function renderChart({
     triangleOffset,
     xStart,
     colorScheme,
-    barOpacity,
     markerSymbol,
     symbolSize,
     symbolConstant,
@@ -119,15 +117,15 @@ export function renderChart({
     defaultStateAll,
   })
 
-  renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize })
+  renderXAxis({ leftBarsContainer, xScaleLeft, xAxisTickSize })
 
-  renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize })
+  renderYAxis({ rightBarsContainer, xScaleRight, xAxisTickSize })
 
   renderLegends({
     chartCore,
     xScaleLeft,
     xStart,
-    axesTickSize,
+    xAxisTickSize,
     markerSymbol,
     symbolSize,
     triangleOffset,
@@ -274,7 +272,7 @@ function renderLegends({
   chartCore,
   xScaleLeft,
   xStart,
-  axesTickSize,
+  xAxisTickSize,
   markerSymbol,
   symbolSize,
   triangleOffset,
@@ -291,8 +289,8 @@ function renderLegends({
   topLegend
     .append('rect')
     .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
-    .attr('y', -axesTickSize * 5)
-    .attr('height', axesTickSize * 2)
+    .attr('y', -xAxisTickSize * 5)
+    .attr('height', xAxisTickSize * 2)
     .attr('width', centerDividerWidth)
     .attr('fill', '#000')
 
@@ -307,7 +305,7 @@ function renderLegends({
         triangleOffset / 4 -
         5 -
         (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) rotate(-90)`,
+      }, ${-xAxisTickSize * 4}) rotate(-90)`,
     )
     .attr('fill', colorScheme[0])
 
@@ -319,7 +317,7 @@ function renderLegends({
       'transform',
       `translate(${
         xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
     )
     .attr('fill', colorScheme[0])
     .attr('dominant-baseline', 'middle')
@@ -337,7 +335,7 @@ function renderLegends({
         triangleOffset / 4 +
         5 +
         (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) rotate(90)`,
+      }, ${-xAxisTickSize * 4}) rotate(90)`,
     )
     .attr('fill', colorScheme[1])
 
@@ -349,7 +347,7 @@ function renderLegends({
       'transform',
       `translate(${
         xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
     )
     .attr('fill', colorScheme[1])
     .attr('dominant-baseline', 'middle')
@@ -362,7 +360,7 @@ function renderLegends({
     .text(xAxisLabel)
     .attr(
       'transform',
-      `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
+      `translate(${xScaleLeft(xStart)}, ${-xAxisTickSize * 6}) `,
     )
     .attr('fill', '#333')
     .attr('dominant-baseline', 'middle')
@@ -370,10 +368,10 @@ function renderLegends({
     .attr('style', 'font-weight: bold;')
 }
 
-function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+function renderXAxis({ leftBarsContainer, xScaleLeft, xAxisTickSize }) {
   leftBarsContainer
     .append('g')
-    .call(d3.axisTop(xScaleLeft).tickSize(axesTickSize))
+    .call(d3.axisTop(xScaleLeft).tickSize(xAxisTickSize))
     .call(g => {
       g.select('.domain').remove()
       g.selectAll('.tick line').attr('stroke', '#555')
@@ -381,10 +379,10 @@ function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
     })
 }
 
-function renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize }) {
+function renderYAxis({ rightBarsContainer, xScaleRight, xAxisTickSize }) {
   rightBarsContainer
     .append('g')
-    .call(d3.axisTop(xScaleRight).tickSize(axesTickSize))
+    .call(d3.axisTop(xScaleRight).tickSize(xAxisTickSize))
     .call(g => {
       g.select('.domain').remove()
       g.selectAll('.tick line').attr('stroke', '#555')
@@ -426,7 +424,6 @@ function renderBars({
   triangleOffset,
   xStart,
   colorScheme,
-  barOpacity,
   markerSymbol,
   symbolSize,
   symbolConstant,
@@ -482,7 +479,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[0])
-    .attr('opacity', barOpacity)
 
   // Left Symbols
   leftBars
@@ -506,7 +502,6 @@ function renderBars({
       return markerSymbol.size(customTriangleSize)()
     })
     .attr('fill', colorScheme[0])
-    .attr('opacity', barOpacity)
 
   leftBars
     .append('text')
@@ -566,7 +561,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[1])
-    .attr('opacity', barOpacity)
 
   // Right Symbols
   rightBars
@@ -589,7 +583,6 @@ function renderBars({
       return markerSymbol.size(customTriangleSize)()
     })
     .attr('fill', colorScheme[1])
-    .attr('opacity', barOpacity)
 
   rightBars
     .append('text')

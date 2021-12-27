@@ -9323,19 +9323,18 @@ g.circles circle.circle.circle-hovered {
     options: {
       aspectRatio = 0.7,
 
-      bgColor = 'transparent',
       marginTop = 0,
       marginRight = 0,
       marginBottom = 0,
       marginLeft = 0,
 
+      bgColor = 'transparent',
+
       colorScheme = ['#3077aa', '#ed3833'],
-      barOpacity = 1,
 
       barValueMidPoint = 50,
 
-      axesTickSize = 10,
-
+      xAxisTickSize = 10,
       leftXAxisLabel = barLeftValueField,
       rightXAxisLabel = barRightValueField,
       xAxisLabel = '',
@@ -9416,7 +9415,6 @@ g.circles circle.circle.circle-hovered {
       triangleOffset,
       xStart,
       colorScheme,
-      barOpacity,
       markerSymbol,
       symbolSize,
       symbolConstant,
@@ -9428,15 +9426,15 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    renderXAxis$3({ leftBarsContainer, xScaleLeft, axesTickSize });
+    renderXAxis$3({ leftBarsContainer, xScaleLeft, xAxisTickSize });
 
-    renderYAxis$2({ rightBarsContainer, xScaleRight, axesTickSize });
+    renderYAxis$2({ rightBarsContainer, xScaleRight, xAxisTickSize });
 
     renderLegends$1({
       chartCore,
       xScaleLeft,
       xStart,
-      axesTickSize,
+      xAxisTickSize,
       markerSymbol,
       symbolSize,
       triangleOffset,
@@ -9583,7 +9581,7 @@ g.circles circle.circle.circle-hovered {
     chartCore,
     xScaleLeft,
     xStart,
-    axesTickSize,
+    xAxisTickSize,
     markerSymbol,
     symbolSize,
     triangleOffset,
@@ -9600,8 +9598,8 @@ g.circles circle.circle.circle-hovered {
     topLegend
       .append('rect')
       .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
-      .attr('y', -axesTickSize * 5)
-      .attr('height', axesTickSize * 2)
+      .attr('y', -xAxisTickSize * 5)
+      .attr('height', xAxisTickSize * 2)
       .attr('width', centerDividerWidth)
       .attr('fill', '#000');
 
@@ -9616,7 +9614,7 @@ g.circles circle.circle.circle-hovered {
         triangleOffset / 4 -
         5 -
         (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) rotate(-90)`,
+      }, ${-xAxisTickSize * 4}) rotate(-90)`,
       )
       .attr('fill', colorScheme[0]);
 
@@ -9628,7 +9626,7 @@ g.circles circle.circle.circle-hovered {
         'transform',
         `translate(${
         xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
       )
       .attr('fill', colorScheme[0])
       .attr('dominant-baseline', 'middle')
@@ -9646,7 +9644,7 @@ g.circles circle.circle.circle-hovered {
         triangleOffset / 4 +
         5 +
         (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) rotate(90)`,
+      }, ${-xAxisTickSize * 4}) rotate(90)`,
       )
       .attr('fill', colorScheme[1]);
 
@@ -9658,7 +9656,7 @@ g.circles circle.circle.circle-hovered {
         'transform',
         `translate(${
         xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
       )
       .attr('fill', colorScheme[1])
       .attr('dominant-baseline', 'middle')
@@ -9671,7 +9669,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel)
       .attr(
         'transform',
-        `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
+        `translate(${xScaleLeft(xStart)}, ${-xAxisTickSize * 6}) `,
       )
       .attr('fill', '#333')
       .attr('dominant-baseline', 'middle')
@@ -9679,10 +9677,10 @@ g.circles circle.circle.circle-hovered {
       .attr('style', 'font-weight: bold;');
   }
 
-  function renderXAxis$3({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+  function renderXAxis$3({ leftBarsContainer, xScaleLeft, xAxisTickSize }) {
     leftBarsContainer
       .append('g')
-      .call(d3__namespace.axisTop(xScaleLeft).tickSize(axesTickSize))
+      .call(d3__namespace.axisTop(xScaleLeft).tickSize(xAxisTickSize))
       .call(g => {
         g.select('.domain').remove();
         g.selectAll('.tick line').attr('stroke', '#555');
@@ -9690,10 +9688,10 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  function renderYAxis$2({ rightBarsContainer, xScaleRight, axesTickSize }) {
+  function renderYAxis$2({ rightBarsContainer, xScaleRight, xAxisTickSize }) {
     rightBarsContainer
       .append('g')
-      .call(d3__namespace.axisTop(xScaleRight).tickSize(axesTickSize))
+      .call(d3__namespace.axisTop(xScaleRight).tickSize(xAxisTickSize))
       .call(g => {
         g.select('.domain').remove();
         g.selectAll('.tick line').attr('stroke', '#555');
@@ -9735,7 +9733,6 @@ g.circles circle.circle.circle-hovered {
     triangleOffset,
     xStart,
     colorScheme,
-    barOpacity,
     markerSymbol,
     symbolSize,
     symbolConstant,
@@ -9790,8 +9787,7 @@ g.circles circle.circle.circle-hovered {
           xScaleLeft(xStart) - xScaleLeft(d[barLeftValueField]) - triangleOffset;
         return rw > 0 ? rw : 0
       })
-      .attr('fill', colorScheme[0])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[0]);
 
     // Left Symbols
     leftBars
@@ -9814,8 +9810,7 @@ g.circles circle.circle.circle-hovered {
         const customTriangleSize = (w * symbolConstant) ** 2;
         return markerSymbol.size(customTriangleSize)()
       })
-      .attr('fill', colorScheme[0])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[0]);
 
     leftBars
       .append('text')
@@ -9874,8 +9869,7 @@ g.circles circle.circle.circle-hovered {
           triangleOffset;
         return rw > 0 ? rw : 0
       })
-      .attr('fill', colorScheme[1])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[1]);
 
     // Right Symbols
     rightBars
@@ -9897,8 +9891,7 @@ g.circles circle.circle.circle-hovered {
         const customTriangleSize = (w * symbolConstant) ** 2;
         return markerSymbol.size(customTriangleSize)()
       })
-      .attr('fill', colorScheme[1])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[1]);
 
     rightBars
       .append('text')
@@ -10072,16 +10065,24 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    // /* Dimensions */
-    // /* xField */
+    colorScheme: checkColorArray(2),
+
+    barValueMidPoint: checkNumber,
+
+    xAxisTickSize: checkNumber,
     // leftXAxisLabel: checkString,
     // rightXAxisLabel: checkString,
     // xAxisLabel: checkString,
 
-    // /* Chart Specific */
-    colorScheme: checkColorArray(2),
-    barValueMidPoint: checkNumber,
-    barOpacity: checkNumberBetween(0, 1),
+    defaultState: checkDefaultState,
+
+    inactiveOpacity: checkNumberBetween(0, 1),
+    activeOpacity: checkNumberBetween(0, 1),
+
+    // goToInitialStateButtonClassNames: checkStringArray,
+    // searchInputClassNames: checkStringArray,
+    // clearAllButtonClassNames: checkStringArray,
+    // showAllButtonClassNames: checkStringArray,
   };
 
   function validateAndRender$5({
