@@ -189,9 +189,17 @@ function applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity }) {
     stroke: ${bgColor};
     fill-opacity: ${activeOpacity};
   }
+  g.left-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  g.right-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
+  }
   g.bar.bar-hovered {
     stroke: #333;
-    stroke-width: 1;
+    stroke-width: 2;
   }
 `)
 }
@@ -471,7 +479,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[0])
-    .attr('stroke-width', 1)
     .attr('opacity', barOpacity)
 
   // Left Symbols
@@ -556,7 +563,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[1])
-    .attr('stroke-width', 1)
     .attr('opacity', barOpacity)
 
   // Right Symbols
@@ -615,20 +621,22 @@ const searchEventHandler = referenceList => (qstr, svg) => {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       // d3.selectAll('.mace').classed('mace-active', false)
-      const maceName = toClassText(val)
+      const barName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        svg.select(`.mace-${maceName}`).classed('mace-matched', true)
+        svg.selectAll(`.bar-${barName}`).classed('bar-matched', true)
       } else {
-        svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+        svg.selectAll(`.bar-${barName}`).classed('bar-matched', false)
       }
-      svg.select('.maces').classed('searching', true)
+      svg.select('.left-bars').classed('searching', true)
+      svg.select('.right-bars').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
-      const maceName = toClassText(val)
-      svg.select(`.mace-${maceName}`).classed('mace-matched', false)
+      const barName = toClassText(val)
+      svg.selectAll(`.bar-${barName}`).classed('bar-matched', false)
     })
-    svg.select('.maces').classed('searching', false)
+    svg.select('.left-bars').classed('searching', false)
+    svg.select('.right-bars').classed('searching', false)
   }
 }
 
