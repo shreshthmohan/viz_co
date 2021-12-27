@@ -727,12 +727,31 @@
     searchInputClassNames,
     nameField,
     svg,
+    chartContainerSelector,
+    nameValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](nameValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
@@ -977,7 +996,9 @@
       widgetsLeft,
       searchInputClassNames,
       nameField,
+      nameValues,
       svg,
+      chartContainerSelector,
     });
 
     setupInitialStateButton$5({
