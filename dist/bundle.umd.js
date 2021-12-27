@@ -7299,6 +7299,8 @@ g.circles circle.circle.circle-hovered {
       missingDataMessage = 'Data missing',
 
       searchButtonClassNames,
+
+      searchInactiveOpacity = 0.3,
     },
     chartContainerSelector,
   }) {
@@ -7312,7 +7314,11 @@ g.circles circle.circle.circle-hovered {
   .hovered {
     stroke: #333;
     stroke-width: 2;
-  }`);
+  }
+  .searching > .iv-county:not(.s-match) {
+    opacity: ${searchInactiveOpacity};
+  }
+  `);
 
     const coreChartHeight = 610;
     const coreChartWidth = 975;
@@ -7516,6 +7522,9 @@ g.circles circle.circle.circle-hovered {
     // colorLegendTitle = valueField,
 
     nullDataColor: checkColor,
+    missingDataColor: checkColor,
+
+    searchInactiveOpacity: checkNumberBetween(0, 1),
 
     // searchButtonClassNames,
   };
