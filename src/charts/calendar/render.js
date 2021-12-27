@@ -2,7 +2,7 @@
 import * as d3 from 'd3'
 import _ from 'lodash-es'
 import { preventOverflow } from '../../utils/helpers/general'
-import { swatches } from '../../utils/helpers/colorLegend'
+import { legend } from '../../utils/helpers/colorLegend'
 
 function setupChartArea({
   chartContainerSelector,
@@ -158,22 +158,61 @@ function setupScales({
   const colorScale = d3.scaleOrdinal(colorScheme).domain(yFields)
   const colorScaleForLegend = d3.scaleOrdinal(colorScheme).domain(yFieldLabels)
 
+  const colorScaleReverseMap = {}
+  yFields.forEach((yf, i) => {
+    colorScaleReverseMap[yFieldLabels[i]] = yf
+  })
+
   return {
     yScale,
     xScale,
     colorScale,
     colorScaleForLegend,
+    colorScaleReverseMap,
     xGridScale,
     yGridScale,
   }
 }
 
-function renderLegends({ widgetsRight, colorScaleForLegend }) {
-  widgetsRight.html(
-    swatches({
+function renderLegends({
+  widgetsRight,
+  colorScaleForLegend,
+  svg,
+  colorScaleReverseMap,
+}) {
+  // widgetsRight.html(
+  //   swatches({
+  //     color: colorScaleForLegend,
+  //     uid: 'rs',
+  //     customClass: '',
+  //   }),
+  // )
+
+  widgetsRight.append(() =>
+    legend({
       color: colorScaleForLegend,
-      uid: 'rs',
-      customClass: '',
+      width: 600,
+      height: 50,
+      tickSize: 0,
+      classNames: 'cldr-color-legend',
+      handleMouseover: (e, d) => {
+        svg
+          .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+          .classed('g-active', true)
+        svg.classed('filtering', true)
+
+        d3.select('.cldr-color-legend').classed('filtering-legend', true)
+        d3.select(e.target).classed('active', true)
+      },
+      handleMouseout: (e, d) => {
+        svg
+          .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+          .classed('g-active', false)
+        svg.classed('filtering', false)
+
+        d3.select('.cldr-color-legend').classed('filtering-legend', false)
+        d3.select(e.target).classed('active', false)
+      },
     }),
   )
 }
@@ -217,6 +256,7 @@ function renderCalendar({
         .data(stackedDataByYear[d[nameField]])
         .enter()
         .append('g')
+        .attr('class', dd => `g-stack-${dd.key}`)
         .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
         .selectAll('rect')
         .data(dd => dd)
@@ -268,6 +308,14 @@ function renderCalendar({
 
 export function renderChart({
   data,
+  dimensions: {
+    xGridField,
+    yGridField,
+    xField,
+    nameField,
+    yFields,
+    uniqueColumnField,
+  },
   options: {
     aspectRatio = 0.8,
 
@@ -290,16 +338,17 @@ export function renderChart({
     xGridGap = 0.02,
     stackHeight = 0.5,
   },
-  dimensions: {
-    xGridField,
-    yGridField,
-    xField,
-    nameField,
-    yFields,
-    uniqueColumnField,
-  },
   chartContainerSelector,
 }) {
+  d3.select('body').append('style').html(`
+  .filtering g:not(.g-active) > rect {
+    opacity: 0.2;
+  }
+  .cldr-color-legend.filtering-legend rect:not(.active) {
+    opacity: 0.2;
+  } 
+  `)
+
   const coreChartWidth = 1000
   const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
     setupChartArea({
@@ -330,6 +379,7 @@ export function renderChart({
     colorScaleForLegend,
     xGridScale,
     yGridScale,
+    colorScaleReverseMap,
   } = setupScales({
     data,
     maxY,
@@ -367,7 +417,13 @@ export function renderChart({
     yFieldLabels,
   })
 
-  renderLegends({ widgetsRight, colorScaleForLegend })
+  renderLegends({
+    widgetsRight,
+    colorScaleForLegend,
+
+    svg,
+    colorScaleReverseMap,
+  })
 
   // adjust svg to prevent overflows
   preventOverflow({

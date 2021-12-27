@@ -16,6 +16,9 @@ export function legend({
   tickFormat,
   tickValues,
   // opacity,
+  classNames,
+  handleMouseover = a => a,
+  handleMouseout = a => a,
 } = {}) {
   const svg = d3
     .create('svg')
@@ -25,6 +28,7 @@ export function legend({
     .style('overflow', 'visible')
     // .style("opacity", 0.7)
     .style('display', 'block')
+    .attr('class', classNames)
 
   let tickAdjust = g =>
     g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height)
@@ -143,6 +147,8 @@ export function legend({
       .attr('width', Math.max(0, x.bandwidth() - 1))
       .attr('height', height - marginTop - marginBottom)
       .attr('fill', color)
+      .on('mouseover', handleMouseover)
+      .on('mouseout', handleMouseout)
 
     tickAdjust = () => {}
   }

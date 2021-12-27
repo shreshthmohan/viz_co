@@ -1960,6 +1960,9 @@
     tickFormat,
     tickValues,
     // opacity,
+    classNames,
+    handleMouseover = a => a,
+    handleMouseout = a => a,
   } = {}) {
     const svg = d3__namespace
       .create('svg')
@@ -1968,7 +1971,8 @@
       .attr('viewBox', [0, 0, width, height])
       .style('overflow', 'visible')
       // .style("opacity", 0.7)
-      .style('display', 'block');
+      .style('display', 'block')
+      .attr('class', classNames);
 
     let tickAdjust = g =>
       g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
@@ -2086,7 +2090,9 @@
         .attr('y', marginTop)
         .attr('width', Math.max(0, x.bandwidth() - 1))
         .attr('height', height - marginTop - marginBottom)
-        .attr('fill', color);
+        .attr('fill', color)
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout);
 
       tickAdjust = () => {};
     }
@@ -4858,22 +4864,61 @@ g.circles circle.circle.circle-hovered {
     const colorScale = d3__namespace.scaleOrdinal(colorScheme).domain(yFields);
     const colorScaleForLegend = d3__namespace.scaleOrdinal(colorScheme).domain(yFieldLabels);
 
+    const colorScaleReverseMap = {};
+    yFields.forEach((yf, i) => {
+      colorScaleReverseMap[yFieldLabels[i]] = yf;
+    });
+
     return {
       yScale,
       xScale,
       colorScale,
       colorScaleForLegend,
+      colorScaleReverseMap,
       xGridScale,
       yGridScale,
     }
   }
 
-  function renderLegends$2({ widgetsRight, colorScaleForLegend }) {
-    widgetsRight.html(
-      swatches({
+  function renderLegends$2({
+    widgetsRight,
+    colorScaleForLegend,
+    svg,
+    colorScaleReverseMap,
+  }) {
+    // widgetsRight.html(
+    //   swatches({
+    //     color: colorScaleForLegend,
+    //     uid: 'rs',
+    //     customClass: '',
+    //   }),
+    // )
+
+    widgetsRight.append(() =>
+      legend({
         color: colorScaleForLegend,
-        uid: 'rs',
-        customClass: '',
+        width: 600,
+        height: 50,
+        tickSize: 0,
+        classNames: 'cldr-color-legend',
+        handleMouseover: (e, d) => {
+          svg
+            .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+            .classed('g-active', true);
+          svg.classed('filtering', true);
+
+          d3__namespace.select('.cldr-color-legend').classed('filtering-legend', true);
+          d3__namespace.select(e.target).classed('active', true);
+        },
+        handleMouseout: (e, d) => {
+          svg
+            .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+            .classed('g-active', false);
+          svg.classed('filtering', false);
+
+          d3__namespace.select('.cldr-color-legend').classed('filtering-legend', false);
+          d3__namespace.select(e.target).classed('active', false);
+        },
       }),
     );
   }
@@ -4917,6 +4962,7 @@ g.circles circle.circle.circle-hovered {
           .data(stackedDataByYear[d[nameField]])
           .enter()
           .append('g')
+          .attr('class', dd => `g-stack-${dd.key}`)
           .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
           .selectAll('rect')
           .data(dd => dd)
@@ -4968,6 +5014,14 @@ g.circles circle.circle.circle-hovered {
 
   function renderChart$d({
     data,
+    dimensions: {
+      xGridField,
+      yGridField,
+      xField,
+      nameField,
+      yFields,
+      uniqueColumnField,
+    },
     options: {
       aspectRatio = 0.8,
 
@@ -4990,16 +5044,17 @@ g.circles circle.circle.circle-hovered {
       xGridGap = 0.02,
       stackHeight = 0.5,
     },
-    dimensions: {
-      xGridField,
-      yGridField,
-      xField,
-      nameField,
-      yFields,
-      uniqueColumnField,
-    },
     chartContainerSelector,
   }) {
+    d3__namespace.select('body').append('style').html(`
+  .filtering g:not(.g-active) > rect {
+    opacity: 0.2;
+  }
+  .cldr-color-legend.filtering-legend rect:not(.active) {
+    opacity: 0.2;
+  } 
+  `);
+
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
       setupChartArea$4({
@@ -5030,6 +5085,7 @@ g.circles circle.circle.circle-hovered {
       colorScaleForLegend,
       xGridScale,
       yGridScale,
+      colorScaleReverseMap,
     } = setupScales$7({
       data,
       maxY,
@@ -5067,7 +5123,13 @@ g.circles circle.circle.circle-hovered {
       yFieldLabels,
     });
 
-    renderLegends$2({ widgetsRight, colorScaleForLegend });
+    renderLegends$2({
+      widgetsRight,
+      colorScaleForLegend,
+
+      svg,
+      colorScaleReverseMap,
+    });
 
     // adjust svg to prevent overflows
     preventOverflow({
