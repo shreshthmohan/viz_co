@@ -9,6 +9,7 @@ import {
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
+import { dashedLegend } from './dashedLegend'
 
 export function renderChart({
   data,
@@ -44,6 +45,8 @@ export function renderChart({
     yAXisLabelFontSize = 12,
 
     nanDisplayMessage = 'NA',
+    referenceValues = [],
+    referenceLineLabels = [],
   },
   dimensions: { xField, yFields },
   chartContainerSelector,
@@ -154,6 +157,32 @@ export function renderChart({
         .style('opacity', 0)
     })
 
+  chartCore
+    .append('g')
+    .attr('class', 'references')
+    .selectAll('path')
+    .data(referenceValues)
+    .join('path')
+    .attr('d', d => {
+      const yDomain = yScale.domain()
+      // const { x, y, width, height } = d3.select('.domain').node().getBBox()
+      const x0 = xScale(String(d)) + xScale.bandwidth() / 2
+      const y0 = yScale(d3.min(yDomain))
+      const y1 = yScale(d3.max(yDomain))
+      const d_ = [
+        { x: x0, y: y0 },
+        { x: x0, y: y1 },
+      ]
+      return d3
+        .line()
+        .x(d => d.x)
+        .y(d => d.y)(d_)
+    })
+    .attr('stroke-width', 4)
+    .attr('opacity', 1)
+    .attr('stroke', (d, i) => colorsRgba[i])
+    .attr('stroke-dasharray', '5,5')
+
   renderXAxis({
     xAxisPosition,
     xScale,
@@ -195,6 +224,16 @@ export function renderChart({
       color: colorScaleForLegend,
       uid: 'rs',
       customClass: '',
+    }),
+  )
+  const colorScaleForRefLines = d3
+    .scaleOrdinal()
+    .domain(referenceLineLabels)
+    .range(colors)
+  widgetsRight.append('div').html(
+    dashedLegend({
+      labels: referenceLineLabels,
+      color: colorScaleForRefLines,
     }),
   )
 }

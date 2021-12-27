@@ -6720,7 +6720,7 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  function dashedLegend({
+  function dashedLegend$1({
     labels,
     color,
     swatchSize = 20,
@@ -7039,7 +7039,7 @@ g.circles circle.circle.circle-hovered {
 
     widgetsRight
       .append('div')
-      .html(dashedLegend({ labels: verticalDashedLineLabels, color: colorScale }));
+      .html(dashedLegend$1({ labels: verticalDashedLineLabels, color: colorScale }));
 
     widgetsRight.append('div').html(
       swatches({
@@ -10141,6 +10141,51 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
+  function dashedLegend({
+    labels,
+    color,
+    swatchSize = 20,
+    swatchWidth = 2.5,
+    swatchHeight = swatchSize,
+    marginLeft = 0,
+    uid,
+    customClass = '',
+  }) {
+    const id = `dl-${uid}`;
+    const mu = `
+  <div
+    style="display: flex; align-items: center; min-height: 33px; margin-left: ${+marginLeft}px; font: 10px sans-serif;"
+  >
+    <style>
+      .${id} {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 1em;
+      }
+
+      .${id}::before {
+
+        content: "";
+        width: 0px;
+        height: ${+swatchHeight}px;
+        border: ${Math.floor(+swatchWidth)}px dashed var(--color);
+        margin-right: 0.5em;
+      }
+    </style>
+      ${labels
+        .map(
+          l =>
+            `<span class="${id} ${customClass}" style="--color: ${color(
+              l,
+            )}" >${l}</span>`,
+        )
+        .join('')}
+
+    </div>
+  `;
+    return mu
+  }
+
   /* global window */
 
   function renderChart$4({
@@ -10177,6 +10222,8 @@ g.circles circle.circle.circle-hovered {
       yAXisLabelFontSize = 12,
 
       nanDisplayMessage = 'NA',
+      referenceValues = [],
+      referenceLineLabels = [],
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -10287,6 +10334,32 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
+    chartCore
+      .append('g')
+      .attr('class', 'references')
+      .selectAll('path')
+      .data(referenceValues)
+      .join('path')
+      .attr('d', d => {
+        const yDomain = yScale.domain();
+        // const { x, y, width, height } = d3.select('.domain').node().getBBox()
+        const x0 = xScale(String(d)) + xScale.bandwidth() / 2;
+        const y0 = yScale(d3__namespace.min(yDomain));
+        const y1 = yScale(d3__namespace.max(yDomain));
+        const d_ = [
+          { x: x0, y: y0 },
+          { x: x0, y: y1 },
+        ];
+        return d3__namespace
+          .line()
+          .x(d => d.x)
+          .y(d => d.y)(d_)
+      })
+      .attr('stroke-width', 4)
+      .attr('opacity', 1)
+      .attr('stroke', (d, i) => colorsRgba[i])
+      .attr('stroke-dasharray', '5,5');
+
     renderXAxis$2({
       xAxisPosition,
       xScale,
@@ -10328,6 +10401,16 @@ g.circles circle.circle.circle-hovered {
         color: colorScaleForLegend,
         uid: 'rs',
         customClass: '',
+      }),
+    );
+    const colorScaleForRefLines = d3__namespace
+      .scaleOrdinal()
+      .domain(referenceLineLabels)
+      .range(colors);
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: referenceLineLabels,
+        color: colorScaleForRefLines,
       }),
     );
   }

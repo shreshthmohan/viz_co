@@ -35,6 +35,10 @@ const options = {
   // to tackle too many x tick labels
   // remove this to show all values
   showOnlyEveryNthValue: 1,
+
+  nanDisplayMessage: 'NA',
+  referenceValues: [2005, 2015],
+  referenceLineLabels: ['Zim-Avg', 'Afg-Avg'],
 }
 
 const dataPath = 'data_.csv'
