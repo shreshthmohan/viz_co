@@ -33,6 +33,21 @@ const options = {
   colorScheme: ['#3077aa', '#ed3833'], // [leftColor, rightColor]
   // barValueMidPoint: 50, // default is 50
   barOpacity: 1, // Between 0 & 1
+
+  defaultState: ['Religion'],
+  // defaultState: 'All',
+
+  inactiveOpacity: 0.2,
+  activeOpacity: 1,
+
+  searchInputClassNames:
+    'focus:ring-gray-500 focus:border-gray-500 text-xs border border-gray-300 rounded-sm px-2 py-1 shadow-inner',
+  goToInitialStateButtonClassNames:
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
+  clearAllButtonClassNames:
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
+  showAllButtonClassNames:
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
 }
 
 const dataPath = 'data.csv'

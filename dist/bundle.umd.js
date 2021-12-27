@@ -109,7 +109,10 @@
   }
 
   function toClassText(str) {
-    return str.replace(/[\s&',.]/g, '').toLowerCase()
+    return str
+      .trim()
+      .replace(/[\s&',.()]/g, '-')
+      .toLowerCase()
   }
 
   function preventOverflow({
@@ -699,7 +702,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$7 = referenceList => (qstr, svg) => {
+  const searchEventHandler$8 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -721,7 +724,7 @@
     }
   };
 
-  function setupSearch$8({
+  function setupSearch$9({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -760,7 +763,7 @@
     return search
   }
 
-  function setupInitialStateButton$5({
+  function setupInitialStateButton$6({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -783,7 +786,7 @@
     });
   }
 
-  function setupClearAllButton$6({
+  function setupClearAllButton$7({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -990,8 +993,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$7(nameValues);
-    const search = setupSearch$8({
+    const handleSearch = searchEventHandler$8(nameValues);
+    const search = setupSearch$9({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -1001,7 +1004,7 @@
       chartContainerSelector,
     });
 
-    setupInitialStateButton$5({
+    setupInitialStateButton$6({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -1009,7 +1012,7 @@
       handleSearch,
       svg,
     });
-    setupClearAllButton$6({
+    setupClearAllButton$7({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -3114,7 +3117,7 @@
       });
   }
 
-  const searchEventHandler$6 = referenceList => qstr => {
+  const searchEventHandler$7 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -3186,7 +3189,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$7({
+  function setupSearch$8({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3305,8 +3308,8 @@
     renderXAxis$8({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$6(dominoValues);
-    setupSearch$7({
+    const handleSearch = searchEventHandler$7(dominoValues);
+    setupSearch$8({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3751,7 +3754,7 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$5 = referenceList => qstr => {
+  const searchEventHandler$6 = referenceList => qstr => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
@@ -3772,7 +3775,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$6({
+  function setupSearch$7({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3791,7 +3794,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$4({
+  function setupInitialStateButton$5({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -3813,7 +3816,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$5({
+  function setupClearAllButton$6({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -3831,7 +3834,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$4({
+  function setupShowAllButton$5({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -3967,15 +3970,15 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     });
 
-    const handleSearch = searchEventHandler$5(categoryDomain);
-    const search = setupSearch$6({
+    const handleSearch = searchEventHandler$6(categoryDomain);
+    const search = setupSearch$7({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       seriesField,
     });
 
-    setupInitialStateButton$4({
+    setupInitialStateButton$5({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -3983,14 +3986,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$5({
+    setupClearAllButton$6({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$4({
+    setupShowAllButton$5({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -5399,7 +5402,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$5({
+    setupSearch$6({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -5601,7 +5604,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$5({
+  function setupSearch$6({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -6277,7 +6280,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$4 = referenceList => qstr => {
+  const searchEventHandler$5 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -6381,7 +6384,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
-  function setupSearch$4({
+  function setupSearch$5({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -6399,7 +6402,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupInitialStateButton$3({
+  function setupInitialStateButton$4({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -6420,7 +6423,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$4({
+  function setupClearAllButton$5({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -6580,22 +6583,22 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    const handleSearch = searchEventHandler$4(allDominoFieldValues);
-    const search = setupSearch$4({
+    const handleSearch = searchEventHandler$5(allDominoFieldValues);
+    const search = setupSearch$5({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       dominoField,
     });
 
-    setupInitialStateButton$3({
+    setupInitialStateButton$4({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
       search,
       handleSearch,
     });
-    setupClearAllButton$4({
+    setupClearAllButton$5({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7930,15 +7933,15 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const handleSearch = searchEventHandler$3(names, index);
-    const search = setupSearch$3({
+    const handleSearch = searchEventHandler$4(names, index);
+    const search = setupSearch$4({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
       sourceField,
     });
 
-    setupClearAllButton$3({
+    setupClearAllButton$4({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
@@ -7946,7 +7949,7 @@ g.circles circle.circle.circle-hovered {
       index,
     });
 
-    setupShowAllButton$3({
+    setupShowAllButton$4({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -8311,7 +8314,7 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  const searchEventHandler$3 = (referenceList, index) => qstr => {
+  const searchEventHandler$4 = (referenceList, index) => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       const matchedIndexes = [];
@@ -8345,7 +8348,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$3({
+  function setupSearch$4({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -8364,7 +8367,7 @@ g.circles circle.circle.circle-hovered {
     return search
   }
 
-  function setupClearAllButton$3({
+  function setupClearAllButton$4({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -8383,7 +8386,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$3({
+  function setupShowAllButton$4({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -8902,8 +8905,8 @@ g.circles circle.circle.circle-hovered {
       });
 
     const nameValues = dataParsed.map(d => d[nameField]);
-    const handleSearch = searchEventHandler$2(nameValues);
-    const search = setupSearch$2({
+    const handleSearch = searchEventHandler$3(nameValues);
+    const search = setupSearch$3({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -8912,7 +8915,7 @@ g.circles circle.circle.circle-hovered {
 
     const axes = chartCore.append('g').attr('class', 'axes');
 
-    setupInitialStateButton$2({
+    setupInitialStateButton$3({
       widgetsLeft,
       goToInitialStateButtonClassNames,
       defaultStateAll,
@@ -8920,14 +8923,14 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupClearAllButton$2({
+    setupClearAllButton$3({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
     });
 
-    setupShowAllButton$2({
+    setupShowAllButton$3({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -9102,7 +9105,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function setupInitialStateButton$2({
+  function setupInitialStateButton$3({
     widgetsLeft,
     goToInitialStateButtonClassNames,
     defaultStateAll,
@@ -9124,7 +9127,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupClearAllButton$2({
+  function setupClearAllButton$3({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
@@ -9142,7 +9145,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$2({
+  function setupShowAllButton$3({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -9160,7 +9163,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$2 = referenceList => qstr => {
+  const searchEventHandler$3 = referenceList => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -9181,7 +9184,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$2({
+  function setupSearch$3({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -9323,22 +9326,31 @@ g.circles circle.circle.circle-hovered {
     options: {
       aspectRatio = 0.7,
 
-      bgColor = 'transparent',
       marginTop = 0,
       marginRight = 0,
       marginBottom = 0,
       marginLeft = 0,
 
+      bgColor = 'transparent',
+
       colorScheme = ['#3077aa', '#ed3833'],
-      barOpacity = 1,
 
       barValueMidPoint = 50,
 
-      axesTickSize = 10,
-
+      xAxisTickSize = 10,
       leftXAxisLabel = barLeftValueField,
       rightXAxisLabel = barRightValueField,
       xAxisLabel = '',
+
+      defaultState = [],
+
+      inactiveOpacity = 0.2,
+      activeOpacity = 1,
+
+      goToInitialStateButtonClassNames = '',
+      searchInputClassNames = '',
+      clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
     },
     dimensions: {
       yField,
@@ -9349,29 +9361,37 @@ g.circles circle.circle.circle-hovered {
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$2({ bgColor });
+    applyInteractionStyles$2({ bgColor, inactiveOpacity, activeOpacity });
 
     const tooltipDiv = initializeTooltip$1();
 
     const coreChartWidth = 1200;
 
-    const { svg, coreChartHeight, allComponents, chartCore } = setupChartArea$3({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
+      setupChartArea$3({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
 
-    const { yDomain, maxOverall, xStartActual } = parseData$1({
+    const {
+      yDomain,
+      maxOverall,
+      xStartActual,
+      dimensionValues,
+      defaultStateAll,
+    } = parseData$1({
       data,
       yField,
       barRightValueField,
       barLeftValueField,
       barValueMidPoint,
+      defaultState,
     });
 
     const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales$2({
@@ -9398,7 +9418,6 @@ g.circles circle.circle.circle-hovered {
       triangleOffset,
       xStart,
       colorScheme,
-      barOpacity,
       markerSymbol,
       symbolSize,
       symbolConstant,
@@ -9407,17 +9426,18 @@ g.circles circle.circle.circle-hovered {
       barRightValueField,
       xScaleRight,
       barRightLabelField,
+      defaultStateAll,
     });
 
-    renderXAxis$3({ leftBarsContainer, xScaleLeft, axesTickSize });
+    renderXAxis$3({ leftBarsContainer, xScaleLeft, xAxisTickSize });
 
-    renderYAxis$2({ rightBarsContainer, xScaleRight, axesTickSize });
+    renderYAxis$2({ rightBarsContainer, xScaleRight, xAxisTickSize });
 
     renderLegends$1({
       chartCore,
       xScaleLeft,
       xStart,
-      axesTickSize,
+      xAxisTickSize,
       markerSymbol,
       symbolSize,
       triangleOffset,
@@ -9425,6 +9445,42 @@ g.circles circle.circle.circle-hovered {
       leftXAxisLabel,
       rightXAxisLabel,
       xAxisLabel,
+    });
+
+    const handleSearch = searchEventHandler$2(dimensionValues);
+    const search = setupSearch$2({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      yField,
+      svg,
+      chartContainerSelector,
+      dimensionValues,
+    });
+
+    setupInitialStateButton$2({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    setupClearAllButton$2({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    setupShowAllButton$2({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
     });
 
     // For responsiveness
@@ -9436,14 +9492,28 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$2({ bgColor }) {
+  function applyInteractionStyles$2({ bgColor, inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
   g.bar {
     stroke: ${bgColor};
+    fill-opacity: ${inactiveOpacity};
+    cursor: pointer;
+  }
+  g.bar.bar-active {
+    stroke: ${bgColor};
+    fill-opacity: ${activeOpacity};
+  }
+  g.left-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  g.right-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
   }
   g.bar.bar-hovered {
     stroke: #333;
-    stroke-width: 1;
+    stroke-width: 2;
   }
 `);
   }
@@ -9454,6 +9524,7 @@ g.circles circle.circle.circle-hovered {
     barRightValueField,
     barLeftValueField,
     barValueMidPoint,
+    defaultState,
   }) {
     const yDomain = data.map(el => el[yField]);
     const maxRight = d3__namespace.max(
@@ -9474,7 +9545,11 @@ g.circles circle.circle.circle-hovered {
 
     const xStartActual = d3__namespace.min([barValueMidPoint, minOverall]);
 
-    return { yDomain, maxOverall, xStartActual }
+    const dimensionValues = ___default["default"](data).map(yField).uniq().value();
+    const defaultStateAll =
+      defaultState === 'All' ? dimensionValues : defaultState;
+
+    return { yDomain, maxOverall, xStartActual, dimensionValues, defaultStateAll }
   }
 
   function setupScales$2({
@@ -9510,7 +9585,7 @@ g.circles circle.circle.circle-hovered {
     chartCore,
     xScaleLeft,
     xStart,
-    axesTickSize,
+    xAxisTickSize,
     markerSymbol,
     symbolSize,
     triangleOffset,
@@ -9527,8 +9602,8 @@ g.circles circle.circle.circle-hovered {
     topLegend
       .append('rect')
       .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
-      .attr('y', -axesTickSize * 5)
-      .attr('height', axesTickSize * 2)
+      .attr('y', -xAxisTickSize * 5)
+      .attr('height', xAxisTickSize * 2)
       .attr('width', centerDividerWidth)
       .attr('fill', '#000');
 
@@ -9543,7 +9618,7 @@ g.circles circle.circle.circle-hovered {
         triangleOffset / 4 -
         5 -
         (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) rotate(-90)`,
+      }, ${-xAxisTickSize * 4}) rotate(-90)`,
       )
       .attr('fill', colorScheme[0]);
 
@@ -9555,7 +9630,7 @@ g.circles circle.circle.circle-hovered {
         'transform',
         `translate(${
         xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
       )
       .attr('fill', colorScheme[0])
       .attr('dominant-baseline', 'middle')
@@ -9573,7 +9648,7 @@ g.circles circle.circle.circle-hovered {
         triangleOffset / 4 +
         5 +
         (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) rotate(90)`,
+      }, ${-xAxisTickSize * 4}) rotate(90)`,
       )
       .attr('fill', colorScheme[1]);
 
@@ -9585,7 +9660,7 @@ g.circles circle.circle.circle-hovered {
         'transform',
         `translate(${
         xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
       )
       .attr('fill', colorScheme[1])
       .attr('dominant-baseline', 'middle')
@@ -9598,7 +9673,7 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel)
       .attr(
         'transform',
-        `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
+        `translate(${xScaleLeft(xStart)}, ${-xAxisTickSize * 6}) `,
       )
       .attr('fill', '#333')
       .attr('dominant-baseline', 'middle')
@@ -9606,10 +9681,10 @@ g.circles circle.circle.circle-hovered {
       .attr('style', 'font-weight: bold;');
   }
 
-  function renderXAxis$3({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+  function renderXAxis$3({ leftBarsContainer, xScaleLeft, xAxisTickSize }) {
     leftBarsContainer
       .append('g')
-      .call(d3__namespace.axisTop(xScaleLeft).tickSize(axesTickSize))
+      .call(d3__namespace.axisTop(xScaleLeft).tickSize(xAxisTickSize))
       .call(g => {
         g.select('.domain').remove();
         g.selectAll('.tick line').attr('stroke', '#555');
@@ -9617,10 +9692,10 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  function renderYAxis$2({ rightBarsContainer, xScaleRight, axesTickSize }) {
+  function renderYAxis$2({ rightBarsContainer, xScaleRight, xAxisTickSize }) {
     rightBarsContainer
       .append('g')
-      .call(d3__namespace.axisTop(xScaleRight).tickSize(axesTickSize))
+      .call(d3__namespace.axisTop(xScaleRight).tickSize(xAxisTickSize))
       .call(g => {
         g.select('.domain').remove();
         g.selectAll('.tick line').attr('stroke', '#555');
@@ -9662,7 +9737,6 @@ g.circles circle.circle.circle-hovered {
     triangleOffset,
     xStart,
     colorScheme,
-    barOpacity,
     markerSymbol,
     symbolSize,
     symbolConstant,
@@ -9671,6 +9745,7 @@ g.circles circle.circle.circle-hovered {
     barRightValueField,
     xScaleRight,
     barRightLabelField,
+    defaultStateAll,
   }) {
     const leftBarsContainer = chartCore.append('g').attr('class', 'left-bars');
 
@@ -9678,7 +9753,14 @@ g.circles circle.circle.circle-hovered {
       .selectAll('g')
       .data(data)
       .join('g')
-      .attr('class', 'bar')
+      .attr(
+        'class',
+        d =>
+          `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+      )
       .on('mouseover', function (e, d) {
         d3__namespace.select(this).classed('bar-hovered', true);
 
@@ -9697,6 +9779,11 @@ g.circles circle.circle.circle-hovered {
           .transition()
           .duration(500)
           .style('opacity', 0);
+      })
+      .on('click', function (e) {
+        const parentBar = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentBar.classed('bar-active');
+        parentBar.classed('bar-active', !clickedState);
       });
 
     leftBars
@@ -9709,9 +9796,7 @@ g.circles circle.circle.circle-hovered {
           xScaleLeft(xStart) - xScaleLeft(d[barLeftValueField]) - triangleOffset;
         return rw > 0 ? rw : 0
       })
-      .attr('fill', colorScheme[0])
-      .attr('stroke-width', 1)
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[0]);
 
     // Left Symbols
     leftBars
@@ -9734,8 +9819,7 @@ g.circles circle.circle.circle-hovered {
         const customTriangleSize = (w * symbolConstant) ** 2;
         return markerSymbol.size(customTriangleSize)()
       })
-      .attr('fill', colorScheme[0])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[0]);
 
     leftBars
       .append('text')
@@ -9754,7 +9838,14 @@ g.circles circle.circle.circle-hovered {
       .selectAll('g')
       .data(data)
       .join('g')
-      .attr('class', 'bar')
+      .attr(
+        'class',
+        d =>
+          `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+      )
       .on('mouseover', function (e, d) {
         d3__namespace.select(this).classed('bar-hovered', true);
 
@@ -9773,6 +9864,11 @@ g.circles circle.circle.circle-hovered {
           .transition()
           .duration(500)
           .style('opacity', 0);
+      })
+      .on('click', function (e) {
+        const parentBar = d3__namespace.select(e.target.parentNode);
+        const clickedState = parentBar.classed('bar-active');
+        parentBar.classed('bar-active', !clickedState);
       });
 
     rightBars
@@ -9787,9 +9883,7 @@ g.circles circle.circle.circle-hovered {
           triangleOffset;
         return rw > 0 ? rw : 0
       })
-      .attr('fill', colorScheme[1])
-      .attr('stroke-width', 1)
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[1]);
 
     // Right Symbols
     rightBars
@@ -9811,8 +9905,7 @@ g.circles circle.circle.circle-hovered {
         const customTriangleSize = (w * symbolConstant) ** 2;
         return markerSymbol.size(customTriangleSize)()
       })
-      .attr('fill', colorScheme[1])
-      .attr('opacity', barOpacity);
+      .attr('fill', colorScheme[1]);
 
     rightBars
       .append('text')
@@ -9842,6 +9935,130 @@ g.circles circle.circle.circle-hovered {
     return { leftBarsContainer, rightBarsContainer }
   }
 
+  const searchEventHandler$2 = referenceList => (qstr, svg) => {
+    if (qstr) {
+      const lqstr = qstr.toLowerCase();
+      referenceList.forEach(val => {
+        // d3.selectAll('.mace').classed('mace-active', false)
+        const barName = toClassText(val);
+        if (val.toLowerCase().includes(lqstr)) {
+          svg.selectAll(`.bar-${barName}`).classed('bar-matched', true);
+        } else {
+          svg.selectAll(`.bar-${barName}`).classed('bar-matched', false);
+        }
+        svg.select('.left-bars').classed('searching', true);
+        svg.select('.right-bars').classed('searching', true);
+      });
+    } else {
+      referenceList.forEach(val => {
+        const barName = toClassText(val);
+        svg.selectAll(`.bar-${barName}`).classed('bar-matched', false);
+      });
+      svg.select('.left-bars').classed('searching', false);
+      svg.select('.right-bars').classed('searching', false);
+    }
+  };
+
+  function setupSearch$2({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    yField,
+    svg,
+    chartContainerSelector,
+    dimensionValues,
+  }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](dimensionValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('class', searchInputClassNames);
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
+    search.attr('placeholder', `Find by ${yField}`);
+    search.on('keyup', e => {
+      const qstr = e.target.value;
+      handleSearch(qstr, svg);
+    });
+    return search
+  }
+
+  function setupClearAllButton$2({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const clearAll = widgetsLeft
+      .append('button')
+      .text('Clear All')
+      .attr('class', clearAllButtonClassNames);
+    clearAll.classed('hidden', false);
+    clearAll.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', false);
+      search.node().value = '';
+      handleSearch('', svg);
+    });
+  }
+
+  function setupShowAllButton$2({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', true);
+      search.node().value = '';
+      handleSearch('', svg);
+    });
+  }
+
+  function setupInitialStateButton$2({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const goToInitialState = widgetsLeft
+      .append('button')
+      .text('Go to Initial State')
+      .attr('class', goToInitialStateButtonClassNames);
+    goToInitialState.classed('hidden', false);
+    goToInitialState.on('click', () => {
+      svg.selectAll('.bar').classed('bar-active', false);
+      ___default["default"].forEach(defaultStateAll, val => {
+        svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true);
+      });
+      search.node().value = '';
+      handleSearch('', svg);
+    });
+  }
+
   const dimensionTypes$4 = {
     yField: [shouldBeUnique, shouldNotBeBlank], // Categorical
 
@@ -9862,16 +10079,24 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    // /* Dimensions */
-    // /* xField */
+    colorScheme: checkColorArray(2),
+
+    barValueMidPoint: checkNumber,
+
+    xAxisTickSize: checkNumber,
     // leftXAxisLabel: checkString,
     // rightXAxisLabel: checkString,
     // xAxisLabel: checkString,
 
-    // /* Chart Specific */
-    colorScheme: checkColorArray(2),
-    barValueMidPoint: checkNumber,
-    barOpacity: checkNumberBetween(0, 1),
+    defaultState: checkDefaultState,
+
+    inactiveOpacity: checkNumberBetween(0, 1),
+    activeOpacity: checkNumberBetween(0, 1),
+
+    // goToInitialStateButtonClassNames: checkStringArray,
+    // searchInputClassNames: checkStringArray,
+    // clearAllButtonClassNames: checkStringArray,
+    // showAllButtonClassNames: checkStringArray,
   };
 
   function validateAndRender$5({
