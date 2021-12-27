@@ -42,6 +42,8 @@ export function renderChart({
     yAxisColor = 'black',
     yAxisLabel = '',
     yAXisLabelFontSize = 12,
+
+    nanDisplayMessage = 'NA',
   },
   dimensions: { xField, yFields },
   chartContainerSelector,
@@ -133,7 +135,9 @@ export function renderChart({
       ${yFields
         .map(
           (yff, i) =>
-            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${colorsRgba[i]}"></div> ${yff}: ${d[yff]}`,
+            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${
+              colorsRgba[i]
+            }"></div> ${yff}: ${d[yff] || nanDisplayMessage}`,
         )
         .join('<br/>')}
       `)

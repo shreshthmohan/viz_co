@@ -10175,6 +10175,8 @@ g.circles circle.circle.circle-hovered {
       yAxisColor = 'black',
       yAxisLabel = '',
       yAXisLabelFontSize = 12,
+
+      nanDisplayMessage = 'NA',
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -10266,7 +10268,9 @@ g.circles circle.circle.circle-hovered {
       ${yFields
         .map(
           (yff, i) =>
-            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${colorsRgba[i]}"></div> ${yff}: ${d[yff]}`,
+            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${
+              colorsRgba[i]
+            }"></div> ${yff}: ${d[yff] || nanDisplayMessage}`,
         )
         .join('<br/>')}
       `);
