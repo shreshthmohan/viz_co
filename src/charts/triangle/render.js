@@ -527,6 +527,9 @@ function greater(t) {
 
 function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   d3.select('body').append('style').html(`  
+    .tmace {
+      cursor: pointer;
+    }
     .tmaces .tmace {
       fill-opacity: ${inactiveOpacity};
     }

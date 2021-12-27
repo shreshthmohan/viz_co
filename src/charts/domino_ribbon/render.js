@@ -8,6 +8,9 @@ import { legend } from '../../utils/helpers/colorLegend'
 
 function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
   d3.select('body').append('style').html(`
+     .ribbon {
+       cursor: pointer;
+     }
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
       }

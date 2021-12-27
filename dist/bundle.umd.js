@@ -218,6 +218,9 @@
 
   function applyInteractionStyles$9({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
+    .mace {
+      cursor: pointer;
+    }
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
     }
@@ -3396,6 +3399,9 @@
 
   function applyInteractionStyles$7({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
+  .series {
+    cursor: pointer;
+  }
 g.serieses .series {
   fill-opacity: ${inactiveOpacity};
 }
@@ -5821,6 +5827,9 @@ g.circles circle.circle.circle-hovered {
 
   function applyInteractionStyles$5({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
+     .ribbon {
+       cursor: pointer;
+     }
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
       }
@@ -9040,6 +9049,9 @@ g.circles circle.circle.circle-hovered {
 
   function applyInteractionStyles$3({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`  
+    .tmace {
+      cursor: pointer;
+    }
     .tmaces .tmace {
       fill-opacity: ${inactiveOpacity};
     }

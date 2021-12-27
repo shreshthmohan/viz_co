@@ -10,6 +10,9 @@ import { pointsToRotationAngle, maceShape } from './helpers'
 
 function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   d3.select('body').append('style').html(`
+    .mace {
+      cursor: pointer;
+    }
     g.maces .mace {
       fill-opacity: ${inactiveOpacity};
     }
