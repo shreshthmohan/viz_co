@@ -33,6 +33,9 @@ const options = {
   // Only used in tooltip, not for caclulating scales
   uniqueFieldTimeParser: '%Y%m',
   uniqueFieldTimeFormatter: '%b %Y',
+
+  colorLegendHeight: 44,
+  colorLegendWidth: 600,
 }
 
 const dimensions = {
@@ -41,9 +44,9 @@ const dimensions = {
   xField: 'month',
   // order: bottom to top; first value's rectangle will be on the bottom
   // the last value's rectangle will be on the top
-  yFields: ['10', '1', '2', '3', '4', '5', '6'], // barFields? stackField
+  yFields: ['0', '1', '2', '3', '4', '5', '6'], // barFields? stackField
   nameField: 'year',
-  uniqueColumnField: 'key_', // identifies each column uniquely
+  uniqueColumnField: 'key', // identifies each column uniquely
 }
 
 const dataPath = 'data.tsv'

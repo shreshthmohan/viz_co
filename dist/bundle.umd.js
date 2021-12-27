@@ -4710,6 +4710,137 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
+  function renderChart$d({
+    data,
+    dimensions: {
+      xGridField,
+      yGridField,
+      xField,
+      nameField,
+      yFields,
+      uniqueColumnField,
+    },
+    options: {
+      aspectRatio = 0.8,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = '#fafafa',
+
+      colorScheme = d3__namespace.schemeRdYlGn[yFields.length],
+
+      descending = true,
+      yFieldLabels = yFields,
+
+      // Only used in tooltip, not for caclulating scales
+      uniqueFieldTimeParser = '%Y%m',
+      uniqueFieldTimeFormatter = '%b %Y',
+
+      xGridGap = 0.02,
+      stackHeight = 0.5,
+
+      colorLegendWidth,
+      colorLegendHeight,
+    },
+    chartContainerSelector,
+  }) {
+    d3__namespace.select('body').append('style').html(`
+  .filtering g:not(.g-active) > rect {
+    opacity: 0.2;
+  }
+  .cldr-color-legend.filtering-legend rect:not(.active) {
+    opacity: 0.2;
+  } 
+  `);
+
+    const coreChartWidth = 1000;
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+      setupChartArea$4({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const tooltipDiv = initializeTooltip$2();
+
+    const { maxY, stackedDataByYear, names } = parseData$6({
+      data,
+      yFields,
+      nameField,
+      xGridField,
+      yGridField,
+    });
+
+    const {
+      yScale,
+      xScale,
+      colorScale,
+      colorScaleForLegend,
+      xGridScale,
+      yGridScale,
+      colorScaleReverseMap,
+    } = setupScales$7({
+      data,
+      maxY,
+      xGridField,
+      xGridGap,
+      yGridField,
+      descending,
+      stackHeight,
+      xField,
+      colorScheme,
+      yFields,
+      yFieldLabels,
+      coreChartWidth,
+      coreChartHeight,
+    });
+
+    renderCalendar({
+      chartCore,
+      names,
+      xField,
+      xGridScale,
+      yGridScale,
+      xGridField,
+      yGridField,
+      tooltipDiv,
+      stackedDataByYear,
+      nameField,
+      colorScale,
+      xScale,
+      yScale,
+      uniqueFieldTimeFormatter,
+      uniqueFieldTimeParser,
+      uniqueColumnField,
+      yFields,
+      yFieldLabels,
+    });
+
+    renderLegends$2({
+      widgetsRight,
+      colorScaleForLegend,
+      svg,
+      colorScaleReverseMap,
+      colorLegendHeight,
+      colorLegendWidth,
+    });
+
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
   function setupChartArea$4({
     chartContainerSelector,
     coreChartWidth,
@@ -4885,6 +5016,8 @@ g.circles circle.circle.circle-hovered {
     colorScaleForLegend,
     svg,
     colorScaleReverseMap,
+    colorLegendWidth,
+    colorLegendHeight,
   }) {
     // widgetsRight.html(
     //   swatches({
@@ -4897,8 +5030,8 @@ g.circles circle.circle.circle-hovered {
     widgetsRight.append(() =>
       legend({
         color: colorScaleForLegend,
-        width: 600,
-        height: 50,
+        width: colorLegendWidth,
+        height: colorLegendHeight,
         tickSize: 0,
         classNames: 'cldr-color-legend',
         handleMouseover: (e, d) => {
@@ -5012,133 +5145,6 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$d({
-    data,
-    dimensions: {
-      xGridField,
-      yGridField,
-      xField,
-      nameField,
-      yFields,
-      uniqueColumnField,
-    },
-    options: {
-      aspectRatio = 0.8,
-
-      marginTop = 0,
-      marginRight = 0,
-      marginBottom = 0,
-      marginLeft = 0,
-
-      bgColor = '#fafafa',
-
-      colorScheme = d3__namespace.schemeRdYlGn[yFields.length],
-
-      descending = true,
-      yFieldLabels = yFields,
-
-      // Only used in tooltip, not for caclulating scales
-      uniqueFieldTimeParser = '%Y%m',
-      uniqueFieldTimeFormatter = '%b %Y',
-
-      xGridGap = 0.02,
-      stackHeight = 0.5,
-    },
-    chartContainerSelector,
-  }) {
-    d3__namespace.select('body').append('style').html(`
-  .filtering g:not(.g-active) > rect {
-    opacity: 0.2;
-  }
-  .cldr-color-legend.filtering-legend rect:not(.active) {
-    opacity: 0.2;
-  } 
-  `);
-
-    const coreChartWidth = 1000;
-    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$4({
-        chartContainerSelector,
-        coreChartWidth,
-        aspectRatio,
-        marginTop,
-        marginBottom,
-        marginLeft,
-        marginRight,
-        bgColor,
-      });
-
-    const tooltipDiv = initializeTooltip$2();
-
-    const { maxY, stackedDataByYear, names } = parseData$6({
-      data,
-      yFields,
-      nameField,
-      xGridField,
-      yGridField,
-    });
-
-    const {
-      yScale,
-      xScale,
-      colorScale,
-      colorScaleForLegend,
-      xGridScale,
-      yGridScale,
-      colorScaleReverseMap,
-    } = setupScales$7({
-      data,
-      maxY,
-      xGridField,
-      xGridGap,
-      yGridField,
-      descending,
-      stackHeight,
-      xField,
-      colorScheme,
-      yFields,
-      yFieldLabels,
-      coreChartWidth,
-      coreChartHeight,
-    });
-
-    renderCalendar({
-      chartCore,
-      names,
-      xField,
-      xGridScale,
-      yGridScale,
-      xGridField,
-      yGridField,
-      tooltipDiv,
-      stackedDataByYear,
-      nameField,
-      colorScale,
-      xScale,
-      yScale,
-      uniqueFieldTimeFormatter,
-      uniqueFieldTimeParser,
-      uniqueColumnField,
-      yFields,
-      yFieldLabels,
-    });
-
-    renderLegends$2({
-      widgetsRight,
-      colorScaleForLegend,
-
-      svg,
-      colorScaleReverseMap,
-    });
-
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
-  }
-
   const dimensionTypes$c = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
@@ -5168,6 +5174,9 @@ g.circles circle.circle.circle-hovered {
     // uniqueFieldTimeParser: checkString,
     // uniqueFieldTimeFormatter: checkString,
     // yFieldLabels: to be added dynamically
+
+    colorLegendWidth: checkNumber,
+    colorLegendHeight: checkNumber,
   };
 
   function buildDimensionAndTypes$2({ dimensions, dimensionTypes, optionTypes }) {
