@@ -8,6 +8,9 @@ import { legend } from '../../utils/helpers/colorLegend'
 
 function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
   d3.select('body').append('style').html(`
+     .ribbon {
+       cursor: pointer;
+     }
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
       }
@@ -188,7 +191,7 @@ function setupScales({
 function renderYAxis({
   chartCore,
   xScale,
-  xDomain,
+  // xDomain,
   yScale,
   formatDate,
   yAxisDateParser,
@@ -197,7 +200,7 @@ function renderYAxis({
   chartCore
     .append('g')
     .attr('class', 'y-axis-right')
-    .attr('transform', `translate(${xScale(xDomain[1]) + 20}, 0)`)
+    .attr('transform', `translate(${xScale(xScale.domain()[1]) + 20}, 0)`)
     .call(
       d3
         .axisRight(yScale)

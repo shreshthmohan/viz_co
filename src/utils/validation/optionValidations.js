@@ -4,14 +4,16 @@ import * as d3 from 'd3'
 export const optionValidation = ({ optionTypes, options }) => {
   const optionValidations = []
   _.each(optionTypes, (fn, key) => {
-    const result = fn(options[key])
     // Ignore options key if undefined,
     // because all options have a default value inside the chart
-    if (!result.valid && typeof options[key] !== 'undefined') {
-      optionValidations.push({
-        keyValue: `${key}: ${options[key]}`,
-        message: result.message,
-      })
+    if (typeof options[key] !== 'undefined') {
+      const result = fn(options[key])
+      if (!result.valid) {
+        optionValidations.push({
+          keyValue: `${key}: ${options[key]}`,
+          message: result.message,
+        })
+      }
     }
   })
 
@@ -44,6 +46,14 @@ export const checkNumber = val => {
   return { valid: false, message: 'Should be a valid number' }
 }
 
+export const checkPositiveInteger = val => {
+  const valid = Number.isInteger(val) && val > 0
+  if (valid) {
+    return { valid: true }
+  }
+  return { valid: false, message: 'Should be a positive integer' }
+}
+
 export const checkBoolean = val => {
   const valid = typeof val === 'boolean'
   if (valid) {
@@ -52,9 +62,9 @@ export const checkBoolean = val => {
   return { valid: false, message: 'Should be true or false' }
 }
 
-export const checkNumberBetween = refArr => val => {
-  const min = Math.min(...refArr)
-  const max = Math.max(...refArr)
+export const checkNumberBetween = (a, b) => val => {
+  const min = Math.min(a, b)
+  const max = Math.max(a, b)
   const message = `Should be a number between ${min} and ${max}`
   const checkNumberResult = checkNumber(val)
   if (!checkNumberResult.valid) {
@@ -106,21 +116,29 @@ export const checkColorArray = length => arr => {
   return combinedResult
 }
 
-// TODO: add length feature as in checkColorArray
-export const checkNumericArray = val => {
-  const valid =
-    _.isArray(val) &&
-    _.reduce(
-      val,
-      (isNumber, val_) => {
-        return isNumber && !Number.isNaN(Number(val_))
-      },
-      true,
-    )
-  if (valid) {
-    return { valid: true }
+export const checkNumericArray = length => arr => {
+  const numberValidationResult = arr.map(el => checkNumber(el))
+  const lengthValidationResult = { valid: true, message: '' }
+  if (_.isArray(arr)) {
+    if (length && arr.length < length) {
+      lengthValidationResult.valid = false
+      lengthValidationResult.message = `Should be an array with at least ${length} numbers`
+    }
+
+    const checkAllResults = [...numberValidationResult, lengthValidationResult]
+    const combinedResult = { valid: true, message: '' }
+
+    checkAllResults.forEach(result => {
+      if (!result.valid) {
+        combinedResult.message += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${result.message}`
+        combinedResult.valid = false
+      }
+    })
+
+    return combinedResult
   }
-  return { valid: false, message: 'Should be a valid array of numbers' }
+
+  return { valid: false, message: 'Should be an array of numbers' }
 }
 
 export const checkStringArray = length => arr => {

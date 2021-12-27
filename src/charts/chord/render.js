@@ -15,8 +15,6 @@ let currentState = 'global'
 export function renderChart({
   data,
   options: {
-    aspectRatio = 1,
-
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
@@ -46,6 +44,8 @@ export function renderChart({
   dimensions: { sourceField, targetField, valueField },
   chartContainerSelector,
 }) {
+  const aspectRatio = 1
+
   applyInteractionStyles({ activeOpacity, inactiveOpacity })
 
   const coreChartWidth = 1000
