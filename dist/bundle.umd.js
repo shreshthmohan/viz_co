@@ -109,7 +109,10 @@
   }
 
   function toClassText(str) {
-    return str.replace(/[\s&',.]/g, '').toLowerCase()
+    return str
+      .trim()
+      .replace(/[\s&',.()]/g, '-')
+      .toLowerCase()
   }
 
   function preventOverflow({
@@ -10010,7 +10013,7 @@ g.circles circle.circle.circle-hovered {
     clearAll.on('click', () => {
       svg.selectAll('.bar').classed('bar-active', false);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -10029,7 +10032,7 @@ g.circles circle.circle.circle-hovered {
     showAll.on('click', () => {
       svg.selectAll('.bar').classed('bar-active', true);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -10052,7 +10055,7 @@ g.circles circle.circle.circle-hovered {
         svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true);
       });
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 

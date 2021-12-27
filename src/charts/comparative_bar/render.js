@@ -704,7 +704,7 @@ function setupClearAllButton({
   clearAll.on('click', () => {
     svg.selectAll('.bar').classed('bar-active', false)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -723,7 +723,7 @@ function setupShowAllButton({
   showAll.on('click', () => {
     svg.selectAll('.bar').classed('bar-active', true)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -746,6 +746,6 @@ function setupInitialStateButton({
       svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true)
     })
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
