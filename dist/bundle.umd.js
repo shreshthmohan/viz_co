@@ -5214,14 +5214,20 @@ g.circles circle.circle.circle-hovered {
       .append('div')
       .attr(
         'style',
-        'display: flex; flex-wrap: wrap; justify-content: space-between; padding-bottom: 0.5rem;',
+        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
       );
     const widgetsLeft = widgets
       .append('div')
-      .attr('style', 'display: flex; align-items: center; column-gap: 5px;');
+      .attr(
+        'style',
+        'display: flex; flex-wrap: wrap; justify-content: start; align-items: center; column-gap: 5px;',
+      );
     const widgetsRight = widgets
       .append('div')
-      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+      .attr(
+        'style',
+        'display: flex; flex-wrap: wrap; justify-content: end; align-items: center; column-gap: 10px;',
+      );
 
     const svg = chartParent
       .append('svg')
@@ -8590,6 +8596,9 @@ g.circles circle.circle.circle-hovered {
       goToInitialStateButtonClassNames = '',
       clearAllButtonClassNames = '',
       showAllButtonClassNames = '',
+
+      colorLegendClassNames = '',
+      directionLegendClassNames = '',
     },
     dimensions: { startField, endField, nameField },
 
@@ -9026,7 +9035,9 @@ g.circles circle.circle.circle-hovered {
     // leftAxis.attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`)
 
     renderDirectionLegend({
-      selection: widgetsRight.append('svg'),
+      selection: widgetsRight
+        .append('svg')
+        .attr('class', directionLegendClassNames),
       circleRadius,
       stickLength,
       stickWidth,
@@ -9036,7 +9047,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     renderMaceColorLegend({
-      selection: widgetsRight.append('svg'),
+      selection: widgetsRight.append('svg').attr('class', colorLegendClassNames),
       circleRadius,
       stickLength,
       stickWidth,

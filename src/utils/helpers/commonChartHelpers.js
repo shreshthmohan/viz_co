@@ -21,14 +21,20 @@ export function setupChartArea({
     .append('div')
     .attr(
       'style',
-      'display: flex; flex-wrap: wrap; justify-content: space-between; padding-bottom: 0.5rem;',
+      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
     )
   const widgetsLeft = widgets
     .append('div')
-    .attr('style', 'display: flex; align-items: center; column-gap: 5px;')
+    .attr(
+      'style',
+      'display: flex; flex-wrap: wrap; justify-content: start; align-items: center; column-gap: 5px;',
+    )
   const widgetsRight = widgets
     .append('div')
-    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
+    .attr(
+      'style',
+      'display: flex; flex-wrap: wrap; justify-content: end; align-items: center; column-gap: 10px;',
+    )
 
   const svg = chartParent
     .append('svg')
