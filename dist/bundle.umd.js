@@ -219,6 +219,230 @@
 
   /* global window */
 
+  function renderChart$j({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = 'transparent',
+
+      oppositeDirectionColor = '#ee4e34',
+      sameDirectionColor = '#44a8c1',
+
+      yAxisTitle = 'y axis title',
+      xAxisTitle = 'x axis title',
+
+      xValueFormatter = '',
+      yValueFormatter = '',
+
+      directionStartLabel = 'start point',
+      directionEndLabel = 'end point',
+      sizeLegendValues = [1e6, 1e8, 1e9],
+      sizeLegendMoveSizeObjectDownBy = 5,
+      sizeLegendTitle = 'size legend title',
+      sizeValueFormatter = '',
+
+      xAxisTickValues,
+
+      xScaleType = 'linear', // linear or log
+      xScaleLogBase = 10, // applicable only if log scale
+
+      defaultState = [],
+
+      activeOpacity = 0.8, // click, hover, search
+      inactiveOpacity = 0.2,
+
+      circleSizeRange = [5, 30],
+      lineWidthRange = [2, 4],
+
+      searchInputClassNames = '',
+      goToInitialStateButtonClassNames = '',
+      clearAllButtonClassNames = '',
+
+      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+    },
+    dimensions: {
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+      nameField,
+    },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles$9({ activeOpacity, inactiveOpacity });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$8({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$6();
+
+    const dataParsed = parseData$9({
+      data,
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+    });
+
+    const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
+      setupScales$a({
+        dataParsed,
+        coreChartHeight,
+        coreChartWidth,
+        yFieldStart,
+        yFieldEnd,
+        xFieldStart,
+        xFieldEnd,
+        xScaleType,
+        xScaleLogBase,
+        sizeField,
+        circleSizeRange,
+        lineWidthRange,
+        sameDirectionColor,
+        oppositeDirectionColor,
+      });
+
+    const nameValues = ___default["default"](data).map(nameField).uniq().value();
+    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
+
+    const gapInCircles = 30;
+    renderSizeLegend$1({
+      gapInCircles,
+      circleSizeScale,
+      widgetsRight,
+      sizeLegendMoveSizeObjectDownBy,
+      sizeLegendValues,
+      sizeValueFormatter,
+      sizeLegendTitle,
+    });
+
+    const stickHeight = 3;
+    const stickLength = 30;
+    const stickWidthLegend = 1;
+    const ballRadius = 6;
+    const gapForText = 5;
+    const singleMaceSectionHeight = 20;
+
+    renderColorLegend$2({
+      stickHeight,
+      stickLength,
+      ballRadius,
+      gapForText,
+      singleMaceSectionHeight,
+      widgetsRight,
+      sameDirectionColor,
+      oppositeDirectionColor,
+      svg,
+    });
+
+    renderDirectionLegend({
+      selection: widgetsRight.append('svg'),
+      ballRadius,
+      stickLength,
+      stickWidthLegend,
+      gapForText,
+      directionStartLabel,
+      directionEndLabel,
+    });
+
+    renderXAxis$9({
+      chartCore,
+      coreChartHeight,
+      coreChartWidth,
+      xScale,
+      xAxisTickValues,
+      xAxisTitle,
+    });
+
+    // y-axis
+    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
+
+    renderMaces({
+      chartCore,
+      dataParsed,
+      sizeField,
+      nameField,
+      defaultStateAll,
+      xFieldStart,
+      xFieldEnd,
+      xScale,
+      yScale,
+      yFieldStart,
+      yFieldEnd,
+      circleSizeScale,
+      lineWidthScale,
+      colorScale,
+      tooltipDiv,
+      sizeValueFormatter,
+      xValueFormatter,
+      yValueFormatter,
+      xFieldType,
+      yFieldType,
+    });
+
+    // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+    // handleSearch accepts search query string and applied appropriate
+    const handleSearch = searchEventHandler$8(nameValues);
+    const search = setupSearch$9({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      nameField,
+      nameValues,
+      svg,
+      chartContainerSelector,
+    });
+
+    setupInitialStateButton$6({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
+    setupClearAllButton$7({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
   function applyInteractionStyles$9({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
     .mace {
@@ -802,230 +1026,6 @@
       svg.selectAll('.mace').classed('mace-active', false);
       search.node().value = '';
       handleSearch('');
-    });
-  }
-
-  function renderChart$j({
-    data,
-    options: {
-      aspectRatio = 2,
-
-      marginTop = 0,
-      marginRight = 0,
-      marginBottom = 0,
-      marginLeft = 0,
-
-      bgColor = 'transparent',
-
-      oppositeDirectionColor = '#ee4e34',
-      sameDirectionColor = '#44a8c1',
-
-      yAxisTitle = 'y axis title',
-      xAxisTitle = 'x axis title',
-
-      xValueFormatter = '',
-      yValueFormatter = '',
-
-      directionStartLabel = 'start point',
-      directionEndLabel = 'end point',
-      sizeLegendValues = [1e6, 1e8, 1e9],
-      sizeLegendMoveSizeObjectDownBy = 5,
-      sizeLegendTitle = 'size legend title',
-      sizeValueFormatter = '',
-
-      xAxisTickValues,
-
-      xScaleType = 'linear', // linear or log
-      xScaleLogBase = 10, // applicable only if log scale
-
-      defaultState = [],
-
-      activeOpacity = 0.8, // click, hover, search
-      inactiveOpacity = 0.2,
-
-      circleSizeRange = [5, 30],
-      lineWidthRange = [2, 4],
-
-      searchInputClassNames = '',
-      goToInitialStateButtonClassNames = '',
-      clearAllButtonClassNames = '',
-
-      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-    },
-    dimensions: {
-      xFieldStart,
-      xFieldEnd,
-      yFieldStart,
-      yFieldEnd,
-      sizeField,
-      nameField,
-    },
-    chartContainerSelector,
-  }) {
-    applyInteractionStyles$9({ activeOpacity, inactiveOpacity });
-
-    const coreChartWidth = 1000;
-    const {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      widgetsRight,
-    } = setupChartArea$8({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
-
-    const tooltipDiv = initializeTooltip$6();
-
-    const dataParsed = parseData$9({
-      data,
-      xFieldStart,
-      xFieldEnd,
-      yFieldStart,
-      yFieldEnd,
-      sizeField,
-    });
-
-    const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$a({
-        dataParsed,
-        coreChartHeight,
-        coreChartWidth,
-        yFieldStart,
-        yFieldEnd,
-        xFieldStart,
-        xFieldEnd,
-        xScaleType,
-        xScaleLogBase,
-        sizeField,
-        circleSizeRange,
-        lineWidthRange,
-        sameDirectionColor,
-        oppositeDirectionColor,
-      });
-
-    const nameValues = ___default["default"](data).map(nameField).uniq().value();
-    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
-
-    const gapInCircles = 30;
-    renderSizeLegend$1({
-      gapInCircles,
-      circleSizeScale,
-      widgetsRight,
-      sizeLegendMoveSizeObjectDownBy,
-      sizeLegendValues,
-      sizeValueFormatter,
-      sizeLegendTitle,
-    });
-
-    const stickHeight = 3;
-    const stickLength = 30;
-    const stickWidthLegend = 1;
-    const ballRadius = 6;
-    const gapForText = 5;
-    const singleMaceSectionHeight = 20;
-
-    renderColorLegend$2({
-      stickHeight,
-      stickLength,
-      ballRadius,
-      gapForText,
-      singleMaceSectionHeight,
-      widgetsRight,
-      sameDirectionColor,
-      oppositeDirectionColor,
-      svg,
-    });
-
-    renderDirectionLegend({
-      selection: widgetsRight.append('svg'),
-      ballRadius,
-      stickLength,
-      stickWidthLegend,
-      gapForText,
-      directionStartLabel,
-      directionEndLabel,
-    });
-
-    renderXAxis$9({
-      chartCore,
-      coreChartHeight,
-      coreChartWidth,
-      xScale,
-      xAxisTickValues,
-      xAxisTitle,
-    });
-
-    // y-axis
-    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
-
-    renderMaces({
-      chartCore,
-      dataParsed,
-      sizeField,
-      nameField,
-      defaultStateAll,
-      xFieldStart,
-      xFieldEnd,
-      xScale,
-      yScale,
-      yFieldStart,
-      yFieldEnd,
-      circleSizeScale,
-      lineWidthScale,
-      colorScale,
-      tooltipDiv,
-      sizeValueFormatter,
-      xValueFormatter,
-      yValueFormatter,
-      xFieldType,
-      yFieldType,
-    });
-
-    // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
-    // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$8(nameValues);
-    const search = setupSearch$9({
-      handleSearch,
-      widgetsLeft,
-      searchInputClassNames,
-      nameField,
-      nameValues,
-      svg,
-      chartContainerSelector,
-    });
-
-    setupInitialStateButton$6({
-      widgetsLeft,
-      goToInitialStateButtonClassNames,
-      defaultStateAll,
-      search,
-      handleSearch,
-      svg,
-    });
-    setupClearAllButton$7({
-      widgetsLeft,
-      clearAllButtonClassNames,
-      search,
-      handleSearch,
-      svg,
-    });
-
-    // For responsiveness
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
     });
   }
 
