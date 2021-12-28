@@ -33,6 +33,9 @@ const options = {
   // Only used in tooltip, not for caclulating scales
   uniqueFieldTimeParser: '%Y%m',
   uniqueFieldTimeFormatter: '%b %Y',
+
+  colorLegendHeight: 44,
+  colorLegendWidth: 600,
 }
 
 const dimensions = {

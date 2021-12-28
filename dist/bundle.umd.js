@@ -219,9 +219,6 @@
 
   /* global window */
 
-<<<<<<< HEAD
-  function applyInteractionStyles$a({ activeOpacity, inactiveOpacity }) {
-=======
   function renderChart$j({
     data,
     dimensions: {
@@ -281,7 +278,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$9({
+    applyInteractionStyles$a({
       chartContainerSelector,
       activeOpacity,
       inactiveOpacity,
@@ -308,7 +305,7 @@
 
     const tooltipDiv = initializeTooltip$6();
 
-    const dataParsed = parseData$9({
+    const dataParsed = parseData$a({
       data,
       xFieldStart,
       xFieldEnd,
@@ -318,7 +315,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$a({
+      setupScales$b({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -452,12 +449,11 @@
     });
   }
 
-  function applyInteractionStyles$9({
+  function applyInteractionStyles$a({
     activeOpacity,
     inactiveOpacity,
     chartContainerSelector,
   }) {
->>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
     d3__namespace.select('body').append('style').html(`
     ${chartContainerSelector} .mace {
       cursor: pointer;
@@ -1048,233 +1044,6 @@
     });
   }
 
-<<<<<<< HEAD
-  function renderChart$j({
-    data,
-    options: {
-      aspectRatio = 2,
-
-      marginTop = 0,
-      marginRight = 0,
-      marginBottom = 0,
-      marginLeft = 0,
-
-      bgColor = 'transparent',
-
-      oppositeDirectionColor = '#ee4e34',
-      sameDirectionColor = '#44a8c1',
-
-      yAxisTitle = 'y axis title',
-      xAxisTitle = 'x axis title',
-
-      xValueFormatter = '',
-      yValueFormatter = '',
-
-      directionStartLabel = 'start point',
-      directionEndLabel = 'end point',
-      sizeLegendValues = [1e6, 1e8, 1e9],
-      sizeLegendMoveSizeObjectDownBy = 5,
-      sizeLegendTitle = 'size legend title',
-      sizeValueFormatter = '',
-
-      xAxisTickValues,
-
-      xScaleType = 'linear', // linear or log
-      xScaleLogBase = 10, // applicable only if log scale
-
-      defaultState = [],
-
-      activeOpacity = 0.8, // click, hover, search
-      inactiveOpacity = 0.2,
-
-      circleSizeRange = [5, 30],
-      lineWidthRange = [2, 4],
-
-      searchInputClassNames = '',
-      goToInitialStateButtonClassNames = '',
-      clearAllButtonClassNames = '',
-
-      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-    },
-    dimensions: {
-      xFieldStart,
-      xFieldEnd,
-      yFieldStart,
-      yFieldEnd,
-      sizeField,
-      nameField,
-    },
-    chartContainerSelector,
-  }) {
-    applyInteractionStyles$a({ activeOpacity, inactiveOpacity });
-
-    const coreChartWidth = 1000;
-    const {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      widgetsRight,
-    } = setupChartArea$8({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
-
-    const tooltipDiv = initializeTooltip$6();
-
-    const dataParsed = parseData$a({
-      data,
-      xFieldStart,
-      xFieldEnd,
-      yFieldStart,
-      yFieldEnd,
-      sizeField,
-    });
-
-    const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$b({
-        dataParsed,
-        coreChartHeight,
-        coreChartWidth,
-        yFieldStart,
-        yFieldEnd,
-        xFieldStart,
-        xFieldEnd,
-        xScaleType,
-        xScaleLogBase,
-        sizeField,
-        circleSizeRange,
-        lineWidthRange,
-        sameDirectionColor,
-        oppositeDirectionColor,
-      });
-
-    const nameValues = ___default["default"](data).map(nameField).uniq().value();
-    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
-
-    const gapInCircles = 30;
-    renderSizeLegend$1({
-      gapInCircles,
-      circleSizeScale,
-      widgetsRight,
-      sizeLegendMoveSizeObjectDownBy,
-      sizeLegendValues,
-      sizeValueFormatter,
-      sizeLegendTitle,
-    });
-
-    const stickHeight = 3;
-    const stickLength = 30;
-    const stickWidthLegend = 1;
-    const ballRadius = 6;
-    const gapForText = 5;
-    const singleMaceSectionHeight = 20;
-
-    renderColorLegend$2({
-      stickHeight,
-      stickLength,
-      ballRadius,
-      gapForText,
-      singleMaceSectionHeight,
-      widgetsRight,
-      sameDirectionColor,
-      oppositeDirectionColor,
-      svg,
-    });
-
-    renderDirectionLegend({
-      selection: widgetsRight.append('svg'),
-      ballRadius,
-      stickLength,
-      stickWidthLegend,
-      gapForText,
-      directionStartLabel,
-      directionEndLabel,
-    });
-
-    renderXAxis$9({
-      chartCore,
-      coreChartHeight,
-      coreChartWidth,
-      xScale,
-      xAxisTickValues,
-      xAxisTitle,
-    });
-
-    // y-axis
-    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
-
-    renderMaces({
-      chartCore,
-      dataParsed,
-      sizeField,
-      nameField,
-      defaultStateAll,
-      xFieldStart,
-      xFieldEnd,
-      xScale,
-      yScale,
-      yFieldStart,
-      yFieldEnd,
-      circleSizeScale,
-      lineWidthScale,
-      colorScale,
-      tooltipDiv,
-      sizeValueFormatter,
-      xValueFormatter,
-      yValueFormatter,
-      xFieldType,
-      yFieldType,
-    });
-
-    // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
-    // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$8(nameValues);
-    const search = setupSearch$9({
-      handleSearch,
-      widgetsLeft,
-      searchInputClassNames,
-      nameField,
-      nameValues,
-      svg,
-      chartContainerSelector,
-    });
-
-    setupInitialStateButton$6({
-      widgetsLeft,
-      goToInitialStateButtonClassNames,
-      defaultStateAll,
-      search,
-      handleSearch,
-      svg,
-    });
-    setupClearAllButton$7({
-      widgetsLeft,
-      clearAllButtonClassNames,
-      search,
-      handleSearch,
-      svg,
-    });
-
-    // For responsiveness
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
-  }
-
-=======
->>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
   const validateData = ({ data, dimensionTypes, dimensions }) => {
     const dataValidations = {};
     ___default["default"].forEach(dimensionTypes, (valFuncs, dim) => {
@@ -2211,6 +1980,11 @@
     tickFormat,
     tickValues,
     // opacity,
+    classNames,
+    handleMouseover = a => a,
+    handleMouseout = a => a,
+    handleClick = a => a,
+    cursorPointer = false,
   } = {}) {
     const svg = d3__namespace
       .create('svg')
@@ -2219,7 +1993,8 @@
       .attr('viewBox', [0, 0, width, height])
       .style('overflow', 'visible')
       // .style("opacity", 0.7)
-      .style('display', 'block');
+      .style('display', 'block')
+      .attr('class', classNames);
 
     let tickAdjust = g =>
       g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
@@ -2333,11 +2108,15 @@
         .selectAll('rect')
         .data(color.domain())
         .join('rect')
+        .attr('style', `${cursorPointer ? 'cursor: pointer;' : ''}`)
         .attr('x', x)
         .attr('y', marginTop)
         .attr('width', Math.max(0, x.bandwidth() - 1))
         .attr('height', height - marginTop - marginBottom)
-        .attr('fill', color);
+        .attr('fill', color)
+        .on('mouseover', handleMouseover)
+        .on('mouseout', handleMouseout)
+        .on('click', handleClick);
 
       tickAdjust = () => {};
     }
@@ -4958,6 +4737,150 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
+  function renderChart$d({
+    data,
+    dimensions: {
+      xGridField,
+      yGridField,
+      xField,
+      nameField,
+      yFields,
+      uniqueColumnField,
+    },
+    options: {
+      aspectRatio = 0.8,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = '#fafafa',
+
+      colorScheme = d3__namespace.schemeRdYlGn[yFields.length],
+
+      descending = true,
+      yFieldLabels = yFields,
+
+      // Only used in tooltip, not for caclulating scales
+      uniqueFieldTimeParser = '%Y%m',
+      uniqueFieldTimeFormatter = '%b %Y',
+
+      xGridGap = 0.02,
+      stackHeight = 0.5,
+
+      colorLegendWidth,
+      colorLegendHeight,
+    },
+    chartContainerSelector,
+  }) {
+    d3__namespace.select('body').append('style').html(`
+  .filtering g:not(.g-active) > rect {
+    opacity: 0.2;
+  }
+  .cldr-color-legend.filtering-legend rect:not(.active) {
+    opacity: 0.2;
+  } 
+  rect.rect-hovered {
+    stroke: #333;
+  }
+
+  .cldr-color-legend rect:not(.active) {
+    opacity: 0.2;
+  }  
+
+.g-stack:not(.g-active) {
+    opacity: 0.2;
+
+}
+
+  `);
+
+    const coreChartWidth = 1000;
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+      setupChartArea$4({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const tooltipDiv = initializeTooltip$2();
+
+    const { maxY, stackedDataByYear, names } = parseData$7({
+      data,
+      yFields,
+      nameField,
+      xGridField,
+      yGridField,
+    });
+
+    const {
+      yScale,
+      xScale,
+      colorScale,
+      colorScaleForLegend,
+      xGridScale,
+      yGridScale,
+      colorScaleReverseMap,
+    } = setupScales$8({
+      data,
+      maxY,
+      xGridField,
+      xGridGap,
+      yGridField,
+      descending,
+      stackHeight,
+      xField,
+      colorScheme,
+      yFields,
+      yFieldLabels,
+      coreChartWidth,
+      coreChartHeight,
+    });
+
+    renderCalendar({
+      chartCore,
+      names,
+      xField,
+      xGridScale,
+      yGridScale,
+      xGridField,
+      yGridField,
+      tooltipDiv,
+      stackedDataByYear,
+      nameField,
+      colorScale,
+      xScale,
+      yScale,
+      uniqueFieldTimeFormatter,
+      uniqueFieldTimeParser,
+      uniqueColumnField,
+      yFields,
+      yFieldLabels,
+    });
+
+    renderLegends$3({
+      widgetsRight,
+      colorScaleForLegend,
+      svg,
+      colorScaleReverseMap,
+      colorLegendHeight,
+      colorLegendWidth,
+    });
+
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
   function setupChartArea$4({
     chartContainerSelector,
     coreChartWidth,
@@ -5112,24 +5035,69 @@ g.circles circle.circle.circle-hovered {
     const colorScale = d3__namespace.scaleOrdinal(colorScheme).domain(yFields);
     const colorScaleForLegend = d3__namespace.scaleOrdinal(colorScheme).domain(yFieldLabels);
 
+    const colorScaleReverseMap = {};
+    yFields.forEach((yf, i) => {
+      colorScaleReverseMap[yFieldLabels[i]] = yf;
+    });
+
     return {
       yScale,
       xScale,
       colorScale,
       colorScaleForLegend,
+      colorScaleReverseMap,
       xGridScale,
       yGridScale,
     }
   }
 
-  function renderLegends$3({ widgetsRight, colorScaleForLegend }) {
-    widgetsRight.html(
-      swatches({
+  function renderLegends$3({
+    widgetsRight,
+    colorScaleForLegend,
+    svg,
+    colorScaleReverseMap,
+    colorLegendWidth,
+    colorLegendHeight,
+  }) {
+    widgetsRight.append(() =>
+      legend({
         color: colorScaleForLegend,
-        uid: 'rs',
-        customClass: '',
+        width: colorLegendWidth,
+        height: colorLegendHeight,
+        tickSize: 0,
+        classNames: 'cldr-color-legend',
+        // handleMouseover: (e, d) => {
+        //   svg
+        //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+        //     .classed('g-active', true)
+        //   svg.classed('filtering', true)
+
+        //   d3.select('.cldr-color-legend').classed('filtering-legend', true)
+        //   d3.select(e.target).classed('active', true)
+        // },
+        // handleMouseout: (e, d) => {
+        //   svg
+        //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+        //     .classed('g-active', false)
+        //   svg.classed('filtering', false)
+
+        //   d3.select('.cldr-color-legend').classed('filtering-legend', false)
+        //   d3.select(e.target).classed('active', false)
+        // },
+        handleClick: (e, d) => {
+          const clickState = d3__namespace.select(e.target).classed('active');
+          d3__namespace.select(e.target).classed('active', !clickState);
+          svg
+            .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+            .classed('g-active', !clickState);
+        },
+        cursorPointer: true,
       }),
     );
+
+    // Make all stacks active in the start
+    d3__namespace.selectAll('.cldr-color-legend g rect').classed('active', true);
+    d3__namespace.selectAll('.g-stack').classed('g-active', true);
   }
 
   function renderCalendar({
@@ -5171,7 +5139,9 @@ g.circles circle.circle.circle-hovered {
           .data(stackedDataByYear[d[nameField]])
           .enter()
           .append('g')
+          .attr('class', dd => `g-stack g-stack-${dd.key}`)
           .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
+          // d3.stack uses yFields as keys, so key here is to identify parts of the stack
           .selectAll('rect')
           .data(dd => dd)
           .join('rect')
@@ -5220,117 +5190,6 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  function renderChart$d({
-    data,
-    options: {
-      aspectRatio = 0.8,
-
-      marginTop = 0,
-      marginRight = 0,
-      marginBottom = 0,
-      marginLeft = 0,
-
-      bgColor = '#fafafa',
-
-      colorScheme = d3__namespace.schemeRdYlGn[yFields.length],
-
-      descending = true,
-      yFieldLabels = yFields,
-
-      // Only used in tooltip, not for caclulating scales
-      uniqueFieldTimeParser = '%Y%m',
-      uniqueFieldTimeFormatter = '%b %Y',
-
-      xGridGap = 0.02,
-      stackHeight = 0.5,
-    },
-    dimensions: {
-      xGridField,
-      yGridField,
-      xField,
-      nameField,
-      yFields,
-      uniqueColumnField,
-    },
-    chartContainerSelector,
-  }) {
-    const coreChartWidth = 1000;
-    const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$4({
-        chartContainerSelector,
-        coreChartWidth,
-        aspectRatio,
-        marginTop,
-        marginBottom,
-        marginLeft,
-        marginRight,
-        bgColor,
-      });
-
-    const tooltipDiv = initializeTooltip$2();
-
-    const { maxY, stackedDataByYear, names } = parseData$7({
-      data,
-      yFields,
-      nameField,
-      xGridField,
-      yGridField,
-    });
-
-    const {
-      yScale,
-      xScale,
-      colorScale,
-      colorScaleForLegend,
-      xGridScale,
-      yGridScale,
-    } = setupScales$8({
-      data,
-      maxY,
-      xGridField,
-      xGridGap,
-      yGridField,
-      descending,
-      stackHeight,
-      xField,
-      colorScheme,
-      yFields,
-      yFieldLabels,
-      coreChartWidth,
-      coreChartHeight,
-    });
-
-    renderCalendar({
-      chartCore,
-      names,
-      xField,
-      xGridScale,
-      yGridScale,
-      xGridField,
-      yGridField,
-      tooltipDiv,
-      stackedDataByYear,
-      nameField,
-      colorScale,
-      xScale,
-      yScale,
-      uniqueFieldTimeFormatter,
-      uniqueFieldTimeParser,
-      uniqueColumnField,
-      yFields,
-      yFieldLabels,
-    });
-
-    renderLegends$3({ widgetsRight, colorScaleForLegend });
-
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
-  }
-
   const dimensionTypes$c = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
@@ -5360,6 +5219,9 @@ g.circles circle.circle.circle-hovered {
     // uniqueFieldTimeParser: checkString,
     // uniqueFieldTimeFormatter: checkString,
     // yFieldLabels: to be added dynamically
+
+    colorLegendWidth: checkNumber,
+    colorLegendHeight: checkNumber,
   };
 
   function buildDimensionAndTypes$2({ dimensions, dimensionTypes, optionTypes }) {

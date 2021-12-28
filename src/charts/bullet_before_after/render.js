@@ -11,7 +11,7 @@ import {
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { swatches } from '../../utils/helpers/colorLegend'
 import { formatNumber } from '../../utils/helpers/formatters'
-import { dashedLegend } from '../overlap_area/dashedLegend'
+import { dashedLegend } from '../../utils/helpers/dashedLegend'
 import { lineBandLegend } from '../line_band_scatter/lineBandLegend'
 
 export function renderChart({
