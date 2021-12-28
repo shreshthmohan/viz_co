@@ -11050,37 +11050,22 @@ g.circles circle.circle.circle-hovered {
       xScaleLogBase,
     });
 
-    const connectorColorStrategies = ['farFromReference', 'closeToReference'];
-    if (connectorColorStrategies.includes(connectorColorStrategy)) {
-      const lineBandsWithColors = [
-        {
-          type: 'line',
-          line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
-        },
-        {
-          type: 'line',
-          line: { label: connectorLegendLabelAfter, color: afterFieldColor },
-        },
-      ];
-      widgetsRight
-        .append('div')
-        .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
-    }
+    renderConnectorLegends({
+      connectorColorStrategy,
+      connectorLegendLabelBefore,
+      connectorLegendLabelAfter,
+      beforeFieldColor,
+      afterFieldColor,
+      widgetsRight,
+    });
 
-    const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }];
-    const dashedLegendColor = d3__namespace
-      .scaleOrdinal()
-      .range([referenceLineColor])
-      .domain(['ref']);
-
-    widgetsRight.append('div').html(
-      dashedLegend({
-        labels: verticalDashedLineLabels,
-        color: dashedLegendColor,
-        swatchWidth: referenceLineWidth,
-        lineOpacity: referenceLineOpacity,
-      }),
-    );
+    renderRefLineLegend({
+      referenceLabel,
+      referenceLineColor,
+      widgetsRight,
+      referenceLineWidth,
+      referenceLineOpacity,
+    });
 
     renderLegends({ widgetsRight, colorScale });
 
@@ -11663,6 +11648,55 @@ g.circles circle.circle.circle-hovered {
       search.node().value = '';
       handleSearch('');
     });
+  }
+
+  function renderConnectorLegends({
+    connectorColorStrategy,
+    connectorLegendLabelBefore,
+    connectorLegendLabelAfter,
+    beforeFieldColor,
+    afterFieldColor,
+    widgetsRight,
+  }) {
+    const connectorColorStrategies = ['farFromReference', 'closeToReference'];
+    if (connectorColorStrategies.includes(connectorColorStrategy)) {
+      const lineBandsWithColors = [
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
+        },
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelAfter, color: afterFieldColor },
+        },
+      ];
+      widgetsRight
+        .append('div')
+        .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
+    }
+  }
+
+  function renderRefLineLegend({
+    referenceLabel,
+    referenceLineColor,
+    widgetsRight,
+    referenceLineWidth,
+    referenceLineOpacity,
+  }) {
+    const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }];
+    const dashedLegendColor = d3__namespace
+      .scaleOrdinal()
+      .range([referenceLineColor])
+      .domain(['ref']);
+
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: verticalDashedLineLabels,
+        color: dashedLegendColor,
+        swatchWidth: referenceLineWidth,
+        lineOpacity: referenceLineOpacity,
+      }),
+    );
   }
 
   // export function that
