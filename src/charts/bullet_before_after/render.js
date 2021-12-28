@@ -30,6 +30,7 @@ export function renderChart({
     afterFieldColor = '#1570A6',
 
     glyphSize = 5,
+
     connectorSize = 5,
     connectorColorStrategy = 'farFromReference',
     connectorColorCustom,
@@ -42,17 +43,15 @@ export function renderChart({
     referenceLineOpacity = 1,
     referenceLabel = '',
 
-    /* Legends */
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
 
-    topicLabelFontSize = '12px',
+    topicLabelFontSize = 12,
     topicLabelTextColor = '#000',
     topicLabelYOffset = 0,
 
     defaultState = [],
 
-    /* Axes */
     xScaleType = 'linear', // linear or log
     xScaleLogBase = 10, // applicable only if log scale
     xAxisPosition = 'top',
@@ -80,7 +79,6 @@ export function renderChart({
     valuePostfix = '',
     valueFormatter = '',
 
-    // Labels
     topicLabelXOffset = 5,
 
     // Opinionated (currently cannot be changed from options)
@@ -624,7 +622,7 @@ function renderBullets({
       d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
     )
     .attr('fill', topicLabelTextColor)
-    .style('font-size', topicLabelFontSize)
+    .style('font-size', `${topicLabelFontSize}px`)
     .attr('text-anchor', d =>
       xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
     )

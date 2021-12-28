@@ -45,7 +45,7 @@ const options = {
   /* Legends */
   beforeLegendLabel: 'Before',
   afterLegendLabel: 'After',
-  topicLabelFontSize: '12px',
+  topicLabelFontSize: 12,
   topicLabelTextColor: '#000',
   topicLabelXOffset: 5,
   topicLabelYOffset: -1,

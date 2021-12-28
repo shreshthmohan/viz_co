@@ -10939,6 +10939,7 @@ g.circles circle.circle.circle-hovered {
       afterFieldColor = '#1570A6',
 
       glyphSize = 5,
+
       connectorSize = 5,
       connectorColorStrategy = 'farFromReference',
       connectorColorCustom,
@@ -10951,17 +10952,15 @@ g.circles circle.circle.circle-hovered {
       referenceLineOpacity = 1,
       referenceLabel = '',
 
-      /* Legends */
       beforeLegendLabel = beforeField,
       afterLegendLabel = afterField,
 
-      topicLabelFontSize = '12px',
+      topicLabelFontSize = 12,
       topicLabelTextColor = '#000',
       topicLabelYOffset = 0,
 
       defaultState = [],
 
-      /* Axes */
       xScaleType = 'linear', // linear or log
       xScaleLogBase = 10, // applicable only if log scale
       xAxisPosition = 'top',
@@ -10989,7 +10988,6 @@ g.circles circle.circle.circle-hovered {
       valuePostfix = '',
       valueFormatter = '',
 
-      // Labels
       topicLabelXOffset = 5,
 
       // Opinionated (currently cannot be changed from options)
@@ -11533,7 +11531,7 @@ g.circles circle.circle.circle-hovered {
         d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
       )
       .attr('fill', topicLabelTextColor)
-      .style('font-size', topicLabelFontSize)
+      .style('font-size', `${topicLabelFontSize}px`)
       .attr('text-anchor', d =>
         xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
       )
@@ -11717,20 +11715,20 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    /* Series Colors */
     beforeFieldColor: checkColor,
     afterFieldColor: checkColor,
 
-    /* Glyphs */
     glyphSize: checkNumber,
-    connectorSize: checkNumber,
 
+    connectorSize: checkNumber,
     connectorColorStrategy: checkOneOf([
       'farFromReference',
       'closeToReference',
       'customColor',
     ]),
     connectorColorCustom: checkColor,
+    // connectorLegendLabelBefore: checkString,
+    //   connectorLegendLabelAfter: checkString,
 
     referenceValue: checkNumber,
     referenceLineColor: checkColor,
@@ -11738,19 +11736,19 @@ g.circles circle.circle.circle-hovered {
     referenceLineOpacity: checkNumberBetween(0, 1),
     // referenceLabel: checkString,
 
-    /* Legends */
     // beforeLegendLabel: checkString,
     // afterLegendLabel: checkString,
+
+    topicLabelFontSize: checkPositiveInteger,
+    topicLabelTextColor: checkColor,
+    topicLabelYOffset: checkNumber,
+    topicLabelXOffset: checkNumber,
+
+    defaultState: checkDefaultState,
 
     // valuePrefix: checkString,
     // valuePostfix: checkString,
     // valueFormatter: checkString,
-
-    topicLabelFontSize: checkFontSizeString,
-    topicLabelTextColor: checkColor,
-    topicLabelYOffset: checkNumber,
-
-    defaultState: checkDefaultState,
 
     /* Axes */
     // xAxisTitle: checkString,
@@ -11773,6 +11771,9 @@ g.circles circle.circle.circle-hovered {
     // xAxisTickBaseline: checkString,
     xAxisTickValueXOffset: checkNumber,
     xAxisTickValueYOffset: checkNumber,
+
+    yPaddingInner: checkNumber,
+    yPaddingOuter: checkNumber,
 
     // searchInputClassNames: checkString,
     // goToInitialStateButtonClassNames: checkString,
