@@ -47,6 +47,9 @@ export function renderChart({
     goToInitialStateButtonClassNames = '',
     clearAllButtonClassNames = '',
     showAllButtonClassNames = '',
+
+    colorLegendClassNames = '',
+    directionLegendClassNames = '',
   },
   dimensions: { startField, endField, nameField },
 
@@ -483,7 +486,9 @@ export function renderChart({
   // leftAxis.attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`)
 
   renderDirectionLegend({
-    selection: widgetsRight.append('svg'),
+    selection: widgetsRight
+      .append('svg')
+      .attr('class', directionLegendClassNames),
     circleRadius,
     stickLength,
     stickWidth,
@@ -493,7 +498,7 @@ export function renderChart({
   })
 
   renderMaceColorLegend({
-    selection: widgetsRight.append('svg'),
+    selection: widgetsRight.append('svg').attr('class', colorLegendClassNames),
     circleRadius,
     stickLength,
     stickWidth,
