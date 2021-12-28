@@ -6201,14 +6201,15 @@ g.circles circle.circle.circle-hovered {
 
     // TODO top and bottom xAxis - Link it to xAxisLocations (this is only top)
     // X-Axis
+    const xAxisOffset = 30;
     chartCore
       .append('g')
       .attr('class', 'x-axis-top')
-      .attr('transform', `translate(0, ${yScale(yDomain[0]) - 30})`)
+      .attr('transform', `translate(0, ${yScale(yDomain[0]) - xAxisOffset})`)
       .call(
         d3__namespace
           .axisTop(xScale)
-          .tickSize(-coreChartHeight)
+          .tickSize(-coreChartHeight - xAxisOffset)
           .tickFormat(val => formatNumber(val, xAxisValueFormatter)),
       )
       .call(g => g.select('.domain').remove())
