@@ -5094,6 +5094,10 @@ g.circles circle.circle.circle-hovered {
         cursorPointer: true,
       }),
     );
+
+    // Make all stacks active in the start
+    d3__namespace.selectAll('.cldr-color-legend g rect').classed('active', true);
+    d3__namespace.selectAll('.g-stack').classed('g-active', true);
   }
 
   function renderCalendar({

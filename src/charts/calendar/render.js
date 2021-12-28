@@ -361,6 +361,10 @@ function renderLegends({
       cursorPointer: true,
     }),
   )
+
+  // Make all stacks active in the start
+  d3.selectAll('.cldr-color-legend g rect').classed('active', true)
+  d3.selectAll('.g-stack').classed('g-active', true)
 }
 
 function renderCalendar({
