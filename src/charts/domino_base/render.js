@@ -242,21 +242,21 @@ function renderDominos({
     })
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       const dominoName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.selectAll(`.domino-${dominoName}`).classed('domino-matched', true)
+        svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', true)
       } else {
-        d3.selectAll(`.domino-${dominoName}`).classed('domino-matched', false)
+        svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', false)
       }
-      d3.select('.dominos').classed('searching', true)
+      svg.select('.dominos').classed('searching', true)
     })
   } else {
-    d3.selectAll('.domino').classed('domino-matched', false)
-    d3.select('.dominos').classed('searching', false)
+    svg.selectAll('.domino').classed('domino-matched', false)
+    svg.select('.dominos').classed('searching', false)
   }
 }
 function renderColorLegend({
@@ -316,16 +316,39 @@ function setupSearch({
   widgetsLeft,
   searchInputClassNames,
   dominoField,
+  svg,
+  chartContainerSelector,
+  dominoValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(dominoValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
-  // TODO: refactor hidden, won't be needed if we add this node
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
   search.attr('placeholder', `Find by ${dominoField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
@@ -436,6 +459,9 @@ export function renderChart({
     widgetsLeft,
     searchInputClassNames,
     dominoField,
+    svg,
+    chartContainerSelector,
+    dominoValues,
   })
 
   // Legends

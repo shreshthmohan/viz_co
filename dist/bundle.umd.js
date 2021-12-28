@@ -3120,21 +3120,21 @@
       });
   }
 
-  const searchEventHandler$7 = referenceList => qstr => {
+  const searchEventHandler$7 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         const dominoName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.selectAll(`.domino-${dominoName}`).classed('domino-matched', true);
+          svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', true);
         } else {
-          d3__namespace.selectAll(`.domino-${dominoName}`).classed('domino-matched', false);
+          svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', false);
         }
-        d3__namespace.select('.dominos').classed('searching', true);
+        svg.select('.dominos').classed('searching', true);
       });
     } else {
-      d3__namespace.selectAll('.domino').classed('domino-matched', false);
-      d3__namespace.select('.dominos').classed('searching', false);
+      svg.selectAll('.domino').classed('domino-matched', false);
+      svg.select('.dominos').classed('searching', false);
     }
   };
   function renderColorLegend$1({
@@ -3194,16 +3194,36 @@
     widgetsLeft,
     searchInputClassNames,
     dominoField,
+    svg,
+    chartContainerSelector,
+    dominoValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](dominoValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${dominoField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -3314,6 +3334,9 @@
       widgetsLeft,
       searchInputClassNames,
       dominoField,
+      svg,
+      chartContainerSelector,
+      dominoValues,
     });
 
     // Legends
