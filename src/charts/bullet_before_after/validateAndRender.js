@@ -19,8 +19,8 @@ import {
   checkNumericArray,
   optionValidation,
   checkOneOf,
-  checkFontSizeString,
   checkDefaultState,
+  checkPositiveInteger,
 } from '../../utils/validation/optionValidations'
 
 import {
@@ -46,39 +46,40 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  /* Series Colors */
   beforeFieldColor: checkColor,
   afterFieldColor: checkColor,
 
-  /* Glyphs */
   glyphSize: checkNumber,
-  connectorSize: checkNumber,
 
+  connectorSize: checkNumber,
   connectorColorStrategy: checkOneOf([
     'farFromReference',
     'closeToReference',
     'customColor',
   ]),
   connectorColorCustom: checkColor,
+  // connectorLegendLabelBefore: checkString,
+  //   connectorLegendLabelAfter: checkString,
 
   referenceValue: checkNumber,
   referenceLineColor: checkColor,
   referenceLineWidth: checkNumber,
   referenceLineOpacity: checkNumberBetween(0, 1),
+  // referenceLabel: checkString,
 
-  /* Legends */
   // beforeLegendLabel: checkString,
   // afterLegendLabel: checkString,
+
+  topicLabelFontSize: checkPositiveInteger,
+  topicLabelTextColor: checkColor,
+  topicLabelYOffset: checkNumber,
+  topicLabelXOffset: checkNumber,
+
+  defaultState: checkDefaultState,
 
   // valuePrefix: checkString,
   // valuePostfix: checkString,
   // valueFormatter: checkString,
-
-  topicLabelFontSize: checkFontSizeString,
-  topicLabelTextColor: checkColor,
-  topicLabelYOffset: checkNumber,
-
-  defaultState: checkDefaultState,
 
   /* Axes */
   // xAxisTitle: checkString,
@@ -101,6 +102,9 @@ const optionTypes = {
   // xAxisTickBaseline: checkString,
   xAxisTickValueXOffset: checkNumber,
   xAxisTickValueYOffset: checkNumber,
+
+  yPaddingInner: checkNumber,
+  yPaddingOuter: checkNumber,
 
   // searchInputClassNames: checkString,
   // goToInitialStateButtonClassNames: checkString,

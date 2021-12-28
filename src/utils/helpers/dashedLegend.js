@@ -7,6 +7,7 @@ export function dashedLegend({
   marginLeft = 0,
   uid,
   customClass = '',
+  lineOpacity = 1,
 }) {
   const id = `dl-${uid}`
   const mu = `
@@ -27,6 +28,7 @@ export function dashedLegend({
         height: ${+swatchHeight}px;
         border: ${Math.floor(+swatchWidth)}px dashed var(--color);
         margin-right: 0.5em;
+        opacity: ${lineOpacity};
       }
     </style>
       ${labels

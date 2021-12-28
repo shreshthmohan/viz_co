@@ -2,7 +2,151 @@
 import * as d3 from 'd3'
 import _ from 'lodash-es'
 import { preventOverflow } from '../../utils/helpers/general'
-import { swatches } from '../../utils/helpers/colorLegend'
+import { legend } from '../../utils/helpers/colorLegend'
+
+export function renderChart({
+  data,
+  dimensions: {
+    xGridField,
+    yGridField,
+    xField,
+    nameField,
+    yFields,
+    uniqueColumnField,
+  },
+  options: {
+    aspectRatio = 0.8,
+
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
+
+    bgColor = '#fafafa',
+
+    colorScheme = d3.schemeRdYlGn[yFields.length],
+
+    descending = true,
+    yFieldLabels = yFields,
+
+    // Only used in tooltip, not for caclulating scales
+    uniqueFieldTimeParser = '%Y%m',
+    uniqueFieldTimeFormatter = '%b %Y',
+
+    xGridGap = 0.02,
+    stackHeight = 0.5,
+
+    colorLegendWidth,
+    colorLegendHeight,
+  },
+  chartContainerSelector,
+}) {
+  d3.select('body').append('style').html(`
+  .filtering g:not(.g-active) > rect {
+    opacity: 0.2;
+  }
+  .cldr-color-legend.filtering-legend rect:not(.active) {
+    opacity: 0.2;
+  } 
+  rect.rect-hovered {
+    stroke: #333;
+  }
+
+  .cldr-color-legend rect:not(.active) {
+    opacity: 0.2;
+  }  
+
+.g-stack:not(.g-active) {
+    opacity: 0.2;
+
+}
+
+  `)
+
+  const coreChartWidth = 1000
+  const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
+    setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    })
+
+  const tooltipDiv = initializeTooltip()
+
+  const { maxY, stackedDataByYear, names } = parseData({
+    data,
+    yFields,
+    nameField,
+    xGridField,
+    yGridField,
+  })
+
+  const {
+    yScale,
+    xScale,
+    colorScale,
+    colorScaleForLegend,
+    xGridScale,
+    yGridScale,
+    colorScaleReverseMap,
+  } = setupScales({
+    data,
+    maxY,
+    xGridField,
+    xGridGap,
+    yGridField,
+    descending,
+    stackHeight,
+    xField,
+    colorScheme,
+    yFields,
+    yFieldLabels,
+    coreChartWidth,
+    coreChartHeight,
+  })
+
+  renderCalendar({
+    chartCore,
+    names,
+    xField,
+    xGridScale,
+    yGridScale,
+    xGridField,
+    yGridField,
+    tooltipDiv,
+    stackedDataByYear,
+    nameField,
+    colorScale,
+    xScale,
+    yScale,
+    uniqueFieldTimeFormatter,
+    uniqueFieldTimeParser,
+    uniqueColumnField,
+    yFields,
+    yFieldLabels,
+  })
+
+  renderLegends({
+    widgetsRight,
+    colorScaleForLegend,
+    svg,
+    colorScaleReverseMap,
+    colorLegendHeight,
+    colorLegendWidth,
+  })
+
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
 
 function setupChartArea({
   chartContainerSelector,
@@ -158,24 +302,69 @@ function setupScales({
   const colorScale = d3.scaleOrdinal(colorScheme).domain(yFields)
   const colorScaleForLegend = d3.scaleOrdinal(colorScheme).domain(yFieldLabels)
 
+  const colorScaleReverseMap = {}
+  yFields.forEach((yf, i) => {
+    colorScaleReverseMap[yFieldLabels[i]] = yf
+  })
+
   return {
     yScale,
     xScale,
     colorScale,
     colorScaleForLegend,
+    colorScaleReverseMap,
     xGridScale,
     yGridScale,
   }
 }
 
-function renderLegends({ widgetsRight, colorScaleForLegend }) {
-  widgetsRight.html(
-    swatches({
+function renderLegends({
+  widgetsRight,
+  colorScaleForLegend,
+  svg,
+  colorScaleReverseMap,
+  colorLegendWidth,
+  colorLegendHeight,
+}) {
+  widgetsRight.append(() =>
+    legend({
       color: colorScaleForLegend,
-      uid: 'rs',
-      customClass: '',
+      width: colorLegendWidth,
+      height: colorLegendHeight,
+      tickSize: 0,
+      classNames: 'cldr-color-legend',
+      // handleMouseover: (e, d) => {
+      //   svg
+      //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+      //     .classed('g-active', true)
+      //   svg.classed('filtering', true)
+
+      //   d3.select('.cldr-color-legend').classed('filtering-legend', true)
+      //   d3.select(e.target).classed('active', true)
+      // },
+      // handleMouseout: (e, d) => {
+      //   svg
+      //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+      //     .classed('g-active', false)
+      //   svg.classed('filtering', false)
+
+      //   d3.select('.cldr-color-legend').classed('filtering-legend', false)
+      //   d3.select(e.target).classed('active', false)
+      // },
+      handleClick: (e, d) => {
+        const clickState = d3.select(e.target).classed('active')
+        d3.select(e.target).classed('active', !clickState)
+        svg
+          .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+          .classed('g-active', !clickState)
+      },
+      cursorPointer: true,
     }),
   )
+
+  // Make all stacks active in the start
+  d3.selectAll('.cldr-color-legend g rect').classed('active', true)
+  d3.selectAll('.g-stack').classed('g-active', true)
 }
 
 function renderCalendar({
@@ -217,7 +406,9 @@ function renderCalendar({
         .data(stackedDataByYear[d[nameField]])
         .enter()
         .append('g')
+        .attr('class', dd => `g-stack g-stack-${dd.key}`)
         .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
+        // d3.stack uses yFields as keys, so key here is to identify parts of the stack
         .selectAll('rect')
         .data(dd => dd)
         .join('rect')
@@ -264,115 +455,4 @@ function renderCalendar({
     .text(d => d[nameField])
     .attr('transform', 'translate(0, -5)')
     .attr('font-size', 14)
-}
-
-export function renderChart({
-  data,
-  options: {
-    aspectRatio = 0.8,
-
-    marginTop = 0,
-    marginRight = 0,
-    marginBottom = 0,
-    marginLeft = 0,
-
-    bgColor = '#fafafa',
-
-    colorScheme = d3.schemeRdYlGn[yFields.length],
-
-    descending = true,
-    yFieldLabels = yFields,
-
-    // Only used in tooltip, not for caclulating scales
-    uniqueFieldTimeParser = '%Y%m',
-    uniqueFieldTimeFormatter = '%b %Y',
-
-    xGridGap = 0.02,
-    stackHeight = 0.5,
-  },
-  dimensions: {
-    xGridField,
-    yGridField,
-    xField,
-    nameField,
-    yFields,
-    uniqueColumnField,
-  },
-  chartContainerSelector,
-}) {
-  const coreChartWidth = 1000
-  const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-    setupChartArea({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    })
-
-  const tooltipDiv = initializeTooltip()
-
-  const { maxY, stackedDataByYear, names } = parseData({
-    data,
-    yFields,
-    nameField,
-    xGridField,
-    yGridField,
-  })
-
-  const {
-    yScale,
-    xScale,
-    colorScale,
-    colorScaleForLegend,
-    xGridScale,
-    yGridScale,
-  } = setupScales({
-    data,
-    maxY,
-    xGridField,
-    xGridGap,
-    yGridField,
-    descending,
-    stackHeight,
-    xField,
-    colorScheme,
-    yFields,
-    yFieldLabels,
-    coreChartWidth,
-    coreChartHeight,
-  })
-
-  renderCalendar({
-    chartCore,
-    names,
-    xField,
-    xGridScale,
-    yGridScale,
-    xGridField,
-    yGridField,
-    tooltipDiv,
-    stackedDataByYear,
-    nameField,
-    colorScale,
-    xScale,
-    yScale,
-    uniqueFieldTimeFormatter,
-    uniqueFieldTimeParser,
-    uniqueColumnField,
-    yFields,
-    yFieldLabels,
-  })
-
-  renderLegends({ widgetsRight, colorScaleForLegend })
-
-  // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
-  })
 }

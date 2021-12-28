@@ -9,6 +9,7 @@ import {
   checkNumber,
   checkColor,
   optionValidation,
+  checkNumberBetween,
 } from '../../utils/validation/optionValidations'
 import {
   showErrors,
@@ -35,6 +36,9 @@ const optionTypes = {
   // colorLegendTitle = valueField,
 
   nullDataColor: checkColor,
+  missingDataColor: checkColor,
+
+  searchInactiveOpacity: checkNumberBetween(0, 1),
 
   // searchButtonClassNames,
 }

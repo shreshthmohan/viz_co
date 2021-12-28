@@ -16,6 +16,11 @@ export function legend({
   tickFormat,
   tickValues,
   // opacity,
+  classNames,
+  handleMouseover = a => a,
+  handleMouseout = a => a,
+  handleClick = a => a,
+  cursorPointer = false,
 } = {}) {
   const svg = d3
     .create('svg')
@@ -25,6 +30,7 @@ export function legend({
     .style('overflow', 'visible')
     // .style("opacity", 0.7)
     .style('display', 'block')
+    .attr('class', classNames)
 
   let tickAdjust = g =>
     g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height)
@@ -138,11 +144,15 @@ export function legend({
       .selectAll('rect')
       .data(color.domain())
       .join('rect')
+      .attr('style', `${cursorPointer ? 'cursor: pointer;' : ''}`)
       .attr('x', x)
       .attr('y', marginTop)
       .attr('width', Math.max(0, x.bandwidth() - 1))
       .attr('height', height - marginTop - marginBottom)
       .attr('fill', color)
+      .on('mouseover', handleMouseover)
+      .on('mouseout', handleMouseout)
+      .on('click', handleClick)
 
     tickAdjust = () => {}
   }
@@ -198,6 +208,7 @@ export function swatches({
   marginLeft = 0,
   uid,
   customClass = '',
+  circle = false,
 }) {
   const id = uid
   //DOM.uid().id;
@@ -225,6 +236,7 @@ export function swatches({
         .${id}-swatch {
           width: ${+swatchWidth}px;
           height: ${+swatchHeight}px;
+          ${circle ? 'border-radius: 50%;' : ''}
           margin: 0 0.5em 0 0;
         }
       </style>
@@ -258,6 +270,7 @@ export function swatches({
         content: "";
         width: ${+swatchWidth}px;
         height: ${+swatchHeight}px;
+        ${circle ? 'border-radius: 50%;' : ''}
         margin-right: 0.5em;
         background: var(--color);
       }
