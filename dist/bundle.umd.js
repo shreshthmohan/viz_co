@@ -5220,13 +5220,13 @@ g.circles circle.circle.circle-hovered {
       .append('div')
       .attr(
         'style',
-        'display: flex; flex-wrap: wrap; justify-content: start; align-items: center; column-gap: 5px;',
+        'display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; column-gap: 5px;',
       );
     const widgetsRight = widgets
       .append('div')
       .attr(
         'style',
-        'display: flex; flex-wrap: wrap; justify-content: end; align-items: center; column-gap: 10px;',
+        'display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; column-gap: 10px;',
       );
 
     const svg = chartParent
