@@ -51,6 +51,16 @@ export function renderChart({
   rect.rect-hovered {
     stroke: #333;
   }
+
+  .cldr-color-legend rect:not(.active) {
+    opacity: 0.2;
+  }  
+
+.g-stack:not(.g-active) {
+    opacity: 0.2;
+
+}
+
   `)
 
   const coreChartWidth = 1000
@@ -316,14 +326,6 @@ function renderLegends({
   colorLegendWidth,
   colorLegendHeight,
 }) {
-  // widgetsRight.html(
-  //   swatches({
-  //     color: colorScaleForLegend,
-  //     uid: 'rs',
-  //     customClass: '',
-  //   }),
-  // )
-
   widgetsRight.append(() =>
     legend({
       color: colorScaleForLegend,
@@ -331,24 +333,32 @@ function renderLegends({
       height: colorLegendHeight,
       tickSize: 0,
       classNames: 'cldr-color-legend',
-      handleMouseover: (e, d) => {
+      // handleMouseover: (e, d) => {
+      //   svg
+      //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+      //     .classed('g-active', true)
+      //   svg.classed('filtering', true)
+
+      //   d3.select('.cldr-color-legend').classed('filtering-legend', true)
+      //   d3.select(e.target).classed('active', true)
+      // },
+      // handleMouseout: (e, d) => {
+      //   svg
+      //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+      //     .classed('g-active', false)
+      //   svg.classed('filtering', false)
+
+      //   d3.select('.cldr-color-legend').classed('filtering-legend', false)
+      //   d3.select(e.target).classed('active', false)
+      // },
+      handleClick: (e, d) => {
+        const clickState = d3.select(e.target).classed('active')
+        d3.select(e.target).classed('active', !clickState)
         svg
           .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
-          .classed('g-active', true)
-        svg.classed('filtering', true)
-
-        d3.select('.cldr-color-legend').classed('filtering-legend', true)
-        d3.select(e.target).classed('active', true)
+          .classed('g-active', !clickState)
       },
-      handleMouseout: (e, d) => {
-        svg
-          .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
-          .classed('g-active', false)
-        svg.classed('filtering', false)
-
-        d3.select('.cldr-color-legend').classed('filtering-legend', false)
-        d3.select(e.target).classed('active', false)
-      },
+      cursorPointer: true,
     }),
   )
 }
@@ -392,8 +402,9 @@ function renderCalendar({
         .data(stackedDataByYear[d[nameField]])
         .enter()
         .append('g')
-        .attr('class', dd => `g-stack-${dd.key}`)
+        .attr('class', dd => `g-stack g-stack-${dd.key}`)
         .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
+        // d3.stack uses yFields as keys, so key here is to identify parts of the stack
         .selectAll('rect')
         .data(dd => dd)
         .join('rect')

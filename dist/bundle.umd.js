@@ -1963,6 +1963,8 @@
     classNames,
     handleMouseover = a => a,
     handleMouseout = a => a,
+    handleClick = a => a,
+    cursorPointer = false,
   } = {}) {
     const svg = d3__namespace
       .create('svg')
@@ -2086,13 +2088,15 @@
         .selectAll('rect')
         .data(color.domain())
         .join('rect')
+        .attr('style', `${cursorPointer ? 'cursor: pointer;' : ''}`)
         .attr('x', x)
         .attr('y', marginTop)
         .attr('width', Math.max(0, x.bandwidth() - 1))
         .attr('height', height - marginTop - marginBottom)
         .attr('fill', color)
         .on('mouseover', handleMouseover)
-        .on('mouseout', handleMouseout);
+        .on('mouseout', handleMouseout)
+        .on('click', handleClick);
 
       tickAdjust = () => {};
     }
@@ -4757,6 +4761,16 @@ g.circles circle.circle.circle-hovered {
   rect.rect-hovered {
     stroke: #333;
   }
+
+  .cldr-color-legend rect:not(.active) {
+    opacity: 0.2;
+  }  
+
+.g-stack:not(.g-active) {
+    opacity: 0.2;
+
+}
+
   `);
 
     const coreChartWidth = 1000;
@@ -5022,14 +5036,6 @@ g.circles circle.circle.circle-hovered {
     colorLegendWidth,
     colorLegendHeight,
   }) {
-    // widgetsRight.html(
-    //   swatches({
-    //     color: colorScaleForLegend,
-    //     uid: 'rs',
-    //     customClass: '',
-    //   }),
-    // )
-
     widgetsRight.append(() =>
       legend({
         color: colorScaleForLegend,
@@ -5037,24 +5043,32 @@ g.circles circle.circle.circle-hovered {
         height: colorLegendHeight,
         tickSize: 0,
         classNames: 'cldr-color-legend',
-        handleMouseover: (e, d) => {
+        // handleMouseover: (e, d) => {
+        //   svg
+        //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+        //     .classed('g-active', true)
+        //   svg.classed('filtering', true)
+
+        //   d3.select('.cldr-color-legend').classed('filtering-legend', true)
+        //   d3.select(e.target).classed('active', true)
+        // },
+        // handleMouseout: (e, d) => {
+        //   svg
+        //     .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
+        //     .classed('g-active', false)
+        //   svg.classed('filtering', false)
+
+        //   d3.select('.cldr-color-legend').classed('filtering-legend', false)
+        //   d3.select(e.target).classed('active', false)
+        // },
+        handleClick: (e, d) => {
+          const clickState = d3__namespace.select(e.target).classed('active');
+          d3__namespace.select(e.target).classed('active', !clickState);
           svg
             .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
-            .classed('g-active', true);
-          svg.classed('filtering', true);
-
-          d3__namespace.select('.cldr-color-legend').classed('filtering-legend', true);
-          d3__namespace.select(e.target).classed('active', true);
+            .classed('g-active', !clickState);
         },
-        handleMouseout: (e, d) => {
-          svg
-            .selectAll(`.g-stack-${colorScaleReverseMap[d]}`)
-            .classed('g-active', false);
-          svg.classed('filtering', false);
-
-          d3__namespace.select('.cldr-color-legend').classed('filtering-legend', false);
-          d3__namespace.select(e.target).classed('active', false);
-        },
+        cursorPointer: true,
       }),
     );
   }
@@ -5098,8 +5112,9 @@ g.circles circle.circle.circle-hovered {
           .data(stackedDataByYear[d[nameField]])
           .enter()
           .append('g')
-          .attr('class', dd => `g-stack-${dd.key}`)
+          .attr('class', dd => `g-stack g-stack-${dd.key}`)
           .attr('fill', dd => colorScale(dd.key)) // not to be confused with uniqueColumnField
+          // d3.stack uses yFields as keys, so key here is to identify parts of the stack
           .selectAll('rect')
           .data(dd => dd)
           .join('rect')

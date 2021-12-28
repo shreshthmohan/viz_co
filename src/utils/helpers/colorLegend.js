@@ -19,6 +19,8 @@ export function legend({
   classNames,
   handleMouseover = a => a,
   handleMouseout = a => a,
+  handleClick = a => a,
+  cursorPointer = false,
 } = {}) {
   const svg = d3
     .create('svg')
@@ -142,6 +144,7 @@ export function legend({
       .selectAll('rect')
       .data(color.domain())
       .join('rect')
+      .attr('style', `${cursorPointer ? 'cursor: pointer;' : ''}`)
       .attr('x', x)
       .attr('y', marginTop)
       .attr('width', Math.max(0, x.bandwidth() - 1))
@@ -149,6 +152,7 @@ export function legend({
       .attr('fill', color)
       .on('mouseover', handleMouseover)
       .on('mouseout', handleMouseout)
+      .on('click', handleClick)
 
     tickAdjust = () => {}
   }
