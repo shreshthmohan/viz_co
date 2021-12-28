@@ -95,6 +95,8 @@ export const checkColor = val => {
 }
 
 export const checkColorArray = length => arr => {
+  if (!Array.isArray(arr))
+    return { valid: false, message: 'Should be an array of colors' }
   const checkColorsResult = arr.map(clr => checkColor(clr))
   const lengthValidationResult = { valid: true, message: '' }
   if (length && arr.length < length) {

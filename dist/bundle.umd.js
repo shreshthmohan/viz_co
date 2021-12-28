@@ -1214,6 +1214,8 @@
   };
 
   const checkColorArray = length => arr => {
+    if (!Array.isArray(arr))
+      return { valid: false, message: 'Should be an array of colors' }
     const checkColorsResult = arr.map(clr => checkColor(clr));
     const lengthValidationResult = { valid: true, message: '' };
     if (length && arr.length < length) {
@@ -10204,7 +10206,7 @@ g.circles circle.circle.circle-hovered {
       barThickness = 0.8,
       outerPadding = 0.2,
 
-      colors = d3__namespace.schemeSpectral[9],
+      colorScheme = d3__namespace.schemeSpectral[9],
 
       showOnlyEveryNthValue = 1,
 
@@ -10272,7 +10274,7 @@ g.circles circle.circle.circle-hovered {
 
     const yMax = d3__namespace.max(allYValues);
 
-    const colorsRgba = colors.map(c => {
+    const colorsRgba = colorScheme.map(c => {
       const parsedColor = d3__namespace.rgb(c);
       parsedColor.opacity = barOpacity;
       return parsedColor
@@ -10551,7 +10553,7 @@ g.circles circle.circle.circle-hovered {
     barThickness: checkNumberBetween(0, 1),
     outerPadding: checkNumberBetween(0, 1),
 
-    colors: checkColorArray,
+    colorScheme: checkColorArray(),
 
     showOnlyEveryNthValue: checkPositiveInteger,
 
@@ -10567,6 +10569,10 @@ g.circles circle.circle.circle-hovered {
     // yAxisPosition: checkString,
     // yAxisColor: checkString,
     // yAxisLabel: checkString,
+
+    // nanDisplayMessage: checkString,
+    // referenceLines: [],
+    referenceLinesOpacity: checkNumberBetween(0, 1),
   };
 
   function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {

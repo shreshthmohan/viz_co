@@ -27,7 +27,7 @@ export function renderChart({
     barThickness = 0.8,
     outerPadding = 0.2,
 
-    colors = d3.schemeSpectral[9],
+    colorScheme = d3.schemeSpectral[9],
 
     showOnlyEveryNthValue = 1,
 
@@ -95,7 +95,7 @@ export function renderChart({
 
   const yMax = d3.max(allYValues)
 
-  const colorsRgba = colors.map(c => {
+  const colorsRgba = colorScheme.map(c => {
     const parsedColor = d3.rgb(c)
     parsedColor.opacity = barOpacity
     return parsedColor

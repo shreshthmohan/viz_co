@@ -19,7 +19,7 @@ const options = {
   outerPadding: 0.5,
 
   barOpacity: 0.5,
-  colors: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
+  colorScheme: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
 
   xAxisPosition: 'bottom',
   xAxisLabel: 'Year',
