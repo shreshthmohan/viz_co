@@ -10206,7 +10206,7 @@ g.circles circle.circle.circle-hovered {
       barThickness = 0.8,
       outerPadding = 0.2,
 
-      colorScheme = d3__namespace.schemeSpectral[9],
+      colors = d3__namespace.schemeSpectral[9],
 
       showOnlyEveryNthValue = 1,
 
@@ -10215,7 +10215,7 @@ g.circles circle.circle.circle-hovered {
       xAXisLabelFontSize = 12,
       xAxisLabelOffset = 30,
       xAxisColor = 'black',
-      xAxisTickRotation = 0,
+      xAxisTickRotation = 90,
 
       yAxisPosition = 'left',
       yAxisLabelOffset = 50,
@@ -10274,7 +10274,7 @@ g.circles circle.circle.circle-hovered {
 
     const yMax = d3__namespace.max(allYValues);
 
-    const colorsRgba = colorScheme.map(c => {
+    const colorsRgba = colors.map(c => {
       const parsedColor = d3__namespace.rgb(c);
       parsedColor.opacity = barOpacity;
       return parsedColor
