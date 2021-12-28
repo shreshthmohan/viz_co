@@ -49,7 +49,7 @@ export function renderChart({
     dominoHeight = 0.3,
     yPaddingOuter = 0.1,
 
-    initialState = [],
+    defaultState = [],
 
     activeOpacity = 1,
     inactiveOpacity = 0.1,
@@ -57,6 +57,7 @@ export function renderChart({
     searchInputClassNames = '',
     goToInitialStateButtonClassNames = '',
     clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
   },
   dimensions: { xField, yField, dominoField, sizeField, colorField },
 
@@ -88,7 +89,7 @@ export function renderChart({
   const { allDominoFieldValues, defaultStateAll } = parseData({
     data,
     dominoField,
-    initialState,
+    defaultState,
   })
 
   const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales({
@@ -159,6 +160,9 @@ export function renderChart({
     widgetsLeft,
     searchInputClassNames,
     dominoField,
+    svg,
+    chartContainerSelector,
+    allDominoFieldValues,
   })
 
   setupInitialStateButton({
@@ -167,12 +171,14 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
   setupClearAllButton({
     widgetsLeft,
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   // Legends
@@ -194,6 +200,14 @@ export function renderChart({
     sizeLegendLabel,
   })
 
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
+
   // For responsiveness
   // adjust svg to prevent overflows
   preventOverflow({
@@ -211,10 +225,22 @@ function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
       }
+      .g-dominos .domino {
+        fill-opacity: ${inactiveOpacity};
+      }
       .g-ribbons .ribbon.ribbon-active {
         fill-opacity: ${activeOpacity};
       }
+      .g-dominos .domino.domino-active {
+        fill-opacity: ${activeOpacity};
+        stroke: #333;
+        stroke-width: 2;
+      }
       .g-ribbons.searching .ribbon.ribbon-matched {
+        stroke: #333;
+        stroke-width: 1;
+      }
+      .g-dominos.searching .domino.domino-matched {
         stroke: #333;
         stroke-width: 1;
       }
@@ -233,10 +259,10 @@ function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
   `)
 }
 
-function parseData({ data, dominoField, initialState }) {
+function parseData({ data, dominoField, defaultState }) {
   const allDominoFieldValues = _.chain(data).map(dominoField).uniq().value()
   const dominoValues = _(data).map(dominoField).uniq().value()
-  const defaultStateAll = initialState === 'All' ? dominoValues : initialState
+  const defaultStateAll = defaultState === 'All' ? dominoValues : defaultState
   return { allDominoFieldValues, defaultStateAll }
 }
 
@@ -437,6 +463,7 @@ function renderDominosAndRibbons({
     .attr(
       'class',
       d => `
+      domino
       domino-${toClassText(d[dominoField])}
       ${defaultStateAll.includes(d[dominoField]) ? 'domino-active' : ''}
     `,
@@ -447,7 +474,7 @@ function renderDominosAndRibbons({
     .attr('height', yScale.bandwidth())
     .attr('fill', d => colorScale(Number.parseFloat(d[colorField])))
     .attr('stroke', d =>
-      d3.rgb(colorScale(Number.parseFloat(d[colorField]))).darker(0.5),
+      d3.rgb(colorScale(Number.parseFloat(d[colorField]))).darker(0.2),
     )
     .on('mouseover', (e, d) => {
       const xFieldValue = formatNumber(d[xField], xAxisValueFormatter)
@@ -499,11 +526,15 @@ function renderDominosAndRibbons({
       const clickedState = d3
         .select(`.ribbon-${dominoGroupCode}`)
         .classed('ribbon-active')
-      d3.select(`.ribbon-${dominoGroupCode}`).classed(
-        'ribbon-active',
-        !clickedState,
-      )
+      d3.select(`.ribbon-${dominoGroupCode}`)
+        .classed('ribbon-active', !clickedState)
+        .raise()
+      d3.selectAll(`.domino-${dominoGroupCode}`)
+        .classed('domino-active', !clickedState)
+        .raise()
     })
+
+  d3.selectAll(`.domino-active`).raise()
 
   allConnectors
     .selectAll('path')
@@ -573,38 +604,39 @@ function renderDominosAndRibbons({
   })
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       const dominoGroupCode = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', true)
-        d3.selectAll(`.domino-${dominoGroupCode}`).classed(
-          'domino-matched',
-          true,
-        )
+        svg.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', true)
+        svg
+          .selectAll(`.domino-${dominoGroupCode}`)
+          .classed('domino-matched', true)
 
-        d3.select('.g-ribbons').classed('searching', true)
+        svg.select('.g-ribbons').classed('searching', true)
+        svg.select('.g-dominos').classed('searching', true)
       } else {
-        d3.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false)
-        d3.selectAll(`.domino-${dominoGroupCode}`).classed(
-          'domino-matched',
-          false,
-        )
+        svg
+          .select(`.ribbon-${dominoGroupCode}`)
+          .classed('ribbon-matched', false)
+        svg
+          .selectAll(`.domino-${dominoGroupCode}`)
+          .classed('domino-matched', false)
       }
     })
   } else {
     referenceList.forEach(val => {
       const dominoGroupCode = toClassText(val)
-      d3.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false)
+      svg.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false)
 
-      d3.selectAll(`.domino-${dominoGroupCode}`).classed(
-        'domino-matched',
-        false,
-      )
+      svg
+        .selectAll(`.domino-${dominoGroupCode}`)
+        .classed('domino-matched', false)
     })
-    d3.select('.g-ribbons').classed('searching', false)
+    svg.select('.g-ribbons').classed('searching', false)
+    svg.select('.g-dominos').classed('searching', false)
   }
 }
 
@@ -682,15 +714,39 @@ function setupSearch({
   widgetsLeft,
   searchInputClassNames,
   dominoField,
+  svg,
+  chartContainerSelector,
+  allDominoFieldValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(allDominoFieldValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
   search.attr('placeholder', `Find by ${dominoField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
@@ -701,18 +757,27 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
     .text('Go to Initial State')
     .attr('class', goToInitialStateButtonClassNames)
   goToInitialState.on('click', () => {
-    d3.selectAll('.ribbon').classed('ribbon-active', false)
+    svg.selectAll('.ribbon').classed('ribbon-active', false)
+    svg.selectAll('.domino').classed('domino-active', false)
     _.forEach(defaultStateAll, val => {
-      d3.select(`.ribbon-${toClassText(val)}`).classed('ribbon-active', true)
+      svg
+        .select(`.ribbon-${toClassText(val)}`)
+        .classed('ribbon-active', true)
+        .raise()
+      svg
+        .selectAll(`.domino-${toClassText(val)}`)
+        .classed('domino-active', true)
+        .raise()
     })
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -721,14 +786,36 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
     .text('Clear All')
     .attr('class', clearAllButtonClassNames)
   clearAll.on('click', () => {
-    d3.selectAll('.ribbon').classed('ribbon-active', false)
+    svg.selectAll('.ribbon').classed('ribbon-active', false)
+    svg.selectAll('.domino').classed('domino-active', false)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    svg.selectAll('.ribbon').classed('ribbon-active', true)
+    svg.selectAll('.domino').classed('domino-active', true)
+    search.node().value = ''
+    handleSearch('', svg)
   })
 }

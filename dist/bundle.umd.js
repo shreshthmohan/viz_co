@@ -3864,7 +3864,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupShowAllButton$5({
+  function setupShowAllButton$6({
     widgetsLeft,
     showAllButtonClassNames,
     search,
@@ -4023,7 +4023,7 @@ g.circles circle.circle.circle-hovered {
       handleSearch,
     });
 
-    setupShowAllButton$5({
+    setupShowAllButton$6({
       widgetsLeft,
       showAllButtonClassNames,
       search,
@@ -6007,7 +6007,7 @@ g.circles circle.circle.circle-hovered {
       dominoHeight = 0.3,
       yPaddingOuter = 0.1,
 
-      initialState = [],
+      defaultState = [],
 
       activeOpacity = 1,
       inactiveOpacity = 0.1,
@@ -6015,6 +6015,7 @@ g.circles circle.circle.circle-hovered {
       searchInputClassNames = '',
       goToInitialStateButtonClassNames = '',
       clearAllButtonClassNames = '',
+      showAllButtonClassNames = '',
     },
     dimensions: { xField, yField, dominoField, sizeField, colorField },
 
@@ -6046,7 +6047,7 @@ g.circles circle.circle.circle-hovered {
     const { allDominoFieldValues, defaultStateAll } = parseData$5({
       data,
       dominoField,
-      initialState,
+      defaultState,
     });
 
     const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$6({
@@ -6117,6 +6118,9 @@ g.circles circle.circle.circle-hovered {
       widgetsLeft,
       searchInputClassNames,
       dominoField,
+      svg,
+      chartContainerSelector,
+      allDominoFieldValues,
     });
 
     setupInitialStateButton$4({
@@ -6125,12 +6129,14 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
     setupClearAllButton$5({
       widgetsLeft,
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     // Legends
@@ -6152,6 +6158,14 @@ g.circles circle.circle.circle-hovered {
       sizeLegendLabel,
     });
 
+    setupShowAllButton$5({
+      widgetsLeft,
+      showAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
     // For responsiveness
     // adjust svg to prevent overflows
     preventOverflow({
@@ -6169,10 +6183,22 @@ g.circles circle.circle.circle-hovered {
      .g-ribbons .ribbon {
         fill-opacity: ${inactiveOpacity};
       }
+      .g-dominos .domino {
+        fill-opacity: ${inactiveOpacity};
+      }
       .g-ribbons .ribbon.ribbon-active {
         fill-opacity: ${activeOpacity};
       }
+      .g-dominos .domino.domino-active {
+        fill-opacity: ${activeOpacity};
+        stroke: #333;
+        stroke-width: 2;
+      }
       .g-ribbons.searching .ribbon.ribbon-matched {
+        stroke: #333;
+        stroke-width: 1;
+      }
+      .g-dominos.searching .domino.domino-matched {
         stroke: #333;
         stroke-width: 1;
       }
@@ -6191,10 +6217,10 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$5({ data, dominoField, initialState }) {
+  function parseData$5({ data, dominoField, defaultState }) {
     const allDominoFieldValues = ___default["default"].chain(data).map(dominoField).uniq().value();
     const dominoValues = ___default["default"](data).map(dominoField).uniq().value();
-    const defaultStateAll = initialState === 'All' ? dominoValues : initialState;
+    const defaultStateAll = defaultState === 'All' ? dominoValues : defaultState;
     return { allDominoFieldValues, defaultStateAll }
   }
 
@@ -6395,6 +6421,7 @@ g.circles circle.circle.circle-hovered {
       .attr(
         'class',
         d => `
+      domino
       domino-${toClassText(d[dominoField])}
       ${defaultStateAll.includes(d[dominoField]) ? 'domino-active' : ''}
     `,
@@ -6405,7 +6432,7 @@ g.circles circle.circle.circle-hovered {
       .attr('height', yScale.bandwidth())
       .attr('fill', d => colorScale(Number.parseFloat(d[colorField])))
       .attr('stroke', d =>
-        d3__namespace.rgb(colorScale(Number.parseFloat(d[colorField]))).darker(0.5),
+        d3__namespace.rgb(colorScale(Number.parseFloat(d[colorField]))).darker(0.2),
       )
       .on('mouseover', (e, d) => {
         const xFieldValue = formatNumber(d[xField], xAxisValueFormatter);
@@ -6457,11 +6484,15 @@ g.circles circle.circle.circle-hovered {
         const clickedState = d3__namespace
           .select(`.ribbon-${dominoGroupCode}`)
           .classed('ribbon-active');
-        d3__namespace.select(`.ribbon-${dominoGroupCode}`).classed(
-          'ribbon-active',
-          !clickedState,
-        );
+        d3__namespace.select(`.ribbon-${dominoGroupCode}`)
+          .classed('ribbon-active', !clickedState)
+          .raise();
+        d3__namespace.selectAll(`.domino-${dominoGroupCode}`)
+          .classed('domino-active', !clickedState)
+          .raise();
       });
+
+    d3__namespace.selectAll(`.domino-active`).raise();
 
     allConnectors
       .selectAll('path')
@@ -6531,38 +6562,39 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$5 = referenceList => qstr => {
+  const searchEventHandler$5 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         const dominoGroupCode = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', true);
-          d3__namespace.selectAll(`.domino-${dominoGroupCode}`).classed(
-            'domino-matched',
-            true,
-          );
+          svg.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', true);
+          svg
+            .selectAll(`.domino-${dominoGroupCode}`)
+            .classed('domino-matched', true);
 
-          d3__namespace.select('.g-ribbons').classed('searching', true);
+          svg.select('.g-ribbons').classed('searching', true);
+          svg.select('.g-dominos').classed('searching', true);
         } else {
-          d3__namespace.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false);
-          d3__namespace.selectAll(`.domino-${dominoGroupCode}`).classed(
-            'domino-matched',
-            false,
-          );
+          svg
+            .select(`.ribbon-${dominoGroupCode}`)
+            .classed('ribbon-matched', false);
+          svg
+            .selectAll(`.domino-${dominoGroupCode}`)
+            .classed('domino-matched', false);
         }
       });
     } else {
       referenceList.forEach(val => {
         const dominoGroupCode = toClassText(val);
-        d3__namespace.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false);
+        svg.select(`.ribbon-${dominoGroupCode}`).classed('ribbon-matched', false);
 
-        d3__namespace.selectAll(`.domino-${dominoGroupCode}`).classed(
-          'domino-matched',
-          false,
-        );
+        svg
+          .selectAll(`.domino-${dominoGroupCode}`)
+          .classed('domino-matched', false);
       });
-      d3__namespace.select('.g-ribbons').classed('searching', false);
+      svg.select('.g-ribbons').classed('searching', false);
+      svg.select('.g-dominos').classed('searching', false);
     }
   };
 
@@ -6640,15 +6672,36 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     dominoField,
+    svg,
+    chartContainerSelector,
+    allDominoFieldValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](allDominoFieldValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${dominoField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -6659,18 +6712,27 @@ g.circles circle.circle.circle-hovered {
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
       .text('Go to Initial State')
       .attr('class', goToInitialStateButtonClassNames);
     goToInitialState.on('click', () => {
-      d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
+      svg.selectAll('.ribbon').classed('ribbon-active', false);
+      svg.selectAll('.domino').classed('domino-active', false);
       ___default["default"].forEach(defaultStateAll, val => {
-        d3__namespace.select(`.ribbon-${toClassText(val)}`).classed('ribbon-active', true);
+        svg
+          .select(`.ribbon-${toClassText(val)}`)
+          .classed('ribbon-active', true)
+          .raise();
+        svg
+          .selectAll(`.domino-${toClassText(val)}`)
+          .classed('domino-active', true)
+          .raise();
       });
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -6679,15 +6741,37 @@ g.circles circle.circle.circle-hovered {
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
       .text('Clear All')
       .attr('class', clearAllButtonClassNames);
     clearAll.on('click', () => {
-      d3__namespace.selectAll('.ribbon').classed('ribbon-active', false);
+      svg.selectAll('.ribbon').classed('ribbon-active', false);
+      svg.selectAll('.domino').classed('domino-active', false);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
+    });
+  }
+
+  function setupShowAllButton$5({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  }) {
+    const showAll = widgetsLeft
+      .append('button')
+      .text('Show All')
+      .attr('class', showAllButtonClassNames);
+    showAll.classed('hidden', false);
+    showAll.on('click', () => {
+      svg.selectAll('.ribbon').classed('ribbon-active', true);
+      svg.selectAll('.domino').classed('domino-active', true);
+      search.node().value = '';
+      handleSearch('', svg);
     });
   }
 
