@@ -2145,6 +2145,7 @@
     marginLeft = 0,
     uid,
     customClass = '',
+    circle = false,
   }) {
     const id = uid;
     //DOM.uid().id;
@@ -2172,6 +2173,7 @@
         .${id}-swatch {
           width: ${+swatchWidth}px;
           height: ${+swatchHeight}px;
+          ${circle ? 'border-radius: 50%;' : ''}
           margin: 0 0.5em 0 0;
         }
       </style>
@@ -2205,6 +2207,7 @@
         content: "";
         width: ${+swatchWidth}px;
         height: ${+swatchHeight}px;
+        ${circle ? 'border-radius: 50%;' : ''}
         margin-right: 0.5em;
         background: var(--color);
       }
@@ -6729,6 +6732,7 @@ g.circles circle.circle.circle-hovered {
     marginLeft = 0,
     uid,
     customClass = '',
+    lineOpacity = 1,
   }) {
     const id = `dl-${uid}`;
     const mu = `
@@ -6749,6 +6753,7 @@ g.circles circle.circle.circle-hovered {
         height: ${+swatchHeight}px;
         border: ${Math.floor(+swatchWidth)}px dashed var(--color);
         margin-right: 0.5em;
+        opacity: ${lineOpacity};
       }
     </style>
       ${labels
@@ -10943,25 +10948,28 @@ g.circles circle.circle.circle-hovered {
       afterFieldColor = '#1570A6',
 
       glyphSize = 5,
+
       connectorSize = 5,
       connectorColorStrategy = 'farFromReference',
       connectorColorCustom,
+      connectorLegendLabelBefore = '',
+      connectorLegendLabelAfter = '',
 
       referenceValue = 0,
       referenceLineColor = '#fff',
       referenceLineWidth = 2,
       referenceLineOpacity = 1,
-      /* Legends */
+      referenceLabel = '',
+
       beforeLegendLabel = beforeField,
       afterLegendLabel = afterField,
 
-      topicLabelFontSize = '12px',
+      topicLabelFontSize = 12,
       topicLabelTextColor = '#000',
       topicLabelYOffset = 0,
 
       defaultState = [],
 
-      /* Axes */
       xScaleType = 'linear', // linear or log
       xScaleLogBase = 10, // applicable only if log scale
       xAxisPosition = 'top',
@@ -10989,7 +10997,6 @@ g.circles circle.circle.circle-hovered {
       valuePostfix = '',
       valueFormatter = '',
 
-      // Labels
       topicLabelXOffset = 5,
 
       // Opinionated (currently cannot be changed from options)
@@ -11048,6 +11055,23 @@ g.circles circle.circle.circle-hovered {
       xAxisCustomDomain,
       xScaleType,
       xScaleLogBase,
+    });
+
+    renderConnectorLegends({
+      connectorColorStrategy,
+      connectorLegendLabelBefore,
+      connectorLegendLabelAfter,
+      beforeFieldColor,
+      afterFieldColor,
+      widgetsRight,
+    });
+
+    renderRefLineLegend({
+      referenceLabel,
+      referenceLineColor,
+      widgetsRight,
+      referenceLineWidth,
+      referenceLineOpacity,
     });
 
     renderLegends({ widgetsRight, colorScale });
@@ -11516,7 +11540,7 @@ g.circles circle.circle.circle-hovered {
         d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
       )
       .attr('fill', topicLabelTextColor)
-      .style('font-size', topicLabelFontSize)
+      .style('font-size', `${topicLabelFontSize}px`)
       .attr('text-anchor', d =>
         xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
       )
@@ -11565,11 +11589,12 @@ g.circles circle.circle.circle-hovered {
   }
 
   function renderLegends({ widgetsRight, colorScale }) {
-    widgetsRight.html(
+    widgetsRight.append('div').html(
       swatches({
         color: colorScale,
         uid: 'rs',
         customClass: '',
+        circle: true,
       }),
     );
   }
@@ -11632,6 +11657,55 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
+  function renderConnectorLegends({
+    connectorColorStrategy,
+    connectorLegendLabelBefore,
+    connectorLegendLabelAfter,
+    beforeFieldColor,
+    afterFieldColor,
+    widgetsRight,
+  }) {
+    const connectorColorStrategies = ['farFromReference', 'closeToReference'];
+    if (connectorColorStrategies.includes(connectorColorStrategy)) {
+      const lineBandsWithColors = [
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
+        },
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelAfter, color: afterFieldColor },
+        },
+      ];
+      widgetsRight
+        .append('div')
+        .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
+    }
+  }
+
+  function renderRefLineLegend({
+    referenceLabel,
+    referenceLineColor,
+    widgetsRight,
+    referenceLineWidth,
+    referenceLineOpacity,
+  }) {
+    const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }];
+    const dashedLegendColor = d3__namespace
+      .scaleOrdinal()
+      .range([referenceLineColor])
+      .domain(['ref']);
+
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: verticalDashedLineLabels,
+        color: dashedLegendColor,
+        swatchWidth: referenceLineWidth,
+        lineOpacity: referenceLineOpacity,
+      }),
+    );
+  }
+
   // export function that
 
   const dimensionTypes$2 = {
@@ -11650,39 +11724,40 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    /* Series Colors */
     beforeFieldColor: checkColor,
     afterFieldColor: checkColor,
 
-    /* Glyphs */
     glyphSize: checkNumber,
-    connectorSize: checkNumber,
 
+    connectorSize: checkNumber,
     connectorColorStrategy: checkOneOf([
       'farFromReference',
       'closeToReference',
       'customColor',
     ]),
     connectorColorCustom: checkColor,
+    // connectorLegendLabelBefore: checkString,
+    //   connectorLegendLabelAfter: checkString,
 
     referenceValue: checkNumber,
     referenceLineColor: checkColor,
     referenceLineWidth: checkNumber,
     referenceLineOpacity: checkNumberBetween(0, 1),
+    // referenceLabel: checkString,
 
-    /* Legends */
     // beforeLegendLabel: checkString,
     // afterLegendLabel: checkString,
+
+    topicLabelFontSize: checkPositiveInteger,
+    topicLabelTextColor: checkColor,
+    topicLabelYOffset: checkNumber,
+    topicLabelXOffset: checkNumber,
+
+    defaultState: checkDefaultState,
 
     // valuePrefix: checkString,
     // valuePostfix: checkString,
     // valueFormatter: checkString,
-
-    topicLabelFontSize: checkFontSizeString,
-    topicLabelTextColor: checkColor,
-    topicLabelYOffset: checkNumber,
-
-    defaultState: checkDefaultState,
 
     /* Axes */
     // xAxisTitle: checkString,
@@ -11705,6 +11780,9 @@ g.circles circle.circle.circle-hovered {
     // xAxisTickBaseline: checkString,
     xAxisTickValueXOffset: checkNumber,
     xAxisTickValueYOffset: checkNumber,
+
+    yPaddingInner: checkNumber,
+    yPaddingOuter: checkNumber,
 
     // searchInputClassNames: checkString,
     // goToInitialStateButtonClassNames: checkString,
