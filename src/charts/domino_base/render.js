@@ -3,6 +3,141 @@
 import * as d3 from 'd3'
 import _ from 'lodash-es'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
+import {
+  initializeTooltip,
+  setupChartArea,
+} from '../../utils/helpers/commonChartHelpers'
+
+export function renderChart({
+  data,
+  options: {
+    aspectRatio = 2,
+
+    marginTop = 60,
+    marginRight = 90,
+    marginBottom = 20,
+    marginLeft = 50,
+
+    bgColor = 'transparent',
+
+    xPaddingOuter = 0.2,
+    xAxisLabel = xField,
+
+    dominoSize = 0.2,
+
+    yPaddingInner = 0.2,
+    yPaddingOuter = 0.2,
+    ySortOrder = 'desc',
+
+    colorStrategy = 'value',
+    colorThreshold = 10,
+    colorDominoHighlighted = '#c20a66',
+    colorDominoNormal = '#d9e2e4',
+
+    normalLegendLabel = 'Normal',
+    highlightedLegendLabel = 'Highlighted',
+
+    searchInputClassNames = '',
+  },
+  dimensions: { xField, yField, dominoField, colorField },
+
+  chartContainerSelector,
+}) {
+  applyInteractionStyles()
+
+  const coreChartWidth = 1000
+  const {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
+
+  const tooltipDiv = initializeTooltip()
+
+  const dataParsed = parseData({
+    data,
+    colorField,
+    yField,
+  })
+
+  const { xScale, yScale, colorScale } = setupScales({
+    dataParsed,
+    xField,
+    yField,
+    dominoSize,
+    coreChartWidth,
+    coreChartHeight,
+    xPaddingOuter,
+    ySortOrder,
+    yPaddingOuter,
+    yPaddingInner,
+    colorThreshold,
+    colorDominoNormal,
+    colorDominoHighlighted,
+    colorStrategy,
+  })
+
+  renderYAxis({ chartCore, yScale })
+
+  renderDominos({
+    dataParsed,
+    yField,
+    chartCore,
+    yScale,
+    dominoField,
+    xScale,
+    xField,
+    colorScale,
+    colorField,
+    colorStrategy,
+    tooltipDiv,
+  })
+
+  renderXAxis({ chartCore, xAxisLabel, coreChartWidth })
+
+  const dominoValues = _(dataParsed).map(dominoField).uniq().value()
+  const handleSearch = searchEventHandler(dominoValues)
+  setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    dominoField,
+    svg,
+    chartContainerSelector,
+    dominoValues,
+  })
+
+  // Legends
+  renderColorLegend({
+    xScale,
+    yScale,
+    widgetsRight,
+    colorDominoHighlighted,
+    highlightedLegendLabel,
+    colorDominoNormal,
+    normalLegendLabel,
+  })
+
+  // For responsiveness
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
 
 function applyInteractionStyles() {
   d3.select('body').append('style').html(`
@@ -12,69 +147,10 @@ function applyInteractionStyles() {
   g.dominos.searching g rect.domino-matched {
     stroke: #333;
   }
-  `)
-}
-
-function setupChartArea({
-  chartContainerSelector,
-  coreChartWidth,
-  aspectRatio,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  bgColor,
-}) {
-  const coreChartHeight = coreChartWidth / aspectRatio
-
-  const viewBoxHeight = coreChartHeight + marginTop + marginBottom
-  const viewBoxWidth = coreChartWidth + marginLeft + marginRight
-
-  const chartParent = d3.select(chartContainerSelector)
-
-  const widgets = chartParent
-    .append('div')
-    .attr(
-      'style',
-      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
-    )
-  const widgetsLeft = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
-  const widgetsRight = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
-
-  const svg = chartParent
-    .append('svg')
-    .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
-    .style('background', bgColor)
-
-  const allComponents = svg.append('g').attr('class', 'all-components')
-
-  const chartCore = allComponents
-    .append('g')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-
-  return {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
+  .searching rect:not(.domino-matched) {
+    opacity: 0.2;
   }
-}
-
-function initializeTooltip() {
-  return d3
-    .select('body')
-    .append('div')
-    .attr('class', 'dom-tooltip')
-    .attr(
-      'style',
-      'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
-    )
+  `)
 }
 
 function parseData({ data, colorField, yField }) {
@@ -239,24 +315,21 @@ function renderDominos({
     })
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       const dominoName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.domino-${dominoName}`).classed('domino-matched', true)
+        svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', true)
       } else {
-        d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
+        svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', false)
       }
-      d3.select('.dominos').classed('searching', true)
+      svg.select('.dominos').classed('searching', true)
     })
   } else {
-    referenceList.forEach(val => {
-      const dominoName = toClassText(val)
-      d3.select(`.domino-${dominoName}`).classed('domino-matched', false)
-    })
-    d3.select('.dominos').classed('searching', false)
+    svg.selectAll('.domino').classed('domino-matched', false)
+    svg.select('.dominos').classed('searching', false)
   }
 }
 function renderColorLegend({
@@ -316,144 +389,39 @@ function setupSearch({
   widgetsLeft,
   searchInputClassNames,
   dominoField,
+  svg,
+  chartContainerSelector,
+  dominoValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(dominoValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
-  // TODO: refactor hidden, won't be needed if we add this node
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
   search.attr('placeholder', `Find by ${dominoField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
-}
-
-export function renderChart({
-  data,
-  options: {
-    aspectRatio = 2,
-
-    marginTop = 60,
-    marginRight = 90,
-    marginBottom = 20,
-    marginLeft = 50,
-
-    bgColor = 'transparent',
-
-    xPaddingOuter = 0.2,
-    xAxisLabel = xField,
-
-    dominoSize = 0.2,
-
-    yPaddingInner = 0.2,
-    yPaddingOuter = 0.2,
-    ySortOrder = 'desc',
-
-    colorStrategy = 'value',
-    colorThreshold = 10,
-    colorDominoHighlighted = '#c20a66',
-    colorDominoNormal = '#d9e2e4',
-
-    normalLegendLabel = 'Normal',
-    highlightedLegendLabel = 'Highlighted',
-
-    searchInputClassNames = '',
-  },
-  dimensions: { xField, yField, dominoField, colorField },
-
-  chartContainerSelector,
-}) {
-  applyInteractionStyles()
-
-  const coreChartWidth = 1000
-  const {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
-  } = setupChartArea({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  })
-
-  const tooltipDiv = initializeTooltip()
-
-  const dataParsed = parseData({
-    data,
-    colorField,
-    yField,
-  })
-
-  const { xScale, yScale, colorScale } = setupScales({
-    dataParsed,
-    xField,
-    yField,
-    dominoSize,
-    coreChartWidth,
-    coreChartHeight,
-    xPaddingOuter,
-    ySortOrder,
-    yPaddingOuter,
-    yPaddingInner,
-    colorThreshold,
-    colorDominoNormal,
-    colorDominoHighlighted,
-    colorStrategy,
-  })
-
-  renderYAxis({ chartCore, yScale })
-
-  renderDominos({
-    dataParsed,
-    yField,
-    chartCore,
-    yScale,
-    dominoField,
-    xScale,
-    xField,
-    colorScale,
-    colorField,
-    colorStrategy,
-    tooltipDiv,
-  })
-
-  renderXAxis({ chartCore, xAxisLabel, coreChartWidth })
-
-  const dominoValues = _(dataParsed).map(dominoField).uniq().value()
-  const handleSearch = searchEventHandler(dominoValues)
-  setupSearch({
-    handleSearch,
-    widgetsLeft,
-    searchInputClassNames,
-    dominoField,
-  })
-
-  // Legends
-  renderColorLegend({
-    xScale,
-    yScale,
-    widgetsRight,
-    colorDominoHighlighted,
-    highlightedLegendLabel,
-    colorDominoNormal,
-    normalLegendLabel,
-  })
-
-  // For responsiveness
-  // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
-  })
 }
