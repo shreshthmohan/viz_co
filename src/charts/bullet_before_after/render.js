@@ -11,6 +11,8 @@ import {
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { swatches } from '../../utils/helpers/colorLegend'
 import { formatNumber } from '../../utils/helpers/formatters'
+import { dashedLegend } from '../overlap_area/dashedLegend'
+import { lineBandLegend } from '../line_band_scatter/lineBandLegend'
 
 export function renderChart({
   data,
@@ -28,25 +30,28 @@ export function renderChart({
     afterFieldColor = '#1570A6',
 
     glyphSize = 5,
+
     connectorSize = 5,
     connectorColorStrategy = 'farFromReference',
     connectorColorCustom,
+    connectorLegendLabelBefore = '',
+    connectorLegendLabelAfter = '',
 
     referenceValue = 0,
     referenceLineColor = '#fff',
     referenceLineWidth = 2,
     referenceLineOpacity = 1,
-    /* Legends */
+    referenceLabel = '',
+
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
 
-    topicLabelFontSize = '12px',
+    topicLabelFontSize = 12,
     topicLabelTextColor = '#000',
     topicLabelYOffset = 0,
 
     defaultState = [],
 
-    /* Axes */
     xScaleType = 'linear', // linear or log
     xScaleLogBase = 10, // applicable only if log scale
     xAxisPosition = 'top',
@@ -74,7 +79,6 @@ export function renderChart({
     valuePostfix = '',
     valueFormatter = '',
 
-    // Labels
     topicLabelXOffset = 5,
 
     // Opinionated (currently cannot be changed from options)
@@ -133,6 +137,23 @@ export function renderChart({
     xAxisCustomDomain,
     xScaleType,
     xScaleLogBase,
+  })
+
+  renderConnectorLegends({
+    connectorColorStrategy,
+    connectorLegendLabelBefore,
+    connectorLegendLabelAfter,
+    beforeFieldColor,
+    afterFieldColor,
+    widgetsRight,
+  })
+
+  renderRefLineLegend({
+    referenceLabel,
+    referenceLineColor,
+    widgetsRight,
+    referenceLineWidth,
+    referenceLineOpacity,
   })
 
   renderLegends({ widgetsRight, colorScale })
@@ -601,7 +622,7 @@ function renderBullets({
       d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
     )
     .attr('fill', topicLabelTextColor)
-    .style('font-size', topicLabelFontSize)
+    .style('font-size', `${topicLabelFontSize}px`)
     .attr('text-anchor', d =>
       xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
     )
@@ -650,11 +671,12 @@ function setupSearch({
 }
 
 function renderLegends({ widgetsRight, colorScale }) {
-  widgetsRight.html(
+  widgetsRight.append('div').html(
     swatches({
       color: colorScale,
       uid: 'rs',
       customClass: '',
+      circle: true,
     }),
   )
 }
@@ -715,4 +737,53 @@ function setupInitialStateButton({
     search.node().value = ''
     handleSearch('')
   })
+}
+
+function renderConnectorLegends({
+  connectorColorStrategy,
+  connectorLegendLabelBefore,
+  connectorLegendLabelAfter,
+  beforeFieldColor,
+  afterFieldColor,
+  widgetsRight,
+}) {
+  const connectorColorStrategies = ['farFromReference', 'closeToReference']
+  if (connectorColorStrategies.includes(connectorColorStrategy)) {
+    const lineBandsWithColors = [
+      {
+        type: 'line',
+        line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
+      },
+      {
+        type: 'line',
+        line: { label: connectorLegendLabelAfter, color: afterFieldColor },
+      },
+    ]
+    widgetsRight
+      .append('div')
+      .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }))
+  }
+}
+
+function renderRefLineLegend({
+  referenceLabel,
+  referenceLineColor,
+  widgetsRight,
+  referenceLineWidth,
+  referenceLineOpacity,
+}) {
+  const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }]
+  const dashedLegendColor = d3
+    .scaleOrdinal()
+    .range([referenceLineColor])
+    .domain(['ref'])
+
+  widgetsRight.append('div').html(
+    dashedLegend({
+      labels: verticalDashedLineLabels,
+      color: dashedLegendColor,
+      swatchWidth: referenceLineWidth,
+      lineOpacity: referenceLineOpacity,
+    }),
+  )
 }

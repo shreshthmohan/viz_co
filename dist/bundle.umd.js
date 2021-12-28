@@ -219,34 +219,272 @@
 
   /* global window */
 
+<<<<<<< HEAD
   function applyInteractionStyles$a({ activeOpacity, inactiveOpacity }) {
+=======
+  function renderChart$j({
+    data,
+    dimensions: {
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+      nameField,
+    },
+
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = 'transparent',
+
+      oppositeDirectionColor = '#ee4e34',
+      sameDirectionColor = '#44a8c1',
+
+      yAxisTitle = `${yFieldStart} → ${yFieldEnd}`,
+      xAxisTitle = `${xFieldStart} → ${xFieldEnd}`,
+
+      xValueFormatter = '',
+      yValueFormatter = '',
+
+      directionStartLabel = 'start point',
+      directionEndLabel = 'end point',
+      sizeLegendValues = [1e6, 1e8, 1e9],
+      sizeLegendMoveSizeObjectDownBy = 5,
+      sizeLegendTitle = 'size legend title',
+      sizeValueFormatter = '',
+
+      xAxisTickValues = [],
+
+      xScaleType = 'linear', // linear or log
+      xScaleLogBase = 10, // applicable only if log scale
+
+      defaultState = [],
+
+      activeOpacity = 0.8, // click, hover, search
+      inactiveOpacity = 0.2,
+
+      circleSizeRange = [5, 30],
+      lineWidthRange = [2, 4],
+
+      searchInputClassNames = '',
+      goToInitialStateButtonClassNames = '',
+      clearAllButtonClassNames = '',
+
+      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+    },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles$9({
+      chartContainerSelector,
+      activeOpacity,
+      inactiveOpacity,
+    });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$8({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$6();
+
+    const dataParsed = parseData$9({
+      data,
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+    });
+
+    const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
+      setupScales$a({
+        dataParsed,
+        coreChartHeight,
+        coreChartWidth,
+        yFieldStart,
+        yFieldEnd,
+        xFieldStart,
+        xFieldEnd,
+        xScaleType,
+        xScaleLogBase,
+        sizeField,
+        circleSizeRange,
+        lineWidthRange,
+        sameDirectionColor,
+        oppositeDirectionColor,
+        xAxisTickValues,
+      });
+
+    const nameValues = ___default["default"](data).map(nameField).uniq().value();
+    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
+
+    const gapInCircles = 30;
+    renderSizeLegend$1({
+      gapInCircles,
+      circleSizeScale,
+      widgetsRight,
+      sizeLegendMoveSizeObjectDownBy,
+      sizeLegendValues,
+      sizeValueFormatter,
+      sizeLegendTitle,
+    });
+
+    const stickHeight = 3;
+    const stickLength = 30;
+    const stickWidthLegend = 1;
+    const ballRadius = 6;
+    const gapForText = 5;
+    const singleMaceSectionHeight = 20;
+
+    renderColorLegend$2({
+      stickHeight,
+      stickLength,
+      ballRadius,
+      gapForText,
+      singleMaceSectionHeight,
+      widgetsRight,
+      sameDirectionColor,
+      oppositeDirectionColor,
+      svg,
+    });
+
+    renderDirectionLegend({
+      selection: widgetsRight.append('svg'),
+      ballRadius,
+      stickLength,
+      stickWidthLegend,
+      gapForText,
+      directionStartLabel,
+      directionEndLabel,
+    });
+
+    renderXAxis$9({
+      chartCore,
+      coreChartHeight,
+      coreChartWidth,
+      xScale,
+      xAxisTickValues,
+      xAxisTitle,
+    });
+
+    // y-axis
+    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
+
+    renderMaces({
+      chartCore,
+      dataParsed,
+      sizeField,
+      nameField,
+      defaultStateAll,
+      xFieldStart,
+      xFieldEnd,
+      xScale,
+      yScale,
+      yFieldStart,
+      yFieldEnd,
+      circleSizeScale,
+      lineWidthScale,
+      colorScale,
+      tooltipDiv,
+      sizeValueFormatter,
+      xValueFormatter,
+      yValueFormatter,
+      xFieldType,
+      yFieldType,
+    });
+
+    // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+    // handleSearch accepts search query string and applied appropriate
+    const handleSearch = searchEventHandler$8(nameValues);
+    const search = setupSearch$9({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      nameField,
+      nameValues,
+      svg,
+      chartContainerSelector,
+    });
+
+    setupInitialStateButton$6({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
+    setupClearAllButton$7({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function applyInteractionStyles$9({
+    activeOpacity,
+    inactiveOpacity,
+    chartContainerSelector,
+  }) {
+>>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
     d3__namespace.select('body').append('style').html(`
-    .mace {
+    ${chartContainerSelector} .mace {
       cursor: pointer;
     }
-    g.maces .mace {
+    ${chartContainerSelector} g.maces .mace {
       fill-opacity: ${inactiveOpacity};
     }
     /* clicked and legend clicked states are common: controlled by .mace-active */
-    g.maces .mace.mace-active {
+    ${chartContainerSelector} g.maces .mace.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.maces.searching .mace.mace-matched {
+    ${chartContainerSelector} g.maces.searching .mace.mace-matched {
       stroke: #333;
       stroke-width: 3;
     }
     /* So that legend text is visible irrespective of state */
-    g.mace text {
+    ${chartContainerSelector} g.mace text {
       fill-opacity: 0.8;
     }
-    g.maces g.mace.mace-hovered {
+    ${chartContainerSelector} g.maces g.mace.mace-hovered {
       stroke: #333;
       stroke-width: 3;
     }
-    g.color-legend g.mace-active {
+    ${chartContainerSelector} g.color-legend g.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.color-legend g:not(.mace-active) {
+    ${chartContainerSelector} g.color-legend g:not(.mace-active) {
       fill-opacity: ${inactiveOpacity};
     }
   `);
@@ -353,6 +591,7 @@
     lineWidthRange,
     sameDirectionColor,
     oppositeDirectionColor,
+    xAxisTickValues,
   }) {
     const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]));
     const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]));
@@ -365,7 +604,12 @@
 
     const xDomainStart = dataParsed.map(el => Number.parseFloat(el[xFieldStart]));
     const xDomainEnd = dataParsed.map(el => Number.parseFloat(el[xFieldEnd]));
-    const xDomain = d3__namespace.extent([...xDomainStart, ...xDomainEnd]);
+    const xDomain = d3__namespace.extent([
+      ...xDomainStart,
+      ...xDomainEnd,
+      ...xAxisTickValues,
+    ]);
+
     const xScale =
       xScaleType === 'log'
         ? d3__namespace
@@ -373,8 +617,7 @@
             .base(xScaleLogBase || 10)
             .range([0, coreChartWidth])
             .domain(xDomain)
-            .nice()
-        : d3__namespace.scaleLinear().range([0, coreChartWidth]).domain(xDomain).nice();
+        : d3__namespace.scaleLinear().range([0, coreChartWidth]).domain(xDomain);
 
     const sizeMax = d3__namespace.max(dataParsed.map(el => el[sizeField]));
 
@@ -471,7 +714,7 @@
       .attr('class', 'x-axis-bottom')
       .attr('transform', `translate(0, ${coreChartHeight + 30})`);
     xAxis.call(
-      xAxisTickValues
+      xAxisTickValues.length
         ? d3__namespace.axisBottom(xScale).tickValues(xAxisTickValues)
         : d3__namespace.axisBottom(xScale),
     );
@@ -805,6 +1048,7 @@
     });
   }
 
+<<<<<<< HEAD
   function renderChart$j({
     data,
     options: {
@@ -1029,6 +1273,8 @@
     });
   }
 
+=======
+>>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
   const validateData = ({ data, dimensionTypes, dimensions }) => {
     const dataValidations = {};
     ___default["default"].forEach(dimensionTypes, (valFuncs, dim) => {
@@ -2147,6 +2393,7 @@
     marginLeft = 0,
     uid,
     customClass = '',
+    circle = false,
   }) {
     const id = uid;
     //DOM.uid().id;
@@ -2174,6 +2421,7 @@
         .${id}-swatch {
           width: ${+swatchWidth}px;
           height: ${+swatchHeight}px;
+          ${circle ? 'border-radius: 50%;' : ''}
           margin: 0 0.5em 0 0;
         }
       </style>
@@ -2207,6 +2455,7 @@
         content: "";
         width: ${+swatchWidth}px;
         height: ${+swatchHeight}px;
+        ${circle ? 'border-radius: 50%;' : ''}
         margin-right: 0.5em;
         background: var(--color);
       }
@@ -6731,6 +6980,7 @@ g.circles circle.circle.circle-hovered {
     marginLeft = 0,
     uid,
     customClass = '',
+    lineOpacity = 1,
   }) {
     const id = `dl-${uid}`;
     const mu = `
@@ -6751,6 +7001,7 @@ g.circles circle.circle.circle-hovered {
         height: ${+swatchHeight}px;
         border: ${Math.floor(+swatchWidth)}px dashed var(--color);
         margin-right: 0.5em;
+        opacity: ${lineOpacity};
       }
     </style>
       ${labels
@@ -7301,6 +7552,8 @@ g.circles circle.circle.circle-hovered {
       missingDataMessage = 'Data missing',
 
       searchButtonClassNames,
+
+      searchInactiveOpacity = 0.3,
     },
     chartContainerSelector,
   }) {
@@ -7314,7 +7567,11 @@ g.circles circle.circle.circle-hovered {
   .hovered {
     stroke: #333;
     stroke-width: 2;
-  }`);
+  }
+  .searching > .iv-county:not(.s-match) {
+    opacity: ${searchInactiveOpacity};
+  }
+  `);
 
     const coreChartHeight = 610;
     const coreChartWidth = 975;
@@ -7518,6 +7775,9 @@ g.circles circle.circle.circle-hovered {
     // colorLegendTitle = valueField,
 
     nullDataColor: checkColor,
+    missingDataColor: checkColor,
+
+    searchInactiveOpacity: checkNumberBetween(0, 1),
 
     // searchButtonClassNames,
   };
@@ -11070,25 +11330,28 @@ g.circles circle.circle.circle-hovered {
       afterFieldColor = '#1570A6',
 
       glyphSize = 5,
+
       connectorSize = 5,
       connectorColorStrategy = 'farFromReference',
       connectorColorCustom,
+      connectorLegendLabelBefore = '',
+      connectorLegendLabelAfter = '',
 
       referenceValue = 0,
       referenceLineColor = '#fff',
       referenceLineWidth = 2,
       referenceLineOpacity = 1,
-      /* Legends */
+      referenceLabel = '',
+
       beforeLegendLabel = beforeField,
       afterLegendLabel = afterField,
 
-      topicLabelFontSize = '12px',
+      topicLabelFontSize = 12,
       topicLabelTextColor = '#000',
       topicLabelYOffset = 0,
 
       defaultState = [],
 
-      /* Axes */
       xScaleType = 'linear', // linear or log
       xScaleLogBase = 10, // applicable only if log scale
       xAxisPosition = 'top',
@@ -11116,7 +11379,6 @@ g.circles circle.circle.circle-hovered {
       valuePostfix = '',
       valueFormatter = '',
 
-      // Labels
       topicLabelXOffset = 5,
 
       // Opinionated (currently cannot be changed from options)
@@ -11175,6 +11437,23 @@ g.circles circle.circle.circle-hovered {
       xAxisCustomDomain,
       xScaleType,
       xScaleLogBase,
+    });
+
+    renderConnectorLegends({
+      connectorColorStrategy,
+      connectorLegendLabelBefore,
+      connectorLegendLabelAfter,
+      beforeFieldColor,
+      afterFieldColor,
+      widgetsRight,
+    });
+
+    renderRefLineLegend({
+      referenceLabel,
+      referenceLineColor,
+      widgetsRight,
+      referenceLineWidth,
+      referenceLineOpacity,
     });
 
     renderLegends({ widgetsRight, colorScale });
@@ -11643,7 +11922,7 @@ g.circles circle.circle.circle-hovered {
         d => yScale(d[topicField]) + topicLabelYOffset + yScale.bandwidth() / 2,
       )
       .attr('fill', topicLabelTextColor)
-      .style('font-size', topicLabelFontSize)
+      .style('font-size', `${topicLabelFontSize}px`)
       .attr('text-anchor', d =>
         xScale(d[afterField]) >= xScale(d[beforeField]) ? 'start' : 'end',
       )
@@ -11692,11 +11971,12 @@ g.circles circle.circle.circle-hovered {
   }
 
   function renderLegends({ widgetsRight, colorScale }) {
-    widgetsRight.html(
+    widgetsRight.append('div').html(
       swatches({
         color: colorScale,
         uid: 'rs',
         customClass: '',
+        circle: true,
       }),
     );
   }
@@ -11759,6 +12039,55 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
+  function renderConnectorLegends({
+    connectorColorStrategy,
+    connectorLegendLabelBefore,
+    connectorLegendLabelAfter,
+    beforeFieldColor,
+    afterFieldColor,
+    widgetsRight,
+  }) {
+    const connectorColorStrategies = ['farFromReference', 'closeToReference'];
+    if (connectorColorStrategies.includes(connectorColorStrategy)) {
+      const lineBandsWithColors = [
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
+        },
+        {
+          type: 'line',
+          line: { label: connectorLegendLabelAfter, color: afterFieldColor },
+        },
+      ];
+      widgetsRight
+        .append('div')
+        .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }));
+    }
+  }
+
+  function renderRefLineLegend({
+    referenceLabel,
+    referenceLineColor,
+    widgetsRight,
+    referenceLineWidth,
+    referenceLineOpacity,
+  }) {
+    const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }];
+    const dashedLegendColor = d3__namespace
+      .scaleOrdinal()
+      .range([referenceLineColor])
+      .domain(['ref']);
+
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: verticalDashedLineLabels,
+        color: dashedLegendColor,
+        swatchWidth: referenceLineWidth,
+        lineOpacity: referenceLineOpacity,
+      }),
+    );
+  }
+
   // export function that
 
   const dimensionTypes$2 = {
@@ -11777,39 +12106,40 @@ g.circles circle.circle.circle-hovered {
 
     bgColor: checkColor,
 
-    /* Series Colors */
     beforeFieldColor: checkColor,
     afterFieldColor: checkColor,
 
-    /* Glyphs */
     glyphSize: checkNumber,
-    connectorSize: checkNumber,
 
+    connectorSize: checkNumber,
     connectorColorStrategy: checkOneOf([
       'farFromReference',
       'closeToReference',
       'customColor',
     ]),
     connectorColorCustom: checkColor,
+    // connectorLegendLabelBefore: checkString,
+    //   connectorLegendLabelAfter: checkString,
 
     referenceValue: checkNumber,
     referenceLineColor: checkColor,
     referenceLineWidth: checkNumber,
     referenceLineOpacity: checkNumberBetween(0, 1),
+    // referenceLabel: checkString,
 
-    /* Legends */
     // beforeLegendLabel: checkString,
     // afterLegendLabel: checkString,
+
+    topicLabelFontSize: checkPositiveInteger,
+    topicLabelTextColor: checkColor,
+    topicLabelYOffset: checkNumber,
+    topicLabelXOffset: checkNumber,
+
+    defaultState: checkDefaultState,
 
     // valuePrefix: checkString,
     // valuePostfix: checkString,
     // valueFormatter: checkString,
-
-    topicLabelFontSize: checkFontSizeString,
-    topicLabelTextColor: checkColor,
-    topicLabelYOffset: checkNumber,
-
-    defaultState: checkDefaultState,
 
     /* Axes */
     // xAxisTitle: checkString,
@@ -11832,6 +12162,9 @@ g.circles circle.circle.circle-hovered {
     // xAxisTickBaseline: checkString,
     xAxisTickValueXOffset: checkNumber,
     xAxisTickValueYOffset: checkNumber,
+
+    yPaddingInner: checkNumber,
+    yPaddingOuter: checkNumber,
 
     // searchInputClassNames: checkString,
     // goToInitialStateButtonClassNames: checkString,
