@@ -34,10 +34,13 @@ const options = {
 
   connectorColorStrategy: 'farFromReference', //['farFromReference', 'closeToReference', 'customColor']
   connectorColorCustom: 'blue',
+  connectorLegendLabelBefore: 'Before is farther from threshhold',
+  connectorLegendLabelAfter: 'After is farther from threshhold',
   referenceLineColor: 'blue',
   referenceLineWidth: 2,
   referenceLineOpacity: 0.8,
   referenceValue: 10000,
+  referenceLabel: 'Ref',
 
   /* Legends */
   beforeLegendLabel: 'Before',

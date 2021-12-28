@@ -33,11 +33,15 @@ export function renderChart({
     connectorSize = 5,
     connectorColorStrategy = 'farFromReference',
     connectorColorCustom,
+    connectorLegendLabelBefore = '',
+    connectorLegendLabelAfter = '',
 
     referenceValue = 0,
     referenceLineColor = '#fff',
     referenceLineWidth = 2,
     referenceLineOpacity = 1,
+    referenceLabel = '',
+
     /* Legends */
     beforeLegendLabel = beforeField,
     afterLegendLabel = afterField,
@@ -137,20 +141,28 @@ export function renderChart({
     xScaleLogBase,
   })
 
-  const verticalDashedLineLabels = [{ series: 'ref', label: 'Reference' }]
+  const connectorColorStrategies = ['farFromReference', 'closeToReference']
+  if (connectorColorStrategies.includes(connectorColorStrategy)) {
+    const lineBandsWithColors = [
+      {
+        type: 'line',
+        line: { label: connectorLegendLabelBefore, color: beforeFieldColor },
+      },
+      {
+        type: 'line',
+        line: { label: connectorLegendLabelAfter, color: afterFieldColor },
+      },
+    ]
+    widgetsRight
+      .append('div')
+      .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }))
+  }
+
+  const verticalDashedLineLabels = [{ series: 'ref', label: referenceLabel }]
   const dashedLegendColor = d3
     .scaleOrdinal()
     .range([referenceLineColor])
     .domain(['ref'])
-
-  // TODO: lineBandWithColors is to be replaced by connection color
-  // SM: I don't quite understand what is to be shown in the legend
-  const lineBandsWithColors = [
-    { type: 'line', line: { label: 'line label', color: 'red' } },
-  ]
-  widgetsRight
-    .append('div')
-    .html(lineBandLegend({ lineBandColorScale: lineBandsWithColors }))
 
   widgetsRight.append('div').html(
     dashedLegend({

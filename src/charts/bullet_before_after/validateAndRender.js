@@ -21,6 +21,7 @@ import {
   checkOneOf,
   checkFontSizeString,
   checkDefaultState,
+  checkStringArray,
 } from '../../utils/validation/optionValidations'
 
 import {
@@ -65,6 +66,7 @@ const optionTypes = {
   referenceLineColor: checkColor,
   referenceLineWidth: checkNumber,
   referenceLineOpacity: checkNumberBetween(0, 1),
+  // referenceLabel: checkString,
 
   /* Legends */
   // beforeLegendLabel: checkString,
