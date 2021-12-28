@@ -5,6 +5,203 @@ import _ from 'lodash-es'
 import { formatNumber, formatDate } from '../../utils/helpers/formatters'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { legend } from '../../utils/helpers/colorLegend'
+import {
+  initializeTooltip,
+  setupChartArea,
+} from '../../utils/helpers/commonChartHelpers'
+
+export function renderChart({
+  data,
+  options: {
+    aspectRatio = 0.8,
+
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
+
+    bgColor = 'transparent',
+
+    sizeLegendLabel = _.capitalize(sizeField),
+
+    sizeLegendValues = [1, 5, 10, 20],
+    sizeLegendGapInSymbols = 25,
+    sizeLegendMoveSymbolsDownBy = 15,
+
+    xDomain,
+    xAxisLabel = xField,
+    xAxisLabelOffset = -40,
+    xAxisValueFormatter = '',
+    yAxisDateParser = '',
+    yAxisDateFormatter = '',
+    colorLegendValueFormatter = '',
+    sizeLegendValueFormatter = '',
+    sizeValueFormatter = '',
+
+    colorDomain,
+    colorRange,
+    colorLegendLabel,
+
+    sizeRange = [2, 20],
+    // Opinionated (currently cannot be changed from options)
+    sizeScaleType = 'linear',
+    sizeScaleLogBase = 10,
+    dominoHeight = 0.3,
+    yPaddingOuter = 0.1,
+
+    initialState = [],
+
+    activeOpacity = 1,
+    inactiveOpacity = 0.1,
+
+    searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
+  },
+  dimensions: { xField, yField, dominoField, sizeField, colorField },
+
+  chartContainerSelector,
+}) {
+  applyInteractionStyles({ inactiveOpacity, activeOpacity })
+
+  const coreChartWidth = 1000
+  const {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
+
+  const tooltipDiv = initializeTooltip()
+
+  const { allDominoFieldValues, defaultStateAll } = parseData({
+    data,
+    dominoField,
+    initialState,
+  })
+
+  const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales({
+    data,
+    xField,
+    yField,
+    sizeField,
+    colorField,
+    colorRange,
+    colorDomain,
+    xDomain,
+    coreChartWidth,
+    coreChartHeight,
+    yPaddingOuter,
+    dominoHeight,
+    sizeScaleType,
+    sizeScaleLogBase,
+    sizeRange,
+  })
+
+  renderXAxis({
+    chartCore,
+    xAxisLabel,
+    coreChartWidth,
+    xAxisLabelOffset,
+    yScale,
+    yDomain,
+    xScale,
+    coreChartHeight,
+    formatNumber,
+    xAxisValueFormatter,
+  })
+
+  renderYAxis({
+    chartCore,
+    xScale,
+    xDomain,
+    yScale,
+    formatDate,
+    yAxisDateParser,
+    yAxisDateFormatter,
+  })
+
+  renderDominosAndRibbons({
+    data,
+    yField,
+    sizeField,
+    sizeScale,
+    xAxisValueFormatter,
+    yAxisDateParser,
+    yAxisDateFormatter,
+    sizeValueFormatter,
+    chartCore,
+    yScale,
+    dominoField,
+    xScale,
+    xField,
+    colorScale,
+    colorField,
+    tooltipDiv,
+    allDominoFieldValues,
+    defaultStateAll,
+  })
+
+  const handleSearch = searchEventHandler(allDominoFieldValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    dominoField,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+  })
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+  })
+
+  // Legends
+  renderColorLegend({
+    colorScale,
+    colorLegendLabel,
+    widgetsRight,
+    colorField,
+    colorLegendValueFormatter,
+  })
+
+  renderSizeLegend({
+    widgetsRight,
+    sizeLegendValues,
+    sizeLegendMoveSymbolsDownBy,
+    sizeScale,
+    sizeLegendGapInSymbols,
+    sizeLegendValueFormatter,
+    sizeLegendLabel,
+  })
+
+  // For responsiveness
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
 
 function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
   d3.select('body').append('style').html(`
@@ -34,68 +231,6 @@ function applyInteractionStyles({ inactiveOpacity, activeOpacity }) {
         stroke-width: 1;
       }
   `)
-}
-
-function setupChartArea({
-  chartContainerSelector,
-  coreChartWidth,
-  aspectRatio,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  bgColor,
-}) {
-  const coreChartHeight = coreChartWidth / aspectRatio
-
-  const viewBoxHeight = coreChartHeight + marginTop + marginBottom
-  const viewBoxWidth = coreChartWidth + marginLeft + marginRight
-
-  const chartParent = d3.select(chartContainerSelector)
-
-  const widgets = chartParent
-    .append('div')
-    .attr(
-      'style',
-      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
-    )
-  const widgetsLeft = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
-  const widgetsRight = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
-
-  const svg = chartParent
-    .append('svg')
-    .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
-    .style('background', bgColor)
-
-  const allComponents = svg.append('g').attr('class', 'all-components')
-
-  const chartCore = allComponents
-    .append('g')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-
-  return {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
-  }
-}
-
-function initializeTooltip() {
-  return d3
-    .select('body')
-    .append('div')
-    .attr('class', 'dom-tooltip')
-    .attr(
-      'style',
-      'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
-    )
 }
 
 function parseData({ data, dominoField, initialState }) {
@@ -595,198 +730,5 @@ function setupClearAllButton({
     d3.selectAll('.ribbon').classed('ribbon-active', false)
     search.node().value = ''
     handleSearch('')
-  })
-}
-
-export function renderChart({
-  data,
-  options: {
-    aspectRatio = 0.8,
-
-    marginTop = 0,
-    marginRight = 0,
-    marginBottom = 0,
-    marginLeft = 0,
-
-    bgColor = 'transparent',
-
-    sizeLegendLabel = _.capitalize(sizeField),
-
-    sizeLegendValues = [1, 5, 10, 20],
-    sizeLegendGapInSymbols = 25,
-    sizeLegendMoveSymbolsDownBy = 15,
-
-    xDomain,
-    xAxisLabel = xField,
-    xAxisLabelOffset = -40,
-    xAxisValueFormatter = '',
-    yAxisDateParser = '',
-    yAxisDateFormatter = '',
-    colorLegendValueFormatter = '',
-    sizeLegendValueFormatter = '',
-    sizeValueFormatter = '',
-
-    colorDomain,
-    colorRange,
-    colorLegendLabel,
-
-    sizeRange = [2, 20],
-    // Opinionated (currently cannot be changed from options)
-    sizeScaleType = 'linear',
-    sizeScaleLogBase = 10,
-    dominoHeight = 0.3,
-    yPaddingOuter = 0.1,
-
-    initialState = [],
-
-    activeOpacity = 1,
-    inactiveOpacity = 0.1,
-
-    searchInputClassNames = '',
-    goToInitialStateButtonClassNames = '',
-    clearAllButtonClassNames = '',
-  },
-  dimensions: { xField, yField, dominoField, sizeField, colorField },
-
-  chartContainerSelector,
-}) {
-  applyInteractionStyles({ inactiveOpacity, activeOpacity })
-
-  const coreChartWidth = 1000
-  const {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
-  } = setupChartArea({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  })
-
-  const tooltipDiv = initializeTooltip()
-
-  const { allDominoFieldValues, defaultStateAll } = parseData({
-    data,
-    dominoField,
-    initialState,
-  })
-
-  const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales({
-    data,
-    xField,
-    yField,
-    sizeField,
-    colorField,
-    colorRange,
-    colorDomain,
-    xDomain,
-    coreChartWidth,
-    coreChartHeight,
-    yPaddingOuter,
-    dominoHeight,
-    sizeScaleType,
-    sizeScaleLogBase,
-    sizeRange,
-  })
-
-  renderXAxis({
-    chartCore,
-    xAxisLabel,
-    coreChartWidth,
-    xAxisLabelOffset,
-    yScale,
-    yDomain,
-    xScale,
-    coreChartHeight,
-    formatNumber,
-    xAxisValueFormatter,
-  })
-
-  renderYAxis({
-    chartCore,
-    xScale,
-    xDomain,
-    yScale,
-    formatDate,
-    yAxisDateParser,
-    yAxisDateFormatter,
-  })
-
-  renderDominosAndRibbons({
-    data,
-    yField,
-    sizeField,
-    sizeScale,
-    xAxisValueFormatter,
-    yAxisDateParser,
-    yAxisDateFormatter,
-    sizeValueFormatter,
-    chartCore,
-    yScale,
-    dominoField,
-    xScale,
-    xField,
-    colorScale,
-    colorField,
-    tooltipDiv,
-    allDominoFieldValues,
-    defaultStateAll,
-  })
-
-  const handleSearch = searchEventHandler(allDominoFieldValues)
-  const search = setupSearch({
-    handleSearch,
-    widgetsLeft,
-    searchInputClassNames,
-    dominoField,
-  })
-
-  setupInitialStateButton({
-    widgetsLeft,
-    goToInitialStateButtonClassNames,
-    defaultStateAll,
-    search,
-    handleSearch,
-  })
-  setupClearAllButton({
-    widgetsLeft,
-    clearAllButtonClassNames,
-    search,
-    handleSearch,
-  })
-
-  // Legends
-  renderColorLegend({
-    colorScale,
-    colorLegendLabel,
-    widgetsRight,
-    colorField,
-    colorLegendValueFormatter,
-  })
-
-  renderSizeLegend({
-    widgetsRight,
-    sizeLegendValues,
-    sizeLegendMoveSymbolsDownBy,
-    sizeScale,
-    sizeLegendGapInSymbols,
-    sizeLegendValueFormatter,
-    sizeLegendLabel,
-  })
-
-  // For responsiveness
-  // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
 }
