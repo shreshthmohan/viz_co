@@ -37,8 +37,11 @@ const options = {
   showOnlyEveryNthValue: 1,
 
   nanDisplayMessage: 'NA',
-  referenceValues: [2005, 2015],
-  referenceLineLabels: ['Zim-Avg', 'Afg-Avg'],
+  referenceLines: [
+    { value: 2005, label: 'Zim-Avg', color: 'orange' },
+    { value: 2015, label: 'Afg-Avg', color: 'blue' },
+  ],
+  referenceLinesOpacity: 0.8,
 }
 
 const dataPath = 'data_.csv'

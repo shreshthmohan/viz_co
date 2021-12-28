@@ -10222,8 +10222,8 @@ g.circles circle.circle.circle-hovered {
       yAXisLabelFontSize = 12,
 
       nanDisplayMessage = 'NA',
-      referenceValues = [],
-      referenceLineLabels = [],
+      referenceLines = [],
+      referenceLinesOpacity = 1,
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
@@ -10231,6 +10231,9 @@ g.circles circle.circle.circle-hovered {
     d3__namespace.select('body').append('style').html(`
   .hovered {
     stroke: #333;
+  }
+  .reference-lines {
+    stroke-opacity: ${referenceLinesOpacity};
   }
   `);
 
@@ -10334,16 +10337,43 @@ g.circles circle.circle.circle-hovered {
           .style('opacity', 0);
       });
 
+    const colorScaleForLegend = d3__namespace.scaleOrdinal(colorsRgba).domain(yFields);
+    widgetsRight.html(
+      swatches({
+        color: colorScaleForLegend,
+        uid: 'rs',
+        customClass: '',
+      }),
+    );
+
+    const refLinesColors = [];
+    const refLinesLabels = [];
+    referenceLines.forEach(l => {
+      refLinesLabels.push(l.label);
+      refLinesColors.push(d3__namespace.rgb(l.color));
+    });
+
+    const colorScaleForRefLines = d3__namespace
+      .scaleOrdinal()
+      .domain(refLinesLabels)
+      .range(refLinesColors);
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: refLinesLabels,
+        color: colorScaleForRefLines,
+      }),
+    );
+
     chartCore
       .append('g')
-      .attr('class', 'references')
+      .attr('class', 'reference-lines')
       .selectAll('path')
-      .data(referenceValues)
+      .data(referenceLines)
       .join('path')
       .attr('d', d => {
         const yDomain = yScale.domain();
         // const { x, y, width, height } = d3.select('.domain').node().getBBox()
-        const x0 = xScale(String(d)) + xScale.bandwidth() / 2;
+        const x0 = xScale(String(d.value)) + xScale.bandwidth() / 2;
         const y0 = yScale(d3__namespace.min(yDomain));
         const y1 = yScale(d3__namespace.max(yDomain));
         const d_ = [
@@ -10394,25 +10424,6 @@ g.circles circle.circle.circle-hovered {
       svg,
       margins: { marginLeft, marginRight, marginTop, marginBottom },
     });
-
-    const colorScaleForLegend = d3__namespace.scaleOrdinal(colorsRgba).domain(yFields);
-    widgetsRight.html(
-      swatches({
-        color: colorScaleForLegend,
-        uid: 'rs',
-        customClass: '',
-      }),
-    );
-    const colorScaleForRefLines = d3__namespace
-      .scaleOrdinal()
-      .domain(referenceLineLabels)
-      .range(colors);
-    widgetsRight.append('div').html(
-      dashedLegend({
-        labels: referenceLineLabels,
-        color: colorScaleForRefLines,
-      }),
-    );
   }
 
   function renderYAxis$1({
