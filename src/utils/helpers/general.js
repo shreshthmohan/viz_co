@@ -1,7 +1,10 @@
 import { throttle } from 'lodash-es'
 
 export function toClassText(str) {
-  return str.replace(/[\s&',.]/g, '').toLowerCase()
+  return str
+    .trim()
+    .replace(/[\s&',.()]/g, '-')
+    .toLowerCase()
 }
 
 export function preventOverflow({

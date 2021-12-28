@@ -9,6 +9,7 @@ import {
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
+import { dashedLegend } from '../../utils/helpers/dashedLegend'
 
 export function renderChart({
   data,
@@ -26,7 +27,7 @@ export function renderChart({
     barThickness = 0.8,
     outerPadding = 0.2,
 
-    colors = d3.schemeSpectral[9],
+    colorScheme = d3.schemeSpectral[9],
 
     showOnlyEveryNthValue = 1,
 
@@ -35,22 +36,22 @@ export function renderChart({
     xAXisLabelFontSize = 12,
     xAxisLabelOffset = 30,
     xAxisColor = 'black',
-    xAxisTickRotation = 0,
+    xAxisTickRotation = 90,
 
     yAxisPosition = 'left',
     yAxisLabelOffset = 50,
     yAxisColor = 'black',
     yAxisLabel = '',
     yAXisLabelFontSize = 12,
+
+    nanDisplayMessage = 'NA',
+    referenceLines = [],
+    referenceLinesOpacity = 1,
   },
   dimensions: { xField, yFields },
   chartContainerSelector,
 }) {
-  d3.select('body').append('style').html(`
-  .hovered {
-    stroke: #333;
-  }
-  `)
+  applyInteractionStyles({ referenceLinesOpacity })
 
   const coreChartWidth = 1000
   const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
@@ -67,88 +68,42 @@ export function renderChart({
 
   const tooltipDiv = initializeTooltip()
 
-  const allYValues = []
-  const dataParsed = data.map(el => {
-    const elParsed = { ...el }
-    yFields.forEach(yf => {
-      elParsed[yf] = Number.parseFloat(el[yf])
-      allYValues.push(Number.parseFloat(el[yf]))
-    })
-    return elParsed
+  const { dataParsed, allYValues } = parseData({ data, yFields })
+
+  const { xScale, yScale, colorsRgba } = setupScales({
+    dataParsed,
+    allYValues,
+    xField,
+    coreChartWidth,
+    coreChartHeight,
+    barThickness,
+    barOpacity,
+    outerPadding,
+    colorScheme,
   })
 
-  const xDomain = dataParsed.map(d => d[xField])
-  const xScale = d3
-    .scaleBand()
-    .range([0, coreChartWidth])
-    .domain(xDomain)
-    .paddingInner(1 - barThickness)
-    .paddingOuter(outerPadding)
-
-  const yMax = d3.max(allYValues)
-
-  const colorsRgba = colors.map(c => {
-    const parsedColor = d3.rgb(c)
-    parsedColor.opacity = barOpacity
-    return parsedColor
+  renderBars({
+    yFields,
+    chartCore,
+    dataParsed,
+    xField,
+    xScale,
+    yScale,
+    colorsRgba,
+    coreChartHeight,
+    tooltipDiv,
+    nanDisplayMessage,
   })
 
-  const yScale = d3
-    .scaleLinear()
-    .range([coreChartHeight, 0])
-    .domain([0, yMax])
-    .nice()
-  yFields.forEach((yf, i) => {
-    chartCore
-      .append('g')
-      .selectAll('rect')
-      .data(dataParsed)
-      .join('rect')
-      .attr('x', d => xScale(d[xField]))
-      .attr('y', d => yScale(d[yf]))
-      .attr('class', d => `rect-${toClassText(d[xField])}`)
-      .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
-      .attr('width', xScale.bandwidth())
-      .attr('fill', colorsRgba[i])
+  renderLegends({ widgetsRight, colorsRgba, yFields, referenceLines })
+
+  renderReferenceLine({
+    chartCore,
+    referenceLines,
+    yScale,
+    xScale,
+    colorsRgba,
   })
-
-  chartCore
-    .append('g')
-    .selectAll('rect')
-    .data(dataParsed)
-    .join('rect')
-    .attr('x', d => xScale(d[xField]))
-    .attr('y', 0)
-    .attr('height', coreChartHeight)
-    .attr('width', xScale.bandwidth())
-    .attr('opacity', 0)
-    .on('mouseover', function (e, d) {
-      tooltipDiv.transition().duration(200).style('opacity', 1)
-      tooltipDiv
-        .style('left', `${e.clientX}px`)
-        .style('top', `${e.clientY + 20 + window.scrollY}px`)
-
-      tooltipDiv.html(`${xField}: ${d[xField]}
-      <br/>
-      ${yFields
-        .map(
-          (yff, i) =>
-            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${colorsRgba[i]}"></div> ${yff}: ${d[yff]}`,
-        )
-        .join('<br/>')}
-      `)
-
-      d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true)
-    })
-    .on('mouseout', function (e, d) {
-      d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false)
-
-      tooltipDiv
-        .style('left', '-300px')
-        .transition()
-        .duration(500)
-        .style('opacity', 0)
-    })
 
   renderXAxis({
     xAxisPosition,
@@ -176,23 +131,13 @@ export function renderChart({
     yAXisLabelFontSize,
   })
 
-  const yAxisGrid = d3.axisLeft(yScale).tickSize(-coreChartWidth)
-  renderYGrid({ chartCore, yAxisGrid })
+  renderYGrid({ chartCore, yScale, coreChartWidth })
 
   preventOverflow({
     allComponents,
     svg,
     margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
-
-  const colorScaleForLegend = d3.scaleOrdinal(colorsRgba).domain(yFields)
-  widgetsRight.html(
-    swatches({
-      color: colorScaleForLegend,
-      uid: 'rs',
-      customClass: '',
-    }),
-  )
 }
 
 function renderYAxis({
@@ -236,7 +181,8 @@ function renderYAxis({
     .text(yAxisLabel)
 }
 
-function renderYGrid({ chartCore, yAxisGrid }) {
+function renderYGrid({ chartCore, yScale, coreChartWidth }) {
+  const yAxisGrid = d3.axisLeft(yScale).tickSize(-coreChartWidth)
   chartCore
     .append('g')
     .call(yAxisGrid)
@@ -302,4 +248,189 @@ function renderXAxis({
     .attr('fill', xAxisColor)
     .attr('transform', `translate(${coreChartWidth / 2}, ${labelOffset})`)
     .text(xAxisLabel)
+}
+
+function applyInteractionStyles({ referenceLinesOpacity }) {
+  d3.select('body').append('style').html(`
+  .hovered {
+    stroke: #333;
+  }
+  .reference-lines {
+    stroke-opacity: ${referenceLinesOpacity};
+  }
+  `)
+}
+
+function parseData({ data, yFields }) {
+  const allYValues = []
+  const dataParsed = data.map(el => {
+    const elParsed = { ...el }
+    yFields.forEach(yf => {
+      elParsed[yf] = Number.parseFloat(el[yf])
+      allYValues.push(Number.parseFloat(el[yf]))
+    })
+    return elParsed
+  })
+
+  return { dataParsed, allYValues }
+}
+
+function setupScales({
+  dataParsed,
+  allYValues,
+  xField,
+  coreChartWidth,
+  coreChartHeight,
+  barThickness,
+  barOpacity,
+  outerPadding,
+  colorScheme,
+}) {
+  const xDomain = dataParsed.map(d => d[xField])
+  const xScale = d3
+    .scaleBand()
+    .range([0, coreChartWidth])
+    .domain(xDomain)
+    .paddingInner(1 - barThickness)
+    .paddingOuter(outerPadding)
+
+  const yMax = d3.max(allYValues)
+
+  const colorsRgba = colorScheme.map(c => {
+    const parsedColor = d3.rgb(c)
+    parsedColor.opacity = barOpacity
+    return parsedColor
+  })
+
+  const yScale = d3
+    .scaleLinear()
+    .range([coreChartHeight, 0])
+    .domain([0, yMax])
+    .nice()
+
+  return { xScale, yScale, colorsRgba }
+}
+
+function renderBars({
+  yFields,
+  chartCore,
+  dataParsed,
+  xField,
+  xScale,
+  yScale,
+  colorsRgba,
+  coreChartHeight,
+  tooltipDiv,
+  nanDisplayMessage,
+}) {
+  yFields.forEach((yf, i) => {
+    chartCore
+      .append('g')
+      .selectAll('rect')
+      .data(dataParsed)
+      .join('rect')
+      .attr('x', d => xScale(d[xField]))
+      .attr('y', d => yScale(d[yf]))
+      .attr('class', d => `rect-${toClassText(d[xField])}`)
+      .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
+      .attr('width', xScale.bandwidth())
+      .attr('fill', colorsRgba[i])
+  })
+
+  chartCore
+    .append('g')
+    .selectAll('rect')
+    .data(dataParsed)
+    .join('rect')
+    .attr('x', d => xScale(d[xField]))
+    .attr('y', 0)
+    .attr('height', coreChartHeight)
+    .attr('width', xScale.bandwidth())
+    .attr('opacity', 0)
+    .on('mouseover', function (e, d) {
+      tooltipDiv.transition().duration(200).style('opacity', 1)
+      tooltipDiv
+        .style('left', `${e.clientX}px`)
+        .style('top', `${e.clientY + 20 + window.scrollY}px`)
+
+      tooltipDiv.html(`${xField}: ${d[xField]}
+      <br/>
+      ${yFields
+        .map(
+          (yff, i) =>
+            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${
+              colorsRgba[i]
+            }"></div> ${yff}: ${d[yff] || nanDisplayMessage}`,
+        )
+        .join('<br/>')}
+      `)
+
+      d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true)
+    })
+    .on('mouseout', function (e, d) {
+      d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false)
+
+      tooltipDiv
+        .style('left', '-300px')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+    })
+}
+
+function renderReferenceLine({ chartCore, referenceLines, yScale, xScale }) {
+  chartCore
+    .append('g')
+    .attr('class', 'reference-lines')
+    .selectAll('path')
+    .data(referenceLines)
+    .join('path')
+    .attr('d', d => {
+      const yDomain = yScale.domain()
+      // const { x, y, width, height } = d3.select('.domain').node().getBBox()
+      const x0 = xScale(String(d.value)) + xScale.bandwidth() / 2
+      const y0 = yScale(d3.min(yDomain))
+      const y1 = yScale(d3.max(yDomain))
+      const d_ = [
+        { x: x0, y: y0 },
+        { x: x0, y: y1 },
+      ]
+      return d3
+        .line()
+        .x(d => d.x)
+        .y(d => d.y)(d_)
+    })
+    .attr('stroke-width', 4)
+    .attr('opacity', 1)
+    .attr('stroke', d => d.color)
+    .attr('stroke-dasharray', '5,5')
+}
+
+function renderLegends({ widgetsRight, colorsRgba, yFields, referenceLines }) {
+  const colorScaleForLegend = d3.scaleOrdinal(colorsRgba).domain(yFields)
+  widgetsRight.html(
+    swatches({
+      color: colorScaleForLegend,
+      uid: 'rs',
+      customClass: '',
+    }),
+  )
+
+  const refLinesColors = []
+  const refLinesLabels = []
+  referenceLines.forEach(l => {
+    refLinesLabels.push(l.label)
+    refLinesColors.push(d3.rgb(l.color))
+  })
+
+  const colorScaleForRefLines = d3
+    .scaleOrdinal()
+    .domain(refLinesLabels)
+    .range(refLinesColors)
+  widgetsRight.append('div').html(
+    dashedLegend({
+      labels: refLinesLabels,
+      color: colorScaleForRefLines,
+    }),
+  )
 }

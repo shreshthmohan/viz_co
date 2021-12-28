@@ -19,7 +19,7 @@ const options = {
   outerPadding: 0.5,
 
   barOpacity: 0.5,
-  colors: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
+  colorScheme: ['orange', 'blue', '#8c8d85', '#29b1c4', 'green', 'yellow'],
 
   xAxisPosition: 'bottom',
   xAxisLabel: 'Year',
@@ -35,6 +35,13 @@ const options = {
   // to tackle too many x tick labels
   // remove this to show all values
   showOnlyEveryNthValue: 1,
+
+  nanDisplayMessage: 'NA',
+  referenceLines: [
+    { value: 2005, label: 'Zim-Avg', color: 'orange' },
+    { value: 2015, label: 'Afg-Avg', color: 'blue' },
+  ],
+  referenceLinesOpacity: 0.8,
 }
 
 const dataPath = 'data_.csv'

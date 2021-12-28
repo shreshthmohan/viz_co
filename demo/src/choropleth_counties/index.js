@@ -22,6 +22,8 @@ const options = {
   missingDataColor: 'gray',
   missingDataMessage: 'Data Missing',
 
+  searchInactiveOpacity: 0.2,
+
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs
     border-gray-300

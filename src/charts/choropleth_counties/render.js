@@ -30,6 +30,8 @@ export function renderChart({
     missingDataMessage = 'Data missing',
 
     searchButtonClassNames,
+
+    searchInactiveOpacity = 0.3,
   },
   chartContainerSelector,
 }) {
@@ -43,7 +45,11 @@ export function renderChart({
   .hovered {
     stroke: #333;
     stroke-width: 2;
-  }`)
+  }
+  .searching > .iv-county:not(.s-match) {
+    opacity: ${searchInactiveOpacity};
+  }
+  `)
 
   const coreChartHeight = 610
   const coreChartWidth = 975
