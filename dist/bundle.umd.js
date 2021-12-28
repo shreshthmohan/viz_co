@@ -292,7 +292,7 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$7({
+    } = setupChartArea$6({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -303,7 +303,7 @@
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$5();
+    const tooltipDiv = initializeTooltip$4();
 
     const dataParsed = parseData$a({
       data,
@@ -486,7 +486,7 @@
   `);
   }
 
-  function setupChartArea$7({
+  function setupChartArea$6({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -537,7 +537,7 @@
     }
   }
 
-  function initializeTooltip$5() {
+  function initializeTooltip$4() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -2910,20 +2910,7 @@
     });
   };
 
-  /* eslint-disable no-import-assign */
-
-  function applyInteractionStyles$9() {
-    d3__namespace.select('body').append('style').html(`
-  rect.domino.domino-hovered {
-    stroke: #333;
-  }
-  g.dominos.searching g rect.domino-matched {
-    stroke: #333;
-  }
-  `);
-  }
-
-  function setupChartArea$6({
+  function setupChartArea$5({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -2948,10 +2935,16 @@
       );
     const widgetsLeft = widgets
       .append('div')
-      .attr('style', 'display: flex; align-items: end; column-gap: 5px;');
+      .attr(
+        'style',
+        'display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; column-gap: 5px;',
+      );
     const widgetsRight = widgets
       .append('div')
-      .attr('style', 'display: flex; align-items: center; column-gap: 10px;');
+      .attr(
+        'style',
+        'display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; column-gap: 10px;',
+      );
 
     const svg = chartParent
       .append('svg')
@@ -2971,18 +2964,166 @@
       chartCore,
       widgetsLeft,
       widgetsRight,
+      viewBoxWidth,
     }
   }
 
-  function initializeTooltip$4() {
+  function initializeTooltip$3() {
     return d3__namespace
       .select('body')
       .append('div')
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; text-align: center; background-color: white; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
       )
+  }
+
+  /* eslint-disable no-import-assign */
+
+  function renderChart$g({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 60,
+      marginRight = 90,
+      marginBottom = 20,
+      marginLeft = 50,
+
+      bgColor = 'transparent',
+
+      xPaddingOuter = 0.2,
+      xAxisLabel = xField,
+
+      dominoSize = 0.2,
+
+      yPaddingInner = 0.2,
+      yPaddingOuter = 0.2,
+      ySortOrder = 'desc',
+
+      colorStrategy = 'value',
+      colorThreshold = 10,
+      colorDominoHighlighted = '#c20a66',
+      colorDominoNormal = '#d9e2e4',
+
+      normalLegendLabel = 'Normal',
+      highlightedLegendLabel = 'Highlighted',
+
+      searchInputClassNames = '',
+    },
+    dimensions: { xField, yField, dominoField, colorField },
+
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles$9();
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$5({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$3();
+
+    const dataParsed = parseData$9({
+      data,
+      colorField,
+      yField,
+    });
+
+    const { xScale, yScale, colorScale } = setupScales$a({
+      dataParsed,
+      xField,
+      yField,
+      dominoSize,
+      coreChartWidth,
+      coreChartHeight,
+      xPaddingOuter,
+      ySortOrder,
+      yPaddingOuter,
+      yPaddingInner,
+      colorThreshold,
+      colorDominoNormal,
+      colorDominoHighlighted,
+      colorStrategy,
+    });
+
+    renderYAxis$6({ chartCore, yScale });
+
+    renderDominos({
+      dataParsed,
+      yField,
+      chartCore,
+      yScale,
+      dominoField,
+      xScale,
+      xField,
+      colorScale,
+      colorField,
+      colorStrategy,
+      tooltipDiv,
+    });
+
+    renderXAxis$8({ chartCore, xAxisLabel, coreChartWidth });
+
+    const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
+    const handleSearch = searchEventHandler$7(dominoValues);
+    setupSearch$8({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      dominoField,
+      svg,
+      chartContainerSelector,
+      dominoValues,
+    });
+
+    // Legends
+    renderColorLegend$1({
+      xScale,
+      yScale,
+      widgetsRight,
+      colorDominoHighlighted,
+      highlightedLegendLabel,
+      colorDominoNormal,
+      normalLegendLabel,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function applyInteractionStyles$9() {
+    d3__namespace.select('body').append('style').html(`
+  rect.domino.domino-hovered {
+    stroke: #333;
+  }
+  g.dominos.searching g rect.domino-matched {
+    stroke: #333;
+  }
+  .searching rect:not(.domino-matched) {
+    opacity: 0.2;
+  }
+  `);
   }
 
   function parseData$9({ data, colorField, yField }) {
@@ -3147,24 +3288,21 @@
       });
   }
 
-  const searchEventHandler$7 = referenceList => qstr => {
+  const searchEventHandler$7 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         const dominoName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', true);
+          svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', true);
         } else {
-          d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
+          svg.selectAll(`.domino-${dominoName}`).classed('domino-matched', false);
         }
-        d3__namespace.select('.dominos').classed('searching', true);
+        svg.select('.dominos').classed('searching', true);
       });
     } else {
-      referenceList.forEach(val => {
-        const dominoName = toClassText(val);
-        d3__namespace.select(`.domino-${dominoName}`).classed('domino-matched', false);
-      });
-      d3__namespace.select('.dominos').classed('searching', false);
+      svg.selectAll('.domino').classed('domino-matched', false);
+      svg.select('.dominos').classed('searching', false);
     }
   };
   function renderColorLegend$1({
@@ -3224,146 +3362,38 @@
     widgetsLeft,
     searchInputClassNames,
     dominoField,
+    svg,
+    chartContainerSelector,
+    dominoValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](dominoValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${dominoField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
-  }
-
-  function renderChart$g({
-    data,
-    options: {
-      aspectRatio = 2,
-
-      marginTop = 60,
-      marginRight = 90,
-      marginBottom = 20,
-      marginLeft = 50,
-
-      bgColor = 'transparent',
-
-      xPaddingOuter = 0.2,
-      xAxisLabel = xField,
-
-      dominoSize = 0.2,
-
-      yPaddingInner = 0.2,
-      yPaddingOuter = 0.2,
-      ySortOrder = 'desc',
-
-      colorStrategy = 'value',
-      colorThreshold = 10,
-      colorDominoHighlighted = '#c20a66',
-      colorDominoNormal = '#d9e2e4',
-
-      normalLegendLabel = 'Normal',
-      highlightedLegendLabel = 'Highlighted',
-
-      searchInputClassNames = '',
-    },
-    dimensions: { xField, yField, dominoField, colorField },
-
-    chartContainerSelector,
-  }) {
-    applyInteractionStyles$9();
-
-    const coreChartWidth = 1000;
-    const {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      widgetsRight,
-    } = setupChartArea$6({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    });
-
-    const tooltipDiv = initializeTooltip$4();
-
-    const dataParsed = parseData$9({
-      data,
-      colorField,
-      yField,
-    });
-
-    const { xScale, yScale, colorScale } = setupScales$a({
-      dataParsed,
-      xField,
-      yField,
-      dominoSize,
-      coreChartWidth,
-      coreChartHeight,
-      xPaddingOuter,
-      ySortOrder,
-      yPaddingOuter,
-      yPaddingInner,
-      colorThreshold,
-      colorDominoNormal,
-      colorDominoHighlighted,
-      colorStrategy,
-    });
-
-    renderYAxis$6({ chartCore, yScale });
-
-    renderDominos({
-      dataParsed,
-      yField,
-      chartCore,
-      yScale,
-      dominoField,
-      xScale,
-      xField,
-      colorScale,
-      colorField,
-      colorStrategy,
-      tooltipDiv,
-    });
-
-    renderXAxis$8({ chartCore, xAxisLabel, coreChartWidth });
-
-    const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$7(dominoValues);
-    setupSearch$8({
-      handleSearch,
-      widgetsLeft,
-      searchInputClassNames,
-      dominoField,
-    });
-
-    // Legends
-    renderColorLegend$1({
-      xScale,
-      yScale,
-      widgetsRight,
-      colorDominoHighlighted,
-      highlightedLegendLabel,
-      colorDominoNormal,
-      normalLegendLabel,
-    });
-
-    // For responsiveness
-    // adjust svg to prevent overflows
-    preventOverflow({
-      allComponents,
-      svg,
-      margins: { marginLeft, marginRight, marginTop, marginBottom },
-    });
   }
 
   const dimensionTypes$e = {
@@ -3489,7 +3519,7 @@ g.circles circle.circle.circle-hovered {
 `);
   }
 
-  function setupChartArea$5({
+  function setupChartArea$4({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -3541,7 +3571,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function initializeTooltip$3() {
+  function initializeTooltip$2() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -3931,7 +3961,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       viewBoxWidth,
-    } = setupChartArea$5({
+    } = setupChartArea$4({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -3942,7 +3972,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip$3();
+    const tooltipDiv = initializeTooltip$2();
 
     const { parsedData, nestedData } = parseData$8({
       data,
@@ -4217,7 +4247,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$4({
+      setupChartArea$3({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -4242,7 +4272,7 @@ g.circles circle.circle.circle-hovered {
         ? d3__namespace.timeFormat(xValueDateFormat)
         : dt => dt;
 
-    const tooltipDiv = initializeTooltip$2();
+    const tooltipDiv = initializeTooltip$1();
 
     const allYValues = [];
 
@@ -4537,7 +4567,7 @@ g.circles circle.circle.circle-hovered {
   //
   //
 
-  function setupChartArea$4({
+  function setupChartArea$3({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -4587,7 +4617,7 @@ g.circles circle.circle.circle-hovered {
       widgetsRight,
     }
   }
-  function initializeTooltip$2() {
+  function initializeTooltip$1() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -4798,7 +4828,7 @@ g.circles circle.circle.circle-hovered {
 
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$3({
+      setupChartArea$2({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -4809,7 +4839,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip$1();
+    const tooltipDiv = initializeTooltip();
 
     const { maxY, stackedDataByYear, names } = parseData$7({
       data,
@@ -4881,7 +4911,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupChartArea$3({
+  function setupChartArea$2({
     chartContainerSelector,
     coreChartWidth,
     aspectRatio,
@@ -4933,7 +4963,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function initializeTooltip$1() {
+  function initializeTooltip() {
     return d3__namespace
       .select('body')
       .append('div')
@@ -5309,75 +5339,6 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  function setupChartArea$2({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  }) {
-    const coreChartHeight = coreChartWidth / aspectRatio;
-
-    const viewBoxHeight = coreChartHeight + marginTop + marginBottom;
-    const viewBoxWidth = coreChartWidth + marginLeft + marginRight;
-
-    const chartParent = d3__namespace.select(chartContainerSelector);
-
-    const widgets = chartParent
-      .append('div')
-      .attr(
-        'style',
-        'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
-      );
-    const widgetsLeft = widgets
-      .append('div')
-      .attr(
-        'style',
-        'display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; column-gap: 5px;',
-      );
-    const widgetsRight = widgets
-      .append('div')
-      .attr(
-        'style',
-        'display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; column-gap: 10px;',
-      );
-
-    const svg = chartParent
-      .append('svg')
-      .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
-      .style('background', bgColor);
-
-    const allComponents = svg.append('g').attr('class', 'all-components');
-
-    const chartCore = allComponents
-      .append('g')
-      .attr('transform', `translate(${marginLeft}, ${marginTop})`);
-
-    return {
-      svg,
-      coreChartHeight,
-      allComponents,
-      chartCore,
-      widgetsLeft,
-      widgetsRight,
-      viewBoxWidth,
-    }
-  }
-
-  function initializeTooltip() {
-    return d3__namespace
-      .select('body')
-      .append('div')
-      .attr('class', 'dom-tooltip')
-      .attr(
-        'style',
-        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
-      )
-  }
-
   /* global window */
 
   function renderChart$c({
@@ -5425,7 +5386,7 @@ g.circles circle.circle.circle-hovered {
 
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -5436,7 +5397,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$6({
       data,
@@ -6031,7 +5992,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$2({
+    } = setupChartArea$5({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -6042,7 +6003,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const { allDominoFieldValues, defaultStateAll } = parseData$5({
       data,
@@ -6951,7 +6912,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const coreChartWidth = 1200;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -6962,7 +6923,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const defaultGroupFieldName = '_defaultGroup_';
     groupField = groupField == null ? defaultGroupFieldName : groupField;
@@ -7478,7 +7439,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const dataParsed = data.map(d => ({
       ...d,
@@ -7767,7 +7728,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
     const dataParsed = data.map(d => ({
       ...d,
       [valueField]: Number.parseFloat(d[valueField]),
@@ -8032,7 +7993,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       // widgetsRight,
-    } = setupChartArea$2({
+    } = setupChartArea$5({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -8043,7 +8004,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const { dataParsed, names, matrix, index, reverseIndex } = parseData$3({
       data,
@@ -8769,7 +8730,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsRight,
       widgetsLeft,
-    } = setupChartArea$2({
+    } = setupChartArea$5({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -8780,7 +8741,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
@@ -9521,12 +9482,12 @@ g.circles circle.circle.circle-hovered {
   }) {
     applyInteractionStyles$3({ bgColor, inactiveOpacity, activeOpacity });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const coreChartWidth = 1200;
 
     const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -10345,7 +10306,7 @@ g.circles circle.circle.circle-hovered {
 
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -10356,7 +10317,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const { dataParsed, allYValues } = parseData$1({ data, yFields });
 
@@ -10886,7 +10847,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -10897,7 +10858,7 @@ g.circles circle.circle.circle-hovered {
         bgColor,
       });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const uniqCellField = `${xGridField}-${yGridField}`;
     const dataParsed = data.map(el => {
@@ -11302,7 +11263,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsLeft,
       widgetsRight,
-    } = setupChartArea$2({
+    } = setupChartArea$5({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
@@ -11313,7 +11274,7 @@ g.circles circle.circle.circle-hovered {
       bgColor,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
     const topicValues = ___default["default"](data).map(topicField).uniq().value();
     const defaultStateAll = defaultState === 'All' ? topicValues : defaultState;
 
@@ -12172,11 +12133,11 @@ g.circles circle.circle.circle-hovered {
       searchOpacity,
     });
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const coreChartWidth = 1200;
     const { svg, widgetsLeft, coreChartHeight, allComponents, chartCore } =
-      setupChartArea$2({
+      setupChartArea$5({
         chartContainerSelector,
         coreChartWidth,
         aspectRatio,
@@ -12879,7 +12840,7 @@ g.circles circle.circle.circle-hovered {
     }
   `);
 
-    const tooltipDiv = initializeTooltip();
+    const tooltipDiv = initializeTooltip$3();
 
     const sizeValueFormatter = val =>
       `${sizeValuePrefix}${formatNumber(val, sizeValueFormat)}${sizeValuePostfix}`;
@@ -12895,7 +12856,7 @@ g.circles circle.circle.circle-hovered {
       chartCore,
       widgetsRight,
       widgetsLeft,
-    } = setupChartArea$2({
+    } = setupChartArea$5({
       chartContainerSelector,
       coreChartWidth,
       aspectRatio,
