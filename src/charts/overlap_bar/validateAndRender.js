@@ -11,6 +11,7 @@ import {
   checkNumber,
   checkNumberBetween,
   checkPositiveInteger,
+  checkStringArray,
   optionValidation,
 } from '../../utils/validation/optionValidations'
 import {
@@ -36,7 +37,7 @@ const optionTypes = {
   barThickness: checkNumberBetween(0, 1),
   outerPadding: checkNumberBetween(0, 1),
 
-  colors: checkColorArray,
+  colorScheme: checkColorArray(),
 
   showOnlyEveryNthValue: checkPositiveInteger,
 
@@ -52,6 +53,10 @@ const optionTypes = {
   // yAxisPosition: checkString,
   // yAxisColor: checkString,
   // yAxisLabel: checkString,
+
+  // nanDisplayMessage: checkString,
+  // referenceLines: [],
+  referenceLinesOpacity: checkNumberBetween(0, 1),
 }
 
 function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {

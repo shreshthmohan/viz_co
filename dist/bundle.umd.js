@@ -219,6 +219,9 @@
 
   /* global window */
 
+<<<<<<< HEAD
+  function applyInteractionStyles$a({ activeOpacity, inactiveOpacity }) {
+=======
   function renderChart$j({
     data,
     dimensions: {
@@ -454,6 +457,7 @@
     inactiveOpacity,
     chartContainerSelector,
   }) {
+>>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
     d3__namespace.select('body').append('style').html(`
     ${chartContainerSelector} .mace {
       cursor: pointer;
@@ -548,7 +552,7 @@
       )
   }
 
-  function parseData$9({
+  function parseData$a({
     data,
     xFieldStart,
     xFieldEnd,
@@ -572,7 +576,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$a({
+  function setupScales$b({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -1044,6 +1048,233 @@
     });
   }
 
+<<<<<<< HEAD
+  function renderChart$j({
+    data,
+    options: {
+      aspectRatio = 2,
+
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
+
+      bgColor = 'transparent',
+
+      oppositeDirectionColor = '#ee4e34',
+      sameDirectionColor = '#44a8c1',
+
+      yAxisTitle = 'y axis title',
+      xAxisTitle = 'x axis title',
+
+      xValueFormatter = '',
+      yValueFormatter = '',
+
+      directionStartLabel = 'start point',
+      directionEndLabel = 'end point',
+      sizeLegendValues = [1e6, 1e8, 1e9],
+      sizeLegendMoveSizeObjectDownBy = 5,
+      sizeLegendTitle = 'size legend title',
+      sizeValueFormatter = '',
+
+      xAxisTickValues,
+
+      xScaleType = 'linear', // linear or log
+      xScaleLogBase = 10, // applicable only if log scale
+
+      defaultState = [],
+
+      activeOpacity = 0.8, // click, hover, search
+      inactiveOpacity = 0.2,
+
+      circleSizeRange = [5, 30],
+      lineWidthRange = [2, 4],
+
+      searchInputClassNames = '',
+      goToInitialStateButtonClassNames = '',
+      clearAllButtonClassNames = '',
+
+      xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+      yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+    },
+    dimensions: {
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+      nameField,
+    },
+    chartContainerSelector,
+  }) {
+    applyInteractionStyles$a({ activeOpacity, inactiveOpacity });
+
+    const coreChartWidth = 1000;
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$8({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
+
+    const tooltipDiv = initializeTooltip$6();
+
+    const dataParsed = parseData$a({
+      data,
+      xFieldStart,
+      xFieldEnd,
+      yFieldStart,
+      yFieldEnd,
+      sizeField,
+    });
+
+    const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
+      setupScales$b({
+        dataParsed,
+        coreChartHeight,
+        coreChartWidth,
+        yFieldStart,
+        yFieldEnd,
+        xFieldStart,
+        xFieldEnd,
+        xScaleType,
+        xScaleLogBase,
+        sizeField,
+        circleSizeRange,
+        lineWidthRange,
+        sameDirectionColor,
+        oppositeDirectionColor,
+      });
+
+    const nameValues = ___default["default"](data).map(nameField).uniq().value();
+    const defaultStateAll = defaultState === 'All' ? nameValues : defaultState;
+
+    const gapInCircles = 30;
+    renderSizeLegend$1({
+      gapInCircles,
+      circleSizeScale,
+      widgetsRight,
+      sizeLegendMoveSizeObjectDownBy,
+      sizeLegendValues,
+      sizeValueFormatter,
+      sizeLegendTitle,
+    });
+
+    const stickHeight = 3;
+    const stickLength = 30;
+    const stickWidthLegend = 1;
+    const ballRadius = 6;
+    const gapForText = 5;
+    const singleMaceSectionHeight = 20;
+
+    renderColorLegend$2({
+      stickHeight,
+      stickLength,
+      ballRadius,
+      gapForText,
+      singleMaceSectionHeight,
+      widgetsRight,
+      sameDirectionColor,
+      oppositeDirectionColor,
+      svg,
+    });
+
+    renderDirectionLegend({
+      selection: widgetsRight.append('svg'),
+      ballRadius,
+      stickLength,
+      stickWidthLegend,
+      gapForText,
+      directionStartLabel,
+      directionEndLabel,
+    });
+
+    renderXAxis$9({
+      chartCore,
+      coreChartHeight,
+      coreChartWidth,
+      xScale,
+      xAxisTickValues,
+      xAxisTitle,
+    });
+
+    // y-axis
+    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
+
+    renderMaces({
+      chartCore,
+      dataParsed,
+      sizeField,
+      nameField,
+      defaultStateAll,
+      xFieldStart,
+      xFieldEnd,
+      xScale,
+      yScale,
+      yFieldStart,
+      yFieldEnd,
+      circleSizeScale,
+      lineWidthScale,
+      colorScale,
+      tooltipDiv,
+      sizeValueFormatter,
+      xValueFormatter,
+      yValueFormatter,
+      xFieldType,
+      yFieldType,
+    });
+
+    // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+    // handleSearch accepts search query string and applied appropriate
+    const handleSearch = searchEventHandler$8(nameValues);
+    const search = setupSearch$9({
+      handleSearch,
+      widgetsLeft,
+      searchInputClassNames,
+      nameField,
+      nameValues,
+      svg,
+      chartContainerSelector,
+    });
+
+    setupInitialStateButton$6({
+      widgetsLeft,
+      goToInitialStateButtonClassNames,
+      defaultStateAll,
+      search,
+      handleSearch,
+      svg,
+    });
+    setupClearAllButton$7({
+      widgetsLeft,
+      clearAllButtonClassNames,
+      search,
+      handleSearch,
+      svg,
+    });
+
+    // For responsiveness
+    // adjust svg to prevent overflows
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+=======
+>>>>>>> 307c4dc24212dc7d5353d59ec944d4e70601245f
   const validateData = ({ data, dimensionTypes, dimensions }) => {
     const dataValidations = {};
     ___default["default"].forEach(dimensionTypes, (valFuncs, dim) => {
@@ -1229,6 +1460,8 @@
   };
 
   const checkColorArray = length => arr => {
+    if (!Array.isArray(arr))
+      return { valid: false, message: 'Should be an array of colors' }
     const checkColorsResult = arr.map(clr => checkColor(clr));
     const lengthValidationResult = { valid: true, message: '' };
     if (length && arr.length < length) {
@@ -2900,7 +3133,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$8() {
+  function applyInteractionStyles$9() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -2973,7 +3206,7 @@
       )
   }
 
-  function parseData$8({ data, colorField, yField }) {
+  function parseData$9({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -3000,7 +3233,7 @@
     return dataParsed
   }
 
-  function setupScales$9({
+  function setupScales$a({
     dataParsed,
     xField,
     yField,
@@ -3261,7 +3494,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$8();
+    applyInteractionStyles$9();
 
     const coreChartWidth = 1000;
     const {
@@ -3284,13 +3517,13 @@
 
     const tooltipDiv = initializeTooltip$5();
 
-    const dataParsed = parseData$8({
+    const dataParsed = parseData$9({
       data,
       colorField,
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$9({
+    const { xScale, yScale, colorScale } = setupScales$a({
       dataParsed,
       xField,
       yField,
@@ -3439,7 +3672,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$7({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$8({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .series {
     cursor: pointer;
@@ -3540,7 +3773,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$7({ data, yField, xField, seriesField, colorField }) {
+  function parseData$8({ data, yField, xField, seriesField, colorField }) {
     const parsedData = data.map(d => ({
       ...d,
       [yField]: Number.parseFloat(d[yField]),
@@ -3565,7 +3798,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$8({
+  function setupScales$9({
     parsedData,
     nestedData,
     xField,
@@ -3909,7 +4142,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$7({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$8({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3932,7 +4165,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$4();
 
-    const { parsedData, nestedData } = parseData$7({
+    const { parsedData, nestedData } = parseData$8({
       data,
       yField,
       xField,
@@ -3941,7 +4174,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$8({
+      setupScales$9({
         parsedData,
         nestedData,
         xField,
@@ -4788,7 +5021,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$6({ data, yFields, nameField, xGridField, yGridField }) {
+  function parseData$7({ data, yFields, nameField, xGridField, yGridField }) {
     let maxSum = 0;
 
     data.forEach(el => {
@@ -4830,7 +5063,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$7({
+  function setupScales$8({
     data,
     maxY,
     xGridField,
@@ -4889,7 +5122,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function renderLegends$2({ widgetsRight, colorScaleForLegend }) {
+  function renderLegends$3({ widgetsRight, colorScaleForLegend }) {
     widgetsRight.html(
       swatches({
         color: colorScaleForLegend,
@@ -5036,7 +5269,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$2();
 
-    const { maxY, stackedDataByYear, names } = parseData$6({
+    const { maxY, stackedDataByYear, names } = parseData$7({
       data,
       yFields,
       nameField,
@@ -5051,7 +5284,7 @@ g.circles circle.circle.circle-hovered {
       colorScaleForLegend,
       xGridScale,
       yGridScale,
-    } = setupScales$7({
+    } = setupScales$8({
       data,
       maxY,
       xGridField,
@@ -5088,7 +5321,7 @@ g.circles circle.circle.circle-hovered {
       yFieldLabels,
     });
 
-    renderLegends$2({ widgetsRight, colorScaleForLegend });
+    renderLegends$3({ widgetsRight, colorScaleForLegend });
 
     // adjust svg to prevent overflows
     preventOverflow({
@@ -5316,7 +5549,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$6({ inactiveOpacity });
+    applyInteractionStyles$7({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -5337,7 +5570,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$5({
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$6({
       data,
       xField,
       yField,
@@ -5345,7 +5578,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$6({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$7({
       dataParsed,
       sizeField,
       sizeRange,
@@ -5665,7 +5898,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$6({ inactiveOpacity }) {
+  function applyInteractionStyles$7({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     opacity: ${inactiveOpacity};
@@ -5676,7 +5909,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$5({ data, xField, yField, sizeField, timeField }) {
+  function parseData$6({ data, xField, yField, sizeField, timeField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -5693,7 +5926,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$6({
+  function setupScales$7({
     dataParsed,
     sizeField,
     sizeRange,
@@ -5867,7 +6100,7 @@ g.circles circle.circle.circle-hovered {
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$5({ inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$6({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
      .ribbon {
        cursor: pointer;
@@ -5959,14 +6192,14 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$4({ data, dominoField, initialState }) {
+  function parseData$5({ data, dominoField, initialState }) {
     const allDominoFieldValues = ___default["default"].chain(data).map(dominoField).uniq().value();
     const dominoValues = ___default["default"](data).map(dominoField).uniq().value();
     const defaultStateAll = initialState === 'All' ? dominoValues : initialState;
     return { allDominoFieldValues, defaultStateAll }
   }
 
-  function setupScales$5({
+  function setupScales$6({
     data,
     xField,
     yField,
@@ -6510,7 +6743,7 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$5({ inactiveOpacity, activeOpacity });
+    applyInteractionStyles$6({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -6533,13 +6766,13 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip();
 
-    const { allDominoFieldValues, defaultStateAll } = parseData$4({
+    const { allDominoFieldValues, defaultStateAll } = parseData$5({
       data,
       dominoField,
       initialState,
     });
 
-    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$5({
+    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$6({
       data,
       xField,
       yField,
@@ -6842,7 +7075,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultGroupFieldName = '_defaultGroup_';
     groupField = groupField == null ? defaultGroupFieldName : groupField;
-    const { dataParsed, seriesValues } = parseData$3({
+    const { dataParsed, seriesValues } = parseData$4({
       data,
       yField,
       defaultGroupFieldName,
@@ -6857,7 +7090,7 @@ g.circles circle.circle.circle-hovered {
       yGridDomain,
       xDomain,
       yDomain,
-    } = setupScales$4({
+    } = setupScales$5({
       dataParsed,
       groupField,
       coreChartHeight,
@@ -7076,7 +7309,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function parseData$3({ data, yField, defaultGroupFieldName, seriesField }) {
+  function parseData$4({ data, yField, defaultGroupFieldName, seriesField }) {
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[yField] = Number.parseFloat(el[yField]);
@@ -7089,7 +7322,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, seriesValues }
   }
 
-  function setupScales$4({
+  function setupScales$5({
     dataParsed,
     groupField,
     coreChartHeight,
@@ -7898,7 +8131,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const aspectRatio = 1;
 
-    applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$5({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -7921,7 +8154,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const { dataParsed, names, matrix, index, reverseIndex } = parseData$2({
+    const { dataParsed, names, matrix, index, reverseIndex } = parseData$3({
       data,
       valueField,
       sourceField,
@@ -7937,7 +8170,7 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const { colorScale } = setupScales$3({ names, colorScheme });
+    const { colorScale } = setupScales$4({ names, colorScheme });
 
     renderChords({
       dataParsed,
@@ -8001,7 +8234,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$4({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$5({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   path.ribbon {
     fill-opacity: ${inactiveOpacity}
@@ -8032,7 +8265,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$2({ data, valueField, sourceField, targetField }) {
+  function parseData$3({ data, valueField, sourceField, targetField }) {
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[valueField] = Number.parseFloat(el[valueField]);
@@ -8080,7 +8313,7 @@ g.circles circle.circle.circle-hovered {
     return { chord, arc, ribbon }
   }
 
-  function setupScales$3({ names, colorScheme }) {
+  function setupScales$4({ names, colorScheme }) {
     const colorScale = d3__namespace.scaleOrdinal(names, colorScheme);
 
     return { colorScale }
@@ -8632,7 +8865,7 @@ g.circles circle.circle.circle-hovered {
     const valueFormatter = val =>
       `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`;
 
-    applyInteractionStyles$3({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$4({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 600;
     const {
@@ -9100,7 +9333,7 @@ g.circles circle.circle.circle-hovered {
     return maxDim
   }
 
-  function applyInteractionStyles$3({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$4({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`  
     .tmace {
       cursor: pointer;
@@ -9390,7 +9623,7 @@ g.circles circle.circle.circle-hovered {
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$2({ bgColor, inactiveOpacity, activeOpacity });
+    applyInteractionStyles$3({ bgColor, inactiveOpacity, activeOpacity });
 
     const tooltipDiv = initializeTooltip$1();
 
@@ -9414,7 +9647,7 @@ g.circles circle.circle.circle-hovered {
       xStartActual,
       dimensionValues,
       defaultStateAll,
-    } = parseData$1({
+    } = parseData$2({
       data,
       yField,
       barRightValueField,
@@ -9423,7 +9656,7 @@ g.circles circle.circle.circle-hovered {
       defaultState,
     });
 
-    const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales$2({
+    const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales$3({
       coreChartHeight,
       coreChartWidth,
       yDomain,
@@ -9434,7 +9667,7 @@ g.circles circle.circle.circle-hovered {
     const { markerSymbol, symbolSize, triangleOffset, symbolConstant } =
       setupBarSymbol({ yScale, chartCore });
 
-    const { leftBarsContainer, rightBarsContainer } = renderBars({
+    const { leftBarsContainer, rightBarsContainer } = renderBars$1({
       chartCore,
       coreChartWidth,
       data,
@@ -9462,7 +9695,7 @@ g.circles circle.circle.circle-hovered {
 
     renderYAxis$2({ rightBarsContainer, xScaleRight, xAxisTickSize });
 
-    renderLegends$1({
+    renderLegends$2({
       chartCore,
       xScaleLeft,
       xStart,
@@ -9521,7 +9754,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$2({ bgColor, inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$3({ bgColor, inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
   g.bar {
     stroke: ${bgColor};
@@ -9547,7 +9780,7 @@ g.circles circle.circle.circle-hovered {
 `);
   }
 
-  function parseData$1({
+  function parseData$2({
     data,
     yField,
     barRightValueField,
@@ -9581,7 +9814,7 @@ g.circles circle.circle.circle-hovered {
     return { yDomain, maxOverall, xStartActual, dimensionValues, defaultStateAll }
   }
 
-  function setupScales$2({
+  function setupScales$3({
     coreChartHeight,
     coreChartWidth,
     yDomain,
@@ -9610,7 +9843,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScaleLeft, xScaleRight, xStart }
   }
 
-  function renderLegends$1({
+  function renderLegends$2({
     chartCore,
     xScaleLeft,
     xStart,
@@ -9753,7 +9986,7 @@ g.circles circle.circle.circle-hovered {
     return { markerSymbol, symbolSize, triangleOffset, symbolConstant }
   }
 
-  function renderBars({
+  function renderBars$1({
     chartCore,
     coreChartWidth,
     data,
@@ -10188,7 +10421,7 @@ g.circles circle.circle.circle-hovered {
       barThickness = 0.8,
       outerPadding = 0.2,
 
-      colors = d3__namespace.schemeSpectral[9],
+      colorScheme = d3__namespace.schemeSpectral[9],
 
       showOnlyEveryNthValue = 1,
 
@@ -10197,22 +10430,22 @@ g.circles circle.circle.circle-hovered {
       xAXisLabelFontSize = 12,
       xAxisLabelOffset = 30,
       xAxisColor = 'black',
-      xAxisTickRotation = 0,
+      xAxisTickRotation = 90,
 
       yAxisPosition = 'left',
       yAxisLabelOffset = 50,
       yAxisColor = 'black',
       yAxisLabel = '',
       yAXisLabelFontSize = 12,
+
+      nanDisplayMessage = 'NA',
+      referenceLines = [],
+      referenceLinesOpacity = 1,
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
   }) {
-    d3__namespace.select('body').append('style').html(`
-  .hovered {
-    stroke: #333;
-  }
-  `);
+    applyInteractionStyles$2({ referenceLinesOpacity });
 
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
@@ -10229,88 +10462,42 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$1();
 
-    const allYValues = [];
-    const dataParsed = data.map(el => {
-      const elParsed = { ...el };
-      yFields.forEach(yf => {
-        elParsed[yf] = Number.parseFloat(el[yf]);
-        allYValues.push(Number.parseFloat(el[yf]));
-      });
-      return elParsed
+    const { dataParsed, allYValues } = parseData$1({ data, yFields });
+
+    const { xScale, yScale, colorsRgba } = setupScales$2({
+      dataParsed,
+      allYValues,
+      xField,
+      coreChartWidth,
+      coreChartHeight,
+      barThickness,
+      barOpacity,
+      outerPadding,
+      colorScheme,
     });
 
-    const xDomain = dataParsed.map(d => d[xField]);
-    const xScale = d3__namespace
-      .scaleBand()
-      .range([0, coreChartWidth])
-      .domain(xDomain)
-      .paddingInner(1 - barThickness)
-      .paddingOuter(outerPadding);
-
-    const yMax = d3__namespace.max(allYValues);
-
-    const colorsRgba = colors.map(c => {
-      const parsedColor = d3__namespace.rgb(c);
-      parsedColor.opacity = barOpacity;
-      return parsedColor
+    renderBars({
+      yFields,
+      chartCore,
+      dataParsed,
+      xField,
+      xScale,
+      yScale,
+      colorsRgba,
+      coreChartHeight,
+      tooltipDiv,
+      nanDisplayMessage,
     });
 
-    const yScale = d3__namespace
-      .scaleLinear()
-      .range([coreChartHeight, 0])
-      .domain([0, yMax])
-      .nice();
-    yFields.forEach((yf, i) => {
-      chartCore
-        .append('g')
-        .selectAll('rect')
-        .data(dataParsed)
-        .join('rect')
-        .attr('x', d => xScale(d[xField]))
-        .attr('y', d => yScale(d[yf]))
-        .attr('class', d => `rect-${toClassText(d[xField])}`)
-        .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
-        .attr('width', xScale.bandwidth())
-        .attr('fill', colorsRgba[i]);
+    renderLegends$1({ widgetsRight, colorsRgba, yFields, referenceLines });
+
+    renderReferenceLine$1({
+      chartCore,
+      referenceLines,
+      yScale,
+      xScale,
+      colorsRgba,
     });
-
-    chartCore
-      .append('g')
-      .selectAll('rect')
-      .data(dataParsed)
-      .join('rect')
-      .attr('x', d => xScale(d[xField]))
-      .attr('y', 0)
-      .attr('height', coreChartHeight)
-      .attr('width', xScale.bandwidth())
-      .attr('opacity', 0)
-      .on('mouseover', function (e, d) {
-        tooltipDiv.transition().duration(200).style('opacity', 1);
-        tooltipDiv
-          .style('left', `${e.clientX}px`)
-          .style('top', `${e.clientY + 20 + window.scrollY}px`);
-
-        tooltipDiv.html(`${xField}: ${d[xField]}
-      <br/>
-      ${yFields
-        .map(
-          (yff, i) =>
-            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${colorsRgba[i]}"></div> ${yff}: ${d[yff]}`,
-        )
-        .join('<br/>')}
-      `);
-
-        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true);
-      })
-      .on('mouseout', function (e, d) {
-        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false);
-
-        tooltipDiv
-          .style('left', '-300px')
-          .transition()
-          .duration(500)
-          .style('opacity', 0);
-      });
 
     renderXAxis$2({
       xAxisPosition,
@@ -10338,23 +10525,13 @@ g.circles circle.circle.circle-hovered {
       yAXisLabelFontSize,
     });
 
-    const yAxisGrid = d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth);
-    renderYGrid({ chartCore, yAxisGrid });
+    renderYGrid({ chartCore, yScale, coreChartWidth });
 
     preventOverflow({
       allComponents,
       svg,
       margins: { marginLeft, marginRight, marginTop, marginBottom },
     });
-
-    const colorScaleForLegend = d3__namespace.scaleOrdinal(colorsRgba).domain(yFields);
-    widgetsRight.html(
-      swatches({
-        color: colorScaleForLegend,
-        uid: 'rs',
-        customClass: '',
-      }),
-    );
   }
 
   function renderYAxis$1({
@@ -10398,7 +10575,8 @@ g.circles circle.circle.circle-hovered {
       .text(yAxisLabel);
   }
 
-  function renderYGrid({ chartCore, yAxisGrid }) {
+  function renderYGrid({ chartCore, yScale, coreChartWidth }) {
+    const yAxisGrid = d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth);
     chartCore
       .append('g')
       .call(yAxisGrid)
@@ -10466,6 +10644,191 @@ g.circles circle.circle.circle-hovered {
       .text(xAxisLabel);
   }
 
+  function applyInteractionStyles$2({ referenceLinesOpacity }) {
+    d3__namespace.select('body').append('style').html(`
+  .hovered {
+    stroke: #333;
+  }
+  .reference-lines {
+    stroke-opacity: ${referenceLinesOpacity};
+  }
+  `);
+  }
+
+  function parseData$1({ data, yFields }) {
+    const allYValues = [];
+    const dataParsed = data.map(el => {
+      const elParsed = { ...el };
+      yFields.forEach(yf => {
+        elParsed[yf] = Number.parseFloat(el[yf]);
+        allYValues.push(Number.parseFloat(el[yf]));
+      });
+      return elParsed
+    });
+
+    return { dataParsed, allYValues }
+  }
+
+  function setupScales$2({
+    dataParsed,
+    allYValues,
+    xField,
+    coreChartWidth,
+    coreChartHeight,
+    barThickness,
+    barOpacity,
+    outerPadding,
+    colorScheme,
+  }) {
+    const xDomain = dataParsed.map(d => d[xField]);
+    const xScale = d3__namespace
+      .scaleBand()
+      .range([0, coreChartWidth])
+      .domain(xDomain)
+      .paddingInner(1 - barThickness)
+      .paddingOuter(outerPadding);
+
+    const yMax = d3__namespace.max(allYValues);
+
+    const colorsRgba = colorScheme.map(c => {
+      const parsedColor = d3__namespace.rgb(c);
+      parsedColor.opacity = barOpacity;
+      return parsedColor
+    });
+
+    const yScale = d3__namespace
+      .scaleLinear()
+      .range([coreChartHeight, 0])
+      .domain([0, yMax])
+      .nice();
+
+    return { xScale, yScale, colorsRgba }
+  }
+
+  function renderBars({
+    yFields,
+    chartCore,
+    dataParsed,
+    xField,
+    xScale,
+    yScale,
+    colorsRgba,
+    coreChartHeight,
+    tooltipDiv,
+    nanDisplayMessage,
+  }) {
+    yFields.forEach((yf, i) => {
+      chartCore
+        .append('g')
+        .selectAll('rect')
+        .data(dataParsed)
+        .join('rect')
+        .attr('x', d => xScale(d[xField]))
+        .attr('y', d => yScale(d[yf]))
+        .attr('class', d => `rect-${toClassText(d[xField])}`)
+        .attr('height', d => yScale(0) - yScale(Number.isNaN(d[yf]) ? 0 : d[yf]))
+        .attr('width', xScale.bandwidth())
+        .attr('fill', colorsRgba[i]);
+    });
+
+    chartCore
+      .append('g')
+      .selectAll('rect')
+      .data(dataParsed)
+      .join('rect')
+      .attr('x', d => xScale(d[xField]))
+      .attr('y', 0)
+      .attr('height', coreChartHeight)
+      .attr('width', xScale.bandwidth())
+      .attr('opacity', 0)
+      .on('mouseover', function (e, d) {
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+
+        tooltipDiv.html(`${xField}: ${d[xField]}
+      <br/>
+      ${yFields
+        .map(
+          (yff, i) =>
+            `<div style="display: inline-block; width: 0.5rem; height: 0.5rem; background: ${
+              colorsRgba[i]
+            }"></div> ${yff}: ${d[yff] || nanDisplayMessage}`,
+        )
+        .join('<br/>')}
+      `);
+
+        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true);
+      })
+      .on('mouseout', function (e, d) {
+        d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false);
+
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+  }
+
+  function renderReferenceLine$1({ chartCore, referenceLines, yScale, xScale }) {
+    chartCore
+      .append('g')
+      .attr('class', 'reference-lines')
+      .selectAll('path')
+      .data(referenceLines)
+      .join('path')
+      .attr('d', d => {
+        const yDomain = yScale.domain();
+        // const { x, y, width, height } = d3.select('.domain').node().getBBox()
+        const x0 = xScale(String(d.value)) + xScale.bandwidth() / 2;
+        const y0 = yScale(d3__namespace.min(yDomain));
+        const y1 = yScale(d3__namespace.max(yDomain));
+        const d_ = [
+          { x: x0, y: y0 },
+          { x: x0, y: y1 },
+        ];
+        return d3__namespace
+          .line()
+          .x(d => d.x)
+          .y(d => d.y)(d_)
+      })
+      .attr('stroke-width', 4)
+      .attr('opacity', 1)
+      .attr('stroke', d => d.color)
+      .attr('stroke-dasharray', '5,5');
+  }
+
+  function renderLegends$1({ widgetsRight, colorsRgba, yFields, referenceLines }) {
+    const colorScaleForLegend = d3__namespace.scaleOrdinal(colorsRgba).domain(yFields);
+    widgetsRight.html(
+      swatches({
+        color: colorScaleForLegend,
+        uid: 'rs',
+        customClass: '',
+      }),
+    );
+
+    const refLinesColors = [];
+    const refLinesLabels = [];
+    referenceLines.forEach(l => {
+      refLinesLabels.push(l.label);
+      refLinesColors.push(d3__namespace.rgb(l.color));
+    });
+
+    const colorScaleForRefLines = d3__namespace
+      .scaleOrdinal()
+      .domain(refLinesLabels)
+      .range(refLinesColors);
+    widgetsRight.append('div').html(
+      dashedLegend({
+        labels: refLinesLabels,
+        color: colorScaleForRefLines,
+      }),
+    );
+  }
+
   const dimensionTypes$3 = { xField: [shouldNotBeBlank] };
 
   const optionTypes$3 = {
@@ -10482,7 +10845,7 @@ g.circles circle.circle.circle-hovered {
     barThickness: checkNumberBetween(0, 1),
     outerPadding: checkNumberBetween(0, 1),
 
-    colors: checkColorArray,
+    colorScheme: checkColorArray(),
 
     showOnlyEveryNthValue: checkPositiveInteger,
 
@@ -10498,6 +10861,10 @@ g.circles circle.circle.circle-hovered {
     // yAxisPosition: checkString,
     // yAxisColor: checkString,
     // yAxisLabel: checkString,
+
+    // nanDisplayMessage: checkString,
+    // referenceLines: [],
+    referenceLinesOpacity: checkNumberBetween(0, 1),
   };
 
   function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {
