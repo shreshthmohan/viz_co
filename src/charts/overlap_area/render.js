@@ -10,7 +10,7 @@ import {
 } from '../../utils/helpers/commonChartHelpers'
 
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
-import { dashedLegend } from './dashedLegend'
+import { dashedLegend } from '../../utils/helpers/dashedLegend'
 
 export function renderChart({
   data,
