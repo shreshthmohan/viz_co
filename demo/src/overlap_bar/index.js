@@ -1,9 +1,10 @@
 /* global viz */
 
 const dimensions = {
-  xField: 'Year',
+  xField: 'year',
   // yFields: ['India', 'Ireland', 'Zim', 'WI', 'Australia', 'Afg'],
-  yFields: ['Zim', 'Afg'],
+  // yFields: ['Zim', 'Afg'],
+  yFields: ['one', 'two'],
 }
 
 const options = {
@@ -37,14 +38,14 @@ const options = {
   showOnlyEveryNthValue: 1,
 
   nanDisplayMessage: 'NA',
-  referenceLines: [
-    { value: 2005, label: 'Zim-Avg', color: 'orange' },
-    { value: 2015, label: 'Afg-Avg', color: 'blue' },
-  ],
+  // referenceLines: [
+  //   { value: 2005, label: 'Zim-Avg', color: 'orange' },
+  //   { value: 2015, label: 'Afg-Avg', color: 'blue' },
+  // ],
   referenceLinesOpacity: 0.8,
 }
 
-const dataPath = 'data_.csv'
+const dataPath = 'data_stacked.csv'
 
 viz.validateAndRenderOverlapBar({
   chartContainerSelector: '#chart-container',
