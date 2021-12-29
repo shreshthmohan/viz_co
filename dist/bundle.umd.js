@@ -7696,6 +7696,7 @@ g.circles circle.circle.circle-hovered {
       missingDataMessage = 'Data Missing',
 
       searchButtonClassNames = '',
+      colorDomain: colorDomainCustom = [],
     },
     chartContainerSelector,
   }) {
@@ -7738,9 +7739,10 @@ g.circles circle.circle.circle-hovered {
     });
 
     const values = dataParsed.map(el => el[valueField]);
-    const valueDomain = d3__namespace.extent(values);
+    const colorDomainDefault = d3__namespace.extent(values);
+    const colorDomain = d3__namespace.extent([...colorDomainDefault, ...colorDomainCustom]);
 
-    const colorScale = d3__namespace.scaleSequential(interpolateScheme).domain(valueDomain);
+    const colorScale = d3__namespace.scaleSequential(interpolateScheme).domain(colorDomain);
 
     const path = d3__namespace.geoPath();
 
@@ -10299,6 +10301,7 @@ g.circles circle.circle.circle-hovered {
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
+    handleBarClick = a => a,
   }) {
     applyInteractionStyles$2({ referenceLinesOpacity });
 
@@ -10342,6 +10345,7 @@ g.circles circle.circle.circle-hovered {
       coreChartHeight,
       tooltipDiv,
       nanDisplayMessage,
+      handleBarClick,
     });
 
     renderLegends$1({ widgetsRight, colorsRgba, yFields, referenceLines });
@@ -10571,6 +10575,7 @@ g.circles circle.circle.circle-hovered {
     coreChartHeight,
     tooltipDiv,
     nanDisplayMessage,
+    handleBarClick,
   }) {
     yFields.forEach((yf, i) => {
       chartCore
@@ -10615,6 +10620,8 @@ g.circles circle.circle.circle-hovered {
       `);
 
         d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true);
+
+        handleBarClick(e, d);
       })
       .on('mouseout', function (e, d) {
         d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false);
@@ -10625,6 +10632,7 @@ g.circles circle.circle.circle-hovered {
           .duration(500)
           .style('opacity', 0);
       });
+    // .on('click', )
   }
 
   function renderReferenceLine$1({ chartCore, referenceLines, yScale, xScale }) {

@@ -1,10 +1,10 @@
 /* global viz */
 
 const dimensions = {
-  xField: 'year',
+  xField: 'Year',
   // yFields: ['India', 'Ireland', 'Zim', 'WI', 'Australia', 'Afg'],
-  // yFields: ['Zim', 'Afg'],
-  yFields: ['one', 'two'],
+  yFields: ['Zim', 'Afg'],
+  // yFields: ['one', 'two'],
 }
 
 const options = {
@@ -45,7 +45,7 @@ const options = {
   referenceLinesOpacity: 0.8,
 }
 
-const dataPath = 'data_stacked.csv'
+const dataPath = 'data_.csv'
 
 viz.validateAndRenderOverlapBar({
   chartContainerSelector: '#chart-container',
