@@ -2975,7 +2975,9 @@
       .attr('class', 'dom-tooltip')
       .attr(
         'style',
-        'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+        `opacity: 0; position: absolute; background-color: white;
+        border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem;
+        line-height: 1rem; border-width: 1px;`,
       )
   }
 
@@ -8287,7 +8289,7 @@ g.circles circle.circle.circle-hovered {
         // debugger
         const tooltipValues = ribbonData
           .map(ribbon => {
-            return `${
+            return `<div style="white-space: nowrap;">${
             ribbon.arrowSymbol
           } <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
             ribbon._name_,
@@ -8295,38 +8297,43 @@ g.circles circle.circle.circle-hovered {
             valuePrefix +
             formatNumber(ribbon._value_, valueFormatter) +
             valuePostfix
-          }`
+          }</div>`
           })
           .reverse();
-        // const values = names
-        //   .map(_name_ => {
-        //     const _value_ = _(ribbonData)
-        //       .filter(row => row._name_ === _name_)
-        //       .sumBy(_value_)
-        //     return `${arrowSymbol} <div style="display: inline-block; height: 0.5rem; width: 0.5rem; background: ${colorScale(
-        //       _name_,
-        //     )}"></div> ${_name_}: ${
-        //       valuePrefix + formatNumber(_value_, valueFormatter) + valuePostfix
-        //     }`
-        //   })
-        //   .reverse()
 
         tooltipDiv.html(
           `<b>${arcName}</b>: ${
           valuePrefix + formatNumber(arcValue, valueFormatter) + valuePostfix
         }
         <br/>
-        ${tooltipValues.join('<br/>')}
+        ${tooltipValues.join('')}
         `,
         );
+
         tooltipDiv
           .style('left', `${e.clientX}px`)
           .style('top', `${e.clientY + 20 + window.scrollY}px`);
+
+        const tooltipSize = tooltipDiv.node().getBoundingClientRect();
+        const outsideY = e.clientY + 20 + tooltipSize.height > window.innerHeight;
+        if (outsideY) {
+          tooltipDiv.style(
+            'top',
+            `${e.clientY + window.scrollY - 10 - tooltipSize.height}px`,
+          );
+        }
+
+        const outsideX = e.clientX + tooltipSize.width > window.innerWidth;
+
+        if (outsideX) {
+          tooltipDiv.style('left', `${e.clientX - tooltipSize.width}px`);
+        }
       })
       .on('mouseout', (e, d) => {
         d3__namespace.select(`.arc-${d.index}`).classed('arc-hovered', false);
         d3__namespace.selectAll(`.ribbon-source-${d.index}`).classed('ribbon-hovered', false);
         d3__namespace.selectAll(`.ribbon-target-${d.index}`).classed('ribbon-hovered', false);
+
         tooltipDiv
           .style('left', '-300px')
           .transition()
