@@ -112,7 +112,23 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
       Number.parseFloat(d[dimensions.valueField]),
     )
     options.colorDomain = d3.extent(choroValues)
-    // console.log(choroDataObj['1997'].columns)
+    const firstYearValue = dataStacked[0][timeField]
+
+    function renderChoroForYear(year) {
+      d3.select('#chart-container-choro')
+        .append('div')
+        .attr('class', 'year-title')
+        .html(year)
+      viz.renderChoroplethStates({
+        data: choroDataObj[year],
+        options,
+        dimensions,
+        chartContainerSelector: '#chart-container-choro',
+      })
+    }
+
+    // Initial Render
+    renderChoroForYear(firstYearValue)
 
     viz.renderOverlapBar({
       data: dataStacked,
@@ -120,17 +136,10 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
       dimensions: dimensionsStacked,
       chartContainerSelector: '#chart-container',
       handleBarClick: (e, d) => {
-        const yr = d[timeField]
         d3.selectAll('#chart-container-choro > *').remove()
-        viz.renderChoroplethStates({
-          data: choroDataObj[yr],
-          options,
-          dimensions,
-          chartContainerSelector: '#chart-container-choro',
-        })
+        const yr = d[timeField]
+        renderChoroForYear(yr)
       },
     })
-
-    // console.log({ choroDataObj })
   },
 )
