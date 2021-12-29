@@ -1,9 +1,7 @@
 /* global viz */
 
-// eslint-disable-next-line no-unused-vars
 const dataPath = 'data.csv'
 
-// eslint-disable-next-line no-unused-vars
 const dimensions = {
   xField: 'frustration', // Numeric
   yField: 'quarter', // Categorical / String / (Parsed Date?)
@@ -12,7 +10,6 @@ const dimensions = {
   colorField: 'frustration', // Numeric // defaults to xField if not provided
 }
 
-// eslint-disable-next-line no-unused-vars
 const options = {
   aspectRatio: 1.5, // decrease this value to increase height
 

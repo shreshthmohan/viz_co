@@ -1,4 +1,3 @@
-/* eslint-disable no-import-assign */
 /* global window */
 import * as d3 from 'd3'
 import _ from 'lodash-es'
@@ -43,7 +42,6 @@ export function renderChart({
     colorLegendLabel,
 
     sizeRange = [2, 20],
-    // Opinionated (currently cannot be changed from options)
     sizeScaleType = 'linear',
     sizeScaleLogBase = 10,
     dominoHeight = 0.3,
@@ -352,7 +350,6 @@ function setupScales({
 function renderYAxis({
   chartCore,
   xScale,
-  // xDomain,
   yScale,
   formatDate,
   yAxisDateParser,
@@ -534,7 +531,7 @@ function renderDominosAndRibbons({
         .raise()
     })
 
-  d3.selectAll(`.domino-active`).raise()
+  d3.selectAll('.domino-active').raise()
 
   allConnectors
     .selectAll('path')

@@ -5927,7 +5927,7 @@ g.circles circle.circle.circle-hovered {
     });
   };
 
-  /* eslint-disable no-import-assign */
+  /* global window */
 
   function renderChart$b({
     data,
@@ -5962,7 +5962,6 @@ g.circles circle.circle.circle-hovered {
       colorLegendLabel,
 
       sizeRange = [2, 20],
-      // Opinionated (currently cannot be changed from options)
       sizeScaleType = 'linear',
       sizeScaleLogBase = 10,
       dominoHeight = 0.3,
@@ -6271,7 +6270,6 @@ g.circles circle.circle.circle-hovered {
   function renderYAxis$4({
     chartCore,
     xScale,
-    // xDomain,
     yScale,
     formatDate,
     yAxisDateParser,
@@ -6453,7 +6451,7 @@ g.circles circle.circle.circle-hovered {
           .raise();
       });
 
-    d3__namespace.selectAll(`.domino-active`).raise();
+    d3__namespace.selectAll('.domino-active').raise();
 
     allConnectors
       .selectAll('path')
