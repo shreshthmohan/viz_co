@@ -12,6 +12,8 @@ const optionsStackedBar = {
   /* Chart Area */
   aspectRatio: 1.6,
 
+  zoom: 4,
+
   marginTop: 0,
   marginRight: 0,
   marginBottom: 0,
