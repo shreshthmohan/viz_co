@@ -65,6 +65,8 @@ export function initializeTooltip() {
     .attr('class', 'dom-tooltip')
     .attr(
       'style',
-      'opacity: 0; position: absolute; background-color: white; border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem; line-height: 1rem; border-width: 1px;',
+      `opacity: 0; position: absolute; background-color: white;
+        border-radius: 0.25rem; padding: 0.5rem 0.75rem; font-size: 0.75rem;
+        line-height: 1rem; border-width: 1px;`,
     )
 }
