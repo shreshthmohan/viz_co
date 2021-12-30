@@ -10850,6 +10850,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { xGridField, yGridField, xField, yFields },
 
     chartContainerSelector,
+    handleCellMouseover = a => a,
   }) {
     const coreChartWidth = 1000;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
@@ -10939,6 +10940,7 @@ g.circles circle.circle.circle-hovered {
       .selectAll('g.cell')
       .data(cells)
       .join('g')
+      .attr('class', 'cell')
       .attr(
         'transform',
         d =>
@@ -10947,6 +10949,7 @@ g.circles circle.circle.circle-hovered {
             ${yGridScale(d[yGridField])}
           )`,
       )
+      .on('mouseover', handleCellMouseover)
       .each(function (d) {
         const xDomain = dataByCell[d[uniqCellField]].map(dc => dc[xField]).sort();
 

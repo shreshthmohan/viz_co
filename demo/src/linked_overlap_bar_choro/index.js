@@ -97,7 +97,6 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_overlap_bar.csv')]).then(
 
     // const choroStateAbbrField = 'state_code'
 
-    // First keyed by time, then by state
     const choroDataObj = {}
 
     dataOverlapBar.forEach(d => {
