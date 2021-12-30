@@ -2,14 +2,14 @@
 
 /* global viz */
 
-const dimensionsStacked = {
+const dimensionsOverlapBar = {
   xField: 'year',
   // yFields: ['India', 'Ireland', 'Zim', 'WI', 'Australia', 'Afg'],
   yFields: ['one', 'two'],
   // yFields: ['one', 'two'],
 }
 
-const optionsStacked = {
+const optionsOverlapBar = {
   aspectRatio: 0.7,
 
   marginTop: 0,
@@ -46,8 +46,6 @@ const optionsStacked = {
   // ],
   referenceLinesOpacity: 0.8,
 }
-
-// const dataPathStacked = 'data_stacked.csv'
 
 // viz.validateAndRenderOverlapBar({
 //   chartContainerSelector: '#chart-container',
@@ -90,9 +88,9 @@ const options = {
   // colorDomain: [0, 9000],
 }
 
-Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
-  ([dataChoro, dataStacked]) => {
-    // console.log({ dataChoro, dataStacked })
+Promise.all([d3.csv('data_choro.csv'), d3.csv('data_overlap_bar.csv')]).then(
+  ([dataChoro, dataOverlapBar]) => {
+    // console.log({ dataChoro, dataOverlapBar })
     const timeField = 'year'
 
     // const choroValueField = 'bachelorsOrHigher'
@@ -102,7 +100,7 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
     // First keyed by time, then by state
     const choroDataObj = {}
 
-    dataStacked.forEach(d => {
+    dataOverlapBar.forEach(d => {
       choroDataObj[d[timeField]] = dataChoro.filter(
         dc => dc[timeField] === d[timeField],
       )
@@ -112,7 +110,7 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
       Number.parseFloat(d[dimensions.valueField]),
     )
     options.colorDomain = d3.extent(choroValues)
-    const firstYearValue = dataStacked[0][timeField]
+    const firstYearValue = dataOverlapBar[0][timeField]
 
     function renderChoroForYear(year) {
       d3.select('#chart-container-choro')
@@ -131,9 +129,9 @@ Promise.all([d3.csv('data_choro.csv'), d3.csv('data_stacked.csv')]).then(
     renderChoroForYear(firstYearValue)
 
     viz.renderOverlapBar({
-      data: dataStacked,
-      options: optionsStacked,
-      dimensions: dimensionsStacked,
+      data: dataOverlapBar,
+      options: optionsOverlapBar,
+      dimensions: dimensionsOverlapBar,
       chartContainerSelector: '#chart-container',
       handleBarClick: (e, d) => {
         d3.selectAll('#chart-container-choro > *').remove()
