@@ -82,7 +82,8 @@ Promise.all([
   d3.csv(dataPathChoroplethStates),
   d3.csv(dataPathStackedBar),
 ]).then(([dataChoro, dataStackedBar]) => {
-  const linkField = 'year' // xGridField in stacked bar
+  // This is the important part for linking:
+  const linkField = 'year' // xGridField in stacked bar, choroDataObj is keyed by the linkField too.
 
   const choroDataObj = {}
 
@@ -102,7 +103,7 @@ Promise.all([
   const firstYearValue = dataStackedBar[0][linkField]
 
   function renderChoroForYear(year) {
-    d3.select('#chart-container-choro')
+    d3.select(chartContainerSelectorChoroplethStates)
       .append('div')
       .attr('class', 'year-title')
       .html(year)
@@ -125,7 +126,7 @@ Promise.all([
     handleCellMouseover: (e, d) => {
       const yr = d[linkField]
       if (currentYear === yr) return
-      d3.selectAll('#chart-container-choro > *').remove()
+      d3.selectAll(`${chartContainerSelectorChoroplethStates} > *`).remove()
       renderChoroForYear(yr)
       currentYear = yr
     },
