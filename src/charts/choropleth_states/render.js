@@ -29,6 +29,8 @@ export function renderChart({
 
     searchButtonClassNames = '',
     colorDomain: colorDomainCustom = [],
+
+    searchDisabled = false,
   },
   chartContainerSelector,
 }) {
@@ -138,6 +140,9 @@ export function renderChart({
     .attr('type', 'text')
     .attr('placeholder', 'Find by state')
     .attr('class', searchButtonClassNames)
+  if (searchDisabled) {
+    search.style('display', 'none')
+  }
 
   function searchBy(term) {
     if (term) {

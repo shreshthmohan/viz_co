@@ -7697,6 +7697,8 @@ g.circles circle.circle.circle-hovered {
 
       searchButtonClassNames = '',
       colorDomain: colorDomainCustom = [],
+
+      searchDisabled = false,
     },
     chartContainerSelector,
   }) {
@@ -7806,6 +7808,9 @@ g.circles circle.circle.circle-hovered {
       .attr('type', 'text')
       .attr('placeholder', 'Find by state')
       .attr('class', searchButtonClassNames);
+    if (searchDisabled) {
+      search.style('display', 'none');
+    }
 
     function searchBy(term) {
       if (term) {

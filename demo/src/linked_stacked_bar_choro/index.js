@@ -71,6 +71,7 @@ const optionsChoroplethStates = {
     shadow-inner border`,
 
   // colorDomain: [0, 9000],
+  searchDisabled: true,
 }
 
 const chartContainerSelectorChoroplethStates = '#chart-container-choro'
@@ -128,10 +129,3 @@ Promise.all([
     },
   })
 })
-
-// viz.renderStackedBar({
-//   options,
-//   dimensions,
-//   dataPath,
-//   chartContainerSelector: '#chart-container',
-// })
