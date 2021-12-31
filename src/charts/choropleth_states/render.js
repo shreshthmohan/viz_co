@@ -28,6 +28,9 @@ export function renderChart({
     missingDataMessage = 'Data Missing',
 
     searchButtonClassNames = '',
+    colorDomain: colorDomainCustom = [],
+
+    searchDisabled = false,
   },
   chartContainerSelector,
 }) {
@@ -70,9 +73,10 @@ export function renderChart({
   })
 
   const values = dataParsed.map(el => el[valueField])
-  const valueDomain = d3.extent(values)
+  const colorDomainDefault = d3.extent(values)
+  const colorDomain = d3.extent([...colorDomainDefault, ...colorDomainCustom])
 
-  const colorScale = d3.scaleSequential(interpolateScheme).domain(valueDomain)
+  const colorScale = d3.scaleSequential(interpolateScheme).domain(colorDomain)
 
   const path = d3.geoPath()
 
@@ -136,6 +140,9 @@ export function renderChart({
     .attr('type', 'text')
     .attr('placeholder', 'Find by state')
     .attr('class', searchButtonClassNames)
+  if (searchDisabled) {
+    search.style('display', 'none')
+  }
 
   function searchBy(term) {
     if (term) {

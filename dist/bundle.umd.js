@@ -7698,6 +7698,9 @@ g.circles circle.circle.circle-hovered {
       missingDataMessage = 'Data Missing',
 
       searchButtonClassNames = '',
+      colorDomain: colorDomainCustom = [],
+
+      searchDisabled = false,
     },
     chartContainerSelector,
   }) {
@@ -7740,9 +7743,10 @@ g.circles circle.circle.circle-hovered {
     });
 
     const values = dataParsed.map(el => el[valueField]);
-    const valueDomain = d3__namespace.extent(values);
+    const colorDomainDefault = d3__namespace.extent(values);
+    const colorDomain = d3__namespace.extent([...colorDomainDefault, ...colorDomainCustom]);
 
-    const colorScale = d3__namespace.scaleSequential(interpolateScheme).domain(valueDomain);
+    const colorScale = d3__namespace.scaleSequential(interpolateScheme).domain(colorDomain);
 
     const path = d3__namespace.geoPath();
 
@@ -7806,6 +7810,9 @@ g.circles circle.circle.circle-hovered {
       .attr('type', 'text')
       .attr('placeholder', 'Find by state')
       .attr('class', searchButtonClassNames);
+    if (searchDisabled) {
+      search.style('display', 'none');
+    }
 
     function searchBy(term) {
       if (term) {
@@ -10306,6 +10313,7 @@ g.circles circle.circle.circle-hovered {
     },
     dimensions: { xField, yFields },
     chartContainerSelector,
+    handleBarClick = a => a,
   }) {
     applyInteractionStyles$2({ referenceLinesOpacity });
 
@@ -10349,6 +10357,7 @@ g.circles circle.circle.circle-hovered {
       coreChartHeight,
       tooltipDiv,
       nanDisplayMessage,
+      handleBarClick,
     });
 
     renderLegends$1({ widgetsRight, colorsRgba, yFields, referenceLines });
@@ -10578,6 +10587,7 @@ g.circles circle.circle.circle-hovered {
     coreChartHeight,
     tooltipDiv,
     nanDisplayMessage,
+    handleBarClick,
   }) {
     yFields.forEach((yf, i) => {
       chartCore
@@ -10622,6 +10632,8 @@ g.circles circle.circle.circle-hovered {
       `);
 
         d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true);
+
+        handleBarClick(e, d);
       })
       .on('mouseout', function (e, d) {
         d3__namespace.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false);
@@ -10632,6 +10644,7 @@ g.circles circle.circle.circle-hovered {
           .duration(500)
           .style('opacity', 0);
       });
+    // .on('click', )
   }
 
   function renderReferenceLine$1({ chartCore, referenceLines, yScale, xScale }) {
@@ -10821,6 +10834,8 @@ g.circles circle.circle.circle-hovered {
     options: {
       aspectRatio = 2,
 
+      zoom = 1,
+
       marginTop = 0,
       marginRight = 0,
       marginBottom = 0,
@@ -10849,8 +10864,9 @@ g.circles circle.circle.circle-hovered {
     dimensions: { xGridField, yGridField, xField, yFields },
 
     chartContainerSelector,
+    handleCellMouseover = a => a,
   }) {
-    const coreChartWidth = 1000;
+    const coreChartWidth = 1000 / zoom;
     const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
       setupChartArea$5({
         chartContainerSelector,
@@ -10938,6 +10954,7 @@ g.circles circle.circle.circle-hovered {
       .selectAll('g.cell')
       .data(cells)
       .join('g')
+      .attr('class', 'cell')
       .attr(
         'transform',
         d =>
@@ -10946,6 +10963,7 @@ g.circles circle.circle.circle-hovered {
             ${yGridScale(d[yGridField])}
           )`,
       )
+      .on('mouseover', handleCellMouseover)
       .each(function (d) {
         const xDomain = dataByCell[d[uniqCellField]].map(dc => dc[xField]).sort();
 

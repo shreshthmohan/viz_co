@@ -14,6 +14,8 @@ export function renderChart({
   options: {
     aspectRatio = 2,
 
+    zoom = 1,
+
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
@@ -42,8 +44,9 @@ export function renderChart({
   dimensions: { xGridField, yGridField, xField, yFields },
 
   chartContainerSelector,
+  handleCellMouseover = a => a,
 }) {
-  const coreChartWidth = 1000
+  const coreChartWidth = 1000 / zoom
   const { svg, coreChartHeight, allComponents, chartCore, widgetsRight } =
     setupChartArea({
       chartContainerSelector,
@@ -131,6 +134,7 @@ export function renderChart({
     .selectAll('g.cell')
     .data(cells)
     .join('g')
+    .attr('class', 'cell')
     .attr(
       'transform',
       d =>
@@ -139,6 +143,7 @@ export function renderChart({
             ${yGridScale(d[yGridField])}
           )`,
     )
+    .on('mouseover', handleCellMouseover)
     .each(function (d) {
       const xDomain = dataByCell[d[uniqCellField]].map(dc => dc[xField]).sort()
 

@@ -50,6 +50,7 @@ export function renderChart({
   },
   dimensions: { xField, yFields },
   chartContainerSelector,
+  handleBarClick = a => a,
 }) {
   applyInteractionStyles({ referenceLinesOpacity })
 
@@ -93,6 +94,7 @@ export function renderChart({
     coreChartHeight,
     tooltipDiv,
     nanDisplayMessage,
+    handleBarClick,
   })
 
   renderLegends({ widgetsRight, colorsRgba, yFields, referenceLines })
@@ -322,6 +324,7 @@ function renderBars({
   coreChartHeight,
   tooltipDiv,
   nanDisplayMessage,
+  handleBarClick,
 }) {
   yFields.forEach((yf, i) => {
     chartCore
@@ -366,6 +369,8 @@ function renderBars({
       `)
 
       d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', true)
+
+      handleBarClick(e, d)
     })
     .on('mouseout', function (e, d) {
       d3.selectAll(`.rect-${toClassText(d[xField])}`).classed('hovered', false)
@@ -376,6 +381,7 @@ function renderBars({
         .duration(500)
         .style('opacity', 0)
     })
+  // .on('click', )
 }
 
 function renderReferenceLine({ chartCore, referenceLines, yScale, xScale }) {
