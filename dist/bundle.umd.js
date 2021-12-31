@@ -219,7 +219,7 @@
 
   /* global window */
 
-  function renderChart$j({
+  function renderChart$k({
     data,
     dimensions: {
       xFieldStart,
@@ -278,7 +278,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$a({
+    applyInteractionStyles$b({
       chartContainerSelector,
       activeOpacity,
       inactiveOpacity,
@@ -305,7 +305,7 @@
 
     const tooltipDiv = initializeTooltip$4();
 
-    const dataParsed = parseData$a({
+    const dataParsed = parseData$b({
       data,
       xFieldStart,
       xFieldEnd,
@@ -315,7 +315,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$b({
+      setupScales$c({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -376,7 +376,7 @@
       directionEndLabel,
     });
 
-    renderXAxis$9({
+    renderXAxis$a({
       chartCore,
       coreChartHeight,
       coreChartWidth,
@@ -386,7 +386,7 @@
     });
 
     // y-axis
-    renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle });
+    renderYAxis$8({ chartCore, coreChartWidth, yScale, yAxisTitle });
 
     renderMaces({
       chartCore,
@@ -414,7 +414,7 @@
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
     const handleSearch = searchEventHandler$8(nameValues);
-    const search = setupSearch$9({
+    const search = setupSearch$a({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -449,7 +449,7 @@
     });
   }
 
-  function applyInteractionStyles$a({
+  function applyInteractionStyles$b({
     activeOpacity,
     inactiveOpacity,
     chartContainerSelector,
@@ -548,7 +548,7 @@
       )
   }
 
-  function parseData$a({
+  function parseData$b({
     data,
     xFieldStart,
     xFieldEnd,
@@ -572,7 +572,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$b({
+  function setupScales$c({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -697,7 +697,7 @@
       .attr('height', sizeLegendBoundingBox.height)
       .attr('width', sizeLegendBoundingBox.width);
   }
-  function renderXAxis$9({
+  function renderXAxis$a({
     chartCore,
     coreChartHeight,
     coreChartWidth,
@@ -725,7 +725,7 @@
       .attr('transform', `translate(${coreChartWidth / 2}, 30)`);
   }
 
-  function renderYAxis$7({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
+  function renderYAxis$8({ chartCore, coreChartWidth, yScale, yAxisTitle }) {
     const yAxis = chartCore
       .append('g')
       .attr('class', 'text-xs y-axis-right')
@@ -963,7 +963,7 @@
     }
   };
 
-  function setupSearch$9({
+  function setupSearch$a({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -1354,7 +1354,7 @@
 
   // export function that
 
-  const dimensionTypes$h = {
+  const dimensionTypes$i = {
     xFieldStart: [shouldBeNumber],
     xFieldEnd: [shouldBeNumber],
     yFieldStart: [shouldBeNumber],
@@ -1363,7 +1363,7 @@
     nameField: [shouldNotBeBlank, shouldBeUnique],
   };
 
-  const optionTypes$i = {
+  const optionTypes$j = {
     /* Headers */
     // heading: checkString,
     // subheading: checkString,
@@ -1410,13 +1410,13 @@
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender$j = ({
+  const validateAndRender$k = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$i, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$j, options });
 
     d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       // Run validations
@@ -1426,7 +1426,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$h, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$i, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1447,7 +1447,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$j({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$k({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
 
       // eslint-disable-next-line no-console
@@ -1477,7 +1477,7 @@
     center: 'sankeyCenter',
   };
 
-  function renderChart$i({
+  function renderChart$j({
     data,
     options: {
       aspectRatio = 2,
@@ -1899,13 +1899,13 @@
     });
   }
 
-  const dimensionTypes$g = {
+  const dimensionTypes$h = {
     sourceField: [shouldNotBeBlank],
     targetField: [shouldNotBeBlank],
     valueField: [shouldBeNumber],
   };
 
-  const optionTypes$h = {
+  const optionTypes$i = {
     aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
@@ -1921,13 +1921,13 @@
     nodeWidth: checkNumber,
   };
 
-  const validateAndRender$i = ({
+  const validateAndRender$j = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$h, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$i, options });
 
     d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
@@ -1937,7 +1937,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$g, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$h, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -1958,7 +1958,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$i({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$j({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2259,7 +2259,7 @@
 
   /* global window, console */
 
-  function renderChart$h({
+  function renderChart$i({
     data,
     dimensions: {
       sizeField,
@@ -2817,14 +2817,14 @@
     'schemeOranges',
   ];
 
-  const dimensionTypes$f = {
+  const dimensionTypes$g = {
     sizeField: [shouldBeNumber],
     xField: [shouldBeNumber],
     nameField: [shouldNotBeBlank], // also search field
     segmentField: [shouldNotBeBlank],
   };
 
-  const optionTypes$g = {
+  const optionTypes$h = {
     aspectRatioCombined: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
     aspectRatioSplit: checkNumberBetween(0.01, Number.MAX_SAFE_INTEGER),
 
@@ -2869,13 +2869,13 @@
     // searchInputClassNames = '',
   };
 
-  const validateAndRender$h = ({
+  const validateAndRender$i = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$g, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$h, options });
 
     d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
@@ -2884,7 +2884,7 @@
         columns,
         dimensions,
       });
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$f, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$g, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -2905,7 +2905,7 @@
       });
 
       combinedValidation.valid
-        ? renderChart$h({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$i({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -2983,7 +2983,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function renderChart$g({
+  function renderChart$h({
     data,
     options: {
       aspectRatio = 2,
@@ -3018,7 +3018,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$9();
+    applyInteractionStyles$a();
 
     const coreChartWidth = 1000;
     const {
@@ -3041,13 +3041,13 @@
 
     const tooltipDiv = initializeTooltip$3();
 
-    const dataParsed = parseData$9({
+    const dataParsed = parseData$a({
       data,
       colorField,
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$a({
+    const { xScale, yScale, colorScale } = setupScales$b({
       dataParsed,
       xField,
       yField,
@@ -3064,7 +3064,7 @@
       colorStrategy,
     });
 
-    renderYAxis$6({ chartCore, yScale });
+    renderYAxis$7({ chartCore, yScale });
 
     renderDominos({
       dataParsed,
@@ -3080,11 +3080,11 @@
       tooltipDiv,
     });
 
-    renderXAxis$8({ chartCore, xAxisLabel, coreChartWidth });
+    renderXAxis$9({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
     const handleSearch = searchEventHandler$7(dominoValues);
-    setupSearch$8({
+    setupSearch$9({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3114,7 +3114,7 @@
     });
   }
 
-  function applyInteractionStyles$9() {
+  function applyInteractionStyles$a() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -3128,7 +3128,7 @@
   `);
   }
 
-  function parseData$9({ data, colorField, yField }) {
+  function parseData$a({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -3155,7 +3155,7 @@
     return dataParsed
   }
 
-  function setupScales$a({
+  function setupScales$b({
     dataParsed,
     xField,
     yField,
@@ -3209,7 +3209,7 @@
     }
   }
 
-  function renderYAxis$6({ chartCore, yScale }) {
+  function renderYAxis$7({ chartCore, yScale }) {
     chartCore
       .append('g')
       .attr('class', 'y-axis-left')
@@ -3217,7 +3217,7 @@
       .call(g => g.select('.domain').remove());
   }
 
-  function renderXAxis$8({ chartCore, xAxisLabel, coreChartWidth }) {
+  function renderXAxis$9({ chartCore, xAxisLabel, coreChartWidth }) {
     chartCore
       .append('text')
       .text(xAxisLabel)
@@ -3359,7 +3359,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$8({
+  function setupSearch$9({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3398,14 +3398,14 @@
     return search
   }
 
-  const dimensionTypes$e = {
+  const dimensionTypes$f = {
     xField: [shouldNotBeBlank],
     yField: [shouldNotBeBlank],
     colorField: [shouldBeNumber],
     dominoField: [shouldNotBeBlank],
   };
 
-  const optionTypes$f = {
+  const optionTypes$g = {
     aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
@@ -3439,13 +3439,13 @@
     // highlightedLegendLabel: checkString,
   };
 
-  const validateAndRender$g = ({
+  const validateAndRender$h = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$f, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$g, options });
 
     d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
@@ -3455,7 +3455,7 @@
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$e, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$f, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -3476,14 +3476,14 @@
       });
 
       combinedValidation.valid
-        ? renderChart$g({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$h({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$8({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$9({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .series {
     cursor: pointer;
@@ -3584,7 +3584,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$8({ data, yField, xField, seriesField, colorField }) {
+  function parseData$9({ data, yField, xField, seriesField, colorField }) {
     const parsedData = data.map(d => ({
       ...d,
       [yField]: Number.parseFloat(d[yField]),
@@ -3609,7 +3609,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$9({
+  function setupScales$a({
     parsedData,
     nestedData,
     xField,
@@ -3652,7 +3652,7 @@ g.circles circle.circle.circle-hovered {
     return { yScale, xScale, categoryScale, categoryDomain, fillColorScale }
   }
 
-  function renderXAxis$7({
+  function renderXAxis$8({
     chartCore,
     coreChartHeight,
     xScale,
@@ -3837,7 +3837,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$7({
+  function setupSearch$8({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3914,7 +3914,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function renderChart$f({
+  function renderChart$g({
     data,
     options: {
       aspectRatio = 0.8,
@@ -3953,7 +3953,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$8({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$9({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3976,7 +3976,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$2();
 
-    const { parsedData, nestedData } = parseData$8({
+    const { parsedData, nestedData } = parseData$9({
       data,
       yField,
       xField,
@@ -3985,7 +3985,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$9({
+      setupScales$a({
         parsedData,
         nestedData,
         xField,
@@ -4001,7 +4001,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultStateAll = defaultState === 'All' ? categoryDomain : defaultState;
 
-    renderXAxis$7({
+    renderXAxis$8({
       chartCore,
       coreChartHeight,
       xScale,
@@ -4033,7 +4033,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const handleSearch = searchEventHandler$6(categoryDomain);
-    const search = setupSearch$7({
+    const search = setupSearch$8({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -4070,14 +4070,14 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const dimensionTypes$d = {
+  const dimensionTypes$e = {
     xField: [shouldNotBeBlank],
     yField: [shouldBeNumber],
     seriesField: [shouldNotBeBlank],
     colorField: [shouldNotBeBlank],
   };
 
-  const optionTypes$e = {
+  const optionTypes$f = {
     aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
@@ -4099,13 +4099,13 @@ g.circles circle.circle.circle-hovered {
     inactiveOpacity: checkNumberBetween(0, 1),
   };
 
-  const validateAndRender$f = ({
+  const validateAndRender$g = ({
     dataPath,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$e, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$f, options });
 
     d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
       const { columns } = data;
@@ -4115,7 +4115,7 @@ g.circles circle.circle.circle-hovered {
         dimensions,
       });
 
-      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$d, dimensions });
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$e, dimensions });
 
       // When new validations are added simply add the result to this array
       // When building a new validator the output should be of format:
@@ -4136,7 +4136,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$f({ data, dimensions, options, chartContainerSelector })
+        ? renderChart$g({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
     });
   };
@@ -4217,7 +4217,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$e({
+  function renderChart$f({
     data,
     dataScatter = [],
     dimensions: { xField, yFields },
@@ -4655,7 +4655,7 @@ g.circles circle.circle.circle-hovered {
   // 2. options.yColors doesn't have a validation, it has a structure similar to yFields
   // 3. options.highlightRanges doesn't have a validation yet
 
-  const optionTypes$d = {
+  const optionTypes$e = {
     aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
@@ -4678,13 +4678,13 @@ g.circles circle.circle.circle-hovered {
     highlightRangeColors: checkColorArray(),
   };
 
-  const validateAndRender$e = ({
+  const validateAndRender$f = ({
     dataPaths,
     options,
     dimensions,
     chartContainerSelector,
   }) => {
-    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$d, options });
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$e, options });
     const yFieldsDimensionTypes = {};
     const yFieldDimensions = {};
 
@@ -4756,7 +4756,7 @@ g.circles circle.circle.circle-hovered {
       });
 
       combinedValidation.valid
-        ? renderChart$e({
+        ? renderChart$f({
             data,
             dataScatter,
             dimensions,
@@ -4769,7 +4769,7 @@ g.circles circle.circle.circle-hovered {
 
   /* global window */
 
-  function renderChart$d({
+  function renderChart$e({
     data,
     dimensions: {
       xGridField,
@@ -4843,7 +4843,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip();
 
-    const { maxY, stackedDataByYear, names } = parseData$7({
+    const { maxY, stackedDataByYear, names } = parseData$8({
       data,
       yFields,
       nameField,
@@ -4859,7 +4859,7 @@ g.circles circle.circle.circle-hovered {
       xGridScale,
       yGridScale,
       colorScaleReverseMap,
-    } = setupScales$8({
+    } = setupScales$9({
       data,
       maxY,
       xGridField,
@@ -4976,7 +4976,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$7({ data, yFields, nameField, xGridField, yGridField }) {
+  function parseData$8({ data, yFields, nameField, xGridField, yGridField }) {
     let maxSum = 0;
 
     data.forEach(el => {
@@ -5018,7 +5018,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$8({
+  function setupScales$9({
     data,
     maxY,
     xGridField,
@@ -5222,7 +5222,7 @@ g.circles circle.circle.circle-hovered {
       .attr('font-size', 14);
   }
 
-  const dimensionTypes$c = {
+  const dimensionTypes$d = {
     xGridField: [shouldNotBeBlank],
     yGridField: [shouldNotBeBlank],
     xField: [shouldNotBeBlank],
@@ -5231,7 +5231,7 @@ g.circles circle.circle.circle-hovered {
     // yFieldsDimensionTypes will be added dynamically
   };
 
-  const optionTypes$c = {
+  const optionTypes$d = {
     aspectRatio: checkNumberBetween(0.01, Number.POSITIVE_INFINITY),
 
     marginTop: checkNumber,
@@ -5285,7 +5285,7 @@ g.circles circle.circle.circle-hovered {
     return { flatDimensions, dimensionTypesWYFields, optionTypesWYFields }
   }
 
-  const validateAndRender$d = ({
+  const validateAndRender$e = ({
     dataPath,
     options,
     dimensions,
@@ -5297,8 +5297,8 @@ g.circles circle.circle.circle-hovered {
       const { flatDimensions, dimensionTypesWYFields, optionTypesWYFields } =
         buildDimensionAndTypes$2({
           dimensions,
-          dimensionTypes: dimensionTypes$c,
-          optionTypes: optionTypes$c,
+          dimensionTypes: dimensionTypes$d,
+          optionTypes: optionTypes$d,
         });
 
       const optionsValidationResult = optionValidation({
@@ -5335,6 +5335,594 @@ g.circles circle.circle.circle-hovered {
         }
       });
 
+      combinedValidation.valid
+        ? renderChart$e({ data, dimensions, options, chartContainerSelector })
+        : showErrors(chartContainerSelector, combinedValidation.messages);
+    });
+  };
+
+  /* global window */
+
+  function renderChart$d({
+    data,
+    dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
+    options: {
+      motionDelay = 1000,
+      marginTop = 40,
+      marginRight = 50,
+      marginBottom = 50,
+      marginLeft = 40,
+      bgColor = 'transparent',
+      aspectRatio = 2,
+
+      sizeRange = [2, 20],
+      sizeValueFormat = '',
+
+      xDomainCustom = null,
+      xAxisLabel = xField,
+      xValueFormat = '',
+
+      yDomainCustom = null,
+      yAxisLabel = yField,
+      yValueFormat = '',
+
+      inbuiltScheme = 'schemePuRd',
+      numberOfColors = 9, // minumum: 3, maximum: 9
+
+      inactiveOpacity = 0.1,
+      activeOpacity = 1,
+
+      startButtonClassNames = '',
+      stopButtonClassNames = '',
+      searchButtonClassNames = '',
+    },
+    chartContainerSelector,
+  }) {
+    let intervalId;
+
+    applyInteractionStyles$8({ inactiveOpacity });
+
+    const xValueFormatter = val => formatNumber(val, xValueFormat);
+    const yValueFormatter = val => formatNumber(val, yValueFormat);
+    const sizeValueFormatter = val => formatNumber(val, sizeValueFormat);
+
+    const coreChartWidth = 1000;
+    const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
+      setupChartArea$5({
+        chartContainerSelector,
+        coreChartWidth,
+        aspectRatio,
+        marginTop,
+        marginBottom,
+        marginLeft,
+        marginRight,
+        bgColor,
+      });
+
+    const tooltipDiv = initializeTooltip$3();
+
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$7({
+      data,
+      xField,
+      yField,
+      sizeField,
+      timeField,
+    });
+
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$8({
+      dataParsed,
+      sizeField,
+      sizeRange,
+      xDomainCustom,
+      yDomainCustom,
+      xField,
+      yField,
+      colorField,
+      coreChartWidth,
+      coreChartHeight,
+      inbuiltScheme,
+      numberOfColors,
+    });
+
+    const { startButton, stopButton, rangeSlider, rangeSliderValue } =
+      setupWidgets$1({
+        widgetsLeft,
+        timeField,
+        startButtonClassNames,
+        stopButtonClassNames,
+      });
+
+    // Initial time value for range value display
+    rangeSliderValue.text(timeDomain[0]);
+
+    // Bubbles are stationary initially so disable stop button
+    stopButton.node().disabled = true;
+
+    // Initial render
+    const circles = renderCircles$1({
+      chartCore,
+      dataAt,
+      timeDomain,
+      nameField,
+      sizeField,
+      xScale,
+      yScale,
+      xField,
+      yField,
+      timeField,
+      colorField,
+      xValueFormatter,
+      yValueFormatter,
+      sizeValueFormatter,
+      sizeScale,
+      colorScale,
+      activeOpacity,
+      tooltipDiv,
+    });
+
+    const updateCircles = newData => {
+      circles
+        .data(newData, d => d[nameField])
+        .sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]))
+        .transition()
+        .duration(motionDelay)
+        .attr('cx', d => xScale(d[xField]))
+        .attr('cy', d => yScale(d[yField]))
+        .attr('r', d => sizeScale(d[sizeField]));
+    };
+
+    activateMotionWidget$1({
+      rangeSlider,
+      timeDomainLength,
+      timeDomain,
+      rangeSliderValue,
+      dataAt,
+      updateCircles,
+      startButton,
+      stopButton,
+      intervalId,
+      motionDelay,
+    });
+
+    setupSearch$7({
+      widgetsLeft,
+      nameField,
+      searchButtonClassNames,
+      circles,
+      sizeField,
+    });
+
+    renderXAxis$7({
+      chartCore,
+      coreChartHeight,
+      coreChartWidth,
+      xScale,
+      xAxisLabel,
+    });
+
+    renderYAxis$6({
+      chartCore,
+      coreChartWidth,
+      coreChartHeight,
+      yScale,
+      yAxisLabel,
+    });
+
+    preventOverflow({
+      allComponents,
+      svg,
+      margins: { marginLeft, marginRight, marginTop, marginBottom },
+    });
+  }
+
+  function setupWidgets$1({
+    widgetsLeft,
+    timeField,
+    startButtonClassNames,
+    stopButtonClassNames,
+  }) {
+    const startButton = widgetsLeft
+      .append('button')
+      .text('Start')
+      .attr('id', '#start')
+      .attr('class', startButtonClassNames);
+
+    const stopButton = widgetsLeft
+      .append('button')
+      .text('Stop')
+      .attr('id', '#stop')
+      .attr('class', stopButtonClassNames);
+
+    const rangeSliderContainer = widgetsLeft
+      .append('div')
+      .attr(
+        'style',
+        'display: flex; flex-direction: column; align-items: center; font-size: 0.75rem',
+      );
+
+    // Range slider label
+    rangeSliderContainer
+      .append('label')
+      .text(timeField)
+      .attr('for', '#range-slider')
+      .attr('style', 'text-transform: capitalize');
+
+    const rangeSlider = rangeSliderContainer
+      .append('input')
+      .attr('type', 'range')
+      .attr('id', 'range-slider');
+
+    const rangeSliderValue = rangeSliderContainer.append('span');
+
+    return {
+      startButton,
+      stopButton,
+      rangeSlider,
+      rangeSliderValue,
+    }
+  }
+
+  function renderCircles$1({
+    chartCore,
+    dataAt,
+    timeDomain,
+    nameField,
+    sizeField,
+    xScale,
+    yScale,
+    xField,
+    yField,
+    timeField,
+    colorField,
+    xValueFormatter,
+    yValueFormatter,
+    sizeValueFormatter,
+    sizeScale,
+    colorScale,
+    activeOpacity,
+    tooltipDiv,
+  }) {
+    const circles = chartCore
+      .append('g')
+      .attr('class', 'group-circles')
+      .selectAll('circle')
+      .data(dataAt(timeDomain[0]), d => d[nameField])
+      .join('circle')
+      .sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]))
+      .attr('class', d => `iv-circle iv-circle-${toClassText(d[nameField])}`)
+      .attr('cx', d => xScale(d[xField]))
+      .attr('cy', d => yScale(d[yField]))
+      .attr('r', d => sizeScale(d[sizeField]))
+      .attr('fill', d => colorScale(d[colorField]))
+      .attr('opacity', activeOpacity)
+      .attr('stroke', d => d3__namespace.rgb(colorScale(d[colorField])).darker(0.5))
+      .on('mouseover', (e, d) => {
+        tooltipDiv.transition().duration(200).style('opacity', 1);
+        tooltipDiv.html(`${d[nameField]} (${d[timeField]})
+      <br/>
+      <div style="text-transform: capitalize">
+      <span> ${xField}: ${xValueFormatter(d[xField])}</span>
+      <br/>
+      <span>${yField}: ${yValueFormatter(d[yField])}</span>
+      <br/>
+      ${
+        sizeField
+          ? `<span>${sizeField}: ${sizeValueFormatter(d[sizeField])}</span>`
+          : ''
+      }
+      </div>
+      `);
+        d3__namespace.select(e.target).attr('stroke-width', 2);
+        tooltipDiv
+          .style('left', `${e.clientX}px`)
+          .style('top', `${e.clientY + 20 + window.scrollY}px`);
+      })
+      .on('mouseout', e => {
+        d3__namespace.select(e.target).attr('stroke-width', 1);
+        tooltipDiv
+          .style('left', '-300px')
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      });
+    return circles
+  }
+
+  function activateMotionWidget$1({
+    rangeSlider,
+    timeDomainLength,
+    timeDomain,
+    rangeSliderValue,
+    dataAt,
+    updateCircles,
+    startButton,
+    stopButton,
+    intervalId,
+    motionDelay,
+  }) {
+    rangeSlider
+      .attr('min', 0)
+      .attr('max', timeDomainLength - 1)
+      .attr('value', 0)
+      .on('input', e => {
+        const posInArr = Number.parseInt(e.target.value, 10);
+        rangeSliderValue.text(timeDomain[posInArr]);
+        updateCircles(dataAt(timeDomain[posInArr]));
+      });
+
+    startButton.on('click', () => {
+      startButton.node().disabled = true;
+      stopButton.node().disabled = false;
+
+      if (
+        Number.parseInt(rangeSlider.node().value, 10) ===
+        Number.parseInt(timeDomainLength - 1, 10)
+      ) {
+        rangeSlider.node().value = 0;
+        rangeSliderValue.text(timeDomain[0]);
+        updateCircles(dataAt(timeDomain[0]));
+      }
+      intervalId = window.setInterval(() => {
+        if (
+          Number.parseInt(rangeSlider.node().value, 10) ===
+          Number.parseInt(timeDomainLength - 1, 10)
+        ) {
+          window.clearInterval(intervalId);
+          startButton.node().disabled = false;
+          stopButton.node().disabled = true;
+          return
+        }
+        rangeSlider.node().value++;
+        const posInArr = Number.parseInt(rangeSlider.node().value, 10);
+        rangeSliderValue.text(timeDomain[posInArr]);
+        updateCircles(dataAt(timeDomain[posInArr]));
+      }, motionDelay);
+    });
+
+    stopButton.on('click', () => {
+      stopButton.node().disabled = true;
+      startButton.node().disabled = false;
+      window.clearInterval(intervalId);
+    });
+  }
+
+  function setupSearch$7({
+    widgetsLeft,
+    nameField,
+    searchButtonClassNames,
+    circles,
+    sizeField,
+  }) {
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('placeholder', `Find by ${nameField}`)
+      .attr('class', searchButtonClassNames);
+
+    function searchBy(term) {
+      if (term) {
+        d3__namespace.select('.group-circles').classed('searching', true);
+        const matchedCircles = [];
+        circles.classed('s-match', d => {
+          const bool = d[nameField].toLowerCase().includes(term.toLowerCase());
+          if (bool) {
+            matchedCircles.push(`.iv-circle-${toClassText(d[nameField])}`);
+          }
+          return bool
+        });
+        // Raise all matched circles so that
+        // hovering over them doesn't cause other circle's tooltip
+        // to be highlighted
+        matchedCircles.forEach(m => {
+          d3__namespace.select(m).raise();
+        });
+      } else {
+        d3__namespace.select('.group-circles').classed('searching', false);
+
+        // Put circles back in order after raising matched circles
+        circles.sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]));
+      }
+    }
+
+    search.on('keyup', e => {
+      searchBy(e.target.value.trim());
+    });
+  }
+
+  function applyInteractionStyles$8({ inactiveOpacity }) {
+    d3__namespace.select('body').append('style').html(`
+  .group-circles.searching > .iv-circle:not(.s-match) {
+    opacity: ${inactiveOpacity};
+  }
+  .group-circles.searching > .iv-circle.s-match {
+    stroke: #333;
+  }
+  `);
+  }
+
+  function parseData$7({ data, xField, yField, sizeField, timeField }) {
+    const dataParsed = data.map(d => ({
+      ...d,
+      [sizeField]: Number.parseFloat(d[sizeField]),
+      [xField]: Number.parseFloat(d[xField]),
+      [yField]: Number.parseFloat(d[yField]),
+    }));
+
+    const dataAt = loc => {
+      return dataParsed.filter(d => d[timeField] === loc)
+    };
+    const timeDomain = ___default["default"].uniq(___default["default"].map(data, timeField)).sort();
+    const timeDomainLength = timeDomain.length;
+
+    return { dataParsed, dataAt, timeDomain, timeDomainLength }
+  }
+
+  function setupScales$8({
+    dataParsed,
+    sizeField,
+    sizeRange,
+    xDomainCustom,
+    yDomainCustom,
+    xField,
+    yField,
+    colorField,
+    coreChartWidth,
+    coreChartHeight,
+    inbuiltScheme,
+    numberOfColors,
+  }) {
+    const sizes = dataParsed.map(d => d[sizeField]);
+    const sizeDomain = d3__namespace.extent(sizes);
+    const sizeScale = sizeField
+      ? d3__namespace.scaleSqrt().domain([0, sizeDomain[1]]).range(sizeRange)
+      : () => sizeRange[0];
+
+    const xDomain = xDomainCustom || d3__namespace.extent(dataParsed.map(d => d[xField]));
+    const yDomain = yDomainCustom || d3__namespace.extent(dataParsed.map(d => d[yField]));
+
+    const xScale = d3__namespace.scaleLinear().domain(xDomain).range([0, coreChartWidth]);
+    const yScale = d3__namespace.scaleLinear().range([coreChartHeight, 0]).domain(yDomain);
+    // .nice()
+
+    const colorDomain = ___default["default"].uniq(___default["default"].map(dataParsed, colorField));
+    const colorScale = d3__namespace.scaleOrdinal(
+      colorDomain,
+      d3__namespace[inbuiltScheme][numberOfColors],
+    );
+
+    return { sizeScale, xScale, yScale, colorScale }
+  }
+
+  function renderXAxis$7({
+    chartCore,
+    coreChartHeight,
+    coreChartWidth,
+    xScale,
+    xAxisLabel,
+  }) {
+    const xAxis = chartCore.append('g').attr('class', 'x-axis').lower();
+
+    xAxis
+      .attr('transform', `translate(0, ${coreChartHeight})`)
+      .call(d3__namespace.axisBottom(xScale).tickSize(-coreChartHeight - 6))
+      .style('color', '#777')
+      .call(g => {
+        g.selectAll('.tick line')
+          .style('color', '#ddd')
+          .attr('transform', `translate(0, ${6})`);
+        g.selectAll('.tick text').attr('transform', `translate(0, ${6})`);
+        g.select('.domain').remove();
+      });
+
+    xAxis
+      .append('text')
+      .attr('transform', `translate(${coreChartWidth / 2}, 35)`)
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'top')
+      .style('fill', '#333')
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .text(xAxisLabel);
+  }
+
+  function renderYAxis$6({
+    chartCore,
+    coreChartWidth,
+    coreChartHeight,
+    yScale,
+    yAxisLabel,
+  }) {
+    const yAxis = chartCore.append('g').attr('class', 'y-axis').lower();
+
+    yAxis
+      .append('g')
+      .call(d3__namespace.axisLeft(yScale).tickSize(-coreChartWidth - 6))
+      .style('color', '#777')
+      .call(g => {
+        g.selectAll('.tick line')
+          .style('color', '#ddd')
+          .attr('transform', 'translate(-6, 0)');
+        g.selectAll('.tick text').attr('transform', 'translate(-6, 0)');
+        g.select('.domain').remove();
+      })
+      .attr('class', 'y-axis');
+
+    yAxis
+      .append('text')
+      .attr('transform', `translate(-35, ${coreChartHeight / 2}), rotate(-90)`)
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'hanging')
+      .style('fill', '#333')
+      .style('font-size', '12px')
+      .style('font-weight', 'bold')
+      .text(yAxisLabel);
+  }
+
+  const dimensionTypes$c = {
+    sizeField: [], // can be empty (if not provided first value in sizeRange will be picked)
+    xField: [shouldNotBeBlank, shouldBeNumber],
+    yField: [shouldNotBeBlank, shouldBeNumber],
+    timeField: [shouldNotBeBlank],
+    nameField: [shouldNotBeBlank],
+    colorField: [], // can be empty (if not provided, first color from scheme will be picked)
+  };
+
+  const optionTypes$c = {
+    aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
+
+    marginTop: checkNumber,
+    marginRight: checkNumber,
+    marginBottom: checkNumber,
+    marginLeft: checkNumber,
+
+    bgColor: checkColor,
+
+    sizeRange: checkNumericArray(2),
+    xDomainCustom: checkNumericArray(2),
+    yDomainCustom: checkNumericArray(2),
+
+    inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
+    numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
+
+    // xAxisLabel: xField,
+    // yAxisLabel: yField,
+
+    // startButtonClassNames: '',
+    // stopButtonClassNames: '',
+    // searchButtonClassNames: '',
+  };
+
+  const validateAndRender$d = ({
+    dataPath,
+    options,
+    dimensions,
+    chartContainerSelector,
+  }) => {
+    const optionsValidationResult = optionValidation({ optionTypes: optionTypes$c, options });
+
+    d3__namespace[fileExtension(dataPath)](dataPath).then(data => {
+      const { columns } = data;
+      const dimensionValidation = validateColumnsWithDimensions({
+        columns,
+        dimensions,
+      });
+
+      const dataValidations = validateData({ data, dimensionTypes: dimensionTypes$c, dimensions });
+
+      const allValidations = [
+        dimensionValidation,
+        dataValidations,
+        optionsValidationResult,
+      ];
+
+      const combinedValidation = { valid: true, messages: [] };
+
+      allValidations.forEach(v => {
+        combinedValidation.valid = combinedValidation.valid && v.valid;
+        if (!v.valid) {
+          combinedValidation.messages.push(v.message);
+        }
+      });
       combinedValidation.valid
         ? renderChart$d({ data, dimensions, options, chartContainerSelector })
         : showErrors(chartContainerSelector, combinedValidation.messages);
@@ -5441,6 +6029,7 @@ g.circles circle.circle.circle-hovered {
     // Initial render
     const circles = renderCircles({
       chartCore,
+      dataParsed,
       dataAt,
       timeDomain,
       nameField,
@@ -5471,6 +6060,15 @@ g.circles circle.circle.circle-hovered {
         .attr('r', d => sizeScale(d[sizeField]));
     };
 
+    const updateBubbles = timePos => {
+      circles.classed('bubble-current', d => d[timeField] === timePos);
+
+      chartCore.selectAll('.bubble-current').raise();
+      chartCore.selectAll('.s-match').raise();
+    };
+
+    updateBubbles(timeDomain[0]);
+
     activateMotionWidget({
       rangeSlider,
       timeDomainLength,
@@ -5478,6 +6076,7 @@ g.circles circle.circle.circle-hovered {
       rangeSliderValue,
       dataAt,
       updateCircles,
+      updateBubbles,
       startButton,
       stopButton,
       intervalId,
@@ -5490,6 +6089,7 @@ g.circles circle.circle.circle-hovered {
       searchButtonClassNames,
       circles,
       sizeField,
+      chartCore,
     });
 
     renderXAxis$6({
@@ -5564,8 +6164,7 @@ g.circles circle.circle.circle-hovered {
 
   function renderCircles({
     chartCore,
-    dataAt,
-    timeDomain,
+    dataParsed,
     nameField,
     sizeField,
     xScale,
@@ -5586,7 +6185,7 @@ g.circles circle.circle.circle-hovered {
       .append('g')
       .attr('class', 'group-circles')
       .selectAll('circle')
-      .data(dataAt(timeDomain[0]), d => d[nameField])
+      .data(dataParsed)
       .join('circle')
       .sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]))
       .attr('class', d => `iv-circle iv-circle-${toClassText(d[nameField])}`)
@@ -5633,8 +6232,7 @@ g.circles circle.circle.circle-hovered {
     timeDomainLength,
     timeDomain,
     rangeSliderValue,
-    dataAt,
-    updateCircles,
+    updateBubbles,
     startButton,
     stopButton,
     intervalId,
@@ -5647,7 +6245,7 @@ g.circles circle.circle.circle-hovered {
       .on('input', e => {
         const posInArr = Number.parseInt(e.target.value, 10);
         rangeSliderValue.text(timeDomain[posInArr]);
-        updateCircles(dataAt(timeDomain[posInArr]));
+        updateBubbles(timeDomain[posInArr]);
       });
 
     startButton.on('click', () => {
@@ -5660,7 +6258,7 @@ g.circles circle.circle.circle-hovered {
       ) {
         rangeSlider.node().value = 0;
         rangeSliderValue.text(timeDomain[0]);
-        updateCircles(dataAt(timeDomain[0]));
+        updateBubbles(timeDomain[0]);
       }
       intervalId = window.setInterval(() => {
         if (
@@ -5675,7 +6273,7 @@ g.circles circle.circle.circle-hovered {
         rangeSlider.node().value++;
         const posInArr = Number.parseInt(rangeSlider.node().value, 10);
         rangeSliderValue.text(timeDomain[posInArr]);
-        updateCircles(dataAt(timeDomain[posInArr]));
+        updateBubbles(timeDomain[posInArr]);
       }, motionDelay);
     });
 
@@ -5692,6 +6290,7 @@ g.circles circle.circle.circle-hovered {
     searchButtonClassNames,
     circles,
     sizeField,
+    chartCore,
   }) {
     const search = widgetsLeft
       .append('input')
@@ -5721,6 +6320,8 @@ g.circles circle.circle.circle-hovered {
 
         // Put circles back in order after raising matched circles
         circles.sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]));
+
+        chartCore.selectAll('.bubble-current').raise();
       }
     }
 
@@ -5732,11 +6333,23 @@ g.circles circle.circle.circle-hovered {
   function applyInteractionStyles$7({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
-    opacity: ${inactiveOpacity};
+    fill-opacity: ${inactiveOpacity};
+    stroke-opacity: ${inactiveOpacity};
   }
+  
+
+  .group-circles > :not(.bubble-current) {
+    fill-opacity: ${inactiveOpacity};
+    stroke-opacity: ${inactiveOpacity};
+  }
+
   .group-circles.searching > .iv-circle.s-match {
     stroke: #333;
+    stroke-opacity: 1;
+    stroke-width: 2;
   }
+  
+  
   `);
   }
 
@@ -13142,44 +13755,46 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  exports.renderBubbleHorizontal = renderChart$h;
+  exports.renderBubbleHorizontal = renderChart$i;
   exports.renderBulletBeforeAfter = renderChart$2;
-  exports.renderCalendar = renderChart$d;
+  exports.renderCalendar = renderChart$e;
   exports.renderChord = renderChart$7;
   exports.renderChoroplethCounties = renderChart$9;
   exports.renderChoroplethStates = renderChart$8;
   exports.renderComparativeBar = renderChart$5;
-  exports.renderDominoBase = renderChart$g;
+  exports.renderDominoBase = renderChart$h;
   exports.renderDominoRibbon = renderChart$b;
-  exports.renderLineBandScatter = renderChart$e;
-  exports.renderMace = renderChart$j;
-  exports.renderMotionBubble = renderChart$c;
+  exports.renderLineBandScatter = renderChart$f;
+  exports.renderMace = renderChart$k;
+  exports.renderMotionBubble = renderChart$d;
+  exports.renderMotionTrack = renderChart$c;
   exports.renderOverlapArea = renderChart$a;
   exports.renderOverlapBar = renderChart$4;
   exports.renderPackedBubble = renderChart;
   exports.renderParallelConnections = renderChart$1;
-  exports.renderRidgeline = renderChart$f;
-  exports.renderSankey = renderChart$i;
+  exports.renderRidgeline = renderChart$g;
+  exports.renderSankey = renderChart$j;
   exports.renderStackedBar = renderChart$3;
   exports.renderTriangle = renderChart$6;
-  exports.validateAndRenderBubbleHorizontal = validateAndRender$h;
+  exports.validateAndRenderBubbleHorizontal = validateAndRender$i;
   exports.validateAndRenderBulletBeforeAfter = validateAndRender$2;
-  exports.validateAndRenderCalendar = validateAndRender$d;
+  exports.validateAndRenderCalendar = validateAndRender$e;
   exports.validateAndRenderChord = validateAndRender$7;
   exports.validateAndRenderChoroplethCounties = validateAndRender$9;
   exports.validateAndRenderChoroplethStates = validateAndRender$8;
   exports.validateAndRenderComparativeBar = validateAndRender$5;
-  exports.validateAndRenderDominoBase = validateAndRender$g;
+  exports.validateAndRenderDominoBase = validateAndRender$h;
   exports.validateAndRenderDominoRibbon = validateAndRender$b;
-  exports.validateAndRenderLineBandScatter = validateAndRender$e;
-  exports.validateAndRenderMace = validateAndRender$j;
-  exports.validateAndRenderMotionBubble = validateAndRender$c;
+  exports.validateAndRenderLineBandScatter = validateAndRender$f;
+  exports.validateAndRenderMace = validateAndRender$k;
+  exports.validateAndRenderMotionBubble = validateAndRender$d;
+  exports.validateAndRenderMotionTrack = validateAndRender$c;
   exports.validateAndRenderOverlapArea = validateAndRender$a;
   exports.validateAndRenderOverlapBar = validateAndRender$4;
   exports.validateAndRenderPackedBubble = validateAndRender;
   exports.validateAndRenderParallelConnections = validateAndRender$1;
-  exports.validateAndRenderRidgeline = validateAndRender$f;
-  exports.validateAndRenderSankey = validateAndRender$i;
+  exports.validateAndRenderRidgeline = validateAndRender$g;
+  exports.validateAndRenderSankey = validateAndRender$j;
   exports.validateAndRenderStackedBar = validateAndRender$3;
   exports.validateAndRenderTriangle = validateAndRender$6;
 

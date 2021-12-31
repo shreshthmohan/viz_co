@@ -39,6 +39,11 @@ export {
 } from './charts/motion_bubble/index'
 
 export {
+  renderChart as renderMotionTrack,
+  validateAndRender as validateAndRenderMotionTrack,
+} from './charts/motion_track/index'
+
+export {
   renderChart as renderDominoRibbon,
   validateAndRender as validateAndRenderDominoRibbon,
 } from './charts/domino_ribbon/index'
