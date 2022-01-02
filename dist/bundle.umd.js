@@ -2650,13 +2650,22 @@
            }</div>
          </div>`,
           );
+          const { x: circleX, y: circleY } = this.getBoundingClientRect();
+          const { width: tooltipWidth, height: tooltipHeight } = tooltipDiv
+            .node()
+            .getBoundingClientRect();
+
           tooltipDiv
-            .style('left', `${e.clientX}px`)
-            .style('top', `${e.clientY + window.scrollY + 30}px`);
+            .style('left', `${circleX - tooltipWidth / 2}px`)
+            .style('top', `${circleY - tooltipHeight - 3 + window.scrollY}px`);
           d3__namespace.select(this).classed('hovered', true);
         })
         .on('mouseout', function () {
-          tooltipDiv.transition().duration(500).style('opacity', 0);
+          tooltipDiv
+            .style('left', '-300px')
+            .transition()
+            .duration(500)
+            .style('opacity', 0);
           d3__namespace.select(this).classed('hovered', false);
         });
       u.exit().remove();
@@ -2678,8 +2687,46 @@
       if (term) {
         d3__namespace.select('.bubbles').classed('g-searching', true);
         allBubbles.classed('c-match', d =>
-          d[nameField].toLowerCase().includes(term.toLowerCase()),
+          d[nameField].toLowerCase().startsWith(term.toLowerCase()),
         );
+        if (chartCore.selectAll('.c-match').size() === 1) {
+          // tooltipDi
+          const d = chartCore.select('.c-match').data()[0];
+
+          tooltipDiv.html(
+            `<div><span>${d[nameField]}</span>(${d[segmentField]})</div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${xField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             xValuePrefix +
+             formatNumber(d[xField], xValueFormatter) +
+             xValueSuffix
+           }</div>
+         </div>
+         <div style="display: flex">
+           <div style="text-transform: capitalize">${sizeField}:</div>
+           <div style="padding-left: 0.25rem; font-weight: bold">${
+             sizeValuePrefix +
+             formatNumber(d[sizeField], sizeValueFormatter) +
+             sizeValueSuffix
+           }</div>
+         </div>`,
+          );
+          const { x: circleX, y: circleY } = chartCore
+            .select('.c-match')
+            .node()
+            .getBoundingClientRect();
+          const { width: tooltipWidth, height: tooltipHeight } = tooltipDiv
+            .node()
+            .getBoundingClientRect();
+
+          tooltipDiv
+            .style('left', `${circleX - tooltipWidth / 2}px`)
+            .style('top', `${circleY - tooltipHeight - 3 + window.scrollY}px`)
+            .transition()
+            .duration(200)
+            .style('opacity', 1);
+        }
       } else {
         d3__namespace.select('.bubbles').classed('g-searching', false);
       }
