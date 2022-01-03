@@ -1,6 +1,7 @@
 /* eslint-disable no-import-assign */
 /* global window */
 import * as d3_ from 'd3'
+import _ from 'lodash-es'
 import {
   sankey,
   sankeyCenter,
@@ -384,10 +385,34 @@ export function renderChart({
     .attr('dy', '0.35em')
     .attr('text-anchor', d => (d.x0 < coreChartWidth / 2 ? 'start' : 'end'))
 
+  const enableSearchSuggestions = true
+  const nodesSankey = []
+  sankeyfied.nodes.forEach(thisNode => {
+    const { name } = thisNode
+    nodesSankey.push(name)
+  })
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(nodesSankey)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
   search.attr('placeholder', `Find by node`)
 
   search.on('keyup', e => {

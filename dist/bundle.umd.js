@@ -1820,11 +1820,31 @@
       .attr('y', d => (d.y1 + d.y0) / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', d => (d.x0 < coreChartWidth / 2 ? 'start' : 'end'));
+    const nodesSankey = [];
+    sankeyfied.nodes.forEach(thisNode => {
+      const { name } = thisNode;
+      nodesSankey.push(name);
+    });
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](nodesSankey)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
 
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
     search.attr('placeholder', `Find by node`);
 
     search.on('keyup', e => {
@@ -3842,12 +3862,30 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     seriesField,
+    chartContainerSelector,
+    categoryDomain,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](categoryDomain)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
     // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
     search.attr('placeholder', `Find by ${seriesField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
@@ -4038,6 +4076,8 @@ g.circles circle.circle.circle-hovered {
       widgetsLeft,
       searchInputClassNames,
       seriesField,
+      chartContainerSelector,
+      categoryDomain,
     });
 
     setupInitialStateButton$5({
@@ -8673,6 +8713,9 @@ g.circles circle.circle.circle-hovered {
       widgetsLeft,
       searchInputClassNames,
       sourceField,
+      svg,
+      chartContainerSelector,
+      names,
     });
 
     setupClearAllButton$4({
@@ -9092,12 +9135,32 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     sourceField,
+    svg,
+    chartContainerSelector,
+    names,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](names)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${sourceField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
@@ -9653,6 +9716,8 @@ g.circles circle.circle.circle-hovered {
       widgetsLeft,
       searchInputClassNames,
       nameField,
+      chartContainerSelector,
+      nameValues,
     });
 
     const axes = chartCore.append('g').attr('class', 'axes');
@@ -9933,12 +9998,30 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     nameField,
+    chartContainerSelector,
+    nameValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](nameValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
     // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
     search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
@@ -12025,6 +12108,9 @@ g.circles circle.circle.circle-hovered {
       widgetsLeft,
       searchInputClassNames,
       topicField,
+      svg,
+      chartContainerSelector,
+      topicValues,
     });
 
     setupInitialStateButton$1({
@@ -12422,25 +12508,25 @@ g.circles circle.circle.circle-hovered {
       .attr('dominant-baseline', 'middle');
   }
 
-  const searchEventHandler$1 = referenceList => qstr => {
+  const searchEventHandler$1 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         // d3.selectAll('.mace').classed('mace-active', false)
         const topicName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', true);
+          svg.select(`.topic-${topicName}`).classed('topic-matched', true);
         } else {
-          d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', false);
+          svg.select(`.topic-${topicName}`).classed('topic-matched', false);
         }
-        d3__namespace.select('.topics').classed('searching', true);
+        svg.select('.topics').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
         const topicName = toClassText(val);
-        d3__namespace.select(`.topic-${topicName}`).classed('topic-matched', false);
+        svg.select(`.topic-${topicName}`).classed('topic-matched', false);
       });
-      d3__namespace.select('.topics').classed('searching', false);
+      svg.select('.topics').classed('searching', false);
     }
   };
 
@@ -12449,16 +12535,36 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     topicField,
+    svg,
+    chartContainerSelector,
+    topicValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](topicValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
     // TODO: refactor hidden, won't be needed if we add this node
     search.attr('placeholder', `Find by ${topicField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -12851,6 +12957,8 @@ g.circles circle.circle.circle-hovered {
       searchInputClassNames,
       connectionField,
       svg,
+      chartContainerSelector,
+      connectionValues,
     });
 
     setupInitialStateButton({
@@ -13176,12 +13284,28 @@ g.circles circle.circle.circle-hovered {
     searchInputClassNames,
     connectionField,
     svg,
+    chartContainerSelector,
+    connectionValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](connectionValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
-    // TODO: refactor hidden, won't be needed if we add this node
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
     search.attr('placeholder', `Find by ${connectionField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;

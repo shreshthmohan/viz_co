@@ -232,6 +232,9 @@ export function renderChart({
     widgetsLeft,
     searchInputClassNames,
     topicField,
+    svg,
+    chartContainerSelector,
+    topicValues,
   })
 
   setupInitialStateButton({
@@ -629,25 +632,25 @@ function renderBullets({
     .attr('dominant-baseline', 'middle')
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       // d3.selectAll('.mace').classed('mace-active', false)
       const topicName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.topic-${topicName}`).classed('topic-matched', true)
+        svg.select(`.topic-${topicName}`).classed('topic-matched', true)
       } else {
-        d3.select(`.topic-${topicName}`).classed('topic-matched', false)
+        svg.select(`.topic-${topicName}`).classed('topic-matched', false)
       }
-      d3.select('.topics').classed('searching', true)
+      svg.select('.topics').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
       const topicName = toClassText(val)
-      d3.select(`.topic-${topicName}`).classed('topic-matched', false)
+      svg.select(`.topic-${topicName}`).classed('topic-matched', false)
     })
-    d3.select('.topics').classed('searching', false)
+    svg.select('.topics').classed('searching', false)
   }
 }
 
@@ -656,16 +659,39 @@ function setupSearch({
   widgetsLeft,
   searchInputClassNames,
   topicField,
+  svg,
+  chartContainerSelector,
+  topicValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(topicValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
   // TODO: refactor hidden, won't be needed if we add this node
   search.attr('placeholder', `Find by ${topicField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
