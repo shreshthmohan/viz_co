@@ -1,0 +1,63 @@
+Property	Chart	Category	Description	Detail	Valid Values
+aspectRatioCombined	Horizontal Bubble	Chart Area	Ratio of Width to the height of the visual when bubbles are combined.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+aspectRatioSplit	Horizontal Bubble	Chart Area	Ratio of Width to the height of the visual when bubbles are split by segment.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	
+marginTop	Horizontal Bubble	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Horizontal Bubble	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Horizontal Bubble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Horizontal Bubble	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Horizontal Bubble	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+customColorScheme	Horizontal Bubble	Color	Color scheme of the bubbles along the x-axis.	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+inbuiltScheme	Horizontal Bubble	Color	Color scheme of the bubbles along the x-axis.	Chose one of the provided color schemes.	One of schemeBrBG, schemePRGn', schemePiYG', schemePuOr', schemeRdBu', schemeRdGy', schemeRdYlBu', schemeRdYlGn', schemeSpectral', schemeBuGn', schemeBuPu', schemeGnBu', schemeOrRd', schemePuBuGn', schemePuBu', schemePuRd', schemeRdPu', schemeYlGnBu', schemeYlGn', schemeYlOrBr', schemeYlOrRd',  schemeBlues', schemeGreens', schemeGreys', schemePurples', schemeReds', schemeOranges'
+numberOfColors	Horizontal Bubble	Color	Number of colors to be used from the provided scheme.	Chose number  of colors for the bubbles.	Positive Integer
+collisionDistance	Horizontal Bubble	Force	Distance between the bubbles in steady state	Adjust the value to change the density of bubbles.	Positive Integer
+xDomainCustom	Horizontal Bubble	X-Axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum size and secod for maximum value.	Array of 2 numbers. Example [1,5]
+xAxisLabel	Horizontal Bubble	X-Axis	X-axis label	Defaults to xField column name	Any string
+xValuePrefix	Horizontal Bubble	X-Axis	Prefix for x-axis values	Defaults to empty string	Any string
+xValueFormatter	Horizontal Bubble	X-Axis	Formatter for x-axis value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+xValueSuffix	Horizontal Bubble	X-Axis	Suffix for x-axis values	Defaults to empty string	Any string
+sizeRange	Horizontal Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+sizeValuePrefix	Horizontal Bubble	Size	Prefix for size value	Defaults to empty string	Any string
+sizeValueFormatter	Horizontal Bubble	Size	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+sizeValueSuffix	Horizontal Bubble	Size	Suffix for size value	Defaults to empty string	Any string
+sizeLegendValues	Horizontal Bubble	Legend	Value of size for size legend circles	Provide array of numbers corresponding to the size values to be shown in size legend.	Array of numbers
+sizeLegendTitle	Horizontal Bubble	Legend	Title of size legend	Defaults to sizeField column name	Any string
+sizeLegendGapInCircles	Horizontal Bubble	Legend	Gap in pixels between size legend circles	Change the value to adjust th gap between size legend circles	Any number
+colorLegendTitle	Horizontal Bubble	Legend	Title of color legend	Defaults to xField column name	Any string
+combinedSegmentLabel	Horizontal Bubble	Labels	Label of segment header when combined	Defaults to 'All'	Any string
+segmentType	Horizontal Bubble	Labels	Label of segment header when split	Defaults to segment field column name	Any string
+segmentTypeCombined	Horizontal Bubble	Labels	Label of segment tilte when bubble are combined	Defaults to empty string	Any string
+segmentTypeSplit	Horizontal Bubble	Labels	Label of segment tilte when bubble are split	Defaults to empty string	Any string
+splitButtonClassNames	Horizontal Bubble	Styling	CSS classes for styling the split button	Provide css classes to style the split button as intended. Provided css classes should be available in included css style sheet.	Any string
+combinedButtonClassNames	Horizontal Bubble	Styling	CSS classes for styling the combined button	Provide css classes to style the combined button as intended. Provided css classes should be available in included css style sheet.	Any string
+searchInputClassNames	Horizontal Bubble	Styling	CSS classes for styling the search bar	Provide css classes to style the search bar as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Calendar	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Calendar	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Calendar	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Calendar	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Calendar	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Calendar	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+colorScheme	Calendar	Color	Colors of the stacked bars. 	Chose colors of the stacked bars by providing an array of valid colors values.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of stacked fields. Example: ['red', '#333'] or d3.schemeCategory10
+descending	Calendar	Order	Order of the years to be displayed	Set true for descending and false for ascending	ture or false
+uniqueFieldTimeParser	Calendar	Time	Format to parse inputed unique time field	Provide a time parser string corresponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+uniqueFieldTimeFormatter	Calendar	Time	Format to format inputed unique time field	Provide a time formatter string correponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+xGridGap	Calendar	X-Axis	Gap between groups along the row.	Adjust the gap between the groups in a row by varying the number between 0 and 1.	Number between 0 & 1
+stackHeight	Calendar	Y-Axis	Height of the stacks in groups.	Adjust the height of the stack by varying the number between 0 and 1.	Number between 0 & 1
+colorLegendWidth	Calendar	Legend	Width of the legend.	Chose legend width	Positive number
+colorLegendHeight	Calendar	Legend	Height of the legend.	Chose legend height	Positive number
+marginTop	Chord	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Chord	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Chord	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Chord	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Chord	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+valuePrefix	Chord	Formatting	Prefix for value	Defaults to empty string	Any string
+valuePostfix	Chord	Formatting	Suffix for value	Defaults to empty string	Any string
+valueFormatter	Chord	Formatting	Formatter for value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+chordType	Chord	Chord	Directional or non-directional chord type.	Chose between directional or non-directional chord.	One of "directed" or "undirected"
+colorScheme	Chord	Color	Colors of the chords. 	Chose colors of the chords by providing an array of valid colors values.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of source or target fields. Example: ['red', '#333'] or d3.schemeCategory10
+arcLabelFontSize	Chord	Arc	Font size of arc labels	Chose font size in pixels of arc labels.	Positive Integer
+inactiveOpacity	Chord	Interaction Options	Opacity of chords when active	Provide opacity to be applied on chords when in active state	Number between 0 and 1
+activeOpacity	Chord	Interaction Options	Opactiy of chords when inactive	Provide opacity to be applied on chords when in inactive state	Number between 0 and 1
+searchInputClassNames	Chord	Styling	CSS classes for styling the search bar	Provide css classes to style the search bar as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Chord	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Chord	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+startingState	Chord	Interaction Options	Starting state of chords. All active or all inactive	Chose the starting state of the chords. Either all active or all inactive.	One of "Show All" or "Clear All"

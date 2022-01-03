@@ -1,0 +1,14 @@
+Dimension	Chart	Description	Coulmn Type	Detail
+sizeField	Horizontal Bubble	Column name for size of the bubble	Numeric	
+xField	Horizontal Bubble	Column name for value on x-axis	Numeric	
+nameField	Horizontal Bubble	Column name for name of the bubble	Categorical	
+segmentField	Horizontal Bubble	Column name for segments by which the chart will be split	Categorical	
+xGridField	Calendar	Column name for columns along x-grid	Categorical	
+yGridField	Calendar	Column name for rows along y-grid	Categorical	
+xField	Calendar	Column name for value along x-axis within x-grid group	Categorical	
+nameField	Calendar	Column name for groups along x-axis in each row	Categorical	
+yFields	Calendar	Array of column names for numeric fields to be stacked in calendar bars.	Numeric	Provide array of column names corresponding to numeric fields to be stacked in the calendar bars. First value of array corresponds to the bottom
+uniqueColumnField	Calendar	Column name for unique identifier for each stack/row. 	Categorical	Value should correspond to a date/time. Format parser should be provided.
+sourceField	Chord	Column name for the source field	Categorical	
+targetField	Chord	Column name for the target field	Categorical	
+valueField	Chord	Column name for the value between source and target	Numeric	
