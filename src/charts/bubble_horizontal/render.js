@@ -60,6 +60,15 @@ export function renderChart({
 
   chartContainerSelector,
 }) {
+  const xValueFormatFunc = val =>
+    `${xValuePrefix}${formatNumber(val, xValueFormatter)}${xValueSuffix}`
+
+  const sizeValueFormatFunc = val =>
+    `${sizeValuePrefix}${formatNumber(
+      val,
+      sizeValueFormatter,
+    )}${sizeValueSuffix}`
+
   d3.select('body').append('style').html(`
     .g-searching circle.c-match {
       stroke-width: 2;
@@ -279,10 +288,7 @@ export function renderChart({
         d3
           .axisTop(xScale)
           .tickSize(-coreChartHeightSplit)
-          .tickFormat(
-            val =>
-              xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
-          ),
+          .tickFormat(xValueFormatFunc),
       )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
       .call(g => g.select('.domain').remove())
@@ -293,10 +299,7 @@ export function renderChart({
         d3
           .axisTop(xScale)
           .tickSize(-coreChartHeightCombined)
-          .tickFormat(
-            val =>
-              xValuePrefix + formatNumber(val, xValueFormatter) + xValueSuffix,
-          ),
+          .tickFormat(xValueFormatFunc),
       )
       .call(g => g.selectAll('.tick line').attr('stroke-opacity', 0.1))
       .call(g => g.select('.domain').remove())
@@ -419,6 +422,11 @@ export function renderChart({
       }
     } else {
       d3.select('.bubbles').classed('g-searching', false)
+      tooltipDiv
+        .style('left', '-300px')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
     }
   }
 
@@ -427,19 +435,15 @@ export function renderChart({
       `<div><span>${dataObj[nameField]}</span>(${dataObj[segmentField]})</div>
      <div style="display: flex">
        <div style="text-transform: capitalize">${xField}:</div>
-       <div style="padding-left: 0.25rem; font-weight: bold">${
-         xValuePrefix +
-         formatNumber(dataObj[xField], xValueFormatter) +
-         xValueSuffix
-       }</div>
+       <div style="padding-left: 0.25rem; font-weight: bold">${xValueFormatFunc(
+         dataObj[xField],
+       )}</div>
      </div>
      <div style="display: flex">
        <div style="text-transform: capitalize">${sizeField}:</div>
-       <div style="padding-left: 0.25rem; font-weight: bold">${
-         sizeValuePrefix +
-         formatNumber(dataObj[sizeField], sizeValueFormatter) +
-         sizeValueSuffix
-       }</div>
+       <div style="padding-left: 0.25rem; font-weight: bold">${sizeValueFormatFunc(
+         dataObj[sizeField],
+       )}</div>
      </div>`,
     )
     const {
