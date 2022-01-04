@@ -376,34 +376,7 @@ export function renderChart({
         return d.y
       })
       .on('mouseover', function (e, d) {
-        tooltipDiv.transition().duration(200).style('opacity', 1)
-        tooltipDiv.html(
-          `<div><span>${d[nameField]}</span>(${d[segmentField]})</div>
-         <div style="display: flex">
-           <div style="text-transform: capitalize">${xField}:</div>
-           <div style="padding-left: 0.25rem; font-weight: bold">${
-             xValuePrefix +
-             formatNumber(d[xField], xValueFormatter) +
-             xValueSuffix
-           }</div>
-         </div>
-         <div style="display: flex">
-           <div style="text-transform: capitalize">${sizeField}:</div>
-           <div style="padding-left: 0.25rem; font-weight: bold">${
-             sizeValuePrefix +
-             formatNumber(d[sizeField], sizeValueFormatter) +
-             sizeValueSuffix
-           }</div>
-         </div>`,
-        )
-        const { x: circleX, y: circleY } = this.getBoundingClientRect()
-        const { width: tooltipWidth, height: tooltipHeight } = tooltipDiv
-          .node()
-          .getBoundingClientRect()
-
-        tooltipDiv
-          .style('left', `${circleX - tooltipWidth / 2}px`)
-          .style('top', `${circleY - tooltipHeight - 3 + window.scrollY}px`)
+        fillAndShowTooltip({ shapeNode: this, dataObj: d })
         d3.select(this).classed('hovered', true)
       })
       .on('mouseout', function () {
@@ -437,45 +410,53 @@ export function renderChart({
       )
       if (chartCore.selectAll('.c-match').size() === 1) {
         // tooltipDi
-        const d = chartCore.select('.c-match').data()[0]
+        const matchedCircle = chartCore.select('.c-match')
 
-        tooltipDiv.html(
-          `<div><span>${d[nameField]}</span>(${d[segmentField]})</div>
-         <div style="display: flex">
-           <div style="text-transform: capitalize">${xField}:</div>
-           <div style="padding-left: 0.25rem; font-weight: bold">${
-             xValuePrefix +
-             formatNumber(d[xField], xValueFormatter) +
-             xValueSuffix
-           }</div>
-         </div>
-         <div style="display: flex">
-           <div style="text-transform: capitalize">${sizeField}:</div>
-           <div style="padding-left: 0.25rem; font-weight: bold">${
-             sizeValuePrefix +
-             formatNumber(d[sizeField], sizeValueFormatter) +
-             sizeValueSuffix
-           }</div>
-         </div>`,
-        )
-        const { x: circleX, y: circleY } = chartCore
-          .select('.c-match')
-          .node()
-          .getBoundingClientRect()
-        const { width: tooltipWidth, height: tooltipHeight } = tooltipDiv
-          .node()
-          .getBoundingClientRect()
-
-        tooltipDiv
-          .style('left', `${circleX - tooltipWidth / 2}px`)
-          .style('top', `${circleY - tooltipHeight - 3 + window.scrollY}px`)
-          .transition()
-          .duration(200)
-          .style('opacity', 1)
+        fillAndShowTooltip({
+          shapeNode: matchedCircle.node(),
+          dataObj: matchedCircle.data()[0],
+        })
       }
     } else {
       d3.select('.bubbles').classed('g-searching', false)
     }
+  }
+
+  function fillAndShowTooltip({ shapeNode, dataObj }) {
+    tooltipDiv.html(
+      `<div><span>${dataObj[nameField]}</span>(${dataObj[segmentField]})</div>
+     <div style="display: flex">
+       <div style="text-transform: capitalize">${xField}:</div>
+       <div style="padding-left: 0.25rem; font-weight: bold">${
+         xValuePrefix +
+         formatNumber(dataObj[xField], xValueFormatter) +
+         xValueSuffix
+       }</div>
+     </div>
+     <div style="display: flex">
+       <div style="text-transform: capitalize">${sizeField}:</div>
+       <div style="padding-left: 0.25rem; font-weight: bold">${
+         sizeValuePrefix +
+         formatNumber(dataObj[sizeField], sizeValueFormatter) +
+         sizeValueSuffix
+       }</div>
+     </div>`,
+    )
+    const {
+      x: circleX,
+      y: circleY,
+      width: circleWidth,
+    } = shapeNode.getBoundingClientRect()
+    const { width: tooltipWidth, height: tooltipHeight } = tooltipDiv
+      .node()
+      .getBoundingClientRect()
+
+    tooltipDiv
+      .style('left', `${circleX - tooltipWidth / 2 + circleWidth / 2}px`)
+      .style('top', `${circleY - tooltipHeight - 3 + window.scrollY}px`)
+      .transition()
+      .duration(200)
+      .style('opacity', 1)
   }
 
   search.on('keyup', e => {
