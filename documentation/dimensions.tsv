@@ -12,3 +12,21 @@ uniqueColumnField	Calendar	Column name for unique identifier for each stack/row.
 sourceField	Chord	Column name for the source field	Categorical	
 targetField	Chord	Column name for the target field	Categorical	
 valueField	Chord	Column name for the value between source and target	Numeric	
+stateAbbrField	Choropleth States	Column name for state code	Categorical	
+valueField	Choropleth States	Column name for the metric for states	Numeric	
+fipsField	Choropleth Counties	Column name for state code	Categorical	
+valueField	Choropleth Counties	Column name for the metric for counties	Numeric	
+yField	Comparative Bar	Column name for topics to be compared vertically	Categorical	
+barLeftValueField	Comparative Bar	Column name for value corresponding to left bar	Numeric	
+barRightValueField	Comparative Bar	Column name for value corresponding to right bar	Numeric	
+barLeftLabelField	Comparative Bar	Column name for labels corresponding to left bar	Categorical	
+barRightLabelField	Comparative Bar	Column name for labels corresponding to right bar	Categorical	
+xField	Domino Base	Column name for order of dominos along x-axis	Numeric	
+yField	Domino Base	Column name for categories along y-axis	Categorical	
+dominoField	Domino Base	Column name identifying each domino	Categorical	
+colorField	Domino Base	Column name for assigning colors to dominos	Numeric	
+xField	Domino Ribbon			
+yField	Domino Ribbon			
+dominoField	Domino Ribbon			
+sizeField	Domino Ribbon			
+colorField	Domino Ribbon			

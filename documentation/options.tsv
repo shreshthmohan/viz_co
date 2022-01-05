@@ -61,3 +61,104 @@ searchInputClassNames	Chord	Styling	CSS classes for styling the search bar	Provi
 clearAllButtonClassNames	Chord	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
 showAllButtonClassNames	Chord	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
 startingState	Chord	Interaction Options	Starting state of chords. All active or all inactive	Chose the starting state of the chords. Either all active or all inactive.	One of "Show All" or "Clear All"
+marginTop	Choropleth Counties	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Choropleth Counties	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Choropleth Counties	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Choropleth Counties	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Choropleth Counties	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+valueFormat	Choropleth Counties	Formatting	Formatter for value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+interpolateScheme	Choropleth Counties	Color	Continuous color range of the states/counties.	Chose continuous color range for the states/counties by providing an array of valid color scheme.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Valid d3 color interpolation scheme.  Example: d3.interpolateBlues
+colorLegendTitle	Choropleth Counties	Legend	Title of color legend	Defaults to valueField	Any string
+nullDataColor	Choropleth Counties	Color	Color of states/counties when value is null	Chose color of state/coutny when the value is null. Defaults to gray.	Valid color value.  Example: 'red' or '#333'
+nullDataMessage	Choropleth Counties	Tooltip	Message in tooltip for states/counties when value is null	Chose message in the tooltip for state/coutny when the value is null. Defaults to "Data not available".	Any string
+missingDataColor	Choropleth Counties	Color	Color of states/counties when state/coutny is missing	Chose color of state/coutny when the state/county is missing. Defaults to gray.	Valid color value.  Example: 'red' or '#333'
+missingDataMessage	Choropleth Counties	Tooltip	Message in tooltip for states/counties when value is missing	Chose message in the tooltip for state/coutny when the state/county is missing. Defaults to "Data missing".	Any string
+searchButtonClassNames	Choropleth Counties	Styling	CSS classes for styling the search bar	Provide css classes to style the search bar as intended. Provided css classes should be available in included css style sheet.	Any string
+searchInactiveOpacity	Choropleth Counties	Interaction Options	Opacity of counties when not matched with search	Provide opacity to be applied to counties when in inactive state	Number between 0 and 1
+marginTop	Choropleth States	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Choropleth States	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Choropleth States	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Choropleth States	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Choropleth States	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+valueFormat	Choropleth States	Formatting	Formatter for value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+interpolateScheme	Choropleth States	Color	Continuous color range of the states/counties.	Chose continuous color range for the states/counties by providing an array of valid color scheme.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Valid d3 color interpolation scheme.  Example: d3.interpolateBlues
+colorLegendTitle	Choropleth States	Legend	Title of color legend	Defaults to valueField	Any string
+nullDataColor	Choropleth States	Color	Color of states/counties when value is null	Chose color of state/coutny when the value is null. Defaults to gray.	Valid color value.  Example: 'red' or '#333'
+nullDataMessage	Choropleth States	Tooltip	Message in tooltip for states/counties when value is null	Chose message in the tooltip for state/coutny when the value is null. Defaults to "Data not available".	Any string
+missingDataColor	Choropleth States	Color	Color of states/counties when state/coutny is missing	Chose color of state/coutny when the state/county is missing. Defaults to gray.	Valid color value.  Example: 'red' or '#333'
+missingDataMessage	Choropleth States	Tooltip	Message in tooltip for states/counties when value is missing	Chose message in the tooltip for state/coutny when the state/county is missing. Defaults to "Data missing".	Any string
+searchButtonClassNames	Choropleth States	Styling	CSS classes for styling the search bar	Provide css classes to style the search bar as intended. Provided css classes should be available in included css style sheet.	Any string
+colorDomain	Choropleth States	Color	Custom colors for the states.	Chose colors of the states by providing an array of valid colors values. Use when interpolation is not required.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of source or target fields. Example: ['red', '#333'] or d3.schemeCategory10
+searchDisabled	Choropleth States	Interaction Options	Chose to enable or disable search	Enable or disable the search bar per your requirement. Handy when linking choropleth to other charts.	One of true or false
+aspectRatio	Comparative Bar	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Comparative Bar	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Comparative Bar	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Comparative Bar	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Comparative Bar	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Comparative Bar	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+colorScheme	Comparative Bar	Color	Colors of the two bars. 	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+barValueMidPoint	Comparative Bar	Chart Specific	Starting value for the left and right bars. This is also the midpoint of the chart's x-axis.	Chose the starting value of both the bars. If provided value is greater than the smallest value in the dataset for either bar then the starting value will default to the smallest value in the dataset.	Any number
+xAxisTickSize	Comparative Bar	X-Axis	Size of the tick on the x-axis.	Adjust the tick size on the x-axis.	Any number
+leftXAxisLabel	Comparative Bar	X-Axis	Label of the left x-axis.	Change the label of the left x-axis. Defaults to series name of the left bar provided in the dimensions.	Any string
+rightXAxisLabel	Comparative Bar	X-Axis	Label of the left x-axis.	Change the label of the right x-axis. Defaults to series name of the right bar provided in the dimensions.	Any string
+xAxisLabel	Comparative Bar	X-Axis	Label of the x-axis.	Provide x-axis label. No label will be displayed if no value is provided.	Any string
+defaultState	Comparative Bar	Interaction Options	Bars to be shown active in starting state.	Provide an array of bar names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+inactiveOpacity	Comparative Bar	Interaction Options	Opacity of bars when active	Provide opacity to be applied on bars when in active state	Number between 0 and 1
+activeOpacity	Comparative Bar	Interaction Options	Opactiy of bars when inactive	Provide opacity to be applied on bars when in inactive state	Number between 0 and 1
+goToInitialStateButtonClassNames	Comparative Bar	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+searchInputClassNames	Comparative Bar	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Comparative Bar	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Comparative Bar	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Domino Base	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Domino Base	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Domino Base	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Domino Base	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Domino Base	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Domino Base	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+xPaddingOuter	Domino Base	X-Axis	Horizontal spacing to the left of first and right of last domino	Adjust the spacing to the left and right of the first and last domino by chosing a value between 0 and 1.	Number between 0 and 1
+xAxisLabel	Domino Base	X-Axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+dominoSize	Domino Base	Size	Size of the domino	Adjust size of domino by chosing a number between 0 and 1	Number between 0 and 1
+yPaddingInner	Domino Base	Y-Axis	Vertical spacing between domino rows	Adjust the vertical spacing between domino rows by chosing a value between 0 and 1.	Number between 0 and 1
+yPaddingOuter	Domino Base	Y-Axis	Vertical spacing abvoe top and below bottom domino row	Adjust the spacing to above and below the first and last domino row by chosing a value between 0 and 1.	Number between 0 and 1
+ySortOrder	Domino Base	Y-Axis	Sort order of y-axis.	Chose sort order of y-axis. Defaults to descending.	One of 'asc' or 'desc'
+colorStrategy	Domino Base	Color	Strategy to highlighted dominos.	Chose to highlight dominos by value or rank.  By value: dominos above a certain threshold will be highlighted. By rank:  dominos below a certain threshold will be highlighted.	One of "rank" or "value"
+colorThreshold	Domino Base	Color	Threshold value for color strategy	Provide the threshold value to be used for coloring/highlighting strategy	Any number
+colorDominoHighlighted	Domino Base	Color	Color of domino when highlighted	Chose color of highlighted domino.	Valid color value.  Example: 'red' or '#333'
+colorDominoNormal	Domino Base	Color	Color of domino when normal	Chose color of normal domino.	Valid color value.  Example: 'red' or '#333'
+normalLegendLabel	Domino Base	Legend	Legend label for normal domino	Provide label for normal domino	Any string
+highlightedLegendLabel	Domino Base	Legend	Legend label for highlighted domino	Provide label for highlighted domino	Any string
+searchInputClassNames	Domino Base	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Domino Ribbon	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Domino Ribbon	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Domino Ribbon	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Domino Ribbon	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Domino Ribbon	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Domino Ribbon	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+sizeLegendLabel	Domino Ribbon	Legend	Title of size legend	Defaults to sizeField column name	Any string
+sizeLegendValues	Domino Ribbon	Legend	Value of size for size legend circles	Provide array of numbers corresponding to the size values to be shown in size legend.	Array of numbers
+sizeLegendGapInSymbols	Domino Ribbon	Legend	Gap between size legend dominos	Adjust the spacing within the size legend area	Any number
+sizeLegendMoveSymbolsDownBy	Domino Ribbon	Legend	Gap between size legend label and size legend dominos	Adjust the spacing within the size legend area	Any number
+xDomain	Domino Ribbon	X-Axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum value and second for maximum value.	Array of 2 numbers. Example [1,5]
+xAxisLabel	Domino Ribbon	X-Axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+xAxisLabelOffset	Domino Ribbon	X-Axis	X-axis label offset from axis	Adjust the position of x-axis labels from the axis/axis tick values.	Any number
+xAxisValueFormatter	Domino Ribbon	X-Axis	Formatter for x-axis value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+yAxisDateParser	Domino Ribbon	Y-Axis	Format to parse inputed date field on yaxis	Provide a time parser string corresponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+yAxisDateFormatter	Domino Ribbon	Y-Axis	Format to format inputed date field on yaxis	Provide a time formatter string correponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+colorLegendValueFormatter	Domino Ribbon	Legend	Color legend value formatter	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+sizeLegendValueFormatter	Domino Ribbon	Legend	Size legend value formatter	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+sizeValueFormatter	Domino Ribbon	Formatting	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+colorDomain	Domino Ribbon	Color	Custom domain to determine color of dominos	Provide and array of 2 numbers. 	Array of 2 numbers. Example [1,5]
+colorRange	Domino Ribbon	Color	Colors of dominos	Chose colors of the dominos by providing an array of valid colors values.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of stacked fields. Example: ['red', '#333'] or d3.schemeCategory10
+colorLegendLabel	Domino Ribbon	Legend	Title of color legend	Provide label for colro legend. Default to xField name.	Any string
+sizeRange	Domino Ribbon	Size	Minimum and maximum size of the dominos in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+sizeScaleType	Domino Ribbon	Scale	Scale type for size dimension	Chose liner or loag scale for the size of dominos	One of "log" or "linear"
+sizeScaleLogBase	Domino Ribbon	Scale	Base of log scale	Base of log scale. Defautls to 10. Applicable only if sizeScaleType is log	Any positive number
+dominoHeight	Domino Ribbon	Size	Height of the domino	Adjust height of domino by chosing a number between 0 and 1	Number between 0 and 1
+yPaddingOuter	Domino Ribbon	Y-Axis	Vertical spacing abvoe top and below bottom domino row	Adjust the spacing to above and below the first and last domino row by chosing a value between 0 and 1.	Number between 0 and 1
+defaultState	Domino Ribbon	Interaction Options	Dominos to be shown active in starting state	Provide an array of domino names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+activeOpacity	Domino Ribbon	Interaction Options	Opacity of bars when active	Provide opacity to be applied on bars when in active state	Number between 0 and 1
+inactiveOpacity	Domino Ribbon	Interaction Options	Opactiy of bars when inactive	Provide opacity to be applied on bars when in inactive state	Number between 0 and 1
+searchInputClassNames	Domino Ribbon	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
