@@ -1,6 +1,7 @@
 /* global window, console */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import { legend } from '../../utils/helpers/colorLegend'
 import { preventOverflowThrottled } from '../../utils/helpers/general'
 import { formatNumber } from '../../utils/helpers/formatters'
@@ -121,6 +122,7 @@ export function renderChart({
     [sizeField]: Number.parseFloat(d[sizeField]),
     [xField]: Number.parseFloat(d[xField]),
   }))
+  const nameValues = _(parsedData).map(nameField).uniq().value()
 
   // const splitButton = d3.select('#split-bubbles')
   const splitButton = widgetsLeft
@@ -413,26 +415,37 @@ export function renderChart({
     })
   }
 
+  const enableSearchSuggestions = true
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(nameValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
 
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
   search.attr('placeholder', `Find by ${nameField}`)
 
-  function searchBy(term) {
-    if (term) {
-      d3.select('.bubbles').classed('g-searching', true)
-      allBubbles.classed('c-match', d =>
-        d[nameField].toLowerCase().includes(term.toLowerCase()),
-      )
-    } else {
-      d3.select('.bubbles').classed('g-searching', false)
-    }
-  }
+  const handleSearch = searchEventHandler(nameField)
 
   search.on('keyup', e => {
-    searchBy(e.target.value.trim())
+    const term = e.target.value.trim()
+    handleSearch(term, allBubbles, nameField)
   })
 
   function splitSim() {
@@ -531,4 +544,15 @@ export function renderChart({
   combinedButton.on('click', combinedSim)
 
   combinedSim()
+}
+
+const searchEventHandler = nameField => (term, allBubbles) => {
+  if (term) {
+    d3.select('.bubbles').classed('g-searching', true)
+    allBubbles.classed('c-match', d =>
+      d[nameField].toLowerCase().includes(term.toLowerCase()),
+    )
+  } else {
+    d3.select('.bubbles').classed('g-searching', false)
+  }
 }

@@ -413,7 +413,7 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$8(nameValues);
+    const handleSearch = searchEventHandler$9(nameValues);
     const search = setupSearch$a({
       handleSearch,
       widgetsLeft,
@@ -941,7 +941,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$8 = referenceList => (qstr, svg) => {
+  const searchEventHandler$9 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -2375,6 +2375,7 @@
       [sizeField]: Number.parseFloat(d[sizeField]),
       [xField]: Number.parseFloat(d[xField]),
     }));
+    const nameValues = ___default["default"](parsedData).map(nameField).uniq().value();
 
     // const splitButton = d3.select('#split-bubbles')
     const splitButton = widgetsLeft
@@ -2666,27 +2667,34 @@
         margins: { marginLeft, marginRight, marginTop, marginBottom },
       });
     }
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](nameValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
 
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('class', searchInputClassNames);
 
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
     search.attr('placeholder', `Find by ${nameField}`);
 
-    function searchBy(term) {
-      if (term) {
-        d3__namespace.select('.bubbles').classed('g-searching', true);
-        allBubbles.classed('c-match', d =>
-          d[nameField].toLowerCase().includes(term.toLowerCase()),
-        );
-      } else {
-        d3__namespace.select('.bubbles').classed('g-searching', false);
-      }
-    }
+    const handleSearch = searchEventHandler$8(nameField);
 
     search.on('keyup', e => {
-      searchBy(e.target.value.trim());
+      const term = e.target.value.trim();
+      handleSearch(term, allBubbles, nameField);
     });
 
     function splitSim() {
@@ -2786,6 +2794,17 @@
 
     combinedSim();
   }
+
+  const searchEventHandler$8 = nameField => (term, allBubbles) => {
+    if (term) {
+      d3__namespace.select('.bubbles').classed('g-searching', true);
+      allBubbles.classed('c-match', d =>
+        d[nameField].toLowerCase().includes(term.toLowerCase()),
+      );
+    } else {
+      d3__namespace.select('.bubbles').classed('g-searching', false);
+    }
+  };
 
   const d3ColorSchemeOptions = [
     'schemeBrBG',
