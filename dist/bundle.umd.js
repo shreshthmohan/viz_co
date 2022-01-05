@@ -278,7 +278,7 @@
     },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$c({
+    applyInteractionStyles$d({
       chartContainerSelector,
       activeOpacity,
       inactiveOpacity,
@@ -305,7 +305,7 @@
 
     const tooltipDiv = initializeTooltip$4();
 
-    const dataParsed = parseData$c({
+    const dataParsed = parseData$d({
       data,
       xFieldStart,
       xFieldEnd,
@@ -315,7 +315,7 @@
     });
 
     const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-      setupScales$d({
+      setupScales$e({
         dataParsed,
         coreChartHeight,
         coreChartWidth,
@@ -413,8 +413,8 @@
 
     // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
     // handleSearch accepts search query string and applied appropriate
-    const handleSearch = searchEventHandler$9(nameValues);
-    const search = setupSearch$b({
+    const handleSearch = searchEventHandler$a(nameValues);
+    const search = setupSearch$c({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -449,7 +449,7 @@
     });
   }
 
-  function applyInteractionStyles$c({
+  function applyInteractionStyles$d({
     activeOpacity,
     inactiveOpacity,
     chartContainerSelector,
@@ -548,7 +548,7 @@
       )
   }
 
-  function parseData$c({
+  function parseData$d({
     data,
     xFieldStart,
     xFieldEnd,
@@ -572,7 +572,7 @@
       .filter(d => !Number.isNaN(d.slope))
   }
 
-  function setupScales$d({
+  function setupScales$e({
     dataParsed,
     coreChartHeight,
     coreChartWidth,
@@ -941,7 +941,7 @@
           .style('opacity', 0);
       });
   }
-  const searchEventHandler$9 = referenceList => (qstr, svg) => {
+  const searchEventHandler$a = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -963,7 +963,7 @@
     }
   };
 
-  function setupSearch$b({
+  function setupSearch$c({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3018,7 +3018,7 @@
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$b();
+    applyInteractionStyles$c();
 
     const coreChartWidth = 1000;
     const {
@@ -3041,13 +3041,13 @@
 
     const tooltipDiv = initializeTooltip$3();
 
-    const dataParsed = parseData$b({
+    const dataParsed = parseData$c({
       data,
       colorField,
       yField,
     });
 
-    const { xScale, yScale, colorScale } = setupScales$c({
+    const { xScale, yScale, colorScale } = setupScales$d({
       dataParsed,
       xField,
       yField,
@@ -3083,8 +3083,8 @@
     renderXAxis$9({ chartCore, xAxisLabel, coreChartWidth });
 
     const dominoValues = ___default["default"](dataParsed).map(dominoField).uniq().value();
-    const handleSearch = searchEventHandler$8(dominoValues);
-    setupSearch$a({
+    const handleSearch = searchEventHandler$9(dominoValues);
+    setupSearch$b({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -3114,7 +3114,7 @@
     });
   }
 
-  function applyInteractionStyles$b() {
+  function applyInteractionStyles$c() {
     d3__namespace.select('body').append('style').html(`
   rect.domino.domino-hovered {
     stroke: #333;
@@ -3128,7 +3128,7 @@
   `);
   }
 
-  function parseData$b({ data, colorField, yField }) {
+  function parseData$c({ data, colorField, yField }) {
     let dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[colorField] = Number.parseFloat(el[colorField]);
@@ -3155,7 +3155,7 @@
     return dataParsed
   }
 
-  function setupScales$c({
+  function setupScales$d({
     dataParsed,
     xField,
     yField,
@@ -3290,7 +3290,7 @@
       });
   }
 
-  const searchEventHandler$8 = referenceList => (qstr, svg) => {
+  const searchEventHandler$9 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -3359,7 +3359,7 @@
       .attr('height', colorLegendDimensions.height);
   }
 
-  function setupSearch$a({
+  function setupSearch$b({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3483,7 +3483,7 @@
 
   /* eslint-disable no-import-assign */
 
-  function applyInteractionStyles$a({ activeOpacity, inactiveOpacity }) {
+  function applyInteractionStyles$b({ activeOpacity, inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .series {
     cursor: pointer;
@@ -3584,7 +3584,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$a({ data, yField, xField, seriesField, colorField }) {
+  function parseData$b({ data, yField, xField, seriesField, colorField }) {
     const parsedData = data.map(d => ({
       ...d,
       [yField]: Number.parseFloat(d[yField]),
@@ -3609,7 +3609,7 @@ g.circles circle.circle.circle-hovered {
     return date
   };
 
-  function setupScales$b({
+  function setupScales$c({
     parsedData,
     nestedData,
     xField,
@@ -3816,7 +3816,7 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$7 = referenceList => qstr => {
+  const searchEventHandler$8 = referenceList => qstr => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
@@ -3837,7 +3837,7 @@ g.circles circle.circle.circle-hovered {
     }
   };
 
-  function setupSearch$9({
+  function setupSearch$a({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -3953,7 +3953,7 @@ g.circles circle.circle.circle-hovered {
     dimensions: { seriesField, xField, yField, colorField },
     chartContainerSelector,
   }) {
-    applyInteractionStyles$a({ activeOpacity, inactiveOpacity });
+    applyInteractionStyles$b({ activeOpacity, inactiveOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -3976,7 +3976,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$2();
 
-    const { parsedData, nestedData } = parseData$a({
+    const { parsedData, nestedData } = parseData$b({
       data,
       yField,
       xField,
@@ -3985,7 +3985,7 @@ g.circles circle.circle.circle-hovered {
     });
 
     const { yScale, xScale, categoryScale, categoryDomain, fillColorScale } =
-      setupScales$b({
+      setupScales$c({
         parsedData,
         nestedData,
         xField,
@@ -4032,8 +4032,8 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     });
 
-    const handleSearch = searchEventHandler$7(categoryDomain);
-    const search = setupSearch$9({
+    const handleSearch = searchEventHandler$8(categoryDomain);
+    const search = setupSearch$a({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -4843,7 +4843,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip();
 
-    const { maxY, stackedDataByYear, names } = parseData$9({
+    const { maxY, stackedDataByYear, names } = parseData$a({
       data,
       yFields,
       nameField,
@@ -4859,7 +4859,7 @@ g.circles circle.circle.circle-hovered {
       xGridScale,
       yGridScale,
       colorScaleReverseMap,
-    } = setupScales$a({
+    } = setupScales$b({
       data,
       maxY,
       xGridField,
@@ -4976,7 +4976,7 @@ g.circles circle.circle.circle-hovered {
       )
   }
 
-  function parseData$9({ data, yFields, nameField, xGridField, yGridField }) {
+  function parseData$a({ data, yFields, nameField, xGridField, yGridField }) {
     let maxSum = 0;
 
     data.forEach(el => {
@@ -5018,7 +5018,7 @@ g.circles circle.circle.circle-hovered {
     return { maxY, stackedDataByYear, names }
   }
 
-  function setupScales$a({
+  function setupScales$b({
     data,
     maxY,
     xGridField,
@@ -5380,7 +5380,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$9({ inactiveOpacity });
+    applyInteractionStyles$a({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -5401,7 +5401,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$8({
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$9({
       data,
       xField,
       yField,
@@ -5409,7 +5409,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$9({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$a({
       dataParsed,
       sizeField,
       sizeRange,
@@ -5484,7 +5484,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$8({
+    setupSearch$9({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -5686,7 +5686,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$8({
+  function setupSearch$9({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -5729,7 +5729,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$9({ inactiveOpacity }) {
+  function applyInteractionStyles$a({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     opacity: ${inactiveOpacity};
@@ -5740,7 +5740,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$8({ data, xField, yField, sizeField, timeField }) {
+  function parseData$9({ data, xField, yField, sizeField, timeField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -5757,7 +5757,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$9({
+  function setupScales$a({
     dataParsed,
     sizeField,
     sizeRange,
@@ -5968,7 +5968,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     let intervalId;
 
-    applyInteractionStyles$8({ inactiveOpacity });
+    applyInteractionStyles$9({ inactiveOpacity });
 
     const xValueFormatter = val => formatNumber(val, xValueFormat);
     const yValueFormatter = val => formatNumber(val, yValueFormat);
@@ -5989,7 +5989,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$7({
+    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$8({
       data,
       xField,
       yField,
@@ -5997,7 +5997,7 @@ g.circles circle.circle.circle-hovered {
       timeField,
     });
 
-    const { sizeScale, xScale, yScale, colorScale } = setupScales$8({
+    const { sizeScale, xScale, yScale, colorScale } = setupScales$9({
       dataParsed,
       sizeField,
       sizeRange,
@@ -6083,7 +6083,7 @@ g.circles circle.circle.circle-hovered {
       motionDelay,
     });
 
-    setupSearch$7({
+    setupSearch$8({
       widgetsLeft,
       nameField,
       searchButtonClassNames,
@@ -6284,7 +6284,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function setupSearch$7({
+  function setupSearch$8({
     widgetsLeft,
     nameField,
     searchButtonClassNames,
@@ -6330,7 +6330,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$8({ inactiveOpacity }) {
+  function applyInteractionStyles$9({ inactiveOpacity }) {
     d3__namespace.select('body').append('style').html(`
   .group-circles.searching > .iv-circle:not(.s-match) {
     fill-opacity: ${inactiveOpacity};
@@ -6353,7 +6353,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$7({ data, xField, yField, sizeField, timeField }) {
+  function parseData$8({ data, xField, yField, sizeField, timeField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -6370,7 +6370,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, dataAt, timeDomain, timeDomainLength }
   }
 
-  function setupScales$8({
+  function setupScales$9({
     dataParsed,
     sizeField,
     sizeRange,
@@ -6596,7 +6596,7 @@ g.circles circle.circle.circle-hovered {
 
     chartContainerSelector,
   }) {
-    applyInteractionStyles$7({ inactiveOpacity, activeOpacity });
+    applyInteractionStyles$8({ inactiveOpacity, activeOpacity });
 
     const coreChartWidth = 1000;
     const {
@@ -6619,13 +6619,13 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { allDominoFieldValues, defaultStateAll } = parseData$6({
+    const { allDominoFieldValues, defaultStateAll } = parseData$7({
       data,
       dominoField,
       defaultState,
     });
 
-    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$7({
+    const { xScale, yScale, colorScale, sizeScale, yDomain } = setupScales$8({
       data,
       xField,
       yField,
@@ -6687,8 +6687,8 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
     });
 
-    const handleSearch = searchEventHandler$6(allDominoFieldValues);
-    const search = setupSearch$6({
+    const handleSearch = searchEventHandler$7(allDominoFieldValues);
+    const search = setupSearch$7({
       handleSearch,
       widgetsLeft,
       searchInputClassNames,
@@ -6750,7 +6750,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function applyInteractionStyles$7({ inactiveOpacity, activeOpacity }) {
+  function applyInteractionStyles$8({ inactiveOpacity, activeOpacity }) {
     d3__namespace.select('body').append('style').html(`
      .ribbon {
        cursor: pointer;
@@ -6792,14 +6792,14 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$6({ data, dominoField, defaultState }) {
+  function parseData$7({ data, dominoField, defaultState }) {
     const allDominoFieldValues = ___default["default"].chain(data).map(dominoField).uniq().value();
     const dominoValues = ___default["default"](data).map(dominoField).uniq().value();
     const defaultStateAll = defaultState === 'All' ? dominoValues : defaultState;
     return { allDominoFieldValues, defaultStateAll }
   }
 
-  function setupScales$7({
+  function setupScales$8({
     data,
     xField,
     yField,
@@ -7136,7 +7136,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  const searchEventHandler$6 = referenceList => (qstr, svg) => {
+  const searchEventHandler$7 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
@@ -7241,7 +7241,7 @@ g.circles circle.circle.circle-hovered {
       .attr('width', legendBoundingBox.width);
   }
 
-  function setupSearch$6({
+  function setupSearch$7({
     handleSearch,
     widgetsLeft,
     searchInputClassNames,
@@ -7540,7 +7540,7 @@ g.circles circle.circle.circle-hovered {
 
     const defaultGroupFieldName = '_defaultGroup_';
     groupField = groupField == null ? defaultGroupFieldName : groupField;
-    const { dataParsed, seriesValues } = parseData$5({
+    const { dataParsed, seriesValues } = parseData$6({
       data,
       yField,
       defaultGroupFieldName,
@@ -7555,7 +7555,7 @@ g.circles circle.circle.circle-hovered {
       yGridDomain,
       xDomain,
       yDomain,
-    } = setupScales$6({
+    } = setupScales$7({
       dataParsed,
       groupField,
       coreChartHeight,
@@ -7774,7 +7774,7 @@ g.circles circle.circle.circle-hovered {
     });
   }
 
-  function parseData$5({ data, yField, defaultGroupFieldName, seriesField }) {
+  function parseData$6({ data, yField, defaultGroupFieldName, seriesField }) {
     const dataParsed = data.map(el => {
       const elParsed = { ...el };
       elParsed[yField] = Number.parseFloat(el[yField]);
@@ -7787,7 +7787,7 @@ g.circles circle.circle.circle-hovered {
     return { dataParsed, seriesValues }
   }
 
-  function setupScales$6({
+  function setupScales$7({
     dataParsed,
     groupField,
     coreChartHeight,
@@ -8024,19 +8024,7 @@ g.circles circle.circle.circle-hovered {
   }) {
     const valueFormatter = val => formatNumber(val, valueFormat);
 
-    d3__namespace.select('body').append('style').html(`
-  .group-counties.searching > .iv-county.s-match {
-    stroke: #333;
-    stroke-width: 2;
-  }
-  .hovered {
-    stroke: #333;
-    stroke-width: 2;
-  }
-  .searching > .iv-county:not(.s-match) {
-    opacity: ${searchInactiveOpacity};
-  }
-  `);
+    applyInteractionStyles$7({ searchInactiveOpacity });
 
     const coreChartHeight = 610;
     const coreChartWidth = 975;
@@ -8054,23 +8042,110 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
+    const { dataParsed, values, countyNames } = parseData$5({
+      data,
+      valueField,
+      fipsField,
+    });
+
+    const { colorScale } = setupScales$6({ values, interpolateScheme });
+
+    const path = d3__namespace.geoPath();
+
+    const { allCounties } = renderMap$1({
+      chartCore,
+      path,
+      dataParsed,
+      fipsField,
+      valueField,
+      missingDataColor,
+      nullDataColor,
+      colorScale,
+      tooltipDiv,
+      valueFormatter,
+      nullDataMessage,
+      missingDataMessage,
+    });
+
+    const handleSearch = searchEventHandler$6(allCounties);
+    setupSearch$6({
+      widgetsLeft,
+      searchButtonClassNames,
+      chartCore,
+      handleSearch,
+      chartContainerSelector,
+      countyNames,
+    });
+
+    widgetsRight.append(() =>
+      legend({
+        color: colorScale,
+        title: colorLegendTitle,
+        width: 260,
+        tickFormat: valueFormatter,
+      }),
+    );
+  }
+
+  function applyInteractionStyles$7({ searchInactiveOpacity }) {
+    d3__namespace.select('body').append('style').html(`
+  .group-counties.searching > .iv-county.s-match {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  .searching > .iv-county:not(.s-match) {
+    opacity: ${searchInactiveOpacity};
+  }
+  `);
+  }
+
+  function parseData$5({ data, valueField, fipsField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [valueField]: Number.parseFloat(d[valueField]),
       [fipsField]: Number.parseInt(d[fipsField], 10),
     }));
     const values = dataParsed.map(el => el[valueField]);
-    const valueDomain = d3__namespace.extent(values);
 
-    const dataObj = {};
-    dataParsed.forEach(c => {
-      dataObj[c[fipsField]] = c;
+    // const dataObj = {}
+    // dataParsed.forEach(c => {
+    //   dataObj[c[fipsField]] = c
+    // })
+
+    const countyNames = [];
+    ___default["default"].forEach(usStatesAndCountiesTopo.objects.counties.geometries, d => {
+      countyNames.push(d.properties.name);
     });
+
+    return { dataParsed, values, countyNames }
+  }
+
+  function setupScales$6({ values, interpolateScheme }) {
+    const valueDomain = d3__namespace.extent(values);
 
     const colorScale = d3__namespace.scaleSequential(interpolateScheme).domain(valueDomain);
 
-    const path = d3__namespace.geoPath();
+    return { colorScale }
+  }
 
+  function renderMap$1({
+    chartCore,
+    path,
+    dataParsed,
+    fipsField,
+    valueField,
+    missingDataColor,
+    nullDataColor,
+    colorScale,
+    tooltipDiv,
+    valueFormatter,
+    nullDataMessage,
+    missingDataMessage,
+  }) {
     const allCountiesGroup = chartCore.append('g').attr('class', 'group-counties');
     const allCounties = allCountiesGroup
       .selectAll('path')
@@ -8136,41 +8211,7 @@ g.circles circle.circle.circle-hovered {
       .attr('stroke-linejoin', 'round')
       .attr('d', path);
 
-    const search = widgetsLeft
-      .append('input')
-      .attr('type', 'text')
-      .attr('placeholder', 'Find by county')
-      .attr('class', searchButtonClassNames);
-
-    function searchBy(term) {
-      if (term) {
-        chartCore.select('.group-counties').classed('searching', true);
-        allCounties.classed(
-          's-match',
-          // should be boolean
-          d => {
-            return d.properties.name.toLowerCase().includes(term.toLowerCase())
-          },
-        );
-        chartCore.selectAll('.s-match').raise();
-      } else {
-        d3__namespace.select('.group-counties').classed('searching', false);
-        chartCore.selectAll('.iv-county').lower();
-      }
-    }
-
-    search.on('keyup', e => {
-      searchBy(e.target.value.trim());
-    });
-
-    widgetsRight.append(() =>
-      legend({
-        color: colorScale,
-        title: colorLegendTitle,
-        width: 260,
-        tickFormat: valueFormatter,
-      }),
-    );
+    return { allCounties }
   }
 
   function setupChartArea$1({
@@ -8222,6 +8263,61 @@ g.circles circle.circle.circle-hovered {
       viewBoxWidth,
     }
   }
+
+  function setupSearch$6({
+    widgetsLeft,
+    searchButtonClassNames,
+    chartCore,
+    handleSearch,
+    chartContainerSelector,
+    countyNames,
+  }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](countyNames)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
+    const search = widgetsLeft
+      .append('input')
+      .attr('type', 'text')
+      .attr('placeholder', 'Find by county')
+      .attr('class', searchButtonClassNames);
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
+
+    search.on('keyup', e => {
+      const term = e.target.value.trim();
+      handleSearch(term, chartCore);
+    });
+    return { search }
+  }
+
+  const searchEventHandler$6 = allCounties => (term, chartCore) => {
+    if (term) {
+      chartCore.select('.group-counties').classed('searching', true);
+      allCounties.classed(
+        's-match',
+        // should be boolean
+        d => {
+          return d.properties.name.toLowerCase().includes(term.toLowerCase())
+        },
+      );
+      chartCore.selectAll('.s-match').raise();
+    } else {
+      d3__namespace.select('.group-counties').classed('searching', false);
+      chartCore.selectAll('.iv-county').lower();
+    }
+  };
 
   const dimensionTypes$8 = {
     valueField: [shouldBeNumber],

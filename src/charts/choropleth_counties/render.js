@@ -1,6 +1,7 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import * as topojson from 'topojson'
 import { legend } from '../../utils/helpers/colorLegend'
 
@@ -37,19 +38,7 @@ export function renderChart({
 }) {
   const valueFormatter = val => formatNumber(val, valueFormat)
 
-  d3.select('body').append('style').html(`
-  .group-counties.searching > .iv-county.s-match {
-    stroke: #333;
-    stroke-width: 2;
-  }
-  .hovered {
-    stroke: #333;
-    stroke-width: 2;
-  }
-  .searching > .iv-county:not(.s-match) {
-    opacity: ${searchInactiveOpacity};
-  }
-  `)
+  applyInteractionStyles({ searchInactiveOpacity })
 
   const coreChartHeight = 610
   const coreChartWidth = 975
@@ -67,23 +56,110 @@ export function renderChart({
 
   const tooltipDiv = initializeTooltip()
 
+  const { dataParsed, values, countyNames } = parseData({
+    data,
+    valueField,
+    fipsField,
+  })
+
+  const { colorScale } = setupScales({ values, interpolateScheme })
+
+  const path = d3.geoPath()
+
+  const { allCounties } = renderMap({
+    chartCore,
+    path,
+    dataParsed,
+    fipsField,
+    valueField,
+    missingDataColor,
+    nullDataColor,
+    colorScale,
+    tooltipDiv,
+    valueFormatter,
+    nullDataMessage,
+    missingDataMessage,
+  })
+
+  const handleSearch = searchEventHandler(allCounties)
+  setupSearch({
+    widgetsLeft,
+    searchButtonClassNames,
+    chartCore,
+    handleSearch,
+    chartContainerSelector,
+    countyNames,
+  })
+
+  widgetsRight.append(() =>
+    legend({
+      color: colorScale,
+      title: colorLegendTitle,
+      width: 260,
+      tickFormat: valueFormatter,
+    }),
+  )
+}
+
+function applyInteractionStyles({ searchInactiveOpacity }) {
+  d3.select('body').append('style').html(`
+  .group-counties.searching > .iv-county.s-match {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  .searching > .iv-county:not(.s-match) {
+    opacity: ${searchInactiveOpacity};
+  }
+  `)
+}
+
+function parseData({ data, valueField, fipsField }) {
   const dataParsed = data.map(d => ({
     ...d,
     [valueField]: Number.parseFloat(d[valueField]),
     [fipsField]: Number.parseInt(d[fipsField], 10),
   }))
   const values = dataParsed.map(el => el[valueField])
-  const valueDomain = d3.extent(values)
 
-  const dataObj = {}
-  dataParsed.forEach(c => {
-    dataObj[c[fipsField]] = c
+  // const dataObj = {}
+  // dataParsed.forEach(c => {
+  //   dataObj[c[fipsField]] = c
+  // })
+
+  const countyNames = []
+  _.forEach(topo.objects.counties.geometries, d => {
+    countyNames.push(d.properties.name)
   })
+
+  return { dataParsed, values, countyNames }
+}
+
+function setupScales({ values, interpolateScheme }) {
+  const valueDomain = d3.extent(values)
 
   const colorScale = d3.scaleSequential(interpolateScheme).domain(valueDomain)
 
-  const path = d3.geoPath()
+  return { colorScale }
+}
 
+function renderMap({
+  chartCore,
+  path,
+  dataParsed,
+  fipsField,
+  valueField,
+  missingDataColor,
+  nullDataColor,
+  colorScale,
+  tooltipDiv,
+  valueFormatter,
+  nullDataMessage,
+  missingDataMessage,
+}) {
   const allCountiesGroup = chartCore.append('g').attr('class', 'group-counties')
   const allCounties = allCountiesGroup
     .selectAll('path')
@@ -149,41 +225,7 @@ export function renderChart({
     .attr('stroke-linejoin', 'round')
     .attr('d', path)
 
-  const search = widgetsLeft
-    .append('input')
-    .attr('type', 'text')
-    .attr('placeholder', 'Find by county')
-    .attr('class', searchButtonClassNames)
-
-  function searchBy(term) {
-    if (term) {
-      chartCore.select('.group-counties').classed('searching', true)
-      allCounties.classed(
-        's-match',
-        // should be boolean
-        d => {
-          return d.properties.name.toLowerCase().includes(term.toLowerCase())
-        },
-      )
-      chartCore.selectAll('.s-match').raise()
-    } else {
-      d3.select('.group-counties').classed('searching', false)
-      chartCore.selectAll('.iv-county').lower()
-    }
-  }
-
-  search.on('keyup', e => {
-    searchBy(e.target.value.trim())
-  })
-
-  widgetsRight.append(() =>
-    legend({
-      color: colorScale,
-      title: colorLegendTitle,
-      width: 260,
-      tickFormat: valueFormatter,
-    }),
-  )
+  return { allCounties }
 }
 
 function setupChartArea({
@@ -233,5 +275,63 @@ function setupChartArea({
     widgetsLeft,
     widgetsRight,
     viewBoxWidth,
+  }
+}
+
+function setupSearch({
+  widgetsLeft,
+  searchButtonClassNames,
+  chartCore,
+  handleSearch,
+  chartContainerSelector,
+  countyNames,
+}) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(countyNames)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('placeholder', 'Find by county')
+    .attr('class', searchButtonClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
+  search.on('keyup', e => {
+    const term = e.target.value.trim()
+    handleSearch(term, chartCore)
+  })
+  return { search }
+}
+
+const searchEventHandler = allCounties => (term, chartCore) => {
+  if (term) {
+    chartCore.select('.group-counties').classed('searching', true)
+    allCounties.classed(
+      's-match',
+      // should be boolean
+      d => {
+        return d.properties.name.toLowerCase().includes(term.toLowerCase())
+      },
+    )
+    chartCore.selectAll('.s-match').raise()
+  } else {
+    d3.select('.group-counties').classed('searching', false)
+    chartCore.selectAll('.iv-county').lower()
   }
 }
