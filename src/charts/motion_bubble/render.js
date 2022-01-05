@@ -70,13 +70,15 @@ export function renderChart({
 
   const tooltipDiv = initializeTooltip()
 
-  const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData({
-    data,
-    xField,
-    yField,
-    sizeField,
-    timeField,
-  })
+  const { dataParsed, dataAt, timeDomain, timeDomainLength, nameValues } =
+    parseData({
+      data,
+      xField,
+      yField,
+      sizeField,
+      timeField,
+      nameField,
+    })
 
   const { sizeScale, xScale, yScale, colorScale } = setupScales({
     dataParsed,
@@ -159,6 +161,8 @@ export function renderChart({
     searchButtonClassNames,
     circles,
     sizeField,
+    chartContainerSelector,
+    nameValues,
   })
 
   renderXAxis({
@@ -361,12 +365,34 @@ function setupSearch({
   searchButtonClassNames,
   circles,
   sizeField,
+  chartContainerSelector,
+  nameValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(nameValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('placeholder', `Find by ${nameField}`)
     .attr('class', searchButtonClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
 
   function searchBy(term) {
     if (term) {
@@ -409,7 +435,7 @@ function applyInteractionStyles({ inactiveOpacity }) {
   `)
 }
 
-function parseData({ data, xField, yField, sizeField, timeField }) {
+function parseData({ data, xField, yField, sizeField, timeField, nameField }) {
   const dataParsed = data.map(d => ({
     ...d,
     [sizeField]: Number.parseFloat(d[sizeField]),
@@ -423,7 +449,9 @@ function parseData({ data, xField, yField, sizeField, timeField }) {
   const timeDomain = _.uniq(_.map(data, timeField)).sort()
   const timeDomainLength = timeDomain.length
 
-  return { dataParsed, dataAt, timeDomain, timeDomainLength }
+  const nameValues = _(data).map(nameField).uniq().value()
+
+  return { dataParsed, dataAt, timeDomain, timeDomainLength, nameValues }
 }
 
 function setupScales({

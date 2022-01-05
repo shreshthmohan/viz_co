@@ -5401,13 +5401,15 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { dataParsed, dataAt, timeDomain, timeDomainLength } = parseData$7({
-      data,
-      xField,
-      yField,
-      sizeField,
-      timeField,
-    });
+    const { dataParsed, dataAt, timeDomain, timeDomainLength, nameValues } =
+      parseData$7({
+        data,
+        xField,
+        yField,
+        sizeField,
+        timeField,
+        nameField,
+      });
 
     const { sizeScale, xScale, yScale, colorScale } = setupScales$8({
       dataParsed,
@@ -5490,6 +5492,8 @@ g.circles circle.circle.circle-hovered {
       searchButtonClassNames,
       circles,
       sizeField,
+      chartContainerSelector,
+      nameValues,
     });
 
     renderXAxis$7({
@@ -5692,12 +5696,31 @@ g.circles circle.circle.circle-hovered {
     searchButtonClassNames,
     circles,
     sizeField,
+    chartContainerSelector,
+    nameValues,
   }) {
+
+    widgetsLeft
+        .append('datalist')
+        .attr('role', 'datalist')
+        // Assuming that chartContainerSelector will always start with #
+        // i.e. it's always an id selector of the from #id-to-identify-search
+        // TODO add validation
+        .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+        .html(
+          ___default["default"](nameValues)
+            .uniq()
+            .map(el => `<option>${el}</option>`)
+            .join(''),
+        );
+
     const search = widgetsLeft
       .append('input')
       .attr('type', 'text')
       .attr('placeholder', `Find by ${nameField}`)
       .attr('class', searchButtonClassNames);
+
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`);
 
     function searchBy(term) {
       if (term) {
@@ -5740,7 +5763,7 @@ g.circles circle.circle.circle-hovered {
   `);
   }
 
-  function parseData$7({ data, xField, yField, sizeField, timeField }) {
+  function parseData$7({ data, xField, yField, sizeField, timeField, nameField }) {
     const dataParsed = data.map(d => ({
       ...d,
       [sizeField]: Number.parseFloat(d[sizeField]),
@@ -5754,7 +5777,9 @@ g.circles circle.circle.circle-hovered {
     const timeDomain = ___default["default"].uniq(___default["default"].map(data, timeField)).sort();
     const timeDomainLength = timeDomain.length;
 
-    return { dataParsed, dataAt, timeDomain, timeDomainLength }
+    const nameValues = ___default["default"](data).map(nameField).uniq().value();
+
+    return { dataParsed, dataAt, timeDomain, timeDomainLength, nameValues }
   }
 
   function setupScales$8({
