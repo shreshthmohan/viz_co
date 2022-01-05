@@ -1,6 +1,7 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import * as topojson from 'topojson'
 import { legend } from '../../utils/helpers/colorLegend'
 import { usStatesAndCountiesTopo as topo } from '../choropleth_counties/counties-albers-10m'
@@ -34,15 +35,7 @@ export function renderChart({
   },
   chartContainerSelector,
 }) {
-  d3.select('body').append('style').html(`
-  .group-states.searching > .iv-state.s-match {
-    stroke: #333;
-  }
-  .hovered {
-    stroke: #333;
-    stroke-width: 2;
-  }
-  `)
+  applyInteractionStyles()
 
   const valueFormatter = val => formatNumber(val, valueFormat)
 
@@ -62,6 +55,119 @@ export function renderChart({
   })
 
   const tooltipDiv = initializeTooltip()
+
+  const { dataObj, values, stateNames } = parseData({
+    data,
+    valueField,
+    stateAbbrField,
+  })
+
+  const { colorScale } = setupScales({
+    values,
+    colorDomainCustom,
+    interpolateScheme,
+  })
+
+  const path = d3.geoPath()
+
+  const { allStates } = renderMap({
+    chartCore,
+    path,
+    dataObj,
+    valueField,
+    colorScale,
+    missingDataColor,
+    nullDataColor,
+    tooltipDiv,
+    valueFormatter,
+    nullDataMessage,
+    missingDataMessage,
+  })
+
+  const handleSearch = searchEventHandler(allStates)
+  setupSearch({
+    widgetsLeft,
+    searchButtonClassNames,
+    searchDisabled,
+    chartCore,
+    handleSearch,
+    chartContainerSelector,
+    stateNames,
+  })
+
+  widgetsRight.append(() =>
+    legend({
+      color: colorScale,
+      title: colorLegendTitle,
+      width: 260,
+      tickFormat: valueFormatter,
+    }),
+  )
+}
+
+function applyInteractionStyles() {
+  d3.select('body').append('style').html(`
+  .group-states.searching > .iv-state.s-match {
+    stroke: #333;
+  }
+  .hovered {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  `)
+}
+
+function setupChartArea({
+  chartContainerSelector,
+  coreChartWidth,
+  coreChartHeight,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  bgColor,
+}) {
+  const viewBoxHeight = coreChartHeight + marginTop + marginBottom
+  const viewBoxWidth = coreChartWidth + marginLeft + marginRight
+
+  const chartParent = d3.select(chartContainerSelector)
+
+  const widgets = chartParent
+    .append('div')
+    .attr(
+      'style',
+      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
+    )
+  const widgetsLeft = widgets
+    .append('div')
+    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
+  const widgetsRight = widgets
+    .append('div')
+    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
+
+  const svg = chartParent
+    .append('svg')
+    .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+    .style('background', bgColor)
+
+  const allComponents = svg.append('g').attr('class', 'all-components')
+
+  const chartCore = allComponents
+    .append('g')
+    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
+
+  return {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+    viewBoxWidth,
+  }
+}
+
+function parseData({ data, valueField, stateAbbrField }) {
   const dataParsed = data.map(d => ({
     ...d,
     [valueField]: Number.parseFloat(d[valueField]),
@@ -73,13 +179,37 @@ export function renderChart({
   })
 
   const values = dataParsed.map(el => el[valueField])
+
+  const stateNames = []
+  _.forEach(topo.objects.states.geometries, d => {
+    stateNames.push(d.properties.name)
+  })
+
+  return { dataObj, values, stateNames }
+}
+
+function setupScales({ values, colorDomainCustom, interpolateScheme }) {
   const colorDomainDefault = d3.extent(values)
   const colorDomain = d3.extent([...colorDomainDefault, ...colorDomainCustom])
 
   const colorScale = d3.scaleSequential(interpolateScheme).domain(colorDomain)
 
-  const path = d3.geoPath()
+  return { colorScale }
+}
 
+function renderMap({
+  chartCore,
+  path,
+  dataObj,
+  valueField,
+  colorScale,
+  missingDataColor,
+  nullDataColor,
+  tooltipDiv,
+  valueFormatter,
+  nullDataMessage,
+  missingDataMessage,
+}) {
   const allStatesGroup = chartCore.append('g').attr('class', 'group-states')
 
   const allStates = allStatesGroup
@@ -135,87 +265,64 @@ export function renderChart({
     .attr('stroke-linejoin', 'round')
     .attr('d', path)
 
+  return { allStates }
+}
+
+function setupSearch({
+  widgetsLeft,
+  searchButtonClassNames,
+  searchDisabled,
+  chartCore,
+  handleSearch,
+  chartContainerSelector,
+  stateNames,
+}) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(stateNames)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('placeholder', 'Find by state')
     .attr('class', searchButtonClassNames)
+
   if (searchDisabled) {
     search.style('display', 'none')
   }
 
-  function searchBy(term) {
-    if (term) {
-      d3.select('.group-states').classed('searching', true)
-      allStates.classed('s-match', d => {
-        return d.properties.name.toLowerCase().includes(term.toLowerCase())
-      })
-      chartCore.selectAll('.s-match').raise()
-    } else {
-      d3.select('.group-states').classed('searching', false)
-      chartCore.selectAll('.iv-state').lower()
-    }
-  }
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
 
   search.on('keyup', e => {
-    searchBy(e.target.value.trim())
+    const term = e.target.value.trim()
+    handleSearch(term, chartCore)
   })
-  widgetsRight.append(() =>
-    legend({
-      color: colorScale,
-      title: colorLegendTitle,
-      width: 260,
-      tickFormat: valueFormatter,
-    }),
-  )
+  return { search }
 }
 
-function setupChartArea({
-  chartContainerSelector,
-  coreChartWidth,
-  coreChartHeight,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  bgColor,
-}) {
-  const viewBoxHeight = coreChartHeight + marginTop + marginBottom
-  const viewBoxWidth = coreChartWidth + marginLeft + marginRight
-
-  const chartParent = d3.select(chartContainerSelector)
-
-  const widgets = chartParent
-    .append('div')
-    .attr(
-      'style',
-      'display: flex; justify-content: space-between; padding-bottom: 0.5rem;',
-    )
-  const widgetsLeft = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: end; column-gap: 5px;')
-  const widgetsRight = widgets
-    .append('div')
-    .attr('style', 'display: flex; align-items: center; column-gap: 10px;')
-
-  const svg = chartParent
-    .append('svg')
-    .attr('viewBox', `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
-    .style('background', bgColor)
-
-  const allComponents = svg.append('g').attr('class', 'all-components')
-
-  const chartCore = allComponents
-    .append('g')
-    .attr('transform', `translate(${marginLeft}, ${marginTop})`)
-
-  return {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
-    viewBoxWidth,
+const searchEventHandler = allStates => (term, chartCore) => {
+  if (term) {
+    d3.select('.group-states').classed('searching', true)
+    allStates.classed('s-match', d => {
+      return d.properties.name.toLowerCase().includes(term.toLowerCase())
+    })
+    chartCore.selectAll('.s-match').raise()
+  } else {
+    d3.select('.group-states').classed('searching', false)
+    chartCore.selectAll('.iv-state').lower()
   }
 }
