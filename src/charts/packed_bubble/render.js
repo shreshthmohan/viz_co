@@ -1,6 +1,7 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import {
   initializeTooltip,
   setupChartArea,
@@ -100,6 +101,7 @@ export function renderChart({
     [sizeField]: Number.parseFloat(d[sizeField]),
     [yField]: Number.parseFloat(d[yField]),
   }))
+  const nameValues = _(data).map(nameField).uniq().value()
 
   const maxSizeValue = Math.max(...parsedData.map(c => c[sizeField]))
 
@@ -231,25 +233,37 @@ export function renderChart({
     sizeLegendTitle,
   })
 
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(nameValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
     .attr('placeholder', `Find by ${nameField}`)
 
-  function searchBy(term) {
-    if (term) {
-      d3.select('.bubbles').classed('g-searching', true)
-      allBubbles.classed('c-match', d =>
-        d[nameField].toLowerCase().includes(term.toLowerCase()),
-      )
-    } else {
-      d3.select('.bubbles').classed('g-searching', false)
-    }
-  }
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
+  const handleSearchEvent = searchEventHandler(nameField)
 
   search.on('keyup', e => {
-    searchBy(e.target.value.trim())
+    const term = e.target.value.trim()
+    handleSearchEvent(term, allBubbles)
   })
 
   // preventOverflow({
@@ -257,4 +271,15 @@ export function renderChart({
   //   svg,
   //   margins: { marginLeft, marginRight, marginTop, marginBottom },
   // })
+}
+
+const searchEventHandler = nameField => (term, allBubbles) => {
+  if (term) {
+    d3.select('.bubbles').classed('g-searching', true)
+    allBubbles.classed('c-match', d =>
+      d[nameField].toLowerCase().includes(term.toLowerCase()),
+    )
+  } else {
+    d3.select('.bubbles').classed('g-searching', false)
+  }
 }
