@@ -5348,10 +5348,10 @@ g.circles circle.circle.circle-hovered {
     dimensions: { sizeField, xField, yField, timeField, nameField, colorField },
     options: {
       motionDelay = 1000,
-      marginTop = 40,
-      marginRight = 50,
-      marginBottom = 50,
-      marginLeft = 40,
+      marginTop = 0,
+      marginRight = 0,
+      marginBottom = 0,
+      marginLeft = 0,
       bgColor = 'transparent',
       aspectRatio = 2,
 
@@ -5361,6 +5361,9 @@ g.circles circle.circle.circle-hovered {
       xDomainCustom = null,
       xAxisLabel = xField,
       xValueFormat = '',
+
+      xScaleType = 'linear', // linear or log
+      xScaleLogBase = 10, // applicable only if log scale
 
       yDomainCustom = null,
       yAxisLabel = yField,
@@ -5416,6 +5419,8 @@ g.circles circle.circle.circle-hovered {
       xDomainCustom,
       yDomainCustom,
       xField,
+      xScaleType,
+      xScaleLogBase,
       yField,
       colorField,
       coreChartWidth,
@@ -5468,7 +5473,12 @@ g.circles circle.circle.circle-hovered {
         .duration(motionDelay)
         .attr('cx', d => xScale(d[xField]))
         .attr('cy', d => yScale(d[yField]))
-        .attr('r', d => sizeScale(d[sizeField]));
+        .attr('r', d => {
+          if (isNaN(d[xField]) || isNaN(d[yField]) || isNaN(d[sizeField])) {
+            return 0
+          }
+          return sizeScale(d[sizeField])
+        });
     };
 
     activateMotionWidget$1({
@@ -5592,7 +5602,12 @@ g.circles circle.circle.circle-hovered {
       .attr('class', d => `iv-circle iv-circle-${toClassText(d[nameField])}`)
       .attr('cx', d => xScale(d[xField]))
       .attr('cy', d => yScale(d[yField]))
-      .attr('r', d => sizeScale(d[sizeField]))
+      .attr('r', d => {
+        if (isNaN(d[xField]) || isNaN(d[yField]) || isNaN(d[sizeField])) {
+          return 0
+        }
+        return sizeScale(d[sizeField])
+      })
       .attr('fill', d => colorScale(d[colorField]))
       .attr('opacity', activeOpacity)
       .attr('stroke', d => d3__namespace.rgb(colorScale(d[colorField])).darker(0.5))
@@ -5764,6 +5779,8 @@ g.circles circle.circle.circle-hovered {
     xDomainCustom,
     yDomainCustom,
     xField,
+    xScaleType,
+    xScaleLogBase,
     yField,
     colorField,
     coreChartWidth,
@@ -5780,7 +5797,14 @@ g.circles circle.circle.circle-hovered {
     const xDomain = xDomainCustom || d3__namespace.extent(dataParsed.map(d => d[xField]));
     const yDomain = yDomainCustom || d3__namespace.extent(dataParsed.map(d => d[yField]));
 
-    const xScale = d3__namespace.scaleLinear().domain(xDomain).range([0, coreChartWidth]);
+    const xScale =
+      xScaleType === 'log'
+        ? d3__namespace
+            .scaleLog()
+            .base(xScaleLogBase || 10)
+            .range([0, coreChartWidth])
+            .domain(xDomain)
+        : d3__namespace.scaleLinear().domain(xDomain).range([0, coreChartWidth]);
     const yScale = d3__namespace.scaleLinear().range([coreChartHeight, 0]).domain(yDomain);
     // .nice()
 
