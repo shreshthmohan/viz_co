@@ -8666,7 +8666,7 @@ g.circles circle.circle.circle-hovered {
 
     const tooltipDiv = initializeTooltip$3();
 
-    const { dataParsed, names, matrix, index, reverseIndex } = parseData$3({
+    const { dataParsed, names, matrix, indexMap, reverseIndex } = parseData$3({
       data,
       valueField,
       sourceField,
@@ -8707,7 +8707,7 @@ g.circles circle.circle.circle-hovered {
       chordType,
     });
 
-    const handleSearch = searchEventHandler$4(names, index);
+    const handleSearch = searchEventHandler$4(names, indexMap);
     const search = setupSearch$4({
       handleSearch,
       widgetsLeft,
@@ -8723,7 +8723,7 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
-      index,
+      indexMap,
     });
 
     setupShowAllButton$4({
@@ -8797,11 +8797,11 @@ g.circles circle.circle.circle-hovered {
       names.length,
     );
 
-    const index = new Map(names.map((name, i) => [toClassText(name), i]));
+    const indexMap = new Map(names.map((name, i) => [toClassText(name), i]));
     const reverseIndex = new Map(names.map((name, i) => [i, toClassText(name)]));
     ___default["default"].forEach(dataParsed, row => {
-      matrix[index.get(toClassText(row[sourceField]))][
-        index.get(toClassText(row[targetField]))
+      matrix[indexMap.get(toClassText(row[sourceField]))][
+        indexMap.get(toClassText(row[targetField]))
       ] = Number(row[valueField]);
     });
 
@@ -8809,7 +8809,7 @@ g.circles circle.circle.circle-hovered {
       dataParsed,
       names,
       matrix,
-      index,
+      indexMap,
       reverseIndex,
     }
   }
@@ -9096,15 +9096,15 @@ g.circles circle.circle.circle-hovered {
       });
   }
 
-  const searchEventHandler$4 = (referenceList, index) => qstr => {
+  const searchEventHandler$4 = (referenceList, indexMap) => qstr => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       const matchedIndexes = [];
       referenceList.forEach(val => {
         const arcName = toClassText(val).toLowerCase();
-        const index_ = index.get(arcName);
+        const idx = indexMap.get(arcName);
         if (arcName.toLowerCase().includes(lqstr)) {
-          matchedIndexes.push(index_);
+          matchedIndexes.push(idx);
         }
       });
       d3__namespace.select('.ribbons').classed('searching', true);
@@ -9135,7 +9135,6 @@ g.circles circle.circle.circle-hovered {
     widgetsLeft,
     searchInputClassNames,
     sourceField,
-    svg,
     chartContainerSelector,
     names,
   }) {
