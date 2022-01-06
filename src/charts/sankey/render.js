@@ -422,8 +422,8 @@ export function renderChart({
       // reset matched state for all links and nodes because
       // it we don't want matched states to accumulate as we type
       // the matched elements should only correspond to the current qstr
-      d3.selectAll('.sankey-link').classed('node-matched', false)
-      d3.selectAll('.sankey-node').classed('node-matched', false)
+      svg.selectAll('.sankey-link').classed('node-matched', false)
+      svg.selectAll('.sankey-node').classed('node-matched', false)
 
       const lqstr = qstr.toLowerCase()
       const sel = []
@@ -463,21 +463,21 @@ export function renderChart({
       sel.forEach(item => {
         // if sel item is a link
         if (item.source && item.target) {
-          d3.select(`#iv-link-${item.index}`).classed('node-matched', true)
+          svg.select(`#iv-link-${item.index}`).classed('node-matched', true)
         } else {
           // else item is a node
-          d3.select(`#iv-node-${item.index}`).classed('node-matched', true)
+          svg.select(`#iv-node-${item.index}`).classed('node-matched', true)
         }
       })
-      d3.select('.sankey-nodes').classed('searching', true)
-      d3.select('.sankey-links').classed('searching', true)
+      svg.select('.sankey-nodes').classed('searching', true)
+      svg.select('.sankey-links').classed('searching', true)
     } else {
       sankeyfied.nodes.forEach(thisNode => {
         const { index } = thisNode
-        d3.select(`#iv-node-${index}`).classed('node-matched', false)
+        svg.select(`#iv-node-${index}`).classed('node-matched', false)
       })
-      d3.select('.sankey-nodes').classed('searching', false)
-      d3.select('.sankey-links').classed('searching', false)
+      svg.select('.sankey-nodes').classed('searching', false)
+      svg.select('.sankey-links').classed('searching', false)
     }
   })
   preventOverflow({
