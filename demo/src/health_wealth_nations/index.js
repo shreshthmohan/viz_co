@@ -174,7 +174,7 @@ disabled:cursor-not-allowed`
       colorField: 'name',
     },
     options: {
-      motionDelay: 550,
+      motionDelay: 200,
       sizeRange: [3, 30],
       xScaleType: 'log',
       inbuiltScheme: 'schemeSpectral',
