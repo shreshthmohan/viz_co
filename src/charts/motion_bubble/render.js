@@ -163,6 +163,7 @@ export function renderChart({
     sizeField,
     chartContainerSelector,
     nameValues,
+    svg,
   })
 
   renderXAxis({
@@ -367,6 +368,7 @@ function setupSearch({
   sizeField,
   chartContainerSelector,
   nameValues,
+  svg,
 }) {
   const enableSearchSuggestions = true
 
@@ -396,7 +398,7 @@ function setupSearch({
 
   function searchBy(term) {
     if (term) {
-      d3.select('.group-circles').classed('searching', true)
+      svg.select('.group-circles').classed('searching', true)
       const matchedCircles = []
       circles.classed('s-match', d => {
         const bool = d[nameField].toLowerCase().includes(term.toLowerCase())
@@ -409,13 +411,13 @@ function setupSearch({
       // hovering over them doesn't cause other circle's tooltip
       // to be highlighted
       matchedCircles.forEach(m => {
-        d3.select(m).raise()
+        svg.select(m).raise()
       })
     } else {
-      d3.select('.group-circles').classed('searching', false)
+      svg.select('.group-circles').classed('searching', false)
 
       // Put circles back in order after raising matched circles
-      circles.sort((a, b) => d3.descending(a[sizeField], b[sizeField]))
+      circles.sort((a, b) => svg.descending(a[sizeField], b[sizeField]))
     }
   }
 

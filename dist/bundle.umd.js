@@ -5494,6 +5494,7 @@ g.circles circle.circle.circle-hovered {
       sizeField,
       chartContainerSelector,
       nameValues,
+      svg,
     });
 
     renderXAxis$7({
@@ -5698,6 +5699,7 @@ g.circles circle.circle.circle-hovered {
     sizeField,
     chartContainerSelector,
     nameValues,
+    svg,
   }) {
 
     widgetsLeft
@@ -5724,7 +5726,7 @@ g.circles circle.circle.circle-hovered {
 
     function searchBy(term) {
       if (term) {
-        d3__namespace.select('.group-circles').classed('searching', true);
+        svg.select('.group-circles').classed('searching', true);
         const matchedCircles = [];
         circles.classed('s-match', d => {
           const bool = d[nameField].toLowerCase().includes(term.toLowerCase());
@@ -5737,13 +5739,13 @@ g.circles circle.circle.circle-hovered {
         // hovering over them doesn't cause other circle's tooltip
         // to be highlighted
         matchedCircles.forEach(m => {
-          d3__namespace.select(m).raise();
+          svg.select(m).raise();
         });
       } else {
-        d3__namespace.select('.group-circles').classed('searching', false);
+        svg.select('.group-circles').classed('searching', false);
 
         // Put circles back in order after raising matched circles
-        circles.sort((a, b) => d3__namespace.descending(a[sizeField], b[sizeField]));
+        circles.sort((a, b) => svg.descending(a[sizeField], b[sizeField]));
       }
     }
 
