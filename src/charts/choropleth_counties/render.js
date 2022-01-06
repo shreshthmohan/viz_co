@@ -125,11 +125,6 @@ function parseData({ data, valueField, fipsField }) {
   }))
   const values = dataParsed.map(el => el[valueField])
 
-  // const dataObj = {}
-  // dataParsed.forEach(c => {
-  //   dataObj[c[fipsField]] = c
-  // })
-
   const countyNames = []
   _.forEach(topo.objects.counties.geometries, d => {
     countyNames.push(d.properties.name)

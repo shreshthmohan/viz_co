@@ -8111,11 +8111,6 @@ g.circles circle.circle.circle-hovered {
     }));
     const values = dataParsed.map(el => el[valueField]);
 
-    // const dataObj = {}
-    // dataParsed.forEach(c => {
-    //   dataObj[c[fipsField]] = c
-    // })
-
     const countyNames = [];
     ___default["default"].forEach(usStatesAndCountiesTopo.objects.counties.geometries, d => {
       countyNames.push(d.properties.name);
