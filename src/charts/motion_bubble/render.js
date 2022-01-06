@@ -41,12 +41,12 @@ export function renderChart({
 
     inbuiltScheme = 'schemePuRd',
     numberOfColors = 9, // minumum: 3, maximum: 9
+    showColorLegend = false,
 
     inactiveOpacity = 0.1,
     activeOpacity = 1,
 
-    startButtonClassNames = '',
-    stopButtonClassNames = '',
+    startStopButtonClassNames = '',
     searchButtonClassNames = '',
   },
   chartContainerSelector,
@@ -105,19 +105,16 @@ export function renderChart({
     numberOfColors,
   })
 
-  const { startButton, stopButton, rangeSlider, rangeSliderValue } =
-    setupWidgets({
-      widgetsLeft,
-      timeField,
-      startButtonClassNames,
-      stopButtonClassNames,
-    })
+  const { startButton, rangeSlider, rangeSliderValue } = setupWidgets({
+    widgetsLeft,
+    timeField,
+    startStopButtonClassNames,
+  })
 
   // Initial time value for range value display
   rangeSliderValue.text(timeDomain[0])
 
   // Bubbles are stationary initially so disable stop button
-  stopButton.node().disabled = true
 
   // Initial render
   const circles = renderCircles({
@@ -165,7 +162,6 @@ export function renderChart({
     dataAt,
     updateCircles,
     startButton,
-    stopButton,
     intervalId,
     motionDelay,
   })
@@ -194,7 +190,7 @@ export function renderChart({
     yAxisLabel,
   })
 
-  renderLegends({ widgetsRight, colorScale })
+  showColorLegend && renderLegends({ widgetsRight, colorScale })
 
   preventOverflow({
     allComponents,
@@ -203,23 +199,12 @@ export function renderChart({
   })
 }
 
-function setupWidgets({
-  widgetsLeft,
-  timeField,
-  startButtonClassNames,
-  stopButtonClassNames,
-}) {
+function setupWidgets({ widgetsLeft, timeField, startStopButtonClassNames }) {
   const startButton = widgetsLeft
     .append('button')
     .text('Start')
     .attr('id', '#start')
-    .attr('class', startButtonClassNames)
-
-  const stopButton = widgetsLeft
-    .append('button')
-    .text('Stop')
-    .attr('id', '#stop')
-    .attr('class', stopButtonClassNames)
+    .attr('class', startStopButtonClassNames)
 
   const rangeSliderContainer = widgetsLeft
     .append('div')
@@ -244,7 +229,6 @@ function setupWidgets({
 
   return {
     startButton,
-    stopButton,
     rangeSlider,
     rangeSliderValue,
   }
@@ -329,7 +313,6 @@ function activateMotionWidget({
   dataAt,
   updateCircles,
   startButton,
-  stopButton,
   intervalId,
   motionDelay,
 }) {
@@ -342,40 +325,44 @@ function activateMotionWidget({
       rangeSliderValue.text(timeDomain[posInArr])
       updateCircles(dataAt(timeDomain[posInArr]))
     })
+  let playing = false
 
   startButton.on('click', () => {
-    startButton.node().disabled = true
-    stopButton.node().disabled = false
+    if (playing) {
+      // stop
 
-    if (
-      Number.parseInt(rangeSlider.node().value, 10) ===
-      Number.parseInt(timeDomainLength - 1, 10)
-    ) {
-      rangeSlider.node().value = 0
-      rangeSliderValue.text(timeDomain[0])
-      updateCircles(dataAt(timeDomain[0]))
-    }
-    intervalId = window.setInterval(() => {
+      window.clearInterval(intervalId)
+      startButton.text('Start')
+    } else {
+      // start
+
+      startButton.text('Stop')
       if (
         Number.parseInt(rangeSlider.node().value, 10) ===
         Number.parseInt(timeDomainLength - 1, 10)
       ) {
-        window.clearInterval(intervalId)
-        startButton.node().disabled = false
-        stopButton.node().disabled = true
-        return
+        rangeSlider.node().value = 0
+        rangeSliderValue.text(timeDomain[0])
+        updateCircles(dataAt(timeDomain[0]))
       }
-      rangeSlider.node().value++
-      const posInArr = Number.parseInt(rangeSlider.node().value, 10)
-      rangeSliderValue.text(timeDomain[posInArr])
-      updateCircles(dataAt(timeDomain[posInArr]))
-    }, motionDelay)
-  })
-
-  stopButton.on('click', () => {
-    stopButton.node().disabled = true
-    startButton.node().disabled = false
-    window.clearInterval(intervalId)
+      intervalId = window.setInterval(() => {
+        if (
+          Number.parseInt(rangeSlider.node().value, 10) ===
+          Number.parseInt(timeDomainLength - 1, 10)
+        ) {
+          window.clearInterval(intervalId)
+          playing = !playing
+          startButton.text('Start')
+          return
+        }
+        rangeSlider.node().value++
+        const posInArr = Number.parseInt(rangeSlider.node().value, 10)
+        rangeSliderValue.text(timeDomain[posInArr])
+        updateCircles(dataAt(timeDomain[posInArr]))
+      }, motionDelay)
+    }
+    // flip playing flag
+    playing = !playing
   })
 }
 
@@ -464,7 +451,6 @@ function setupScales({
   coreChartWidth,
   coreChartHeight,
   inbuiltScheme,
-  numberOfColors,
 }) {
   const sizes = dataParsed.map(d => d[sizeField])
   const sizeDomain = d3.extent(sizes)

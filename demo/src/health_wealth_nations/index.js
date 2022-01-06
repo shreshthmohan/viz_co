@@ -1,5 +1,7 @@
 /* global d3, viz, _ */
 
+const { truncate } = require('lodash-es')
+
 const gdpPerCapDataPath =
   'GM-GDP per capita - Dataset - v27 - data-for-countries-etc-by-year.csv'
 const lifeExpDataPath =
@@ -150,26 +152,6 @@ Promise.all([
   })
   combinedDataArr.columns = [...dataColumns, 'region']
 
-  const startStopButtonClassNames = `
-inline-flex
-items-center
-px-2
-py-1
-border border-transparent
-text-xs
-font-medium
-rounded-sm
-shadow-sm
-text-white
-bg-gray-600
-hover:bg-gray-700
-disabled:bg-gray-300
-focus:outline-none
-focus:ring-2
-focus:ring-offset-2
-focus:ring-gray-500
-disabled:cursor-not-allowed`
-
   viz.renderMotionBubble({
     chartContainerSelector: '#chart-container',
     dimensions: {
@@ -189,8 +171,28 @@ disabled:cursor-not-allowed`
       inbuiltScheme: d3.schemeSet1,
       activeOpacity: 0.8,
 
-      startButtonClassNames: startStopButtonClassNames,
-      stopButtonClassNames: startStopButtonClassNames,
+      showColorLegend: true,
+
+      startStopButtonClassNames: `
+        inline-flex
+        items-center
+        px-2
+        py-1
+        border border-transparent
+        text-xs
+        font-medium
+        rounded-sm
+        shadow-sm
+        text-white
+        bg-gray-600
+        hover:bg-gray-700
+        disabled:bg-gray-300
+        focus:outline-none
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-gray-500
+        disabled:cursor-not-allowed`,
+
       searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs
     border-gray-300

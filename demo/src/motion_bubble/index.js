@@ -1,25 +1,5 @@
 /* global viz, d3 */
 
-const startStopButtonClassNames = `
-inline-flex
-items-center
-px-2
-py-1
-border border-transparent
-text-xs
-font-medium
-rounded-sm
-shadow-sm
-text-white
-bg-gray-600
-hover:bg-gray-700
-disabled:bg-gray-300
-focus:outline-none
-focus:ring-2
-focus:ring-offset-2
-focus:ring-gray-500
-disabled:cursor-not-allowed`
-
 const dimensions = {
   sizeField: 'calls',
   xField: 'unemployment',
@@ -58,8 +38,26 @@ const options = {
   inactiveOpacity: 0.2,
   activeOpacity: 1,
 
-  startButtonClassNames: startStopButtonClassNames,
-  stopButtonClassNames: startStopButtonClassNames,
+  startStopButtonClassNames: `
+inline-flex
+items-center
+px-2
+py-1
+border border-transparent
+text-xs
+font-medium
+rounded-sm
+shadow-sm
+text-white
+bg-gray-600
+hover:bg-gray-700
+disabled:bg-gray-300
+focus:outline-none
+focus:ring-2
+focus:ring-offset-2
+focus:ring-gray-500
+disabled:cursor-not-allowed`,
+
   searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500
     text-xs
     border-gray-300
