@@ -9718,6 +9718,7 @@ g.circles circle.circle.circle-hovered {
       nameField,
       chartContainerSelector,
       nameValues,
+      svg,
     });
 
     const axes = chartCore.append('g').attr('class', 'axes');
@@ -9728,6 +9729,7 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
 
     setupClearAllButton$3({
@@ -9735,6 +9737,7 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     setupShowAllButton$3({
@@ -9742,6 +9745,7 @@ g.circles circle.circle.circle-hovered {
       showAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     const bottomAxis = axes
@@ -9920,6 +9924,7 @@ g.circles circle.circle.circle-hovered {
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
@@ -9932,7 +9937,7 @@ g.circles circle.circle.circle-hovered {
         d3__namespace.select(`.tmace-${toClassText(val)}`).classed('tmace-active', true);
       });
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -9941,6 +9946,7 @@ g.circles circle.circle.circle-hovered {
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
@@ -9950,7 +9956,7 @@ g.circles circle.circle.circle-hovered {
     clearAll.on('click', () => {
       d3__namespace.selectAll('.tmace').classed('tmace-active', false);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -9959,6 +9965,7 @@ g.circles circle.circle.circle-hovered {
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const showAll = widgetsLeft
       .append('button')
@@ -9968,28 +9975,28 @@ g.circles circle.circle.circle-hovered {
     showAll.on('click', () => {
       d3__namespace.selectAll('.tmace').classed('tmace-active', true);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
-  const searchEventHandler$3 = referenceList => qstr => {
+  const searchEventHandler$3 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = qstr.toLowerCase();
       referenceList.forEach(val => {
         const tmaceName = toClassText(val);
         if (val.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', true);
+          svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', true);
         } else {
-          d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
+          svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
         }
-        d3__namespace.select('.tmaces').classed('searching', true);
+        svg.select('.tmaces').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
         const tmaceName = toClassText(val);
-        d3__namespace.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
+        svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', false);
       });
-      d3__namespace.select('.tmaces').classed('searching', false);
+      svg.select('.tmaces').classed('searching', false);
     }
   };
 
@@ -10000,6 +10007,7 @@ g.circles circle.circle.circle-hovered {
     nameField,
     chartContainerSelector,
     nameValues,
+    svg,
   }) {
 
     widgetsLeft
@@ -10025,7 +10033,7 @@ g.circles circle.circle.circle-hovered {
     search.attr('placeholder', `Find by ${nameField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }

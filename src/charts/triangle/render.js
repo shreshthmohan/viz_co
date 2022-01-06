@@ -370,6 +370,7 @@ export function renderChart({
     nameField,
     chartContainerSelector,
     nameValues,
+    svg,
   })
 
   const axes = chartCore.append('g').attr('class', 'axes')
@@ -380,6 +381,7 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
 
   setupClearAllButton({
@@ -387,6 +389,7 @@ export function renderChart({
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   setupShowAllButton({
@@ -394,6 +397,7 @@ export function renderChart({
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   const bottomAxis = axes
@@ -572,6 +576,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -584,7 +589,7 @@ function setupInitialStateButton({
       d3.select(`.tmace-${toClassText(val)}`).classed('tmace-active', true)
     })
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -593,6 +598,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -602,7 +608,7 @@ function setupClearAllButton({
   clearAll.on('click', () => {
     d3.selectAll('.tmace').classed('tmace-active', false)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -611,6 +617,7 @@ function setupShowAllButton({
   showAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const showAll = widgetsLeft
     .append('button')
@@ -620,28 +627,28 @@ function setupShowAllButton({
   showAll.on('click', () => {
     d3.selectAll('.tmace').classed('tmace-active', true)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = qstr.toLowerCase()
     referenceList.forEach(val => {
       const tmaceName = toClassText(val)
       if (val.toLowerCase().includes(lqstr)) {
-        d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', true)
+        svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', true)
       } else {
-        d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
+        svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
       }
-      d3.select('.tmaces').classed('searching', true)
+      svg.select('.tmaces').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
       const tmaceName = toClassText(val)
-      d3.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
+      svg.select(`.tmace-${tmaceName}`).classed('tmace-matched', false)
     })
-    d3.select('.tmaces').classed('searching', false)
+    svg.select('.tmaces').classed('searching', false)
   }
 }
 
@@ -652,6 +659,7 @@ function setupSearch({
   nameField,
   chartContainerSelector,
   nameValues,
+  svg,
 }) {
   const enableSearchSuggestions = true
 
@@ -680,7 +688,7 @@ function setupSearch({
   search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
