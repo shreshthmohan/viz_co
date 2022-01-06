@@ -243,6 +243,7 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
 
   setupClearAllButton({
@@ -250,6 +251,7 @@ export function renderChart({
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   setupShowAllButton({
@@ -257,6 +259,7 @@ export function renderChart({
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   // For responsiveness
@@ -712,6 +715,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -721,7 +725,7 @@ function setupClearAllButton({
   clearAll.on('click', () => {
     d3.selectAll('.topic').classed('topic-active', false)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -730,6 +734,7 @@ function setupShowAllButton({
   showAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const showAll = widgetsLeft
     .append('button')
@@ -739,7 +744,7 @@ function setupShowAllButton({
   showAll.on('click', () => {
     d3.selectAll('.topic').classed('topic-active', true)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -749,6 +754,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -761,7 +767,7 @@ function setupInitialStateButton({
       d3.select(`.topic-${toClassText(val)}`).classed('topic-active', true)
     })
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 

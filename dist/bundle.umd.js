@@ -12127,6 +12127,7 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
 
     setupClearAllButton$1({
@@ -12134,6 +12135,7 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     setupShowAllButton$1({
@@ -12141,6 +12143,7 @@ g.circles circle.circle.circle-hovered {
       showAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     // For responsiveness
@@ -12593,6 +12596,7 @@ g.circles circle.circle.circle-hovered {
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
@@ -12602,7 +12606,7 @@ g.circles circle.circle.circle-hovered {
     clearAll.on('click', () => {
       d3__namespace.selectAll('.topic').classed('topic-active', false);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -12611,6 +12615,7 @@ g.circles circle.circle.circle-hovered {
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const showAll = widgetsLeft
       .append('button')
@@ -12620,7 +12625,7 @@ g.circles circle.circle.circle-hovered {
     showAll.on('click', () => {
       d3__namespace.selectAll('.topic').classed('topic-active', true);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -12630,6 +12635,7 @@ g.circles circle.circle.circle-hovered {
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
@@ -12642,7 +12648,7 @@ g.circles circle.circle.circle-hovered {
         d3__namespace.select(`.topic-${toClassText(val)}`).classed('topic-active', true);
       });
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
