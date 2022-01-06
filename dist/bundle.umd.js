@@ -4896,7 +4896,7 @@ g.circles circle.circle.circle-hovered {
       yFieldLabels,
     });
 
-    renderLegends$3({
+    renderLegends$4({
       widgetsRight,
       colorScaleForLegend,
       svg,
@@ -5083,7 +5083,7 @@ g.circles circle.circle.circle-hovered {
     }
   }
 
-  function renderLegends$3({
+  function renderLegends$4({
     widgetsRight,
     colorScaleForLegend,
     svg,
@@ -5390,17 +5390,23 @@ g.circles circle.circle.circle-hovered {
     const sizeValueFormatter = val => formatNumber(val, sizeValueFormat);
 
     const coreChartWidth = 1000;
-    const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
-      setupChartArea$5({
-        chartContainerSelector,
-        coreChartWidth,
-        aspectRatio,
-        marginTop,
-        marginBottom,
-        marginLeft,
-        marginRight,
-        bgColor,
-      });
+    const {
+      svg,
+      coreChartHeight,
+      allComponents,
+      chartCore,
+      widgetsLeft,
+      widgetsRight,
+    } = setupChartArea$5({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    });
 
     const tooltipDiv = initializeTooltip$3();
 
@@ -5517,6 +5523,8 @@ g.circles circle.circle.circle-hovered {
       yScale,
       yAxisLabel,
     });
+
+    renderLegends$3({ widgetsRight, colorScale });
 
     preventOverflow({
       allComponents,
@@ -5809,12 +5817,20 @@ g.circles circle.circle.circle-hovered {
     // .nice()
 
     const colorDomain = ___default["default"].uniq(___default["default"].map(dataParsed, colorField));
-    const colorScale = d3__namespace.scaleOrdinal(
-      colorDomain,
-      d3__namespace[inbuiltScheme][numberOfColors],
-    );
+    const colorScale = d3__namespace.scaleOrdinal(colorDomain, inbuiltScheme);
 
     return { sizeScale, xScale, yScale, colorScale }
+  }
+
+  function renderLegends$3({ widgetsRight, colorScale }) {
+    widgetsRight.append('div').html(
+      swatches({
+        color: colorScale,
+        uid: 'rs',
+        customClass: '',
+        circle: true,
+      }),
+    );
   }
 
   function renderXAxis$7({
@@ -5905,8 +5921,8 @@ g.circles circle.circle.circle-hovered {
     xDomainCustom: checkNumericArray(2),
     yDomainCustom: checkNumericArray(2),
 
-    inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-    numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
+    // inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
+    // numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
 
     // xAxisLabel: xField,
     // yAxisLabel: yField,

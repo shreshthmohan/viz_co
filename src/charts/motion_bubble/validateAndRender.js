@@ -45,8 +45,8 @@ const optionTypes = {
   xDomainCustom: checkNumericArray(2),
   yDomainCustom: checkNumericArray(2),
 
-  inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
-  numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
+  // inbuiltScheme: checkOneOf(d3ColorSchemeOptions),
+  // numberOfColors: checkNumberBetween(3, 9), // minumum: 3, maximum: 9
 
   // xAxisLabel: xField,
   // yAxisLabel: yField,

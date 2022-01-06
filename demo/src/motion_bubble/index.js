@@ -1,4 +1,4 @@
-/* global viz */
+/* global viz, d3 */
 
 const startStopButtonClassNames = `
 inline-flex
@@ -52,8 +52,8 @@ const options = {
   yAxisLabel: 'Frustration Index',
   yValueFormat: '.1f',
 
-  inbuiltScheme: 'schemeSpectral',
-  numberOfColors: 9, // minumum: 3, maximum: 9,
+  inbuiltScheme: d3.quantize(d3.interpolateWarm, 50),
+  // numberOfColors: 9, // minumum: 3, maximum: 9,
 
   inactiveOpacity: 0.2,
   activeOpacity: 1,

@@ -1,4 +1,4 @@
-/* global d3, viz */
+/* global d3, viz, _ */
 
 const gdpPerCapDataPath =
   'GM-GDP per capita - Dataset - v27 - data-for-countries-etc-by-year.csv'
@@ -8,12 +8,16 @@ const lifeExpDataPath =
 const popDataPath =
   'GM-Population - Dataset - v6 - data-for-countries-etc-by-year.csv'
 
+const regionsDataPath =
+  'Data Geographies - v2 - by Gapminder - list-of-countries-etc.csv'
+
 // Read data
 Promise.all([
   d3.csv(gdpPerCapDataPath),
   d3.csv(lifeExpDataPath),
   d3.csv(popDataPath),
-]).then(([gdpPerCapitaData, lifeExpData, popData]) => {
+  d3.csv(regionsDataPath),
+]).then(([gdpPerCapitaData, lifeExpData, popData, regionsData]) => {
   // console.log({ gdpPerCapitaData, lifeExpectancyData })
   // Combine datasets. Filter oldest year to prevous year
 
@@ -29,25 +33,27 @@ Promise.all([
     d3.max([d3.min(yearsInGdpData), d3.min(yearsInLifeExpData)]),
   )
 
-  console.log({ commonOldestYear })
-
   const commonLatestYear = parseFloat(
     d3.min([d3.max(yearsInGdpData), d3.max(yearsInLifeExpData)]),
   )
 
-  console.log({ commonLatestYear })
-
   const currentYear = parseFloat(d3.timeFormat('%Y')(new Date()))
 
-  console.log({ currentYear })
-
   const yearBeforeCurrent = currentYear - 1
-
-  console.log(yearBeforeCurrent)
 
   const rangeEndYear = d3.min([yearBeforeCurrent, commonLatestYear])
 
   const rangeYear = [commonOldestYear, rangeEndYear]
+
+  const geoToRegionMapping = {}
+
+  const regionKey = 'six_regions' // 'four_regions' //'World bank region'
+
+  regionsData.forEach(r => {
+    geoToRegionMapping[r.geo] = r[regionKey]
+  })
+
+  const uniqueRegions = _(regionsData).map(regionKey).uniq().value()
 
   // Filter data from commonOldestYear to yearBeforeCurrent
   // Combine data
@@ -127,6 +133,7 @@ Promise.all([
       } else {
         combinedDataObj[uniqueKey] = d
       }
+      combinedDataObj[uniqueKey].region = geoToRegionMapping[d.geo]
     }
   })
 
@@ -141,7 +148,7 @@ Promise.all([
   Object.keys(combinedDataObj).forEach(k => {
     combinedDataArr.push(combinedDataObj[k])
   })
-  combinedDataArr.columns = dataColumns
+  combinedDataArr.columns = [...dataColumns, 'region']
 
   const startStopButtonClassNames = `
 inline-flex
@@ -171,13 +178,17 @@ disabled:cursor-not-allowed`
       yField: 'Life expectancy',
       timeField: 'time',
       nameField: 'name',
-      colorField: 'name',
+      colorField: 'region',
     },
     options: {
       motionDelay: 200,
-      sizeRange: [3, 30],
+      sizeRange: [5, 40],
       xScaleType: 'log',
-      inbuiltScheme: 'schemeSpectral',
+      // inbuiltScheme: d3.quantize(d3.interpolateWarm, uniqueRegions.length),
+      // numberOfColors: uniqueRegions.length,
+      inbuiltScheme: d3.schemeSet1,
+      activeOpacity: 0.8,
+
       startButtonClassNames: startStopButtonClassNames,
       stopButtonClassNames: startStopButtonClassNames,
       searchButtonClassNames: `focus:ring-gray-500 focus:border-gray-500

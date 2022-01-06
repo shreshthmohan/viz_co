@@ -5,6 +5,7 @@ import _ from 'lodash-es'
 
 import { preventOverflow } from '../../utils/helpers/general'
 import { toClassText } from '../../utils/helpers/general'
+import { swatches } from '../../utils/helpers/colorLegend'
 
 import {
   setupChartArea,
@@ -59,17 +60,23 @@ export function renderChart({
   const sizeValueFormatter = val => formatNumber(val, sizeValueFormat)
 
   const coreChartWidth = 1000
-  const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
-    setupChartArea({
-      chartContainerSelector,
-      coreChartWidth,
-      aspectRatio,
-      marginTop,
-      marginBottom,
-      marginLeft,
-      marginRight,
-      bgColor,
-    })
+  const {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
 
   const tooltipDiv = initializeTooltip()
 
@@ -186,6 +193,8 @@ export function renderChart({
     yScale,
     yAxisLabel,
   })
+
+  renderLegends({ widgetsRight, colorScale })
 
   preventOverflow({
     allComponents,
@@ -478,12 +487,20 @@ function setupScales({
   // .nice()
 
   const colorDomain = _.uniq(_.map(dataParsed, colorField))
-  const colorScale = d3.scaleOrdinal(
-    colorDomain,
-    d3[inbuiltScheme][numberOfColors],
-  )
+  const colorScale = d3.scaleOrdinal(colorDomain, inbuiltScheme)
 
   return { sizeScale, xScale, yScale, colorScale }
+}
+
+function renderLegends({ widgetsRight, colorScale }) {
+  widgetsRight.append('div').html(
+    swatches({
+      color: colorScale,
+      uid: 'rs',
+      customClass: '',
+      circle: true,
+    }),
+  )
 }
 
 function renderXAxis({
