@@ -4,6 +4,7 @@ export function toClassText(str) {
   return str
     .trim()
     .replace(/[\s&',.()]/g, '-')
+    .replace(/#/g, '-hash-')
     .toLowerCase()
 }
 

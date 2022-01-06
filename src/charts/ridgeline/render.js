@@ -338,29 +338,30 @@ function renderRidges({
     .style('font-size', 10)
 }
 
-const searchEventHandler = referenceList => qstr => {
+const searchEventHandler = referenceList => (qstr, svg) => {
   if (qstr) {
     const lqstr = toClassText(qstr).toLowerCase()
     referenceList.forEach(val => {
       const seriesName = toClassText(val)
       if (seriesName.toLowerCase().includes(lqstr)) {
-        d3.select(`.series-${seriesName}`).classed('series-matched', true)
+        svg.select(`.series-${seriesName}`).classed('series-matched', true)
       } else {
-        d3.select(`.series-${seriesName}`).classed('series-matched', false)
+        svg.select(`.series-${seriesName}`).classed('series-matched', false)
       }
-      d3.select('.serieses').classed('searching', true)
+      svg.select('.serieses').classed('searching', true)
     })
   } else {
     referenceList.forEach(val => {
       const seriesName = toClassText(val)
-      d3.select(`.series-${seriesName}`).classed('series-matched', false)
+      svg.select(`.series-${seriesName}`).classed('series-matched', false)
     })
-    d3.select('.serieses').classed('searching', false)
+    svg.select('.serieses').classed('searching', false)
   }
 }
 
 function setupSearch({
   handleSearch,
+  svg,
   widgetsLeft,
   searchInputClassNames,
   seriesField,
@@ -394,7 +395,7 @@ function setupSearch({
   search.attr('placeholder', `Find by ${seriesField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
-    handleSearch(qstr)
+    handleSearch(qstr, svg)
   })
   return search
 }
@@ -405,6 +406,7 @@ function setupInitialStateButton({
   defaultStateAll,
   search,
   handleSearch,
+  svg,
 }) {
   const goToInitialState = widgetsLeft
     .append('button')
@@ -417,7 +419,7 @@ function setupInitialStateButton({
       d3.select(`.series-${toClassText(val)}`).classed('series-active', true)
     })
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -426,6 +428,7 @@ function setupClearAllButton({
   clearAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const clearAll = widgetsLeft
     .append('button')
@@ -435,7 +438,7 @@ function setupClearAllButton({
   clearAll.on('click', () => {
     d3.selectAll('.series').classed('series-active', false)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -444,6 +447,7 @@ function setupShowAllButton({
   showAllButtonClassNames,
   search,
   handleSearch,
+  svg,
 }) {
   const showAll = widgetsLeft
     .append('button')
@@ -451,9 +455,9 @@ function setupShowAllButton({
     .attr('class', showAllButtonClassNames)
   showAll.classed('hidden', false)
   showAll.on('click', () => {
-    d3.selectAll('.series').classed('series-active', true)
+    svg.selectAll('.series').classed('series-active', true)
     search.node().value = ''
-    handleSearch('')
+    handleSearch('', svg)
   })
 }
 
@@ -578,6 +582,7 @@ export function renderChart({
   const handleSearch = searchEventHandler(categoryDomain)
   const search = setupSearch({
     handleSearch,
+    svg,
     widgetsLeft,
     searchInputClassNames,
     seriesField,
@@ -591,6 +596,7 @@ export function renderChart({
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   })
 
   setupClearAllButton({
@@ -598,6 +604,7 @@ export function renderChart({
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   setupShowAllButton({
@@ -605,6 +612,7 @@ export function renderChart({
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   })
 
   // adjust svg to prevent overflows

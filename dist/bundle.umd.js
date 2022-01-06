@@ -112,6 +112,7 @@
     return str
       .trim()
       .replace(/[\s&',.()]/g, '-')
+      .replace(/#/g, '-hash-')
       .toLowerCase()
   }
 
@@ -3836,29 +3837,30 @@ g.circles circle.circle.circle-hovered {
       .style('font-size', 10);
   }
 
-  const searchEventHandler$6 = referenceList => qstr => {
+  const searchEventHandler$6 = referenceList => (qstr, svg) => {
     if (qstr) {
       const lqstr = toClassText(qstr).toLowerCase();
       referenceList.forEach(val => {
         const seriesName = toClassText(val);
         if (seriesName.toLowerCase().includes(lqstr)) {
-          d3__namespace.select(`.series-${seriesName}`).classed('series-matched', true);
+          svg.select(`.series-${seriesName}`).classed('series-matched', true);
         } else {
-          d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
+          svg.select(`.series-${seriesName}`).classed('series-matched', false);
         }
-        d3__namespace.select('.serieses').classed('searching', true);
+        svg.select('.serieses').classed('searching', true);
       });
     } else {
       referenceList.forEach(val => {
         const seriesName = toClassText(val);
-        d3__namespace.select(`.series-${seriesName}`).classed('series-matched', false);
+        svg.select(`.series-${seriesName}`).classed('series-matched', false);
       });
-      d3__namespace.select('.serieses').classed('searching', false);
+      svg.select('.serieses').classed('searching', false);
     }
   };
 
   function setupSearch$8({
     handleSearch,
+    svg,
     widgetsLeft,
     searchInputClassNames,
     seriesField,
@@ -3889,7 +3891,7 @@ g.circles circle.circle.circle-hovered {
     search.attr('placeholder', `Find by ${seriesField}`);
     search.on('keyup', e => {
       const qstr = e.target.value;
-      handleSearch(qstr);
+      handleSearch(qstr, svg);
     });
     return search
   }
@@ -3900,6 +3902,7 @@ g.circles circle.circle.circle-hovered {
     defaultStateAll,
     search,
     handleSearch,
+    svg,
   }) {
     const goToInitialState = widgetsLeft
       .append('button')
@@ -3912,7 +3915,7 @@ g.circles circle.circle.circle-hovered {
         d3__namespace.select(`.series-${toClassText(val)}`).classed('series-active', true);
       });
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -3921,6 +3924,7 @@ g.circles circle.circle.circle-hovered {
     clearAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const clearAll = widgetsLeft
       .append('button')
@@ -3930,7 +3934,7 @@ g.circles circle.circle.circle-hovered {
     clearAll.on('click', () => {
       d3__namespace.selectAll('.series').classed('series-active', false);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -3939,6 +3943,7 @@ g.circles circle.circle.circle-hovered {
     showAllButtonClassNames,
     search,
     handleSearch,
+    svg,
   }) {
     const showAll = widgetsLeft
       .append('button')
@@ -3946,9 +3951,9 @@ g.circles circle.circle.circle-hovered {
       .attr('class', showAllButtonClassNames);
     showAll.classed('hidden', false);
     showAll.on('click', () => {
-      d3__namespace.selectAll('.series').classed('series-active', true);
+      svg.selectAll('.series').classed('series-active', true);
       search.node().value = '';
-      handleSearch('');
+      handleSearch('', svg);
     });
   }
 
@@ -4073,6 +4078,7 @@ g.circles circle.circle.circle-hovered {
     const handleSearch = searchEventHandler$6(categoryDomain);
     const search = setupSearch$8({
       handleSearch,
+      svg,
       widgetsLeft,
       searchInputClassNames,
       seriesField,
@@ -4086,6 +4092,7 @@ g.circles circle.circle.circle-hovered {
       defaultStateAll,
       search,
       handleSearch,
+      svg,
     });
 
     setupClearAllButton$6({
@@ -4093,6 +4100,7 @@ g.circles circle.circle.circle-hovered {
       clearAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     setupShowAllButton$6({
@@ -4100,6 +4108,7 @@ g.circles circle.circle.circle-hovered {
       showAllButtonClassNames,
       search,
       handleSearch,
+      svg,
     });
 
     // adjust svg to prevent overflows
