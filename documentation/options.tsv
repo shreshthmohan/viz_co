@@ -1,6 +1,6 @@
 Property	Chart	Category	Description	Detail	Valid Values
 aspectRatioCombined	Horizontal Bubble	Chart Area	Ratio of Width to the height of the visual when bubbles are combined.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
-aspectRatioSplit	Horizontal Bubble	Chart Area	Ratio of Width to the height of the visual when bubbles are split by segment.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	
+aspectRatioSplit	Horizontal Bubble	Chart Area	Ratio of Width to the height of the visual when bubbles are split by segment.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
 marginTop	Horizontal Bubble	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
 marginRight	Horizontal Bubble	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
 marginBottom	Horizontal Bubble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
@@ -159,6 +159,207 @@ defaultState	Domino Ribbon	Interaction Options	Dominos to be shown active in sta
 activeOpacity	Domino Ribbon	Interaction Options	Opacity of bars when active	Provide opacity to be applied on bars when in active state	Number between 0 and 1
 inactiveOpacity	Domino Ribbon	Interaction Options	Opactiy of bars when inactive	Provide opacity to be applied on bars when in inactive state	Number between 0 and 1
 searchInputClassNames	Domino Ribbon	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
-goToInitialStateButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
-clearAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
-showAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Domino Ribbon	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Line Band Scatter	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Line Band Scatter	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Line Band Scatter	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Line Band Scatter	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Line Band Scatter	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Line Band Scatter	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+xAxisLabel	Line Band Scatter	X-Axis	X-axis label	Defaults to xField column name	Any string
+xValueDateParse	Line Band Scatter	X-Axis	Format to parse inputed date field on xaxis	Provide a time parser string corresponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+xValueDateFormat	Line Band Scatter	X-Axis	Format to format inputed date field on xaxis	Provide a time formatter string correponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+yAxisLabel	Line Band Scatter	Y-Axis	Y-axis label	Defaults to empty string	Any string
+yColors	Line Band Scatter	Color	Colors of the serieses, bands, and scatter circles	Provide array of objects to identify colors of each line & scatter for the y-axis. Order of the objects should be the same as yFields provided in the dimensions.	Format: [     { line: '#878770', band: '#d0d1c3' },     { line: '#f29474' },     { circle: 'orange' },   ]
+yValueFormat	Line Band Scatter	Y-Axis	Formatter for y-axis value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+scatterCircleRadius	Line Band Scatter	Size	Radius of scatter circles	Adjust size of scatter circles by providing a radius	Positive Number
+highlightRanges	Line Band Scatter	Section Highlighter	Background region to be highlighted	Chose background regions of the chart to be highlighted. Provide an array of arrays. Child arrays should have values corresponding to x-axis.	[     [1880, 2019],     [2019, 2100],   ]
+highlightRangeColors	Line Band Scatter	Section Highlighter	Colors of the background region to be highlighted	Provide array of colors. Number of colors should be equal to number of highlighted regions	['#46474512', '#ff000012']
+aspectRatio	Mace	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Mace	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Mace	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Mace	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Mace	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Mace	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+oppositeDirectionColor	Mace	Color	Color of maces moving in opposite directions in both x & y axes.	Provide color of maces moving in opposite directions in both x & y axes.	Valid color value.  Example: 'red' or '#333'
+sameDirectionColor	Mace	Color	Color of maces moving in same directions in both x & y axes.	Provide color of maces moving in same directions in both x & y axes.	Valid color value.  Example: 'red' or '#333'
+yAxisTitle	Mace	Y-Axis	Title of y-axis	Defaults to name of yFieldStart → name of yFieldEnd	Any string
+xAxisTitle	Mace	X-Axis	Title of x-axis	Defaults to name of xFieldStart → name of xFieldEnd	Any string
+xValueFormatter	Mace	X-Axis	Formatter for x value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+yValueFormatter	Mace	Y-Axis	Formatter for y value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+directionStartLabel	Mace	Legend	Label for start of direction legend	Provide label for start of direction legend 	Any string
+directionEndLabel	Mace	Legend	Label for end direction legend	Provide label for end of direction legend 	Any string
+sizeLegendValues	Mace	Legend	Value of size for size legend circles	Provide array of numbers corresponding to the size values to be shown in size legend.	Array of numbers
+sizeLegendMoveSizeObjectDownBy	Mace	Legend	Gap between size legend label and size legend dominos	Adjust the spacing within the size legend area	Any number
+sizeLegendTitle	Mace	Legend	Title of size legend	Defaults to sizeField column name	Any string
+sizeValueFormatter	Mace	Size	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+xAxisTickValues	Mace	X-Axis	Custom tick values for the x-axis	Provide tick values to be displayed on the x-axis	Array of numbers
+xScaleType	Mace	Scale	Scale type for size dimension	Chose liner or loag scale for the size of dominos	One of "log" or "linear"
+xScaleLogBase	Mace	Scale	Base of log scale	Base of log scale. Defautls to 10. Applicable only if sizeScaleType is log	Any positive number
+defaultState	Mace	Interaction Options	Dominos to be shown active in starting state	Provide an array of domino names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+activeOpacity	Mace	Interaction Options	Opacity of maces when active	Provide opacity to be applied on maces when in active state	Number between 0 and 1
+inactiveOpacity	Mace	Interaction Options	Opactiy of maces when inactive	Provide opacity to be applied on maces when in inactive state	Number between 0 and 1
+circleSizeRange	Mace	Size	Minimum and maximum radius in pixels of the mace circles.	Provide and array of 2 numbers. First for minimum size and second for maximum size of the mace circle. Defaults to [5, 30]	Array of 2 numbers. Example [5,30]
+lineWidthRange	Mace	Size	Minimum and maximum width in pixels of the mace bar.	Provide and array of 2 numbers. First for minimum size and second for maximum size of the mace bars. Defaults to [2, 4]	Array of 2 numbers. Example [2,4]
+searchInputClassNames	Mace	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Mace	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Mace	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Motion Bubbble	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Motion Bubbble	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Motion Bubbble	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Motion Bubbble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Motion Bubbble	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Motion Bubbble	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+motionDelay	Motion Bubbble	Interaction Options	Time interval (in ms) for motion of bubbles	Adjust time interval between bubbles moving from state of one time to another	Positiver number
+sizeRange	Motion Bubbble	Size	Minimum and maximum radius in pixels of the bubbles	Provide and array of 2 numbers. First for minimum size and second for maximum size of the mace circle. Defaults to [5, 30]	Array of 2 numbers. Example [5,30]
+sizeValueFormat	Motion Bubbble	Size	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+xDomainCustom	Motion Bubbble	X-axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum value and second for maximum value.	Array of 2 numbers. Example [1,5]
+xAxisLabel	Motion Bubbble	X-axis	Title of x-axis	Defaults to xField column name	Any string
+xValueFormat	Motion Bubbble	X-axis	Formatter for x-value	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+yDomainCustom	Motion Bubbble	Y-Axis	Minimum and maximum values of the y-axis	Provide and array of 2 numbers. First for minimum value and second for maximum value.	Array of 2 numbers. Example [1,5]
+yAxisLabel	Motion Bubbble	Y-Axis	Title of y-axis	Defaults to yField column name	Any string
+yValueFormat	Motion Bubbble	Y-Axis	Formatter for y-value	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+inbuiltScheme	Motion Bubbble	Color	Color scheme of the bubbles along the x-axis.	Chose one of the provided color schemes.	One of schemeBrBG, schemePRGn', schemePiYG', schemePuOr', schemeRdBu', schemeRdGy', schemeRdYlBu', schemeRdYlGn', schemeSpectral', schemeBuGn', schemeBuPu', schemeGnBu', schemeOrRd', schemePuBuGn', schemePuBu', schemePuRd', schemeRdPu', schemeYlGnBu', schemeYlGn', schemeYlOrBr', schemeYlOrRd',  schemeBlues', schemeGreens', schemeGreys', schemePurples', schemeReds', schemeOranges'
+numberOfColors	Motion Bubbble	Color	Number of colors to be used for bubbles	Provide the number of colors to be used for bubble categories.   This option is useful when categories are more than number of colors. Colors repeat when number categories are more than colors provided.	Positive number
+inactiveOpacity	Motion Bubbble	Interaction Options	Opactiy of maces when inactive	Provide opacity to be applied on maces when in inactive state	Number between 0 and 1
+activeOpacity	Motion Bubbble	Interaction Options	Opacity of maces when active	Provide opacity to be applied on maces when in active state	Number between 0 and 1
+startButtonClassNames	Motion Bubbble	Styling	CSS classes for styling the start button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+stopButtonClassNames	Motion Bubbble	Styling	CSS classes for styling the stop button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+searchButtonClassNames	Motion Bubbble	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Overlap Area	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Overlap Area	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Overlap Area	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Overlap Area	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Overlap Area	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Overlap Area	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+alternatingTickLabelsXAxis	Overlap Area	X-Axis	X-axis on alternating groups	Chose if x-axis should be displayed on alternating groups of serieses	One of "true" or "false"
+xAxisLabel	Overlap Area	X-Axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+yAxisLabel	Overlap Area	Y-Axis	Label for y-axis	Provide a label for the y-axis. Defaults to yField name.	Any string
+verticalLines	Overlap Area	Reference Lines	Vertical lines to be displayed along areas	Provide an array for vertical lines to be displayed along areas. Each element in the array should contain x-value, group, and series corresponding to the vertical line.	[     { x: '6', group: 'United Income', series: 'Pan' },     { x: '4', group: 'United Income', series: 'Pre' },     { x: '2', group: 'Consumer Auto', series: 'Pre' },     { x: '5', group: 'Dealer', series: 'Post' },     { x: '4', group: 'Refinance', series: 'Pan' },     { x: '8', group: 'Servicing', series: 'Pan' },   ]
+verticalDashedLineLabels	Overlap Area	Reference Lines	Labels of vertical lines	Provide labels for vertical lines. 	Format: [     { series: 'Pan', label: 'Pan Avg' },     { series: 'Pre', label: 'Pre Avg' },     { series: 'Post', label: 'Post Avg' }, ]
+colorScheme	Overlap Area	Color	Color scheme of the areas.	Chose colors of the areas by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+areaOpacity	Overlap Area	Area	Opacity of overlapping areas	Provide opacity of overlapping areas. Opacity 1 will hide areas behind the front one.	Number between 0 and 1
+yAxisTickSizeOffset	Overlap Area	Y-Axis	Spacing between y-axis and y-axis ticks	Adjust spacing between y-axis and y-axis ticks	Any number
+yAxisTicksFontSize	Overlap Area	Y-Axis	Font size of y-axis ticks	Provide font-size of the y-axis tick labels	Positive number
+yAxisPosition	Overlap Area	Y-Axis	Position of y-axis	Chose y-axis to be on the left or right of the chart	One of "right" or "left"
+yAxisGridLines	Overlap Area	Grid	Switch on/off horizontal gridlines	Chose to keep horizontal gridlines	One of "true" or "false"
+yAxisLabelHorizontalOffset	Overlap Area	Y-Axis	Spacing between y-axis and y-axis labels	Adjust spacing between y-axis and y-axis label	Any number
+xAxisTicksFontSize	Overlap Area	X-Axis	Font size of x-axis ticks	Provide font-size of the x-axis tick labels	Positive number
+xAxisPosition	Overlap Area	X-Axis	Position of x-axis	Chose x-axis to be on the bottom or top of the chart	One of "top" or "bottom"
+xAxisTickSizeOffset	Overlap Area	X-Axis	Spacing between x-axis and x-axis ticks	Adjust spacing between x-axis and x-axis ticks	Any number
+xAxisGridLines	Overlap Area	Grid	Switch on/off vertical gridlines	Chose to keep vertical gridlines	One of "true" or "false"
+aspectRatio	Overlap Bar	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Overlap Bar	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Overlap Bar	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Overlap Bar	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Overlap Bar	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Overlap Bar	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+barOpacity	Overlap Bar	Bar	Opacity of overlapping bars	Provide opacity of overlapping bars. Opacity 1 will hide areas behind the front one.	Number between 0 and 1
+barThickness	Overlap Bar	Bar	Width of the bars	Adjust bar width by providing a number between 0 and 1	Number between 0 and 1
+outerPadding	Overlap Bar	X-Axis	Horizontal spacing to the left of first and right of last bars	Adjust the spacing to the left and right of the first and last bar by chosing a value between 0 and 1.	Number between 0 and 1
+colorScheme	Overlap Bar	Color	Colors of the bars. 	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+showOnlyEveryNthValue	Overlap Bar	X-Axis	Frquency of x-axis ticks	Adjust frequency of x-axis tick values. If 2 is provided then every second value will be show. If 3 is provided then every third tick value will be shown.	Positive number
+xAxisPosition	Overlap Bar	X-Axis	Position of x-axis	Chose x-axis to be on the bottom or top of the chart	One of "top" or "bottom"
+xAxisLabel	Overlap Bar	X-Axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+xAXisLabelFontSize	Overlap Bar	X-Axis	Font size of x-axis label	Provide font-size of the x-axis label	Positive number
+xAxisLabelOffset	Overlap Bar	X-Axis	Spacing between x-axis and x-axis label	Adjust spacing between x-axis and x-axis label	Any number
+yAxisPosition	Overlap Bar	Y-Axis	Position of y-axis	Chose y-axis to be on the left or right of the chart	One of "right" or "left"
+yAxisLabelOffset	Overlap Bar	Y-Axis	Spacing between y-axis and y-axis label	Adjust spacing between y-axis and y-axis label	Any number
+yAxisLabel	Overlap Bar	Y-Axis	Label for y-axis	Provide a label for the y-axis. Defaults to yField name.	Any string
+yAXisLabelFontSize	Overlap Bar	Y-Axis	Font size of y-axis label	Provide font-size of the y-axis label	Positive number
+nanDisplayMessage	Overlap Bar	Interaction Options	Message in tooltip for bars when value is null	Chose message in the tooltip for bars when the value is null. Defaults to "NA".	Any string
+referenceLines	Overlap Bar	Reference Lines	Vertical lines to be displayed along bars	Provide an array for vertical lines to be displayed along areas. Each element in the array should contain x-value, label for legend, and color corresponding to the vertical line.	Format: [   { value: 2005, label: 'Zim-Avg', color: 'orange' },      { value: 2015, label: 'Afg-Avg', color: 'blue' }, ]
+referenceLinesOpacity	Overlap Bar	Reference Lines	Opacity of reference lines	Provide opacity of vertical lines. 	Number between 0 and 1
+aspectRatio	Packed Bubble	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginBottom	Packed Bubble	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginLeft	Packed Bubble	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginRight	Packed Bubble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginTop	Packed Bubble	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Packed Bubble	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+sizeRange	Packed Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+customColorScheme	Packed Bubble	Color	Color scheme of the bubbles along the y-axis.	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+inbuiltScheme	Packed Bubble	Color	Color scheme of the bubbles along the y-axis.	Chose one of the provided color schemes.	One of schemeBrBG, schemePRGn', schemePiYG', schemePuOr', schemeRdBu', schemeRdGy', schemeRdYlBu', schemeRdYlGn', schemeSpectral', schemeBuGn', schemeBuPu', schemeGnBu', schemeOrRd', schemePuBuGn', schemePuBu', schemePuRd', schemeRdPu', schemeYlGnBu', schemeYlGn', schemeYlOrBr', schemeYlOrRd',  schemeBlues', schemeGreens', schemeGreys', schemePurples', schemeReds', schemeOranges'
+numberOfColors	Packed Bubble	Color	Number of colors to be used from the provided scheme.	Chose number  of colors for the bubbles.	Positive Integer
+colorLegendTitle	Packed Bubble	Legend	Title of color legend	Defaults to xField column name	Any string
+sizeValueFormat	Packed Bubble	Size	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+sizeValuePrefix	Packed Bubble	Size	Prefix for size value	Defaults to empty string	Any string
+sizeValuePostfix	Packed Bubble	Size	Suffix for size value	Defaults to empty string	Any string
+sizeLegendGapInCircles	Packed Bubble	Legend	Gap in pixels between size legend circles	Change the value to adjust th gap between size legend circles	Any number
+sizeLegendTitle	Packed Bubble	Legend	Title of size legend	Defaults to sizeField column name	Any string
+sizeLegendValues	Packed Bubble	Legend	Value of size for size legend circles	Provide array of numbers corresponding to the size values to be shown in size legend.	Array of numbers
+yValueFormat	Packed Bubble	Formatting	Formatter for y-axis value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+yValuePrefix	Packed Bubble	Formatting	Prefix for y-axis values	Defaults to empty string	Any string
+yValuePostfix	Packed Bubble	Formatting	Suffix for y-axis values	Defaults to empty string	Any string
+collisionDistance	Packed Bubble	Force	Distance between the bubbles in steady state	Adjust the value to change the density of bubbles.	Positive Integer
+circleDiameter	Packed Bubble	Force	Diameter of the overall circle containing the bubbles	Controls y-range. Adjust the outer circle size.	Positive Integer
+yForceStrength	Packed Bubble	Force	Strength of force along y-axis	Adjust strength of force along y-axis.	Positive Integer
+collisionForceStrength	Packed Bubble	Force	Strength of collision force	Adjust strength of collison force.	Positive Integer
+radialForceCircleDiameter	Packed Bubble	Force	Range of radial force	Adjust of areas of influence of radial force. Indirect way of adjusting radial force strength.	Positive Integer
+radialForceStrength	Packed Bubble	Force	Strength of radial force	Adjust strength of radial force.	Any number
+manyBodyForceStrength	Packed Bubble	Force	Attraction force	Adjust strength of attraction force. This is a minor force used for fine tunig. Doesn't have much change.	Any number
+searchInputClassNames	Packed Bubble	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Parallel Connections	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Parallel Connections	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Parallel Connections	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Parallel Connections	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Parallel Connections	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Parallel Connections	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+connectionColor	Parallel Connections	Color	Color of connection	Provide color of the connection	Valid color value.  Example: 'red' or '#333'
+hoverConnectionColor	Parallel Connections	Interaction Options	Color of connection on hover	Provide color of the connection on hover	Valid color value.  Example: 'red' or '#333'
+connectionCircleRadius	Parallel Connections	Connection	Radius of circles at the connection ends	Provide radius of circles at the connection ends. Defaults to 5.	Positive number
+connectionLineWidth	Parallel Connections	Connection	Width of connection line	Provide width of connection line. Defautls to 2.	Positive number
+yAxisValueFormatter	Parallel Connections	Y-Axis	Formatter for y-value	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+xAxisValueFormatter	Parallel Connections	X-axis	Formatter for x-value	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+defaultState	Parallel Connections	Interaction Options	Connections to be shown active in starting state	Provide an array of connection names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+xAxisPosition	Parallel Connections	X-axis	Position of x-axis	Chose x-axis to be on the bottom or top of the chart	One of "top" or "bottom"
+xAxisLabelOffset	Parallel Connections	X-axis	Spacing between x-axis and x-axis label	Adjust spacing between x-axis and x-axis label	Any number
+xAxisLabelFontSize	Parallel Connections	X-axis	Font size of x-axis label	Provide font-size of the x-axis label	Positive number
+xAxisLabel	Parallel Connections	X-axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+yAxisPosition	Parallel Connections	Y-Axis	Position of y-axis	Chose y-axis to be on the left or right of the chart	One of "right" or "left"
+yAxisLabelOffset	Parallel Connections	Y-Axis	Spacing between y-axis and y-axis label	Adjust spacing between y-axis and y-axis label	Any number
+yAXisLabelFontSize	Parallel Connections	Y-Axis	Font size of y-axis label	Provide font-size of the y-axis label	Positive number
+yAxisLabel	Parallel Connections	Y-Axis	Label for y-axis	Provide a label for the y-axis. Defaults to yField name.	Any string
+inactiveOpacity	Parallel Connections	Interaction Options	Opactiy of connections when inactive	Provide opacity to be applied on connections when in inactive state	Number between 0 and 1
+searchOpacity	Parallel Connections	Interaction Options	Opactiy of connections when matched on search	Provide opacity to be applied on maces connections when matched on search	Number between 0 and 1
+activeOpacity	Parallel Connections	Interaction Options	Opacity of connections when active	Provide opacity to be applied on connections when in active state	Number between 0 and 1
+searchInputClassNames	Parallel Connections	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Parallel Connections	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Parallel Connections	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Parallel Connections	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Ridgeline	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Ridgeline	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Ridgeline	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Ridgeline	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Ridgeline	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Ridgeline	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+xAxisTitle	Ridgeline	X-axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+xAxisDateParser	Ridgeline	X-axis	Format to parse inputed date field on xaxis	Provide a time parser string corresponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+xAxisDateFormatter	Ridgeline	X-axis	Format to format inputed date field on xaxis	Provide a time formatter string correponding to the input unique time field. Format of the formatter string are here: https://github.com/d3/d3-time-format	Any string
+xTooltipFormatter	Ridgeline	X-axis	Format to format x-value dates for tooltip	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+overlap	Ridgeline	Ridge	Overlap of ridges over other ridges	Adjust overlap of ridges over other ridges	Positive number
+yValueFormatter	Ridgeline	Y-axis	Formatter for y value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+yValuePrefix	Ridgeline	Y-axis	Suffix for y-axis values	Defaults to empty string	Any string
+yValuePostfix	Ridgeline	Y-axis	Suffix for y-axis values	Defaults to empty string	Any string
+seriesLabelPosition	Ridgeline	Y-axis	Position of ridge labels	Chose ridge labels to be on the left or right of the chart	One of "right" or "left"
+colorRange	Ridgeline	Color	Colors of ridges	Chose colors of the ridges by providing an array of valid colors values.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of stacked fields. Example: ['red', '#333'] or d3.schemeCategory10
+defaultState	Ridgeline	Interaction Options	Ridges to be shown active in starting state	Provide an array of ridges names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+activeOpacity	Ridgeline	Interaction Options	Opactiy of ridgeline when active	Provide opacity to be applied on ridgeline when in active state	Number between 0 and 1
+inactiveOpacity	Ridgeline	Interaction Options	Opactiy of ridgeline when inactive	Provide opacity to be applied on ridgeline when in inactive state	Number between 0 and 1
+searchInputClassNames	Ridgeline	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Ridgeline	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Ridgeline	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Ridgeline	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Sankey	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Sankey	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Sankey	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Sankey	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Sankey	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Sankey	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+align	Sankey	Node	Alignment of the node.	Chose alignment of nodes from one of left, right, center, and justify. Defaults to justify.	One of 'justify', 'left', 'right', 'center'
+verticalGapInNodes	Sankey	Node	Vertical gaps between nodes	Adjust vertical gap between nodes.	Positive number
+nodeWidth	Sankey	Node	Width of the node	Provide width of the node	Positive number
+units	Sankey	Formatting	Suffix of the value	Provide suffix of the value. Defaults to empty string	Any string
+format	Sankey	Formatting	Format to format value dates for tooltip	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+searchInputClassNames	Sankey	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
