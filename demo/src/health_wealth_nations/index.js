@@ -1,7 +1,5 @@
 /* global d3, viz, _ */
 
-const { truncate } = require('lodash-es')
-
 const gdpPerCapDataPath =
   'GM-GDP per capita - Dataset - v27 - data-for-countries-etc-by-year.csv'
 const lifeExpDataPath =
