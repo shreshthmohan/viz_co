@@ -6,16 +6,16 @@ marginRight	Horizontal Bubble	Chart Area	Margin in pixels from the right of the 
 marginBottom	Horizontal Bubble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
 marginLeft	Horizontal Bubble	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
 bgColor	Horizontal Bubble	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
-customColorScheme	Horizontal Bubble	Color	Color scheme of the bubbles along the x-axis.	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+customColorScheme	Horizontal Bubble	Color	Color scheme of the bubbles along the x-axis.	Chose colors of the bubbles by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
 inbuiltScheme	Horizontal Bubble	Color	Color scheme of the bubbles along the x-axis.	Chose one of the provided color schemes.	One of schemeBrBG, schemePRGn', schemePiYG', schemePuOr', schemeRdBu', schemeRdGy', schemeRdYlBu', schemeRdYlGn', schemeSpectral', schemeBuGn', schemeBuPu', schemeGnBu', schemeOrRd', schemePuBuGn', schemePuBu', schemePuRd', schemeRdPu', schemeYlGnBu', schemeYlGn', schemeYlOrBr', schemeYlOrRd',  schemeBlues', schemeGreens', schemeGreys', schemePurples', schemeReds', schemeOranges'
 numberOfColors	Horizontal Bubble	Color	Number of colors to be used from the provided scheme.	Chose number  of colors for the bubbles.	Positive Integer
 collisionDistance	Horizontal Bubble	Force	Distance between the bubbles in steady state	Adjust the value to change the density of bubbles.	Positive Integer
-xDomainCustom	Horizontal Bubble	X-Axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum size and secod for maximum value.	Array of 2 numbers. Example [1,5]
+xDomainCustom	Horizontal Bubble	X-Axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum size and second for maximum value.	Array of 2 numbers. Example [1,5]
 xAxisLabel	Horizontal Bubble	X-Axis	X-axis label	Defaults to xField column name	Any string
 xValuePrefix	Horizontal Bubble	X-Axis	Prefix for x-axis values	Defaults to empty string	Any string
 xValueFormatter	Horizontal Bubble	X-Axis	Formatter for x-axis value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
 xValueSuffix	Horizontal Bubble	X-Axis	Suffix for x-axis values	Defaults to empty string	Any string
-sizeRange	Horizontal Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+sizeRange	Horizontal Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and second for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
 sizeValuePrefix	Horizontal Bubble	Size	Prefix for size value	Defaults to empty string	Any string
 sizeValueFormatter	Horizontal Bubble	Size	Formatter for size value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
 sizeValueSuffix	Horizontal Bubble	Size	Suffix for size value	Defaults to empty string	Any string
@@ -150,7 +150,7 @@ sizeValueFormatter	Domino Ribbon	Formatting	Formatter for size value.	Provide a 
 colorDomain	Domino Ribbon	Color	Custom domain to determine color of dominos	Provide and array of 2 numbers. 	Array of 2 numbers. Example [1,5]
 colorRange	Domino Ribbon	Color	Colors of dominos	Chose colors of the dominos by providing an array of valid colors values.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme. Minimum number of colors in the array should be euqal to number of stacked fields. Example: ['red', '#333'] or d3.schemeCategory10
 colorLegendLabel	Domino Ribbon	Legend	Title of color legend	Provide label for colro legend. Default to xField name.	Any string
-sizeRange	Domino Ribbon	Size	Minimum and maximum size of the dominos in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+sizeRange	Domino Ribbon	Size	Minimum and maximum size of the dominos in pixels.	Provide and array of 2 numbers. First for minimum size and second for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
 sizeScaleType	Domino Ribbon	Scale	Scale type for size dimension	Chose liner or loag scale for the size of dominos	One of "log" or "linear"
 sizeScaleLogBase	Domino Ribbon	Scale	Base of log scale	Base of log scale. Defautls to 10. Applicable only if sizeScaleType is log	Any positive number
 dominoHeight	Domino Ribbon	Size	Height of the domino	Adjust height of domino by chosing a number between 0 and 1	Number between 0 and 1
@@ -278,7 +278,7 @@ marginLeft	Packed Bubble	Chart Area	Margin in pixels from the right of the chart
 marginRight	Packed Bubble	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
 marginTop	Packed Bubble	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
 bgColor	Packed Bubble	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
-sizeRange	Packed Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and secod for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
+sizeRange	Packed Bubble	Size	Minimum and maximum size of the circles in pixels.	Provide and array of 2 numbers. First for minimum size and second for maximum size of the circle. Defaults to [2, 20]	Array of 2 numbers. Example [1,5]
 customColorScheme	Packed Bubble	Color	Color scheme of the bubbles along the y-axis.	Chose colors of the bars by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
 inbuiltScheme	Packed Bubble	Color	Color scheme of the bubbles along the y-axis.	Chose one of the provided color schemes.	One of schemeBrBG, schemePRGn', schemePiYG', schemePuOr', schemeRdBu', schemeRdGy', schemeRdYlBu', schemeRdYlGn', schemeSpectral', schemeBuGn', schemeBuPu', schemeGnBu', schemeOrRd', schemePuBuGn', schemePuBu', schemePuRd', schemeRdPu', schemeYlGnBu', schemeYlGn', schemeYlOrBr', schemeYlOrRd',  schemeBlues', schemeGreens', schemeGreys', schemePurples', schemeReds', schemeOranges'
 numberOfColors	Packed Bubble	Color	Number of colors to be used from the provided scheme.	Chose number  of colors for the bubbles.	Positive Integer
@@ -363,3 +363,79 @@ nodeWidth	Sankey	Node	Width of the node	Provide width of the node	Positive numbe
 units	Sankey	Formatting	Suffix of the value	Provide suffix of the value. Defaults to empty string	Any string
 format	Sankey	Formatting	Format to format value dates for tooltip	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
 searchInputClassNames	Sankey	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+aspectRatio	Before After Bullet	Chart Area	Ratio of Width to the height of the visual.	Use to adjust the hieght of the visual corresponsing to a given width of the visual container.  Height of the visual will decrease with increase in aspect ratio.	0 to positive infinity
+marginTop	Before After Bullet	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Before After Bullet	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Before After Bullet	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Before After Bullet	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+bgColor	Before After Bullet	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+beforeFieldColor	Before After Bullet	Color	Color of before circle of the connection	Provide color of before circle of the connection.	Valid color value.  Example: 'red' or '#333'
+afterFieldColor	Before After Bullet	Color	Color of after circle of the connection	Provide color of after circle of the connection.	Valid color value.  Example: 'red' or '#333'
+glyphSize	Before After Bullet	Connection	Radius of connector circle	Provide radius of circles at the connection ends. Defaults to 5.	Any number
+connectorSize	Before After Bullet	Connection	Width of connector line	Provide width of connection line. Defautls to 5.	Any number
+connectorColorStrategy	Before After Bullet	Color	Strategy for connection color	Chose strategy for connector color: farForReference: Colonnector color corresponds to field (before/after) farther from reference value closeToReference: Colonnector color corresponds to field (before/after) closer to reference value customColor: Provide custom color for the connector	One of 'farFromReference', 'closeToReference', or 'customColor',
+connectorColorCustom	Before After Bullet	Color	Color of the connection	Provide color of the connection. This color is applied only when connectionColorStrategy is customColor.	Valid color value.  Example: 'red' or '#333'
+connectorLegendLabelBefore	Before After Bullet	Legend	Legend label for connector when color as before field	Defaults to empty string	Any string
+connectorLegendLabelAfter	Before After Bullet	Legend	Legend label for connector when colored as after field	Defaults to empty string	Any string
+referenceValue	Before After Bullet	Reference Lines	Reference value for reference line	Provide value where reference line is to be displayed	Any number
+referenceLineColor	Before After Bullet	Reference Lines	Color of reference line	Provide color of reference line	Valid color value.  Example: 'red' or '#333'
+referenceLineWidth	Before After Bullet	Reference Lines	Width of refernce line	Provide width of reference line	Positive number
+referenceLineOpacity	Before After Bullet	Reference Lines	Opacity of reference line	Provide opacity of reference line	Number between 0 and 1
+referenceLabel	Before After Bullet	Legend	Legend label for reference line	Defaults to empty string	Any string
+beforeLegendLabel	Before After Bullet	Legend	Legend label for before field	Defaults to before field	Any string
+afterLegendLabel	Before After Bullet	Legend	Legend label for after field	Defaults to after field	Any string
+topicLabelFontSize	Before After Bullet	Topic	Topic label font size	Provide font size of topic label	Positive number
+topicLabelTextColor	Before After Bullet	Topic	Topic label color	Provide color of topic label	Valid color value.  Example: 'red' or '#333'
+topicLabelYOffset	Before After Bullet	Y-Axis	Spacing between y-axis and y-axis label	Adjust spacing between y-axis and y-axis label	Any number
+defaultState	Before After Bullet	Interaction Options	Topics to be shown active in starting state	Provide an array of topics names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+xScaleType	Before After Bullet	Scale	Scale type for x-axis	Chose liner or loag scale for x-axis	One of "log" or "linear"
+xScaleLogBase	Before After Bullet	Scale	Base of log scale	Base of log scale. Defautls to 10. Applicable only if sizeScaleType is log	Any positive number
+xAxisPosition	Before After Bullet	X-Axis	Position of x-axis	Chose x-axis to be on the bottom or top of the chart	One of "top" or "bottom"
+xAxisOffset	Before After Bullet	X-Axis	Offset of x-axis	Adjust x-axis spacing from the chart	Any number
+xAxisLabel	Before After Bullet	X-Axis	Label for x-axis	Provide a label for the x-axis. Defaults to xField name.	Any string
+xAXisLabelFontSize	Before After Bullet	X-Axis	Font size of x-axis label	Provide font-size of the x-axis label	Positive number
+xAxisLabelOffset	Before After Bullet	X-Axis	Spacing between x-axis and x-axis label	Adjust spacing between x-axis and x-axis label	Any number
+xAxisCustomDomain	Before After Bullet	X-Axis	Minimum and maximum values of the x-axis	Provide and array of 2 numbers. First for minimum size and second for maximum value.	Array of 2 numbers. Example [1,5]
+xAxisTickFontSize	Before After Bullet	X-Axis	Font size of x-axis ticks	Provide font-size of the x-axis tick labels	Positive number
+xAxisTickValues	Before After Bullet	X-Axis	Custom tick values for the x-axis	Provide tick values to be displayed on the x-axis	Array of numbers
+xAxisTickOffset	Before After Bullet	X-Axis	Spacing between x-axis and x-axis ticks	Adjust spacing between x-axis and x-axis ticks	Any number
+xAxisLineThickness	Before After Bullet	X-Axis	Thickness of x-axis	Provide thickness of x-axis	Positive number
+xAxisTickFormatter	Before After Bullet	X-Axis	Formatter for tick-values on x-axis	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+activeOpacity	Before After Bullet	Interaction Options	Opacity of connector & circles when active	Provide opacity to be applied on connector & circles when in active state	Number between 0 and 1
+inactiveOpacity	Before After Bullet	Interaction Options	Opacity of connector & circles when inactive	Provide opacity to be applied on connector & circles when in inactive state	Number between 0 and 1
+valuePrefix	Before After Bullet	Formatting	Prefix for value	Defaults to empty string	Any string
+valuePostfix	Before After Bullet	Formatting	Suffix for value	Defaults to empty string	Any string
+valueFormatter	Before After Bullet	Formatting	Formatter for value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+topicLabelXOffset	Before After Bullet	Topic	Topic tabel offset along x-axis 	Adjust topic label position alond x-axis	Any number
+yPaddingInner	Before After Bullet	Y-Axis	Vertical spacing between topics	Adjust the vertical spacing between topics by chosing a value between 0 and 1.	Number between 0 and 1
+yPaddingOuter	Before After Bullet	Y-Axis	Vertical spacing abvoe top and below bottom topic	Adjust the spacing to above and below the first and last topic by chosing a value between 0 and 1.	Number between 0 and 1
+goToInitialStateButtonClassNames	Before After Bullet	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+searchInputClassNames	Before After Bullet	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Before After Bullet	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Before After Bullet	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+directionStartLabel	Triangle	Legend	Label for start of direction legend	Provide label for start of direction legend 	Any string
+directionEndLabel	Triangle	Legend	Label for end direction legend	Provide label for end of direction legend 	Any string
+circleRadius	Triangle	Connection	Radius of circle	Provide radius of circles. Defaults to 3.	Any number
+lineWidth	Triangle	Connection	Width of connector line	Provide width of connection line. Defautls to 1.	Any number
+stickLength	Triangle	Legend	Radius of circle in legend	Provide radius of circles at the connection ends. Defaults to 3.	Any number
+stickWidth	Triangle	Legend	Width of connector line in legend	Provide width of connection line. Defautls to 1.	Any number
+directionLegendGapForText	Triangle	Legend	Spacing between legend symbol and text for direction legend	Provide gap between legend symbol and text for direction legend	Any number
+marginTop	Triangle	Chart Area	Margin in pixels from the top of the chart area.	Use to adjust the spacing top of the visual.	Any number
+marginRight	Triangle	Chart Area	Margin in pixels from the right of the chart area.	Use to adjust the spacing right of the visual.	Any number
+marginBottom	Triangle	Chart Area	Margin in pixels from the bottom of the chart area.	Use to adjust the spacing bottom of the visual.	Any number
+marginLeft	Triangle	Chart Area	Margin in pixels from the left of the chart area.	Use to adjust the spacing left of the visual.	Any number
+valuePrefix	Triangle	Formatting	Prefix for value	Defaults to empty string	Any string
+valuePostfix	Triangle	Formatting	Suffix for value	Defaults to empty string	Any string
+valueFormat	Triangle	Formatting	Formatter for value.	Provide a formatter string. Format of the formatter string are here: https://github.com/d3/d3-format	Any string
+bgColor	Triangle	Chart Area	Background color of the chart area.	Change background color of the chart area.	Valid color value.  Example: 'red' or '#333'
+colorScheme	Triangle	Color	Color scheme of the connectors.	Chose colors of the connectors by providing an array of valid colors values. First value corresponds to left bar color. Second value corresponds to right bar.  One of the d3 color scheme can also be provided. (https://github.com/d3/d3-scale-chromatic)	Array of valid color values or d3 color scheme.  Example: ['red', '#333'] or d3.schemeCategory10
+fieldLabels	Triangle	Axes	Labels of the sides of the triagle	Provide labels of the sides of the triangle. These labels will also be used in the legends	Format: ['bottom', 'right', 'left']
+activeOpacity	Triangle	Interaction Options	Opacity of connector & circles when active	Provide opacity to be applied on connector & circles when in active state	Number between 0 and 1
+inactiveOpacity	Triangle	Interaction Options	Opacity of connector & circles when inactive	Provide opacity to be applied on connector & circles when in inactive state	Number between 0 and 1
+defaultState	Triangle	Interaction Options	Topics to be shown active in starting state	Provide an array of topics names to be shown active in starting state. Provide 'All' if you want to keep all bars active.	Array of bar names or All. Example: ['Raligion', 'Income'] or 'All' or []
+searchInputClassNames	Triangle	Styling	CSS classes for styling the search button	Provide css classes to style the search button as intended. Provided css classes should be available in included css style sheet.	Any string
+goToInitialStateButtonClassNames	Triangle	Styling	CSS classes for styling the initial state button	Provide css classes to style the initial state button as intended. Provided css classes should be available in included css style sheet.	Any string
+clearAllButtonClassNames	Triangle	Styling	CSS classes for styling the show all button	Provide css classes to style the show all button as intended. Provided css classes should be available in included css style sheet.	Any string
+showAllButtonClassNames	Triangle	Styling	CSS classes for styling the clear all button	Provide css classes to style the clear all button as intended. Provided css classes should be available in included css style sheet.	Any string
+colorLegendClassNames	Triangle	Legend	CSS classes for styling the color legend area	Provide css classes to style the color legend area as intended. Provided css classes should be available in included css style sheet.	Any string
+directionLegendClassNames	Triangle	Legend	CSS classes for styling the direction legend area	Provide css classes to style the direction legend area as intended. Provided css classes should be available in included css style sheet.	Any string

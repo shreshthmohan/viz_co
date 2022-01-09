@@ -64,3 +64,9 @@ colorField	Ridgeline	Column name for assigning colors to ridges	Categorical
 sourceField	Sankey	Column name for the source field	Categorical	
 targetField	Sankey	Column name for the target field	Categorical	
 valueField	Sankey	Column name for the value between source and target	Numeric	
+beforeField	Before After Bullet	Column name for before value of topic	Numeric	
+afterField	Before After Bullet	Column name for after value of topic	Numeric	
+topicField	Before After Bullet	Column name identifying the topic	Categorical	
+startField	Triangle		Numeric	
+endField	Triangle		Numeric	
+nameField	Triangle		Categorical	
