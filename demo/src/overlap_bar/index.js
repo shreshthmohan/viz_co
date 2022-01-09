@@ -38,10 +38,10 @@ const options = {
   showOnlyEveryNthValue: 1,
 
   nanDisplayMessage: 'NA',
-  // referenceLines: [
-  //   { value: 2005, label: 'Zim-Avg', color: 'orange' },
-  //   { value: 2015, label: 'Afg-Avg', color: 'blue' },
-  // ],
+  referenceLines: [
+    { value: 2005, series: 'Zim', label: 'Zim-Avg', color: 'orange' },
+    { value: 2015, series: 'Afg', label: 'Afg-Avg', color: 'blue' },
+  ],
   referenceLinesOpacity: 0.8,
 }
 

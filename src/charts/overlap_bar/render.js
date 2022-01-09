@@ -421,22 +421,10 @@ function renderLegends({ widgetsRight, colorsRgba, yFields, referenceLines }) {
       customClass: '',
     }),
   )
-
-  const refLinesColors = []
-  const refLinesLabels = []
-  referenceLines.forEach(l => {
-    refLinesLabels.push(l.label)
-    refLinesColors.push(d3.rgb(l.color))
-  })
-
-  const colorScaleForRefLines = d3
-    .scaleOrdinal()
-    .domain(refLinesLabels)
-    .range(refLinesColors)
   widgetsRight.append('div').html(
     dashedLegend({
-      labels: refLinesLabels,
-      color: colorScaleForRefLines,
+      labels: referenceLines,
+      color: colorScaleForLegend,
     }),
   )
 }

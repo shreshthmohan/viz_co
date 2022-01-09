@@ -11297,22 +11297,10 @@ g.circles circle.circle.circle-hovered {
         customClass: '',
       }),
     );
-
-    const refLinesColors = [];
-    const refLinesLabels = [];
-    referenceLines.forEach(l => {
-      refLinesLabels.push(l.label);
-      refLinesColors.push(d3__namespace.rgb(l.color));
-    });
-
-    const colorScaleForRefLines = d3__namespace
-      .scaleOrdinal()
-      .domain(refLinesLabels)
-      .range(refLinesColors);
     widgetsRight.append('div').html(
       dashedLegend({
-        labels: refLinesLabels,
-        color: colorScaleForRefLines,
+        labels: referenceLines,
+        color: colorScaleForLegend,
       }),
     );
   }
