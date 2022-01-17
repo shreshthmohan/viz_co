@@ -39,9 +39,19 @@ export {
 } from './charts/motion_bubble/index'
 
 export {
+  renderChart as renderMotionTrack,
+  validateAndRender as validateAndRenderMotionTrack,
+} from './charts/motion_track/index'
+
+export {
   renderChart as renderDominoRibbon,
   validateAndRender as validateAndRenderDominoRibbon,
 } from './charts/domino_ribbon/index'
+
+export {
+  renderChart as renderOverlapArea,
+  validateAndRender as validateAndRenderOverlapArea,
+} from './charts/overlap_area/index'
 
 export {
   renderChart as renderChoroplethCounties,
@@ -69,6 +79,11 @@ export {
 } from './charts/comparative_bar/index'
 
 export {
+  renderChart as renderOverlapBar,
+  validateAndRender as validateAndRenderOverlapBar,
+} from './charts/overlap_bar/index'
+
+export {
   renderChart as renderStackedBar,
   validateAndRender as validateAndRenderStackedBar,
 } from './charts/stacked_bar/index'
@@ -77,3 +92,13 @@ export {
   renderChart as renderBulletBeforeAfter,
   validateAndRender as validateAndRenderBulletBeforeAfter,
 } from './charts/bullet_before_after/index'
+
+export {
+  renderChart as renderParallelConnections,
+  validateAndRender as validateAndRenderParallelConnections,
+} from './charts/parallel_connections/index'
+
+export {
+  renderChart as renderPackedBubble,
+  validateAndRender as validateAndRenderPackedBubble,
+} from './charts/packed_bubble/index'

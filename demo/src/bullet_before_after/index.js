@@ -44,11 +44,11 @@ const options = {
   xAxisOffset: 20,
   xAxisLineThickness: 1,
   xAxisLabel: 'Emotion Score',
-  xAXisLabelFontSize: '14px',
+  xAXisLabelFontSize: 14,
   xAxisLabelOffset: 60,
   xAxisCustomDomain: [-0.8, 0.8],
   // xAxisTickValues: [-1, -0.8, -0.5, 0, 0.5, 0.8, 1],
-  xAxisTickFontSize: '14px',
+  xAxisTickFontSize: 14,
   xAxisColor: 'red',
   xAxisTickOffset: 20,
   xAxisTickFormatter: '.2f',
@@ -58,13 +58,13 @@ const options = {
   xAxisTickValueYOffset: 0,
 
   searchInputClassNames:
-    'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
+    'focus:ring-gray-500 focus:border-gray-500 text-xs border border-gray-300 rounded-sm px-2 py-1 shadow-inner',
   goToInitialStateButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   clearAllButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   showAllButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
 }
 
 viz.validateAndRenderBulletBeforeAfter({

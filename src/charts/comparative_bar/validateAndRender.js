@@ -14,6 +14,7 @@ import {
   checkColor,
   checkColorArray,
   optionValidation,
+  checkDefaultState,
 } from '../../utils/validation/optionValidations'
 import {
   showErrors,
@@ -41,16 +42,24 @@ const optionTypes = {
 
   bgColor: checkColor,
 
-  // /* Dimensions */
-  // /* xField */
+  colorScheme: checkColorArray(2),
+
+  barValueMidPoint: checkNumber,
+
+  xAxisTickSize: checkNumber,
   // leftXAxisLabel: checkString,
   // rightXAxisLabel: checkString,
   // xAxisLabel: checkString,
 
-  // /* Chart Specific */
-  colorScheme: checkColorArray(2),
-  barValueMidPoint: checkNumber,
-  barOpacity: checkNumberBetween(0, 1),
+  defaultState: checkDefaultState,
+
+  inactiveOpacity: checkNumberBetween(0, 1),
+  activeOpacity: checkNumberBetween(0, 1),
+
+  // goToInitialStateButtonClassNames: checkStringArray,
+  // searchInputClassNames: checkStringArray,
+  // clearAllButtonClassNames: checkStringArray,
+  // showAllButtonClassNames: checkStringArray,
 }
 
 export function validateAndRender({

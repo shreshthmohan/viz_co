@@ -34,15 +34,18 @@ const options = {
 
   connectorColorStrategy: 'farFromReference', //['farFromReference', 'closeToReference', 'customColor']
   connectorColorCustom: 'blue',
+  connectorLegendLabelBefore: 'Before is farther from threshhold',
+  connectorLegendLabelAfter: 'After is farther from threshhold',
   referenceLineColor: 'blue',
   referenceLineWidth: 2,
   referenceLineOpacity: 0.8,
   referenceValue: 10000,
+  referenceLabel: 'Ref',
 
   /* Legends */
   beforeLegendLabel: 'Before',
   afterLegendLabel: 'After',
-  topicLabelFontSize: '12px',
+  topicLabelFontSize: 12,
   topicLabelTextColor: '#000',
   topicLabelXOffset: 5,
   topicLabelYOffset: -1,
@@ -73,13 +76,13 @@ const options = {
   valueFormatter: '.2s',
 
   searchInputClassNames:
-    'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
+    'focus:ring-gray-500 focus:border-gray-500 text-xs border border-gray-300 rounded-sm px-2 py-1 shadow-inner',
   goToInitialStateButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   clearAllButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   showAllButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
 }
 
 viz.validateAndRenderBulletBeforeAfter({

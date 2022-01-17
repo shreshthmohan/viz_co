@@ -74,12 +74,11 @@ const options = {
   inactiveOpacity: 0.2,
 
   searchInputClassNames:
-    'border border-gray-300 text-sm rounded overscroll-y-auto px-1.5 py-0.5 shadow-inner',
-  // 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md overscroll-y-auto',
+    'focus:ring-gray-500 focus:border-gray-500 text-xs border border-gray-300 rounded-sm px-2 py-1 shadow-inner',
   goToInitialStateButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
   clearAllButtonClassNames:
-    'bg-gray-200 text-sm rounded px-1.5 py-0.5 border-gray-300 border',
+    'px-2 py-1 border border-transparent text-xs font-medium rounded-sm shadow-sm text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:cursor-not-allowed',
 }
 
 viz.validateAndRenderMace({
@@ -92,6 +91,13 @@ viz.validateAndRenderMace({
 viz.validateAndRenderMace({
   chartContainerSelector: '#chart-container-two',
   dataPath: dataPath_two,
-  options: options,
+  options: {
+    ...options,
+    oppositeDirectionColor: 'red',
+    sameDirectionColor: 'blue',
+
+    activeOpacity: 1,
+    inactiveOpacity: 0.6,
+  },
   dimensions: dimensions,
 })

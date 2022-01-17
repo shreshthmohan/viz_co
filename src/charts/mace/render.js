@@ -8,31 +8,268 @@ import { renderDirectionLegend } from '../../utils/helpers/directionLegend'
 import { preventOverflow, toClassText } from '../../utils/helpers/general'
 import { pointsToRotationAngle, maceShape } from './helpers'
 
-function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
+export function renderChart({
+  data,
+  dimensions: {
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+    nameField,
+  },
+
+  options: {
+    aspectRatio = 2,
+
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
+
+    bgColor = 'transparent',
+
+    oppositeDirectionColor = '#ee4e34',
+    sameDirectionColor = '#44a8c1',
+
+    yAxisTitle = `${yFieldStart} → ${yFieldEnd}`,
+    xAxisTitle = `${xFieldStart} → ${xFieldEnd}`,
+
+    xValueFormatter = '',
+    yValueFormatter = '',
+
+    directionStartLabel = 'start point',
+    directionEndLabel = 'end point',
+    sizeLegendValues = [1e6, 1e8, 1e9],
+    sizeLegendMoveSizeObjectDownBy = 5,
+    sizeLegendTitle = 'size legend title',
+    sizeValueFormatter = '',
+
+    xAxisTickValues = [],
+
+    xScaleType = 'linear', // linear or log
+    xScaleLogBase = 10, // applicable only if log scale
+
+    defaultState = [],
+
+    activeOpacity = 0.8, // click, hover, search
+    inactiveOpacity = 0.2,
+
+    circleSizeRange = [5, 30],
+    lineWidthRange = [2, 4],
+
+    searchInputClassNames = '',
+    goToInitialStateButtonClassNames = '',
+    clearAllButtonClassNames = '',
+
+    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
+    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
+  },
+  chartContainerSelector,
+}) {
+  applyInteractionStyles({
+    chartContainerSelector,
+    activeOpacity,
+    inactiveOpacity,
+  })
+
+  const coreChartWidth = 1000
+  const {
+    svg,
+    coreChartHeight,
+    allComponents,
+    chartCore,
+    widgetsLeft,
+    widgetsRight,
+  } = setupChartArea({
+    chartContainerSelector,
+    coreChartWidth,
+    aspectRatio,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    bgColor,
+  })
+
+  const tooltipDiv = initializeTooltip()
+
+  const dataParsed = parseData({
+    data,
+    xFieldStart,
+    xFieldEnd,
+    yFieldStart,
+    yFieldEnd,
+    sizeField,
+  })
+
+  const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
+    setupScales({
+      dataParsed,
+      coreChartHeight,
+      coreChartWidth,
+      yFieldStart,
+      yFieldEnd,
+      xFieldStart,
+      xFieldEnd,
+      xScaleType,
+      xScaleLogBase,
+      sizeField,
+      circleSizeRange,
+      lineWidthRange,
+      sameDirectionColor,
+      oppositeDirectionColor,
+      xAxisTickValues,
+    })
+
+  const nameValues = _(data).map(nameField).uniq().value()
+  const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
+
+  const gapInCircles = 30
+  renderSizeLegend({
+    gapInCircles,
+    circleSizeScale,
+    widgetsRight,
+    sizeLegendMoveSizeObjectDownBy,
+    sizeLegendValues,
+    sizeValueFormatter,
+    sizeLegendTitle,
+  })
+
+  const stickHeight = 3
+  const stickLength = 30
+  const stickWidthLegend = 1
+  const ballRadius = 6
+  const gapForText = 5
+  const singleMaceSectionHeight = 20
+
+  renderColorLegend({
+    stickHeight,
+    stickLength,
+    ballRadius,
+    gapForText,
+    singleMaceSectionHeight,
+    widgetsRight,
+    sameDirectionColor,
+    oppositeDirectionColor,
+    svg,
+  })
+
+  renderDirectionLegend({
+    selection: widgetsRight.append('svg'),
+    ballRadius,
+    stickLength,
+    stickWidthLegend,
+    gapForText,
+    directionStartLabel,
+    directionEndLabel,
+  })
+
+  renderXAxis({
+    chartCore,
+    coreChartHeight,
+    coreChartWidth,
+    xScale,
+    xAxisTickValues,
+    xAxisTitle,
+  })
+
+  // y-axis
+  renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle })
+
+  renderMaces({
+    chartCore,
+    dataParsed,
+    sizeField,
+    nameField,
+    defaultStateAll,
+    xFieldStart,
+    xFieldEnd,
+    xScale,
+    yScale,
+    yFieldStart,
+    yFieldEnd,
+    circleSizeScale,
+    lineWidthScale,
+    colorScale,
+    tooltipDiv,
+    sizeValueFormatter,
+    xValueFormatter,
+    yValueFormatter,
+    xFieldType,
+    yFieldType,
+  })
+
+  // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
+  // handleSearch accepts search query string and applied appropriate
+  const handleSearch = searchEventHandler(nameValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    nameField,
+    nameValues,
+    svg,
+    chartContainerSelector,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  })
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
+
+  // For responsiveness
+  // adjust svg to prevent overflows
+  preventOverflow({
+    allComponents,
+    svg,
+    margins: { marginLeft, marginRight, marginTop, marginBottom },
+  })
+}
+
+function applyInteractionStyles({
+  activeOpacity,
+  inactiveOpacity,
+  chartContainerSelector,
+}) {
   d3.select('body').append('style').html(`
-    g.maces .mace {
+    ${chartContainerSelector} .mace {
+      cursor: pointer;
+    }
+    ${chartContainerSelector} g.maces .mace {
       fill-opacity: ${inactiveOpacity};
     }
     /* clicked and legend clicked states are common: controlled by .mace-active */
-    g.maces .mace.mace-active {
+    ${chartContainerSelector} g.maces .mace.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.maces.searching .mace.mace-matched {
+    ${chartContainerSelector} g.maces.searching .mace.mace-matched {
       stroke: #333;
       stroke-width: 3;
     }
     /* So that legend text is visible irrespective of state */
-    g.mace text {
+    ${chartContainerSelector} g.mace text {
       fill-opacity: 0.8;
     }
-    g.maces g.mace.mace-hovered {
+    ${chartContainerSelector} g.maces g.mace.mace-hovered {
       stroke: #333;
       stroke-width: 3;
     }
-    g.color-legend g.mace-active {
+    ${chartContainerSelector} g.color-legend g.mace-active {
       fill-opacity: ${activeOpacity};
     }
-    g.color-legend g:not(.mace-active) {
+    ${chartContainerSelector} g.color-legend g:not(.mace-active) {
       fill-opacity: ${inactiveOpacity};
     }
   `)
@@ -139,6 +376,7 @@ function setupScales({
   lineWidthRange,
   sameDirectionColor,
   oppositeDirectionColor,
+  xAxisTickValues,
 }) {
   const yDomainStart = dataParsed.map(el => Number.parseFloat(el[yFieldStart]))
   const yDomainEnd = dataParsed.map(el => Number.parseFloat(el[yFieldEnd]))
@@ -151,7 +389,12 @@ function setupScales({
 
   const xDomainStart = dataParsed.map(el => Number.parseFloat(el[xFieldStart]))
   const xDomainEnd = dataParsed.map(el => Number.parseFloat(el[xFieldEnd]))
-  const xDomain = d3.extent([...xDomainStart, ...xDomainEnd])
+  const xDomain = d3.extent([
+    ...xDomainStart,
+    ...xDomainEnd,
+    ...xAxisTickValues,
+  ])
+
   const xScale =
     xScaleType === 'log'
       ? d3
@@ -159,8 +402,7 @@ function setupScales({
           .base(xScaleLogBase || 10)
           .range([0, coreChartWidth])
           .domain(xDomain)
-          .nice()
-      : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain).nice()
+      : d3.scaleLinear().range([0, coreChartWidth]).domain(xDomain)
 
   const sizeMax = d3.max(dataParsed.map(el => el[sizeField]))
 
@@ -257,7 +499,7 @@ function renderXAxis({
     .attr('class', 'x-axis-bottom')
     .attr('transform', `translate(0, ${coreChartHeight + 30})`)
   xAxis.call(
-    xAxisTickValues
+    xAxisTickValues.length
       ? d3.axisBottom(xScale).tickValues(xAxisTickValues)
       : d3.axisBottom(xScale),
   )
@@ -516,12 +758,34 @@ function setupSearch({
   searchInputClassNames,
   nameField,
   svg,
+  chartContainerSelector,
+  nameValues,
 }) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(nameValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
   const search = widgetsLeft
     .append('input')
     .attr('type', 'text')
     .attr('class', searchInputClassNames)
-  // TODO: refactor hidden, won't be needed if we add this node
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
   search.attr('placeholder', `Find by ${nameField}`)
   search.on('keyup', e => {
     const qstr = e.target.value
@@ -569,227 +833,5 @@ function setupClearAllButton({
     svg.selectAll('.mace').classed('mace-active', false)
     search.node().value = ''
     handleSearch('')
-  })
-}
-
-export function renderChart({
-  data,
-  options: {
-    aspectRatio = 2,
-
-    marginTop = 0,
-    marginRight = 0,
-    marginBottom = 0,
-    marginLeft = 0,
-
-    bgColor = 'transparent',
-
-    oppositeDirectionColor = '#ee4e34',
-    sameDirectionColor = '#44a8c1',
-
-    yAxisTitle = 'y axis title',
-    xAxisTitle = 'x axis title',
-
-    xValueFormatter = '',
-    yValueFormatter = '',
-
-    directionStartLabel = 'start point',
-    directionEndLabel = 'end point',
-    sizeLegendValues = [1e6, 1e8, 1e9],
-    sizeLegendMoveSizeObjectDownBy = 5,
-    sizeLegendTitle = 'size legend title',
-    sizeValueFormatter = '',
-
-    xAxisTickValues,
-
-    xScaleType = 'linear', // linear or log
-    xScaleLogBase = 10, // applicable only if log scale
-
-    defaultState = [],
-
-    activeOpacity = 0.8, // click, hover, search
-    inactiveOpacity = 0.2,
-
-    circleSizeRange = [5, 30],
-    lineWidthRange = [2, 4],
-
-    searchInputClassNames = '',
-    goToInitialStateButtonClassNames = '',
-    clearAllButtonClassNames = '',
-
-    xFieldType = `${xFieldStart} → ${xFieldEnd}`,
-    yFieldType = `${yFieldStart} → ${yFieldEnd}`,
-  },
-  dimensions: {
-    xFieldStart,
-    xFieldEnd,
-    yFieldStart,
-    yFieldEnd,
-    sizeField,
-    nameField,
-  },
-  chartContainerSelector,
-}) {
-  applyInteractionStyles({ activeOpacity, inactiveOpacity })
-
-  const coreChartWidth = 1000
-  const {
-    svg,
-    coreChartHeight,
-    allComponents,
-    chartCore,
-    widgetsLeft,
-    widgetsRight,
-  } = setupChartArea({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  })
-
-  const tooltipDiv = initializeTooltip()
-
-  const dataParsed = parseData({
-    data,
-    xFieldStart,
-    xFieldEnd,
-    yFieldStart,
-    yFieldEnd,
-    sizeField,
-  })
-
-  const { yScale, xScale, circleSizeScale, lineWidthScale, colorScale } =
-    setupScales({
-      dataParsed,
-      coreChartHeight,
-      coreChartWidth,
-      yFieldStart,
-      yFieldEnd,
-      xFieldStart,
-      xFieldEnd,
-      xScaleType,
-      xScaleLogBase,
-      sizeField,
-      circleSizeRange,
-      lineWidthRange,
-      sameDirectionColor,
-      oppositeDirectionColor,
-    })
-
-  const nameValues = _(data).map(nameField).uniq().value()
-  const defaultStateAll = defaultState === 'All' ? nameValues : defaultState
-
-  const gapInCircles = 30
-  renderSizeLegend({
-    gapInCircles,
-    circleSizeScale,
-    widgetsRight,
-    sizeLegendMoveSizeObjectDownBy,
-    sizeLegendValues,
-    sizeValueFormatter,
-    sizeLegendTitle,
-  })
-
-  const stickHeight = 3
-  const stickLength = 30
-  const stickWidthLegend = 1
-  const ballRadius = 6
-  const gapForText = 5
-  const singleMaceSectionHeight = 20
-
-  renderColorLegend({
-    stickHeight,
-    stickLength,
-    ballRadius,
-    gapForText,
-    singleMaceSectionHeight,
-    widgetsRight,
-    sameDirectionColor,
-    oppositeDirectionColor,
-    svg,
-  })
-
-  renderDirectionLegend({
-    selection: widgetsRight.append('svg'),
-    ballRadius,
-    stickLength,
-    stickWidthLegend,
-    gapForText,
-    directionStartLabel,
-    directionEndLabel,
-  })
-
-  renderXAxis({
-    chartCore,
-    coreChartHeight,
-    coreChartWidth,
-    xScale,
-    xAxisTickValues,
-    xAxisTitle,
-  })
-
-  // y-axis
-  renderYAxis({ chartCore, coreChartWidth, yScale, yAxisTitle })
-
-  renderMaces({
-    chartCore,
-    dataParsed,
-    sizeField,
-    nameField,
-    defaultStateAll,
-    xFieldStart,
-    xFieldEnd,
-    xScale,
-    yScale,
-    yFieldStart,
-    yFieldEnd,
-    circleSizeScale,
-    lineWidthScale,
-    colorScale,
-    tooltipDiv,
-    sizeValueFormatter,
-    xValueFormatter,
-    yValueFormatter,
-    xFieldType,
-    yFieldType,
-  })
-
-  // searchEventHandler is a higher order function that returns a function based on referenceList (here nameValues)
-  // handleSearch accepts search query string and applied appropriate
-  const handleSearch = searchEventHandler(nameValues)
-  const search = setupSearch({
-    handleSearch,
-    widgetsLeft,
-    searchInputClassNames,
-    nameField,
-    svg,
-  })
-
-  setupInitialStateButton({
-    widgetsLeft,
-    goToInitialStateButtonClassNames,
-    defaultStateAll,
-    search,
-    handleSearch,
-    svg,
-  })
-  setupClearAllButton({
-    widgetsLeft,
-    clearAllButtonClassNames,
-    search,
-    handleSearch,
-    svg,
-  })
-
-  // For responsiveness
-  // adjust svg to prevent overflows
-  preventOverflow({
-    allComponents,
-    svg,
-    margins: { marginLeft, marginRight, marginTop, marginBottom },
   })
 }

@@ -46,6 +46,14 @@ export const checkNumber = val => {
   return { valid: false, message: 'Should be a valid number' }
 }
 
+export const checkPositiveInteger = val => {
+  const valid = Number.isInteger(val) && val > 0
+  if (valid) {
+    return { valid: true }
+  }
+  return { valid: false, message: 'Should be a positive integer' }
+}
+
 export const checkBoolean = val => {
   const valid = typeof val === 'boolean'
   if (valid) {
@@ -87,6 +95,8 @@ export const checkColor = val => {
 }
 
 export const checkColorArray = length => arr => {
+  if (!Array.isArray(arr))
+    return { valid: false, message: 'Should be an array of colors' }
   const checkColorsResult = arr.map(clr => checkColor(clr))
   const lengthValidationResult = { valid: true, message: '' }
   if (length && arr.length < length) {

@@ -60,8 +60,6 @@ function buildDimensionAndTypes({
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween(0.1, Number.POSITIVE_INFINITY),
-
   // directionStartLabel: 'start point',
   // directionEndLabel: 'end point',
 

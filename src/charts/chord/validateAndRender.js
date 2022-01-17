@@ -37,8 +37,6 @@ const dimensionTypes = {
 }
 
 const optionTypes = {
-  aspectRatio: checkNumberBetween(0, Number.POSITIVE_INFINITY),
-
   marginTop: checkNumber,
   marginRight: checkNumber,
   marginBottom: checkNumber,

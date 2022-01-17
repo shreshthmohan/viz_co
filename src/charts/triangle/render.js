@@ -15,8 +15,6 @@ import { renderMaceColorLegend } from './maceColorLegend'
 export function renderChart({
   data,
   options: {
-    aspectRatio = 2 / Math.sqrt(3),
-
     directionStartLabel = 'start point',
     directionEndLabel = 'end point',
 
@@ -49,11 +47,16 @@ export function renderChart({
     goToInitialStateButtonClassNames = '',
     clearAllButtonClassNames = '',
     showAllButtonClassNames = '',
+
+    colorLegendClassNames = '',
+    directionLegendClassNames = '',
   },
   dimensions: { startField, endField, nameField },
 
   chartContainerSelector,
 }) {
+  const aspectRatio = 2 / Math.sqrt(3)
+
   const valueFormatter = val =>
     `${valuePrefix}${formatNumber(val, valueFormat)}${valuePostfix}`
 
@@ -483,7 +486,9 @@ export function renderChart({
   // leftAxis.attr('transform', `translate(${triangleSide / 2}, ${0}) rotate(30)`)
 
   renderDirectionLegend({
-    selection: widgetsRight.append('svg'),
+    selection: widgetsRight
+      .append('svg')
+      .attr('class', directionLegendClassNames),
     circleRadius,
     stickLength,
     stickWidth,
@@ -493,7 +498,7 @@ export function renderChart({
   })
 
   renderMaceColorLegend({
-    selection: widgetsRight.append('svg'),
+    selection: widgetsRight.append('svg').attr('class', colorLegendClassNames),
     circleRadius,
     stickLength,
     stickWidth,
@@ -527,6 +532,9 @@ function greater(t) {
 
 function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   d3.select('body').append('style').html(`  
+    .tmace {
+      cursor: pointer;
+    }
     .tmaces .tmace {
       fill-opacity: ${inactiveOpacity};
     }

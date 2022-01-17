@@ -50,6 +50,9 @@ const optionTypes = {
   // uniqueFieldTimeParser: checkString,
   // uniqueFieldTimeFormatter: checkString,
   // yFieldLabels: to be added dynamically
+
+  colorLegendWidth: checkNumber,
+  colorLegendHeight: checkNumber,
 }
 
 function buildDimensionAndTypes({ dimensions, dimensionTypes, optionTypes }) {

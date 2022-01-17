@@ -1,34 +1,44 @@
 /* global window */
 
 import * as d3 from 'd3'
+import _ from 'lodash-es'
 import {
   initializeTooltip,
   setupChartArea,
 } from '../../utils/helpers/commonChartHelpers'
 
-import { preventOverflow } from '../../utils/helpers/general'
+import { preventOverflow, toClassText } from '../../utils/helpers/general'
 
 export function renderChart({
   data,
   options: {
     aspectRatio = 0.7,
 
-    bgColor = 'transparent',
     marginTop = 0,
     marginRight = 0,
     marginBottom = 0,
     marginLeft = 0,
 
+    bgColor = 'transparent',
+
     colorScheme = ['#3077aa', '#ed3833'],
-    barOpacity = 1,
 
     barValueMidPoint = 50,
 
-    axesTickSize = 10,
-
+    xAxisTickSize = 10,
     leftXAxisLabel = barLeftValueField,
     rightXAxisLabel = barRightValueField,
     xAxisLabel = '',
+
+    defaultState = [],
+
+    inactiveOpacity = 0.2,
+    activeOpacity = 1,
+
+    goToInitialStateButtonClassNames = '',
+    searchInputClassNames = '',
+    clearAllButtonClassNames = '',
+    showAllButtonClassNames = '',
   },
   dimensions: {
     yField,
@@ -39,29 +49,37 @@ export function renderChart({
   },
   chartContainerSelector,
 }) {
-  applyInteractionStyles({ bgColor })
+  applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity })
 
   const tooltipDiv = initializeTooltip()
 
   const coreChartWidth = 1200
 
-  const { svg, coreChartHeight, allComponents, chartCore } = setupChartArea({
-    chartContainerSelector,
-    coreChartWidth,
-    aspectRatio,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    bgColor,
-  })
+  const { svg, coreChartHeight, allComponents, chartCore, widgetsLeft } =
+    setupChartArea({
+      chartContainerSelector,
+      coreChartWidth,
+      aspectRatio,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      bgColor,
+    })
 
-  const { yDomain, maxOverall, xStartActual } = parseData({
+  const {
+    yDomain,
+    maxOverall,
+    xStartActual,
+    dimensionValues,
+    defaultStateAll,
+  } = parseData({
     data,
     yField,
     barRightValueField,
     barLeftValueField,
     barValueMidPoint,
+    defaultState,
   })
 
   const { yScale, xScaleLeft, xScaleRight, xStart } = setupScales({
@@ -88,7 +106,6 @@ export function renderChart({
     triangleOffset,
     xStart,
     colorScheme,
-    barOpacity,
     markerSymbol,
     symbolSize,
     symbolConstant,
@@ -97,17 +114,18 @@ export function renderChart({
     barRightValueField,
     xScaleRight,
     barRightLabelField,
+    defaultStateAll,
   })
 
-  renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize })
+  renderXAxis({ leftBarsContainer, xScaleLeft, xAxisTickSize })
 
-  renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize })
+  renderYAxis({ rightBarsContainer, xScaleRight, xAxisTickSize })
 
   renderLegends({
     chartCore,
     xScaleLeft,
     xStart,
-    axesTickSize,
+    xAxisTickSize,
     markerSymbol,
     symbolSize,
     triangleOffset,
@@ -115,6 +133,42 @@ export function renderChart({
     leftXAxisLabel,
     rightXAxisLabel,
     xAxisLabel,
+  })
+
+  const handleSearch = searchEventHandler(dimensionValues)
+  const search = setupSearch({
+    handleSearch,
+    widgetsLeft,
+    searchInputClassNames,
+    yField,
+    svg,
+    chartContainerSelector,
+    dimensionValues,
+  })
+
+  setupInitialStateButton({
+    widgetsLeft,
+    goToInitialStateButtonClassNames,
+    defaultStateAll,
+    search,
+    handleSearch,
+    svg,
+  })
+
+  setupClearAllButton({
+    widgetsLeft,
+    clearAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
+  })
+
+  setupShowAllButton({
+    widgetsLeft,
+    showAllButtonClassNames,
+    search,
+    handleSearch,
+    svg,
   })
 
   // For responsiveness
@@ -126,14 +180,28 @@ export function renderChart({
   })
 }
 
-function applyInteractionStyles({ bgColor }) {
+function applyInteractionStyles({ bgColor, inactiveOpacity, activeOpacity }) {
   d3.select('body').append('style').html(`
   g.bar {
     stroke: ${bgColor};
+    fill-opacity: ${inactiveOpacity};
+    cursor: pointer;
+  }
+  g.bar.bar-active {
+    stroke: ${bgColor};
+    fill-opacity: ${activeOpacity};
+  }
+  g.left-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
+  }
+  g.right-bars.searching .bar.bar-matched {
+    stroke: #333;
+    stroke-width: 2;
   }
   g.bar.bar-hovered {
     stroke: #333;
-    stroke-width: 1;
+    stroke-width: 2;
   }
 `)
 }
@@ -144,6 +212,7 @@ function parseData({
   barRightValueField,
   barLeftValueField,
   barValueMidPoint,
+  defaultState,
 }) {
   const yDomain = data.map(el => el[yField])
   const maxRight = d3.max(
@@ -164,7 +233,11 @@ function parseData({
 
   const xStartActual = d3.min([barValueMidPoint, minOverall])
 
-  return { yDomain, maxOverall, xStartActual }
+  const dimensionValues = _(data).map(yField).uniq().value()
+  const defaultStateAll =
+    defaultState === 'All' ? dimensionValues : defaultState
+
+  return { yDomain, maxOverall, xStartActual, dimensionValues, defaultStateAll }
 }
 
 function setupScales({
@@ -200,7 +273,7 @@ function renderLegends({
   chartCore,
   xScaleLeft,
   xStart,
-  axesTickSize,
+  xAxisTickSize,
   markerSymbol,
   symbolSize,
   triangleOffset,
@@ -217,8 +290,8 @@ function renderLegends({
   topLegend
     .append('rect')
     .attr('x', xScaleLeft(xStart) - (centerDividerWidth - 1) / 2)
-    .attr('y', -axesTickSize * 5)
-    .attr('height', axesTickSize * 2)
+    .attr('y', -xAxisTickSize * 5)
+    .attr('height', xAxisTickSize * 2)
     .attr('width', centerDividerWidth)
     .attr('fill', '#000')
 
@@ -233,7 +306,7 @@ function renderLegends({
         triangleOffset / 4 -
         5 -
         (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) rotate(-90)`,
+      }, ${-xAxisTickSize * 4}) rotate(-90)`,
     )
     .attr('fill', colorScheme[0])
 
@@ -245,7 +318,7 @@ function renderLegends({
       'transform',
       `translate(${
         xScaleLeft(xStart) - triangleOffset - 5 - (centerDividerWidth - 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
     )
     .attr('fill', colorScheme[0])
     .attr('dominant-baseline', 'middle')
@@ -263,7 +336,7 @@ function renderLegends({
         triangleOffset / 4 +
         5 +
         (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) rotate(90)`,
+      }, ${-xAxisTickSize * 4}) rotate(90)`,
     )
     .attr('fill', colorScheme[1])
 
@@ -275,7 +348,7 @@ function renderLegends({
       'transform',
       `translate(${
         xScaleLeft(xStart) + triangleOffset + 5 + (centerDividerWidth + 1) / 2
-      }, ${-axesTickSize * 4}) `,
+      }, ${-xAxisTickSize * 4}) `,
     )
     .attr('fill', colorScheme[1])
     .attr('dominant-baseline', 'middle')
@@ -288,7 +361,7 @@ function renderLegends({
     .text(xAxisLabel)
     .attr(
       'transform',
-      `translate(${xScaleLeft(xStart)}, ${-axesTickSize * 6}) `,
+      `translate(${xScaleLeft(xStart)}, ${-xAxisTickSize * 6}) `,
     )
     .attr('fill', '#333')
     .attr('dominant-baseline', 'middle')
@@ -296,10 +369,10 @@ function renderLegends({
     .attr('style', 'font-weight: bold;')
 }
 
-function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
+function renderXAxis({ leftBarsContainer, xScaleLeft, xAxisTickSize }) {
   leftBarsContainer
     .append('g')
-    .call(d3.axisTop(xScaleLeft).tickSize(axesTickSize))
+    .call(d3.axisTop(xScaleLeft).tickSize(xAxisTickSize))
     .call(g => {
       g.select('.domain').remove()
       g.selectAll('.tick line').attr('stroke', '#555')
@@ -307,10 +380,10 @@ function renderXAxis({ leftBarsContainer, xScaleLeft, axesTickSize }) {
     })
 }
 
-function renderYAxis({ rightBarsContainer, xScaleRight, axesTickSize }) {
+function renderYAxis({ rightBarsContainer, xScaleRight, xAxisTickSize }) {
   rightBarsContainer
     .append('g')
-    .call(d3.axisTop(xScaleRight).tickSize(axesTickSize))
+    .call(d3.axisTop(xScaleRight).tickSize(xAxisTickSize))
     .call(g => {
       g.select('.domain').remove()
       g.selectAll('.tick line').attr('stroke', '#555')
@@ -352,7 +425,6 @@ function renderBars({
   triangleOffset,
   xStart,
   colorScheme,
-  barOpacity,
   markerSymbol,
   symbolSize,
   symbolConstant,
@@ -361,6 +433,7 @@ function renderBars({
   barRightValueField,
   xScaleRight,
   barRightLabelField,
+  defaultStateAll,
 }) {
   const leftBarsContainer = chartCore.append('g').attr('class', 'left-bars')
 
@@ -368,7 +441,14 @@ function renderBars({
     .selectAll('g')
     .data(data)
     .join('g')
-    .attr('class', 'bar')
+    .attr(
+      'class',
+      d =>
+        `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+    )
     .on('mouseover', function (e, d) {
       d3.select(this).classed('bar-hovered', true)
 
@@ -388,6 +468,11 @@ function renderBars({
         .duration(500)
         .style('opacity', 0)
     })
+    .on('click', function (e) {
+      const parentBar = d3.select(e.target.parentNode)
+      const clickedState = parentBar.classed('bar-active')
+      parentBar.classed('bar-active', !clickedState)
+    })
 
   leftBars
     .append('rect')
@@ -400,8 +485,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[0])
-    .attr('stroke-width', 1)
-    .attr('opacity', barOpacity)
 
   // Left Symbols
   leftBars
@@ -425,7 +508,6 @@ function renderBars({
       return markerSymbol.size(customTriangleSize)()
     })
     .attr('fill', colorScheme[0])
-    .attr('opacity', barOpacity)
 
   leftBars
     .append('text')
@@ -444,7 +526,14 @@ function renderBars({
     .selectAll('g')
     .data(data)
     .join('g')
-    .attr('class', 'bar')
+    .attr(
+      'class',
+      d =>
+        `bar
+      bar-${toClassText(d[yField])}
+      ${defaultStateAll.includes(d[yField]) ? 'bar-active' : ''}
+      `,
+    )
     .on('mouseover', function (e, d) {
       d3.select(this).classed('bar-hovered', true)
 
@@ -464,6 +553,11 @@ function renderBars({
         .duration(500)
         .style('opacity', 0)
     })
+    .on('click', function (e) {
+      const parentBar = d3.select(e.target.parentNode)
+      const clickedState = parentBar.classed('bar-active')
+      parentBar.classed('bar-active', !clickedState)
+    })
 
   rightBars
     .append('rect')
@@ -478,8 +572,6 @@ function renderBars({
       return rw > 0 ? rw : 0
     })
     .attr('fill', colorScheme[1])
-    .attr('stroke-width', 1)
-    .attr('opacity', barOpacity)
 
   // Right Symbols
   rightBars
@@ -502,7 +594,6 @@ function renderBars({
       return markerSymbol.size(customTriangleSize)()
     })
     .attr('fill', colorScheme[1])
-    .attr('opacity', barOpacity)
 
   rightBars
     .append('text')
@@ -530,4 +621,131 @@ function renderBars({
     .attr('font-weight', 'bold')
 
   return { leftBarsContainer, rightBarsContainer }
+}
+
+const searchEventHandler = referenceList => (qstr, svg) => {
+  if (qstr) {
+    const lqstr = qstr.toLowerCase()
+    referenceList.forEach(val => {
+      // d3.selectAll('.mace').classed('mace-active', false)
+      const barName = toClassText(val)
+      if (val.toLowerCase().includes(lqstr)) {
+        svg.selectAll(`.bar-${barName}`).classed('bar-matched', true)
+      } else {
+        svg.selectAll(`.bar-${barName}`).classed('bar-matched', false)
+      }
+      svg.select('.left-bars').classed('searching', true)
+      svg.select('.right-bars').classed('searching', true)
+    })
+  } else {
+    referenceList.forEach(val => {
+      const barName = toClassText(val)
+      svg.selectAll(`.bar-${barName}`).classed('bar-matched', false)
+    })
+    svg.select('.left-bars').classed('searching', false)
+    svg.select('.right-bars').classed('searching', false)
+  }
+}
+
+function setupSearch({
+  handleSearch,
+  widgetsLeft,
+  searchInputClassNames,
+  yField,
+  svg,
+  chartContainerSelector,
+  dimensionValues,
+}) {
+  const enableSearchSuggestions = true
+
+  enableSearchSuggestions &&
+    widgetsLeft
+      .append('datalist')
+      .attr('role', 'datalist')
+      // Assuming that chartContainerSelector will always start with #
+      // i.e. it's always an id selector of the from #id-to-identify-search
+      // TODO add validation
+      .attr('id', `${chartContainerSelector.slice(1)}-search-list`)
+      .html(
+        _(dimensionValues)
+          .uniq()
+          .map(el => `<option>${el}</option>`)
+          .join(''),
+      )
+
+  const search = widgetsLeft
+    .append('input')
+    .attr('type', 'text')
+    .attr('class', searchInputClassNames)
+
+  enableSearchSuggestions &&
+    search.attr('list', `${chartContainerSelector.slice(1)}-search-list`)
+
+  search.attr('placeholder', `Find by ${yField}`)
+  search.on('keyup', e => {
+    const qstr = e.target.value
+    handleSearch(qstr, svg)
+  })
+  return search
+}
+
+function setupClearAllButton({
+  widgetsLeft,
+  clearAllButtonClassNames,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const clearAll = widgetsLeft
+    .append('button')
+    .text('Clear All')
+    .attr('class', clearAllButtonClassNames)
+  clearAll.classed('hidden', false)
+  clearAll.on('click', () => {
+    svg.selectAll('.bar').classed('bar-active', false)
+    search.node().value = ''
+    handleSearch('', svg)
+  })
+}
+
+function setupShowAllButton({
+  widgetsLeft,
+  showAllButtonClassNames,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const showAll = widgetsLeft
+    .append('button')
+    .text('Show All')
+    .attr('class', showAllButtonClassNames)
+  showAll.classed('hidden', false)
+  showAll.on('click', () => {
+    svg.selectAll('.bar').classed('bar-active', true)
+    search.node().value = ''
+    handleSearch('', svg)
+  })
+}
+
+function setupInitialStateButton({
+  widgetsLeft,
+  goToInitialStateButtonClassNames,
+  defaultStateAll,
+  search,
+  handleSearch,
+  svg,
+}) {
+  const goToInitialState = widgetsLeft
+    .append('button')
+    .text('Go to Initial State')
+    .attr('class', goToInitialStateButtonClassNames)
+  goToInitialState.classed('hidden', false)
+  goToInitialState.on('click', () => {
+    svg.selectAll('.bar').classed('bar-active', false)
+    _.forEach(defaultStateAll, val => {
+      svg.selectAll(`.bar-${toClassText(val)}`).classed('bar-active', true)
+    })
+    search.node().value = ''
+    handleSearch('', svg)
+  })
 }

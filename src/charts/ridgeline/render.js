@@ -7,6 +7,9 @@ import { preventOverflow, toClassText } from '../../utils/helpers/general'
 
 function applyInteractionStyles({ activeOpacity, inactiveOpacity }) {
   d3.select('body').append('style').html(`
+  .series {
+    cursor: pointer;
+  }
 g.serieses .series {
   fill-opacity: ${inactiveOpacity};
 }
