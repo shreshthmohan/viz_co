@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "rollup -c",
+    "build:demo": "rollup -c && cp -r dist/ demo/src/js/",
     "build::minified": "rollup --config rollup.config.min.js",
     "tsc": "tsc"
   },
